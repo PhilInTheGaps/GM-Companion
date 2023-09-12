@@ -1,14 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../../defines.js" as Defines
+import src
+import "../../.."
 
 Page {
     id: root
 
     header: Rectangle {
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.button
 
         Label {
@@ -49,15 +52,20 @@ Page {
             visible: item_list_table.contentHeight > item_list_table.height
         }
 
-        model: shop_tool
-               && shop_tool.editor ? shop_tool.editor.itemModelGroup : []
+        model: ShopTool && ShopTool.editor ? ShopTool.editor.itemModelGroup : [] // qmllint disable unresolved-type
 
         delegate: Rectangle {
             id: item_delegate_rect
+
+            required property string name
+            required property string price
+            required property string description
+            required property int index
+
             height: item_list_table.currentIndex
                     === index ? Math.max(
                                     item_delegate_text_column.height,
-                                    Defines.TOOLBAR_HEIGHT) : item_delegate_text_column.height
+                                    Sizes.toolbarHeight) : item_delegate_text_column.height
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
@@ -67,7 +75,7 @@ Page {
                 id: item_delegate_text_column
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: item_list_table.currentIndex
-                              == index ? add_item_button.right : parent.left
+                              === item_delegate_rect.index ? add_item_button.right : parent.left
                 anchors.right: parent.right
                 anchors.margins: 5
 
@@ -84,12 +92,12 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         verticalAlignment: Text.AlignVCenter
 
-                        text: name
+                        text: item_delegate_rect.name
                         font.pointSize: 12
 
                         clip: true
                         elide: Text.ElideRight
-                        wrapMode: item_list_table.currentIndex === index ? Text.Wrap : Text.NoWrap
+                        wrapMode: item_list_table.currentIndex === item_delegate_rect.index ? Text.Wrap : Text.NoWrap
                     }
 
                     Label {
@@ -100,13 +108,13 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignRight
 
-                        text: price
+                        text: item_delegate_rect.price
                         font.pointSize: 12
 
                         clip: true
                         elide: Text.ElideRight
                         wrapMode: item_list_table.currentIndex
-                                  === index ? Text.WordWrap : Text.NoWrap
+                                  === item_delegate_rect.index ? Text.WordWrap : Text.NoWrap
                     }
                 }
 
@@ -115,15 +123,15 @@ Page {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     verticalAlignment: Text.AlignTop
-                    visible: item_list_table.currentIndex === index
-                             && description !== ""
+                    visible: item_list_table.currentIndex === item_delegate_rect.index
+                             && item_delegate_rect.description !== ""
 
-                    text: description
+                    text: item_delegate_rect.description
                     font.pointSize: 12
 
                     clip: true
                     elide: Text.ElideRight
-                    wrapMode: item_list_table.currentIndex === index ? Text.WordWrap : Text.NoWrap
+                    wrapMode: item_list_table.currentIndex === item_delegate_rect.index ? Text.WordWrap : Text.NoWrap
                 }
 
                 Rectangle {
@@ -138,7 +146,7 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     item_list_table.forceActiveFocus()
-                    item_list_table.currentIndex = index
+                    item_list_table.currentIndex = item_delegate_rect.index
                 }
             }
 
@@ -149,10 +157,10 @@ Page {
                 background: Item {}
                 iconItem.font.pointSize: 14
 
-                visible: item_list_table.currentIndex === index
+                visible: item_list_table.currentIndex === item_delegate_rect.index
 
                 iconText: FontAwesome.circleChevronLeft
-                onClicked: shop_tool.editor.addItem(index)
+                onClicked: ShopTool.editor.addItem(item_delegate_rect.index)
             }
         }
     }

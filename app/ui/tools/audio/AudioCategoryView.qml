@@ -1,10 +1,10 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
+import src
 import "./buttons"
-import "../../defines.js" as Defines
+import "../.."
 
 Rectangle {
     id: left_menu
@@ -18,7 +18,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
         anchors.leftMargin: 5
         anchors.rightMargin: 5
@@ -30,17 +30,14 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: editor_button.left
 
-            width: parent.width - editor_button.width - parent.spacing
-            model: audio_tool ? audio_tool.projects : []
+            width: parent.width - editor_button.width
+            model: AudioTool.projects
             textRole: "name"
-            emptyString: audio_tool
-                         && audio_tool.isLoading ? qsTr("Loading ...") : qsTr(
+            emptyString: AudioTool.isLoading ? qsTr("Loading ...") : qsTr(
                                                        "No Projects")
 
             onCurrentTextChanged: {
-                if (audio_tool) {
-                    audio_tool.setCurrentProject(currentIndex)
-                }
+                AudioTool.setCurrentProject(currentIndex)
             }
         }
 
@@ -53,7 +50,7 @@ Rectangle {
             anchors.topMargin: 8
             anchors.bottomMargin: 8
 
-            onClicked: editorButtonClicked()
+            onClicked: left_menu.editorButtonClicked()
         }
     }
 
@@ -78,17 +75,18 @@ Rectangle {
             Repeater {
                 id: category_repeater
 
-                model: audio_tool
-                       && audio_tool.currentProject ? audio_tool.currentProject.categories : []
+                model: AudioTool.currentProject ? AudioTool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData.name
+                    required property AudioCategory modelData
+
+                    buttonText: modelData.name // qmllint disable missing-property
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
                     onClicked: {
-                        audio_tool.currentProject.currentCategory = modelData
+                        AudioTool.currentProject.currentCategory = modelData
                     }
                 }
             }
@@ -105,11 +103,13 @@ Rectangle {
 
         Repeater {
             id: sound_repeater
-            model: audio_tool ? audio_tool.soundController.activeElements : []
+            model: AudioTool.soundController.activeElements
 
             SoundButton {
-                element: modelData.name
-                element_icon: modelData.thumbnail
+                required property AudioElement modelData
+
+                elementName: modelData.name // qmllint disable missing-property
+                elementThumbnail: modelData.thumbnail
                 anchors.left: parent.left
                 anchors.right: parent.right
             }
@@ -122,8 +122,8 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        visible: source != ""
+        visible: source !== ""
         sourceSize.width: width
-        source: audio_tool ? audio_tool.metaData.cover : ""
+        source: AudioTool.metaData.cover
     }
 }

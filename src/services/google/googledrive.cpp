@@ -1,4 +1,5 @@
 #include "googledrive.h"
+#include "googledriveconnectorlocal.h"
 #include "settings/settingsmanager.h"
 #include <QLoggingCategory>
 #include <utility>
@@ -11,6 +12,10 @@ constexpr auto AUTH_REFRESH_URL = "https://accounts.google.com/o/oauth2/token";
 
 Q_LOGGING_CATEGORY(gmGoogleDrive, "gm.service.google.drive")
 
+GoogleDrive::GoogleDrive(QQmlEngine &engine, QObject *parent) : GoogleDrive(*engine.networkAccessManager(), parent)
+{
+}
+
 GoogleDrive::GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent)
     : GoogleDrive(u"Google"_s, networkManager, parent)
 {
@@ -21,6 +26,16 @@ GoogleDrive::GoogleDrive(const QString &serviceName, QNetworkAccessManager &netw
 {
     clientId(SettingsManager::instance()->get<QString>(u"googleID"_s, u""_s, serviceName));
     updateConnector();
+}
+
+auto GoogleDrive::qmlInstance(QQmlEngine *engine) -> GoogleDrive *
+{
+    if (s_qmlInstance == nullptr)
+    {
+        s_qmlInstance = new GoogleDrive(*engine, engine);
+    }
+
+    return s_qmlInstance;
 }
 
 auto GoogleDrive::get(const QUrl &url) -> QFuture<RestNetworkReply *>

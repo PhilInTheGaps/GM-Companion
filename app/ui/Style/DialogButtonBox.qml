@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.DialogButtonBox {
     id: control
@@ -36,6 +35,6 @@ T.DialogButtonBox {
         width: parent.width - 2
         height: parent.height - 2
 
-        color: Colors.window
+        color: palette.window
     }
 }

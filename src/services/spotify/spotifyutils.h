@@ -5,6 +5,8 @@
 
 class SpotifyUtils
 {
+    Q_GADGET
+
 public:
     enum class SpotifyType
     {
@@ -17,6 +19,8 @@ public:
         Local,
         Unknown
     };
+
+    Q_ENUM(SpotifyType)
 
     static auto getUriType(const QString &uri) -> SpotifyType;
     static auto typeFromString(const QString &str) -> SpotifyType;
@@ -33,5 +37,3 @@ private:
         R"((?'type'albums?|playlists?|tracks?|artists?|episodes?|shows?)\/(?'id'[[:alnum:]]+))";
     static constexpr const char *IS_URI = R"(.+\:.+\:.*)";
 };
-
-Q_DECLARE_METATYPE(SpotifyUtils::SpotifyType)

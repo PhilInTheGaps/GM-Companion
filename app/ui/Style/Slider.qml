@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Slider {
     id: control
@@ -26,9 +23,9 @@ T.Slider {
         implicitWidth: 26
         implicitHeight: 26
         radius: width / 2
-        color: control.enabled ? (control.pressed ? (control.visualFocus ? Colors.focus : Colors.textDisabled) : (control.visualFocus ? Colors.focus : Colors.text)) : Colors.textDisabled
+        color: control.enabled ? (control.pressed ? (control.visualFocus ? StyleColors.focus : StyleColors.textDisabled) : (control.visualFocus ? StyleColors.focus : palette.text)) : StyleColors.textDisabled
         border.width: control.visualFocus ? 2 : 1
-        border.color: Colors.dark
+        border.color: palette.dark
 
         readonly property bool horizontal: control.orientation === Qt.Horizontal
     }
@@ -40,7 +37,7 @@ T.Slider {
         implicitHeight: horizontal ? 6 : 200
         width: horizontal ? control.availableWidth : implicitWidth
         height: horizontal ? implicitHeight : control.availableHeight
-        color: Colors.midlight
+        color: palette.midlight
         scale: horizontal && control.mirrored ? -1 : 1
 
         readonly property bool horizontal: control.orientation === Qt.Horizontal
@@ -48,7 +45,7 @@ T.Slider {
         Rectangle {
             width: parent.horizontal ? control.visualPosition * parent.width : parent.width
             height: parent.horizontal ? parent.height : control.visualPosition * parent.height
-            color: Colors.alternateBase
+            color: palette.alternateBase
         }
     }
 }

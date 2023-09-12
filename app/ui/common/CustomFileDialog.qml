@@ -1,9 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import lol.rophil.gmcompanion.filedialog 1.0
-import "../defines.js" as Defines
+import FileDialog
+import ".."
 
 Dialog {
     id: root
@@ -20,7 +22,7 @@ Dialog {
     property alias folder: backend.currentDir
     property alias foldersOnly: backend.folderMode
     property var textField: undefined
-    property var replacePath: undefined
+    property string replacePath: ""
 
     FileDialogBackend {
         id: backend
@@ -157,6 +159,10 @@ Dialog {
 
             delegate: Item {
                 id: delegate_item
+
+                required property int index
+                required property FileObject modelData
+
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
                 anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
@@ -171,7 +177,7 @@ Dialog {
                     spacing: 10
 
                     Label {
-                        text: modelData.isFolder ? FontAwesome.folder : FontAwesome.file
+                        text: delegate_item.modelData.isFolder ? FontAwesome.folder : FontAwesome.file
                         font.family: FontAwesome.fontSolid.family
                         font.styleName: FontAwesome.fontSolid.styleName
                         width: height
@@ -180,7 +186,7 @@ Dialog {
                     }
 
                     Label {
-                        text: modelData.name
+                        text: delegate_item.modelData.name
                         verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -190,8 +196,8 @@ Dialog {
                     id: delegate_mouse_area
                     anchors.fill: delegate_item
                     hoverEnabled: true
-                    onClicked: main_list_view.currentIndex = index
-                    onDoubleClicked: backend.enterFolder(index)
+                    onClicked: main_list_view.currentIndex = delegate_item.index
+                    onDoubleClicked: backend.enterFolder(delegate_item.index)
                 }
             }
 
@@ -202,7 +208,7 @@ Dialog {
     }
 
     footer: Rectangle {
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.dark
 
         TextField {

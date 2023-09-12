@@ -1,11 +1,16 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import lol.rophil.gmcompanion.fileaccessswitcher 1.0
+import filesystem
+import common
+import "../../common"
 
 Item {
     id: root
+
+    required property CustomFileDialog fileDialog
 
     readonly property var paths: [{
             "name": qsTr("Audio Projects"),
@@ -66,14 +71,16 @@ Item {
                 }]
 
             CustomRadioButton {
+                required property var modelData
+
                 text: modelData.name
                 iconText: modelData.icon
                 iconFont: modelData.iconFont
-                checked: settings_manager.cloudMode === modelData.setting
+                checked: SettingsManager.cloudMode === modelData.setting
 
                 onClicked: {
                     if (checked) {
-                        settings_manager.cloudMode = modelData.setting
+                        SettingsManager.cloudMode = modelData.setting
                         fileModeChanged()
                     }
                 }
@@ -110,12 +117,16 @@ Item {
                 model: root.paths
 
                 Column {
+                    id: path_box
+
+                    required property var modelData
+
                     anchors.left: parent.left
                     anchors.right: parent.right
                     spacing: 5
 
                     Label {
-                        text: modelData.name
+                        text: path_box.modelData.name
                     }
 
                     Item {
@@ -130,13 +141,12 @@ Item {
                             anchors.rightMargin: 5
 
                             function loadPath() {
-                                text = settings_manager.getPath(
-                                            modelData.setting)
+                                text = SettingsManager.getPath(
+                                            path_box.modelData.setting)
                             }
 
                             function savePath() {
-                                settings_manager.setPath(modelData.setting,
-                                                         text)
+                                SettingsManager.setPath(path_box.modelData.setting, text)
                             }
 
                             Component.onCompleted: loadPath()
@@ -160,11 +170,11 @@ Item {
                             centering: true
 
                             onClicked: {
-                                file_dialog.title = modelData.name
-                                file_dialog.foldersOnly = true
-                                file_dialog.folder = path_text_field.text
-                                file_dialog.textField = path_text_field
-                                file_dialog.open()
+                                root.fileDialog.title = path_box.modelData.name
+                                root.fileDialog.foldersOnly = true
+                                root.fileDialog.folder = path_text_field.text
+                                root.fileDialog.textField = path_text_field
+                                root.fileDialog.open()
                             }
                         }
                     }

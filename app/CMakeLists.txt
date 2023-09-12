@@ -6,26 +6,17 @@ add_subdirectory(ui)
 
 set(SOURCES
   main.cpp
+  logger.h
   logger.cpp
-  messages/messagemanager.cpp
-  messages/messagedispatcher.cpp
-)
-
-set(HEADERS
   version.h
   version.h.in
-  logger.h
-  tools.h
-  messages/messagemanager.h
-  messages/messagedispatcher.h
-  messages/message.h
 )
 
 set(RCFILES
   gm-companion.rc
 )
 
-qt_add_executable(gm-companion ${SOURCES} ${HEADERS} ${RCFILES})
+qt_add_executable(gm-companion ${SOURCES} ${RCFILES})
 
 if (BUILD_TRANSLATIONS)
   file(GLOB_RECURSE TO_TRANSLATE

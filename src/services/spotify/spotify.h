@@ -1,28 +1,33 @@
 ﻿#pragma once
 
-#include <QNetworkAccessManager>
-#include <QObject>
-#include <QPointer>
-#include <gsl/gsl>
-
+#include "api/albumapi.h"
+#include "api/playerapi.h"
+#include "api/playlistsapi.h"
+#include "api/tracksapi.h"
 #include "clients/librespotcontroller.h"
+#include "qmlsingletonfactory.h"
 #include "service.h"
 #include "spotifyconnectorlocal.h"
 #include "spotifyconnectorserver.h"
 #include "spotifynetworkerror.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
-
-#include "api/albumapi.h"
-#include "api/playerapi.h"
-#include "api/playlistsapi.h"
-#include "api/tracksapi.h"
+#include <QNetworkAccessManager>
+#include <QObject>
+#include <QPointer>
+#include <QtQml/qqmlregistration.h>
+#include <gsl/gsl>
 
 class Spotify : public Service
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+    QML_SINGLETON_FACTORY(Spotify)
+
     Q_PROPERTY(ServiceStatus *clientStatus READ clientStatus NOTIFY clientStatusChanged)
 
 public:
+    Spotify() = delete;
     static auto instance() -> Spotify *;
 
     void grant();

@@ -6,7 +6,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
-#include <QQmlContext>
 #include <QSettings>
 #include <QTemporaryFile>
 
@@ -14,22 +13,23 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmCharactersTool, "gm.characters.tool")
 
-CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent)
+CharacterTool::CharacterTool(QObject *parent) : AbstractTool(parent)
 {
     qCDebug(gmCharactersTool()) << "Loading Character Tool ...";
 
-    m_imageViewer = new CharacterImageViewer(this);
-
-    engine->rootContext()->setContextProperty(u"character_tool"_s, this);
-    engine->rootContext()->setContextProperty(u"character_image_viewer"_s, m_imageViewer);
-
-    connect(m_imageViewer, &CharacterImageViewer::categoryChanged, this, [this]() {
-        if (m_currentViewer == m_imageViewer) emit categoryChanged();
+    connect(&m_imageViewer, &CharacterImageViewer::categoryChanged, this, [this]() {
+        if (m_currentViewer == &m_imageViewer) emit categoryChanged();
     });
 
-    connect(m_imageViewer, &CharacterImageViewer::categoriesChanged, this, [this]() {
-        if (m_currentViewer == m_imageViewer) emit categoriesChanged();
+    connect(&m_imageViewer, &CharacterImageViewer::categoriesChanged, this, [this]() {
+        if (m_currentViewer == &m_imageViewer) emit categoriesChanged();
     });
+}
+
+auto CharacterTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CharacterTool *
+{
+    Q_UNUSED(jsEngine)
+    return new CharacterTool(qmlEngine);
 }
 
 auto CharacterTool::characters() const -> QStringList
@@ -79,7 +79,7 @@ void CharacterTool::setCurrentCharacter(int index)
 
     if (m_currentCharacter)
     {
-        if (m_currentCharacter->type() < 2) m_currentViewer = m_imageViewer;
+        if (m_currentCharacter->type() < 2) m_currentViewer = &m_imageViewer;
 
         m_currentViewer->setCharacter(m_currentCharacter);
     }

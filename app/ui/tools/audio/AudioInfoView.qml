@@ -1,6 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import src
 
 Item {
     id: audio_info_frame
@@ -60,11 +62,17 @@ Item {
             visible: playlist_view.contentHeight > playlist_view.height
         }
 
-        model: audio_tool ? audio_tool.playlist : []
-        currentIndex: audio_tool ? audio_tool.index : -1
+        model: AudioTool.playlist
+        currentIndex: AudioTool.index
         highlightMoveVelocity: -1
 
         delegate: Item {
+            id: playlist_delegate
+
+            // TODO: type
+            required property AudioFile modelData
+            required property int index
+
             width: playlist_view.width
             height: playlist_text.height + 10
 
@@ -72,8 +80,8 @@ Item {
                 id: playlist_text
                 clip: true
                 elide: Text.ElideRight
-                text: modelData.displayName
-                color: playlist_view.currentIndex === index ? palette.highlightedText : palette.text
+                text: playlist_delegate.modelData.displayName
+                color: playlist_view.currentIndex === playlist_delegate.index ? palette.highlightedText : palette.text
                 font.pointSize: 10
                 anchors.centerIn: parent
                 width: parent.width - 10
@@ -81,14 +89,14 @@ Item {
 
             ToolTip {
                 id: playlist_tooltip
-                text: playlist_text.text + " [" + modelData.url + "]"
+                text: playlist_text.text + " [" + playlist_delegate.modelData.url + "]"
             }
 
             MouseArea {
                 hoverEnabled: true
                 anchors.fill: parent
 
-                onClicked: audio_tool.setMusicIndex(index)
+                onClicked: AudioTool.setMusicIndex(playlist_delegate.index)
                 onEntered: playlist_tooltip.visible = true
                 onExited: playlist_tooltip.visible = false
             }
@@ -109,8 +117,8 @@ Item {
 
             visible: true
 
-            initialMusicVolume: audio_tool ? audio_tool.musicVolume : 0
-            initialSoundVolume: audio_tool ? audio_tool.soundVolume : 0
+            initialMusicVolume: AudioTool.musicVolume
+            initialSoundVolume: AudioTool.soundVolume
         }
     }
 }

@@ -1,10 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
 
 Rectangle {
     id: root
     color: palette.dark
+
+    required property MapMarkerEditor markerEditor
 
     signal openDeleteDialog
 
@@ -35,7 +36,9 @@ Rectangle {
         MapMarkerDetails {
             id: marker_details
 
-            onDeleteButtonClicked: openDeleteDialog()
+            markerEditor: root.markerEditor // qmllint disable incompatible-type
+
+            onDeleteButtonClicked: root.openDeleteDialog()
 
             onBack: {
                 marker_menu_swipe.currentIndex = 0

@@ -49,46 +49,47 @@ void TestAudioProjectUpgrader::canUpgradeProject()
 
     auto *scenario = project.currentScenario();
 
-    const auto musicElements = scenario->elements(AudioElement::Type::Music);
-    QCOMPARE(musicElements.length(), 2);
-    QCOMPARE(musicElements[0]->name(), QStringLiteral("Music"));
-    QCOMPARE(musicElements[0]->mode(), AudioElement::Mode::RandomList);
-    QCOMPARE(musicElements[0]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
-    QCOMPARE(musicElements[0]->files().length(), 1);
-    QCOMPARE(musicElements[0]->files()[0]->source(), AudioFile::Source::File);
-    QCOMPARE(musicElements[0]->files()[0]->url(), QStringLiteral("/test.mp3"));
+    const auto elements = scenario->elements();
+    QCOMPARE(elements.length(), 5);
+    QCOMPARE(elements[0]->name(), QStringLiteral("Music"));
+    QCOMPARE(elements[0]->mode(), AudioElement::Mode::RandomList);
+    QCOMPARE(elements[0]->type(), AudioElement::Type::Music);
+    QCOMPARE(elements[0]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
+    QCOMPARE(elements[0]->files().length(), 1);
+    QCOMPARE(elements[0]->files()[0]->source(), AudioFile::Source::File);
+    QCOMPARE(elements[0]->files()[0]->url(), QStringLiteral("/test.mp3"));
 
-    QCOMPARE(musicElements[1]->name(), QStringLiteral("Spotify"));
-    QCOMPARE(musicElements[1]->mode(), AudioElement::Mode::RandomList);
-    QCOMPARE(musicElements[1]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
-    QCOMPARE(musicElements[1]->files().length(), 1);
-    QCOMPARE(musicElements[1]->files()[0]->source(), AudioFile::Source::Spotify);
-    QCOMPARE(musicElements[1]->files()[0]->url(), QStringLiteral("spotify:album:test"));
+    QCOMPARE(elements[1]->name(), QStringLiteral("Spotify"));
+    QCOMPARE(elements[1]->mode(), AudioElement::Mode::RandomList);
+    QCOMPARE(elements[1]->type(), AudioElement::Type::Music);
+    QCOMPARE(elements[1]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
+    QCOMPARE(elements[1]->files().length(), 1);
+    QCOMPARE(elements[1]->files()[0]->source(), AudioFile::Source::Spotify);
+    QCOMPARE(elements[1]->files()[0]->url(), QStringLiteral("spotify:album:test"));
 
-    const auto soundElements = scenario->elements(AudioElement::Type::Sound);
-    QCOMPARE(soundElements.length(), 1);
-    QCOMPARE(soundElements[0]->name(), QStringLiteral("Sounds"));
-    QCOMPARE(soundElements[0]->mode(), AudioElement::Mode::RandomList);
-    QCOMPARE(soundElements[0]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
-    QCOMPARE(soundElements[0]->files().length(), 1);
-    QCOMPARE(soundElements[0]->files()[0]->source(), AudioFile::Source::File);
-    QCOMPARE(soundElements[0]->files()[0]->url(), QStringLiteral("/test.wav"));
+    QCOMPARE(elements[2]->name(), QStringLiteral("Sounds"));
+    QCOMPARE(elements[2]->type(), AudioElement::Type::Sound);
+    QCOMPARE(elements[2]->mode(), AudioElement::Mode::RandomList);
+    QCOMPARE(elements[2]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
+    QCOMPARE(elements[2]->files().length(), 1);
+    QCOMPARE(elements[2]->files()[0]->source(), AudioFile::Source::File);
+    QCOMPARE(elements[2]->files()[0]->url(), QStringLiteral("/test.wav"));
 
-    const auto radioElements = scenario->elements(AudioElement::Type::Radio);
-    QCOMPARE(radioElements.length(), 2);
-    QCOMPARE(radioElements[0]->name(), QStringLiteral("Radio"));
-    QCOMPARE(radioElements[0]->mode(), AudioElement::Mode::RandomList);
-    QCOMPARE(radioElements[0]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
-    QCOMPARE(radioElements[0]->files().length(), 1);
-    QCOMPARE(radioElements[0]->files()[0]->source(), AudioFile::Source::Web);
-    QCOMPARE(radioElements[0]->files()[0]->url(), QStringLiteral("http://localhost/radio"));
+    QCOMPARE(elements[3]->name(), QStringLiteral("Radio"));
+    QCOMPARE(elements[3]->mode(), AudioElement::Mode::RandomList);
+    QCOMPARE(elements[3]->type(), AudioElement::Type::Radio);
+    QCOMPARE(elements[3]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
+    QCOMPARE(elements[3]->files().length(), 1);
+    QCOMPARE(elements[3]->files()[0]->source(), AudioFile::Source::Web);
+    QCOMPARE(elements[3]->files()[0]->url(), QStringLiteral("http://localhost/radio"));
 
-    QCOMPARE(radioElements[1]->name(), QStringLiteral("Radio Local"));
-    QCOMPARE(radioElements[1]->mode(), AudioElement::Mode::RandomList);
-    QCOMPARE(radioElements[1]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
-    QCOMPARE(radioElements[1]->files().length(), 1);
-    QCOMPARE(radioElements[1]->files()[0]->source(), AudioFile::Source::File);
-    QCOMPARE(radioElements[1]->files()[0]->url(), QStringLiteral("/test.m3u"));
+    QCOMPARE(elements[4]->name(), QStringLiteral("Radio Local"));
+    QCOMPARE(elements[4]->mode(), AudioElement::Mode::RandomList);
+    QCOMPARE(elements[4]->type(), AudioElement::Type::Radio);
+    QCOMPARE(elements[4]->thumbnail()->relativeUrl(), QStringLiteral("/test.jpg"));
+    QCOMPARE(elements[4]->files().length(), 1);
+    QCOMPARE(elements[4]->files()[0]->source(), AudioFile::Source::File);
+    QCOMPARE(elements[4]->files()[0]->url(), QStringLiteral("/test.m3u"));
 }
 
 void TestAudioProjectUpgrader::audioSaveLoadUpgradesProject()

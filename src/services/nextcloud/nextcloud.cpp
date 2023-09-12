@@ -16,6 +16,10 @@ constexpr auto MAX_AUTH_POLLS = 20;
 
 Q_LOGGING_CATEGORY(gmNextCloud, "gm.service.nextcloud")
 
+NextCloud::NextCloud(QQmlEngine &engine, QObject *parent) : NextCloud(*engine.networkAccessManager(), parent)
+{
+}
+
 NextCloud::NextCloud(QNetworkAccessManager &networkManager, QObject *parent)
     : NextCloud(u"NextCloud"_s, networkManager, parent)
 {
@@ -56,6 +60,16 @@ NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkM
             m_loggingIn = false;
             connected(false);
         });
+}
+
+auto NextCloud::qmlInstance(QQmlEngine *engine) -> NextCloud *
+{
+    if (s_qmlInstance == nullptr)
+    {
+        s_qmlInstance = new NextCloud(*engine, engine);
+    }
+
+    return s_qmlInstance;
 }
 
 auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,

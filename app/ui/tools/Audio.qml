@@ -1,11 +1,13 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+pragma ComponentBehavior: Bound
 
-import "../main"
+import QtQuick
+import QtQuick.Controls
 import "./audio"
 import "./audio/editor"
 
 Item {
+    id: root
+
     StackView {
         id: audio_stack
         anchors.fill: parent
@@ -13,7 +15,7 @@ Item {
         initialItem: audio_page
     }
 
-    AudioTool {
+    AudioPage {
         id: audio_page
 
         onOpenEditor: {
@@ -25,11 +27,14 @@ Item {
     Loader {
         id: audio_editor_page
 
-        property alias stack: audio_stack
-        property alias loader: audio_editor_page
-
         active: false
         asynchronous: true
-        source: "audio/editor/Editor.qml"
+
+        sourceComponent: Editor {
+            onBackToTool: {
+                audio_stack.pop()
+                audio_editor_page.active = false
+            }
+        }
     }
 }

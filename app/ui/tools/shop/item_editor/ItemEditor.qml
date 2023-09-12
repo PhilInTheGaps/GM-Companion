@@ -1,17 +1,18 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../../defines.js" as Defines
+import src
+import "../../.."
 
 Page {
-    id: editor
+    id: root
 
     signal backToShopEditor
 
     Connections {
-        target: shop_tool && shop_tool.editor
-                && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor : undefined
+        target: ShopTool && ShopTool.editor
+                && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor : undefined
 
         function onShowInfoBar(message) {
             info_text.text = message
@@ -24,12 +25,12 @@ Page {
         id: header_bar
 
         enableBack: true
-        onBackClicked: backToShopEditor()
+        onBackClicked: root.backToShopEditor()
 
         enableSave: true
-        isSaved: shop_tool && shop_tool.editor
-                 && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.isSaved : true
-        onSaveClicked: shop_tool.editor.itemEditor.save()
+        isSaved: ShopTool && ShopTool.editor
+                 && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor.isSaved : true
+        onSaveClicked: ShopTool.editor.itemEditor.save()
     }
 
     ItemDetails {
@@ -54,7 +55,7 @@ Page {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            height: Defines.TOOLBAR_HEIGHT
+            height: Sizes.toolbarHeight
             color: palette.button
 
             Row {
@@ -112,10 +113,17 @@ Page {
 
             ScrollBar.vertical: ScrollBar {}
 
-            model: shop_tool && shop_tool.editor
-                   && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.itemModel : []
+            model: ShopTool.editor && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor.itemModel : []
 
             delegate: Rectangle {
+                id: item_rect
+
+                required property string name
+                required property string price
+                required property string category
+                required property string description
+                required property int index
+
                 height: delegate_row.height
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
@@ -146,7 +154,7 @@ Page {
                     height: 30
 
                     Label {
-                        text: name
+                        text: item_rect.name
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                         clip: true
                         elide: Text.ElideRight
@@ -155,7 +163,7 @@ Page {
                     }
 
                     Label {
-                        text: price
+                        text: item_rect.price
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
                         clip: true
                         elide: Text.ElideRight
@@ -165,7 +173,7 @@ Page {
                     }
 
                     Label {
-                        text: category
+                        text: item_rect.category
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
                         clip: true
                         elide: Text.ElideRight
@@ -174,7 +182,7 @@ Page {
                     }
 
                     Label {
-                        text: description
+                        text: item_rect.description
                         width: (parent.width - x - delete_button.width
                                 - parent.spacing - parent.rightPadding)
                         clip: true
@@ -203,7 +211,7 @@ Page {
                             color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : palette.text)
                         }
 
-                        onClicked: shop_tool.editor.itemEditor.deleteItem(index)
+                        onClicked: ShopTool.editor.itemEditor.deleteItem(item_rect.index)
                     }
                 }
             }
@@ -215,7 +223,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.alternateBase
         visible: false
 

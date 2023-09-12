@@ -1,23 +1,29 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
+pragma ComponentBehavior: Bound
 
-import "../../../../../colors.js" as Colors
-import "../../../../../sizes.js" as Sizes
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import IconFonts
+import src
+import "../../../../.."
 
 Item {
     id: root
+
+    property bool enableMoveButtons: true
+    property bool enableDelete: true
+
+    signal deleteClicked
+
     anchors.left: parent.left
     anchors.right: parent.right
     height: Sizes.toolbarHeight
 
     Connections {
-        target: audio_editor
+        target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            element_name_field.text = audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.name : ""
+            element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : "" // qmllint disable missing-property
         }
     }
 
@@ -42,29 +48,32 @@ Item {
                 text: qsTr("No Subscenario")
 
                 onClicked: {
-                    audio_editor.setSubscenario(-1)
+                    AudioTool.editor.setSubscenario(-1)
                     subscenario_dialog.accept()
                 }
             }
 
             Repeater {
                 model: {
-                    if (audio_editor && audio_editor.currentProject
-                            && audio_editor.currentProject.currentScenario) {
-                        audio_editor.currentProject.currentScenario.scenarios
+                    if (AudioTool.editor.currentProject
+                            && AudioTool.editor.currentProject.currentScenario) {
+                        AudioTool.editor.currentProject.currentScenario.scenarios
                     } else {
                         []
                     }
                 }
 
                 Button {
+                    required property AudioScenario modelData
+                    required property int index
+
                     anchors.right: parent.right
                     anchors.left: parent.left
 
-                    text: modelData.name
+                    text: modelData.name // qmllint disable missing-property
 
                     onClicked: {
-                        audio_editor.setSubscenario(index)
+                        AudioTool.editor.setSubscenario(index)
                         subscenario_dialog.accept()
                     }
                 }
@@ -74,7 +83,7 @@ Item {
 
     Item {
         id: element_up_down
-        visible: enable_move_buttons
+        visible: root.enableMoveButtons
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -88,14 +97,14 @@ Item {
             height: parent.height / 2
 
             background: Rectangle {
-                color: Colors.alternateBase
+                color: palette.alternateBase
             }
 
             Label {
                 text: element_name_field.edit_mode ? FontAwesome.circleCheck : FontAwesome.chevronUp
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
-                color: element_name_field.edit_mode ? "limegreen" : Colors.text
+                color: element_name_field.edit_mode ? "limegreen" : palette.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -105,13 +114,13 @@ Item {
                 if (element_name_field.edit_mode) {
                     element_name_field.edit_mode = false
 
-                    if (audio_editor && audio_editor.currentElement) {
-                        audio_editor.currentElement.name = element_name_field.text
+                    if (AudioTool.editor.currentElement) {
+                        AudioTool.editor.currentElement.name = element_name_field.text
                     }
 
-                    element_up_down.visible = enable_move_buttons
+                    element_up_down.visible = enableMoveButtons
                 } else {
-                    audio_editor.moveElement(audio_editor.currentElement, -1)
+                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, -1)
                 }
             }
         }
@@ -124,14 +133,14 @@ Item {
             anchors.bottom: parent.bottom
 
             background: Rectangle {
-                color: Colors.alternateBase
+                color: palette.alternateBase
             }
 
             Label {
                 text: element_name_field.edit_mode ? FontAwesome.circleXmark : FontAwesome.chevronDown
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
-                color: element_name_field.edit_mode ? "red" : Colors.text
+                color: element_name_field.edit_mode ? "red" : palette.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -140,11 +149,10 @@ Item {
             onClicked: {
                 if (element_name_field.edit_mode) {
                     element_name_field.edit_mode = false
-                    element_name_field.text = audio_editor
-                            && audio_editor.currentElement ? audio_editor.currentElement.name : ""
-                    element_up_down.visible = enable_move_buttons
+                    element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : "" // qmllint disable missing-property
+                    element_up_down.visible = root.enableMoveButtons
                 } else {
-                    audio_editor.moveElement(audio_editor.currentElement, 1)
+                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, 1)
                 }
             }
         }
@@ -156,7 +164,7 @@ Item {
         anchors.margins: 0
         anchors.left: element_up_down.visible ? element_up_down.right : parent.left
 
-        backgroundColor: Colors.alternateBase
+        backgroundColor: palette.alternateBase
         transparentBackground: false
         padding: 0
         borderWidth: 0
@@ -169,8 +177,7 @@ Item {
 
     TextField {
         id: element_name_field
-        text: audio_editor
-              && audio_editor.currentElement ? audio_editor.currentProject.name : ""
+        text: AudioTool.editor.currentElement ? AudioTool.editor.currentProject.name : "" // qmllint disable missing-property
         anchors.left: scenario_button.visible ? scenario_button.right : parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -187,7 +194,7 @@ Item {
 
         CustomToolBarButton {
             id: element_edit_name_button
-            anchors.right: enable_delete ? element_delete_button.left : parent.right
+            anchors.right: root.enableDelete ? element_delete_button.left : parent.right
             anchors.margins: 0
             visible: !element_name_field.edit_mode
 
@@ -203,7 +210,7 @@ Item {
 
         Button {
             id: element_delete_button
-            visible: !element_name_field.edit_mode && enable_delete
+            visible: !element_name_field.edit_mode && root.enableDelete
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -230,7 +237,7 @@ Item {
                 id: element_delete_overlay
                 visible: false
                 anchors.fill: parent
-                color: Colors.alternateBase
+                color: palette.alternateBase
 
                 Label {
                     text: FontAwesome.trash
@@ -266,10 +273,10 @@ Item {
                     }
 
                     onClicked: {
-                        deleteClicked()
+                        root.deleteClicked()
                         element_delete_overlay.visible = false
 
-                        audio_editor.deleteCurrentElement()
+                        AudioTool.editor.deleteCurrentElement()
                     }
                 }
 

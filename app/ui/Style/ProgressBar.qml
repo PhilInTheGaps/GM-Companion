@@ -1,9 +1,5 @@
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Controls
-import QtQuick.Controls.impl
-import "./sizes.js" as Sizes
-import "./colors.js" as Colors
 
 T.ProgressBar {
     id: control
@@ -16,7 +12,7 @@ T.ProgressBar {
                         contentItem.implicitHeight + topPadding + bottomPadding)
 
     contentItem: Item {
-        implicitHeight: Sizes.progressBarHeight
+        implicitHeight: StyleSizes.progressBarHeight
         implicitWidth: 116
 
         Rectangle {
@@ -26,20 +22,20 @@ T.ProgressBar {
             height: parent.height
 
             radius: 2
-            color: Colors.alternateBase
+            color: palette.alternateBase
         }
     }
 
     background: Rectangle {
         implicitWidth: 200
-        implicitHeight: Sizes.progressBarHeight
+        implicitHeight: StyleSizes.progressBarHeight
         x: control.leftPadding
         y: control.topPadding + (control.availableHeight - height) / 2
         width: control.availableWidth
-        height: Sizes.progressBarHeight
+        height: StyleSizes.progressBarHeight
 
-        color: Colors.window
-        border.color: Colors.border
+        color: palette.window
+        border.color: StyleColors.border
         border.width: 1
     }
 }

@@ -1,8 +1,10 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import "../../../../defines.js" as Defines
-import "../../../../colors.js" as Colors
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
+import "../../../.."
 import "../../buttons"
 
 Dialog {
@@ -41,35 +43,29 @@ Dialog {
     property var selectedElement: undefined
 
     onOpened: {
-        if (audio_addon_element_manager) {
-            audio_addon_element_manager.loadData()
-        }
-
+        AudioTool.editor.addons.loadData()
         selectedElement = undefined
     }
 
     onAccepted: {
-        if (!audio_editor || !audio_addon_element_manager)
-            return
-
-        let project = audio_addon_element_manager.projects[addon_project_combo_box.currentIndex]
+        let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
         let subscenario = asSubscenario ? subscenarioIndex : -1
 
         switch (mode) {
         case AddonElementDialog.Mode.Project:
-            audio_editor.createProjectFromTemplate(project)
+            AudioTool.editor.createProjectFromTemplate(project)
             break
         case AddonElementDialog.Mode.Category:
-            audio_editor.createCategoryFromTemplate(project.currentCategory)
+            AudioTool.editor.createCategoryFromTemplate(project.currentCategory)
             break
         case AddonElementDialog.Mode.Scenario:
-            audio_editor.createScenarioFromTemplate(project.currentScenario,
+            AudioTool.editor.createScenarioFromTemplate(project.currentScenario,
                                                     asSubscenario)
             break
         case AddonElementDialog.Mode.Music:
         case AddonElementDialog.Mode.Sound:
         case AddonElementDialog.Mode.Radio:
-            audio_editor.createElementFromTemplate(selectedElement, subscenario)
+            AudioTool.editor.createElementFromTemplate(selectedElement, subscenario)
         }
     }
 
@@ -79,7 +75,7 @@ Dialog {
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: Defines.SIDEBAR_WIDTH
+            width: Sizes.sidebarWidth
 
             color: palette.dark
             border.color: Colors.border
@@ -89,20 +85,14 @@ Dialog {
                 id: addon_combo_box
                 anchors.left: parent.left
                 anchors.right: parent.right
-                emptyString: audio_addon_element_manager
-                             && audio_addon_element_manager.isLoading ? qsTr("loading ...") : qsTr(
+                emptyString: AudioTool.editor.addons.isLoading ? qsTr("loading ...") : qsTr(
                                                                             "No Addons")
 
-                model: audio_addon_element_manager ? audio_addon_element_manager.addons : []
+                model: AudioTool.editor.addons.addons
                 textRole: "shortName"
 
                 onCurrentTextChanged: {
-                    console.log(currentIndex)
-
-                    if (!audio_addon_element_manager)
-                        return
-
-                    audio_addon_element_manager.currentIndex = currentIndex
+                    AudioTool.editor.addons.currentIndex = currentIndex
                 }
             }
 
@@ -113,7 +103,7 @@ Dialog {
                 anchors.right: parent.right
                 emptyString: qsTr("No Projects")
 
-                model: audio_addon_element_manager ? audio_addon_element_manager.projects : []
+                model: AudioTool.editor.addons.projects
                 textRole: "name"
             }
 
@@ -139,17 +129,18 @@ Dialog {
                     anchors.right: parent.right
 
                     Repeater {
-                        model: audio_addon_element_manager
-                               && addon_project_combo_box.currentIndex
-                               >= 0 ? audio_addon_element_manager.projects[addon_project_combo_box.currentIndex].categories : []
+                        model: addon_project_combo_box.currentIndex >= 0
+                               ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].categories : []
 
                         CustomButton {
+                            required property AudioProject modelData
+
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            buttonText: modelData.name
+                            buttonText: modelData.name // qmllint disable missing-property
 
                             onClicked: {
-                                let project = audio_addon_element_manager.projects[addon_project_combo_box.currentIndex]
+                                let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
                                 project.currentCategory = modelData
                             }
                         }
@@ -175,17 +166,18 @@ Dialog {
                 Repeater {
                     id: scenario_repeater
 
-                    model: audio_addon_element_manager
-                           && addon_project_combo_box.currentIndex
-                           >= 0 ? audio_addon_element_manager.projects[addon_project_combo_box.currentIndex].currentCategory.scenarios : []
+                    model: addon_project_combo_box.currentIndex >= 0
+                           ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.scenarios : []
 
                     CustomButton {
-                        buttonText: modelData.name
+                        required property AudioScenario modelData
+
+                        buttonText: modelData.name // qmllint disable missing-property
                         padding: 10
                         backgroundColor: "transparent"
                         usesFixedWidth: false
                         onClicked: {
-                            let project = audio_addon_element_manager.projects[addon_project_combo_box.currentIndex]
+                            let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
                             let category = project.currentCategory
                             category.currentScenario = modelData
                         }
@@ -213,9 +205,9 @@ Dialog {
 
                 clip: true
 
-                model: audio_addon_element_manager
-                       && addon_project_combo_box.currentIndex >= 0
-                       && audio_addon_element_manager.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario ? audio_addon_element_manager.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario.model : []
+                model: addon_project_combo_box.currentIndex >= 0
+                       && AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario
+                        ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario.model : []
 
                 ScrollBar.vertical: ScrollBar {
                     id: verticalScrollBar
@@ -228,16 +220,21 @@ Dialog {
                 }
 
                 delegate: Column {
+                    id: scenario_delegate
+
+                    required property AudioScenario modelData
+                    required property int index
+
                     spacing: 5
                     anchors.left: parent ? parent.left : undefined
                     anchors.right: parent ? parent.right : undefined
 
                     Label {
                         id: subscenario_text
-                        text: modelData.name
+                        text: scenario_delegate.modelData.name // qmllint disable missing-property
                         font.pointSize: 12
                         verticalAlignment: Text.AlignVCenter
-                        visible: index > 0
+                        visible: scenario_delegate.index > 0
 
                         anchors.right: parent.right
                         anchors.left: parent.left
@@ -249,37 +246,41 @@ Dialog {
                         anchors.right: parent.right
 
                         Repeater {
-                            model: modelData.elements
+                            model: scenario_delegate.modelData.elements
 
                             Item {
+                                id: element_delegate
+
+                                required property AudioElement modelData
+
                                 width: list.button_width
                                 height: width
-                                visible: mode < 3 || modelData.type === mode - 3
+                                visible: root.mode < 3 || modelData.type === root.mode - 3
 
                                 AudioButton {
                                     id: element_button
-                                    element_name: modelData.name
-                                    element_type: modelData.type
+                                    element_name: element_delegate.modelData.name // qmllint disable missing-property
+                                    element_type: element_delegate.modelData.type
                                     subscenario_name: subscenario_text.text
-                                    thumbnail: modelData.thumbnail
+                                    thumbnail: element_delegate.modelData.thumbnail
                                     width: parent.width - 4
                                     anchors.centerIn: parent
                                     overlay_enabled: false
-                                    hover_enabled: mode >= 3
+                                    hover_enabled: root.mode >= 3
 
                                     Rectangle {
                                         id: dialog_overlay
                                         anchors.fill: parent
 
                                         visible: element_button.hover_enabled
-                                                 && selectedElement === modelData
+                                                 && root.selectedElement === element_delegate.modelData
 
                                         color: "transparent"
                                         border.color: Colors.border
                                         border.width: 5
                                     }
 
-                                    onClicked: selectedElement = modelData
+                                    onClicked: root.selectedElement = element_delegate.modelData
                                 }
                             }
                         }

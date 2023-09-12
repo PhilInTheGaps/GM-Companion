@@ -1,8 +1,12 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import CustomComponents 1.0
-import "../../defines.js" as Defines
+import CustomComponents
+import common
+import src
+import "../.."
 
 Page {
     id: page
@@ -30,14 +34,14 @@ Page {
                 anchors.top: parent.top
                 anchors.right: parent.right
 
-                width: Math.min(Defines.SIDEBAR_WIDTH * 2, left_view.width)
-                height: Defines.TOOLBAR_HEIGHT * 1.5
+                width: Math.min(Sizes.sidebarWidth * 2, left_view.width)
+                height: Sizes.toolbarHeight * 1.5
                 font.pointSize: 12
                 text: qsTr("1.0")
 
                 validator: DoubleValidator {
                     notation: DoubleValidator.ScientificNotation
-                    locale: settings_manager.languageBcp47
+                    locale: SettingsManager.languageBcp47
                 }
 
                 selectByMouse: true
@@ -73,25 +77,21 @@ Page {
                     Repeater {
                         id: from_unit_repeater
 
-                        model: converter_tool
-                               && converter_tool.currentCategory ? converter_tool.currentCategory.units : []
+                        model: ConverterTool.currentCategory ? ConverterTool.currentCategory.units : []
 
                         CustomButton {
+                            required property ConverterUnit modelData
+
                             buttonText: qsTranslate("Units", modelData.name)
-                            anchors.left: parent.left
-                            anchors.right: parent.right
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
                             hoverEnabled: true
                             font.pointSize: 12
 
-                            backgroundColor: converter_tool
-                                             && converter_tool.fromUnit
-                                             === modelData ? palette.button : palette.dark
+                            backgroundColor: ConverterTool.fromUnit === modelData ? palette.button : palette.dark
 
                             onClicked: {
-                                if (!converter_tool)
-                                    return
-
-                                converter_tool.fromUnit = modelData
+                                ConverterTool.fromUnit = modelData
                             }
                         }
                     }
@@ -113,7 +113,7 @@ Page {
                 font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 15
 
-                height: Defines.TOOLBAR_HEIGHT * 1.5
+                height: Sizes.toolbarHeight * 1.5
                 verticalAlignment: Label.AlignVCenter
 
                 anchors.top: parent.top
@@ -134,18 +134,16 @@ Page {
                 anchors.top: parent.top
                 anchors.left: parent.left
 
-                width: Math.min(Defines.SIDEBAR_WIDTH * 2, right_view.width)
-                height: Defines.TOOLBAR_HEIGHT * 1.5
+                width: Math.min(Sizes.sidebarWidth * 2, right_view.width)
+                height: Sizes.toolbarHeight * 1.5
                 font.pointSize: 12
                 readOnly: true
-                text: converter_tool ? Number(
-                                           converter_tool.convert(
-                                               converter_tool.fromUnit,
-                                               from_value_text_field.text,
-                                               converter_tool.toUnit)).toLocaleString(
-                                           Qt.locale(
-                                               settings_manager.languageBcp47),
-                                           'G', 8) : ""
+                text: Number(
+                    ConverterTool.convert(
+                        ConverterTool.fromUnit,
+                        from_value_text_field.text,
+                        ConverterTool.toUnit)).toLocaleString(
+                            Qt.locale(SettingsManager.languageBcp47), 'G', 8)
             }
 
             Flickable {
@@ -177,30 +175,24 @@ Page {
                     Repeater {
                         id: to_unit_repeater
 
-                        model: converter_tool
-                               && converter_tool.currentCategory ? converter_tool.currentCategory.units : []
+                        model: ConverterTool.currentCategory ? ConverterTool.currentCategory.units : []
 
                         CustomButton {
-                            property string converted: converter_tool ? converter_tool.convert(
-                                                                            converter_tool.fromUnit, from_value_text_field.text,
-                                                                            modelData) : ""
+                            required property ConverterUnit modelData
+                            property string converted: ConverterTool.convert(
+                                                            ConverterTool.fromUnit, from_value_text_field.text,modelData)
 
                             buttonText: qsTranslate("Units", modelData.name)
                                         + (converted.length > 0 ? " (" + converted + ")" : "")
-                            anchors.left: parent.left
-                            anchors.right: parent.right
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
                             hoverEnabled: true
                             font.pointSize: 12
 
-                            backgroundColor: converter_tool
-                                             && converter_tool.toUnit
-                                             === modelData ? palette.button : palette.dark
+                            backgroundColor: ConverterTool.toUnit === modelData ? palette.button : palette.dark
 
                             onClicked: {
-                                if (!converter_tool)
-                                    return
-
-                                converter_tool.toUnit = modelData
+                                ConverterTool.toUnit = modelData
                             }
                         }
                     }

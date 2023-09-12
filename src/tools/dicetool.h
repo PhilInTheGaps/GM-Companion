@@ -1,30 +1,52 @@
-#ifndef DICETOOL_H
-#define DICETOOL_H
+#pragma once
 
+#include <QJSEngine>
 #include <QObject>
 #include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class DiceTool : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
     Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
     Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
     Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
 
 public:
-    explicit DiceTool(QQmlEngine *engine, QObject *parent = nullptr);
-    explicit DiceTool(QObject *parent) : QObject(parent) {}
+    DiceTool() = delete;
+    using QObject::QObject;
 
-    [[nodiscard]] auto sides() const -> int { return m_sides; }
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> DiceTool *;
+
+    [[nodiscard]] auto sides() const -> int
+    {
+        return m_sides;
+    }
     [[nodiscard]] auto roll() -> int;
-    [[nodiscard]] auto calculationString() const -> QString { return m_calculationString; }
+    [[nodiscard]] auto calculationString() const -> QString
+    {
+        return m_calculationString;
+    }
 
     Q_INVOKABLE void setSides(int sides);
-    Q_INVOKABLE void setBonusDice(int count) { m_bonusDice = count; }
-    Q_INVOKABLE void setAmount(int amount) { m_amount = amount; }
-    Q_INVOKABLE void setModifier(int modifier) { m_modifier = modifier; }
+    Q_INVOKABLE void setBonusDice(int count)
+    {
+        m_bonusDice = count;
+    }
+    Q_INVOKABLE void setAmount(int amount)
+    {
+        m_amount = amount;
+    }
+    Q_INVOKABLE void setModifier(int modifier)
+    {
+        m_modifier = modifier;
+    }
 
-    Q_INVOKABLE static void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax);
+    Q_INVOKABLE static void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax,
+                                            bool successMax);
     [[nodiscard]] Q_INVOKABLE static bool getCriticalEnabled();
     [[nodiscard]] Q_INVOKABLE static int getSuccess();
     [[nodiscard]] Q_INVOKABLE static int getFailure();
@@ -49,5 +71,3 @@ private:
 
     QString m_calculationString;
 };
-
-#endif // DICETOOL_H

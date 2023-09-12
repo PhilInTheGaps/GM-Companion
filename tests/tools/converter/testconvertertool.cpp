@@ -25,7 +25,7 @@ void TestConverterTool::initTestCase()
 
 void TestConverterTool::canConvertUnits()
 {
-    const ConverterTool converter(nullptr, nullptr);
+    const ConverterTool converter(nullptr);
 
     auto *fromUnit = new ConverterUnit(QStringLiteral("Inch"), 0.0254, this);
     auto *toUnit = new ConverterUnit(QStringLiteral("Centimeter"), 0.01, this);
@@ -36,7 +36,7 @@ void TestConverterTool::canConvertUnits()
 
 void TestConverterTool::canConvertProjectUnits()
 {
-    ConverterTool converter(nullptr, nullptr);
+    ConverterTool converter(nullptr);
 
     auto *fromUnit = new ConverterUnit(QStringLiteral("Inch"), 0.0254, this);
     auto *toUnit = new ConverterUnit(QStringLiteral("Centimeter"), 0.01, this);
@@ -52,7 +52,7 @@ void TestConverterTool::canConvertProjectUnits()
 
 void TestConverterTool::canNotConvertInvalidUnits()
 {
-    const ConverterTool converter(nullptr, nullptr);
+    const ConverterTool converter(nullptr);
     auto *fromUnit = new ConverterUnit(QStringLiteral("From"), 0, this);
     auto *toUnit = new ConverterUnit(QStringLiteral("To"), 0, this);
 
@@ -64,7 +64,7 @@ void TestConverterTool::canNotConvertInvalidUnits()
 
 void TestConverterTool::canLoadProjects()
 {
-    ConverterTool converter(nullptr, nullptr);
+    ConverterTool converter(nullptr);
     QVERIFY(converter.projects().isEmpty());
 
     converter.loadData();
@@ -76,7 +76,7 @@ void TestConverterTool::canLoadAddonProjects()
     const auto unitDir = FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath());
     const auto backupDir = backupUserFolder(unitDir);
 
-    ConverterTool converter(nullptr, nullptr);
+    ConverterTool converter(nullptr);
     QVERIFY(converter.projects().isEmpty());
 
     converter.loadData();
@@ -91,7 +91,7 @@ void TestConverterTool::canLoadAddonProjects()
 
 void TestConverterTool::canHandleIncompleteProjects()
 {
-    ConverterTool converter(nullptr, nullptr);
+    ConverterTool converter(nullptr);
     converter.currentProject(new ConverterProject(QLatin1String(), this));
     converter.currentProject(nullptr);
     converter.currentProject(

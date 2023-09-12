@@ -1,9 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.MenuItem {
     id: control
@@ -28,21 +25,21 @@ T.MenuItem {
 
         text: control.text
         font: control.font
-        color: control.enabled ? Colors.text : Colors.textDisabled
+        color: control.enabled ? palette.text : StyleColors.textDisabled
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
     }
 
     background: Rectangle {
         implicitWidth: 200
-        implicitHeight: Sizes.menuItemHeight
+        implicitHeight: StyleSizes.menuItemHeight
         x: 1
         y: 1
         width: parent.width - 2
         height: parent.height - 2
         color: "transparent"
         opacity: enabled ? 1 : 0.3
-        border.color: Colors.border
+        border.color: StyleColors.border
         border.width: control.hovered ? 1 : 0
     }
 }

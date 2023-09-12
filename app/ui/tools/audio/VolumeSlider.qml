@@ -1,13 +1,12 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-
+import QtQuick
+import QtQuick.Controls
 import IconFonts
 
 Slider {
     id: slider
 
     property string icon: FontAwesome.question
-    property var iconFont: FontAwesome.fontSolid
+    property font iconFont: FontAwesome.fontSolid
     property real initialVolume: 0
 
     orientation: Qt.Horizontal
@@ -26,9 +25,9 @@ Slider {
         border.color: palette.dark
 
         Text {
-            text: icon
-            font.family: iconFont.family
-            font.styleName: iconFont.styleName
+            text: slider.icon
+            font.family: slider.iconFont.family
+            font.styleName: slider.iconFont.styleName
             font.pixelSize: parent.height / 2
             anchors.centerIn: parent
             color: palette.alternateBase

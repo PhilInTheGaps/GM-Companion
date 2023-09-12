@@ -2,10 +2,19 @@ cmake_minimum_required(VERSION 3.19)
 
 # set QML import path
 list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
 list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
 qt_add_library(gm-companion-ui-style STATIC)
+
+set_source_files_properties(StyleColors.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
+
+set_source_files_properties(StyleSizes.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
 
 qt_add_qml_module(gm-companion-ui-style
     URI Style
@@ -43,6 +52,8 @@ qt_add_qml_module(gm-companion-ui-style
         TextField.qml
         ToolBar.qml
         ToolTip.qml
-        colors.js
-        sizes.js
+        StyleColors.qml
+        StyleSizes.qml
+    IMPORT_PATH
+        ${QML_IMPORT_PATH}
 )

@@ -54,14 +54,25 @@ auto MarkdownUtils::markdownToHtmlDiscount(const QString &markdown) -> QString
 {
     auto markdownStd = markdown.toStdString();
     auto flags = MKD_AUTOLINK;
-    MMIOT *doc = mkd_string(markdownStd.c_str(), markdownStd.size(), flags);
+
+#ifdef MKD_NOLINKS
+    // Discount v2
+    auto *doc = gfm_string(markdownStd.c_str(), markdownStd.size(), flags);
 
     if (doc == nullptr) return u""_s;
 
     mkd_compile(doc, flags);
+#else
+    // Discount v3
+    auto *doc = gfm_string(markdownStd.c_str(), markdownStd.size(), &flags);
+
+    if (doc == nullptr) return u""_s;
+
+    mkd_compile(doc, &flags);
+#endif
 
     char *cstr_buff = nullptr;
-    int size = mkd_document(doc, &cstr_buff);
+    const int size = mkd_document(doc, &cstr_buff);
 
     std::string html;
     html.assign(cstr_buff, size);

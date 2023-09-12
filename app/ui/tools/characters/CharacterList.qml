@@ -1,7 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
 
 Rectangle {
     id: root
@@ -29,9 +30,13 @@ Rectangle {
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
 
             Repeater {
-                model: character_tool.characters
+                model: CharacterTool.characters
 
                 CustomButton {
+                    id: character_delegate
+                    required property string modelData
+                    required property int index
+
                     buttonText: modelData
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -39,19 +44,19 @@ Rectangle {
                     textItem.width: mainRow.width - textItem.x
                                     - (icon_button.visible ? icon_button.width : 0)
 
-                    onClicked: character_tool.setCurrentCharacter(index)
+                    onClicked: CharacterTool.setCurrentCharacter(index)
 
                     CustomToolBarButton {
                         id: icon_button
-                        iconText: character_tool.active ? FontAwesome.xmark : FontAwesome.plus
+                        iconText: CharacterTool.active ? FontAwesome.xmark : FontAwesome.plus
                         anchors.right: parent.right
                         visible: parent.hovered || hovered
 
-                        ToolTip.text: parent.active ? qsTr("Make Inactive") : qsTr(
-                                                          "Make Active")
+                        ToolTip.text: CharacterTool.active ? qsTr("Make Inactive") : qsTr(
+                                                                  "Make Active")
                         ToolTip.visible: hovered
 
-                        onClicked: character_tool.toggleCharacterActive(index)
+                        onClicked: CharacterTool.toggleCharacterActive(character_delegate.index)
                     }
                 }
             }

@@ -1,25 +1,29 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../sizes.js" as Sizes
+import common
+import ".."
 
 CustomButton {
     id: root
 
     property string itemIcon: ""
+    required property TreeItem modelData
 
     height: Sizes.toolbarHeight / 2
 
     anchors.right: parent ? parent.right : undefined
     anchors.left: parent ? parent.left : undefined
-    anchors.leftMargin: modelData.depth * 5 + (!modelData.canToggle
-                                               && itemIcon === "" ? 22 : 0)
+    anchors.leftMargin: modelData ? modelData.depth * 5 + (!modelData.canToggle
+                                               && itemIcon === "" ? 22 : 0) : 0
 
-    iconText: modelData.canToggle ? (modelData.isOpen ? FontAwesome.caretDown : FontAwesome.caretRight) : itemIcon
+    iconText: modelData && modelData.canToggle ? (modelData.isOpen ? FontAwesome.caretDown : FontAwesome.caretRight) : itemIcon
 
     textItem.font.pointSize: 10
-    buttonText: modelData.name
+    buttonText: modelData ? modelData.name : ""
     mainRow.spacing: checkbox.visible ? checkbox.width + 10 : 10
 
     onClicked: {
@@ -34,7 +38,7 @@ CustomButton {
 
     CheckBox {
         id: checkbox
-        visible: modelData.isCheckable
+        visible: root.modelData && root.modelData.isCheckable
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: 2
@@ -43,7 +47,7 @@ CustomButton {
 
         tristate: true
         checkState: {
-            switch (modelData.isChecked) {
+            switch (root.modelData ? root.modelData.isChecked : 0) {
             case 0:
                 Qt.Unchecked
                 break
@@ -63,7 +67,7 @@ CustomButton {
             anchors.fill: parent
 
             onClicked: {
-                modelData.isChecked = modelData.isChecked < 2 ? 2 : 0
+                root.modelData.isChecked = root.modelData.isChecked < 2 ? 2 : 0
             }
         }
     }
@@ -82,7 +86,7 @@ CustomButton {
         }
 
         onAccepted: {
-            modelData.rename(rename_field.text)
+            root.modelData.rename(rename_field.text)
         }
 
         contentItem: TextField {
@@ -112,7 +116,7 @@ CustomButton {
         }
 
         onAccepted: {
-            modelData.create(new_thing_dialog.type, name_field.text)
+            root.modelData.create(new_thing_dialog.type, name_field.text)
         }
 
         contentItem: TextField {
@@ -136,7 +140,7 @@ CustomButton {
         modal: true
 
         onAccepted: {
-            modelData.remove()
+            root.modelData.remove()
         }
 
         contentItem: Item {
@@ -184,10 +188,13 @@ CustomButton {
         }
 
         Repeater {
-            model: modelData.creatables
+            model: root.modelData ? root.modelData.creatables : []
 
             CustomMenuItem {
                 id: new_item
+
+                required property string modelData
+
                 text: qsTr("New") + " " + modelData + " ..."
 
                 onTriggered: {

@@ -4,10 +4,17 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ConverterCategory : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    AUTO_PROPERTY(QString, name);
+    READ_LIST_PROPERTY(ConverterUnit, units);
+
 public:
     explicit ConverterCategory(const QString &name, QObject *parent);
     explicit ConverterCategory(const QString &name, const QList<ConverterUnit *> &units, QObject *parent);
@@ -15,6 +22,5 @@ public:
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
 
-    AUTO_PROPERTY(QString, name);
-    AUTO_PROPERTY(QList<ConverterUnit *>, units);
+    void setUnits(const QList<ConverterUnit *> &units);
 };

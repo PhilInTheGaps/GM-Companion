@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
 import IconFonts
-import "../defines.js" as Defines
+import common
+import ".."
 
 Button {
     id: button
@@ -14,9 +15,9 @@ Button {
     property bool currentTool: false
     property bool useAltColor: false
 
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: Defines.TOOLBAR_HEIGHT
+    anchors.left: parent ? parent.left : undefined
+    anchors.right: parent ? parent.right : undefined
+    height: Sizes.toolbarHeight
     hoverEnabled: true
 
     background: Item {}
@@ -39,8 +40,8 @@ Button {
             sourceSize.height: parent.iconWidth
             height: sourceSize.height
             width: height
-            source: iconSource
-            visible: settings_manager.classicIcons && iconSource != ""
+            source: button.iconSource
+            visible: SettingsManager.classicIcons && button.iconSource !== ""
             asynchronous: true
 
             MultiEffect {
@@ -66,7 +67,7 @@ Button {
             visible: !button_icon.visible
             width: parent.iconWidth
             height: width
-            text: faIcon
+            text: button.faIcon
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             horizontalAlignment: Text.AlignHCenter
@@ -79,7 +80,7 @@ Button {
         Text {
             text: button.toolName
             font.pixelSize: 16
-            visible: settings_manager.showToolNames
+            visible: SettingsManager.showToolNames
 
             width: parent.width - parent.spacing - parent.padding * 2 - parent.iconWidth
             clip: true

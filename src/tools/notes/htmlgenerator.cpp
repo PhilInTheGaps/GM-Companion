@@ -5,7 +5,7 @@ using namespace Qt::Literals::StringLiterals;
 
 HtmlGenerator::HtmlGenerator(QObject *parent) : QObject(parent)
 {
-    m_worker = new HtmlWorker;
+    m_worker = new HtmlWorker();
     m_worker->moveToThread(&m_workerThread);
 
     connect(&m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
@@ -32,7 +32,7 @@ void HtmlWorker::generate(const QString &raw, int id)
     html.replace("<del>"_L1, "<s>"_L1).replace("</del>"_L1, "</s>"_L1);
 
     // Insert table style manually here, does not work via CSS
-    html.replace("<table>"_L1, "<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">"_L1);
+    html.replace("<table>"_L1, R"(<table border="1" cellspacing="0" cellpadding="10">)"_L1);
 
     emit generated(html, id);
 }

@@ -1,16 +1,18 @@
-#ifndef MAPMARKER_H
-#define MAPMARKER_H
+#pragma once
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
-
-#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QtQml/qqmlregistration.h>
 
 class MapMarker : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QString, description)
     AUTO_PROPERTY(QString, color)
@@ -24,20 +26,23 @@ public:
 
     explicit MapMarker(const QJsonObject &json, QObject *parent);
 
-    QJsonObject toJson() const;
+    [[nodiscard]] auto toJson() const -> QJsonObject;
 
-    qreal x() const
+    [[nodiscard]] auto x() const -> qreal
     {
         return m_x;
     }
-    qreal y() const
+    [[nodiscard]] auto y() const -> qreal
     {
         return m_y;
     }
     void setPosition(qreal x, qreal y)
     {
         m_x = x;
+        emit xChanged();
+
         m_y = y;
+        emit yChanged();
     }
 
 signals:
@@ -52,10 +57,10 @@ private:
 class MapMarkerModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
-    explicit MapMarkerModel(QObject *parent) : QAbstractListModel(parent)
-    {
-    }
+    using QAbstractListModel::QAbstractListModel;
 
     int rowCount(const QModelIndex &) const override
     {
@@ -81,7 +86,7 @@ public:
 
     MapMarker *marker(int index)
     {
-        return static_cast<MapMarker *>(m_items[index]);
+        return static_cast<MapMarker *>(m_items.at(index));
     }
     QList<MapMarker *> elements() const;
 
@@ -95,5 +100,3 @@ protected:
 private:
     QList<QObject *> m_items = {};
 };
-
-#endif // MAPMARKER_H

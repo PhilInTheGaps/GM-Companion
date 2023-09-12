@@ -1,11 +1,10 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
 import IconFonts
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.ComboBox {
     id: control
@@ -28,9 +27,12 @@ T.ComboBox {
                              || !indicator.visible ? 0 : indicator.width + spacing)
 
     delegate: ItemDelegate {
+        required property int index
+        required property var modelData
+        required property var model
+
         width: parent.width
-        text: control.textRole ? (Array.isArray(
-                                      control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
+        text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
         font.weight: control.currentIndex === index ? Font.DemiBold : Font.Normal
         highlighted: control.highlightedIndex === index
         hoverEnabled: control.hoverEnabled
@@ -65,9 +67,9 @@ T.ComboBox {
 
         font: control.font
         color: !control.editable
-               && control.visualFocus ? Colors.focus : Colors.text
-        selectionColor: Colors.focus
-        selectedTextColor: Colors.highlightedText
+               && control.visualFocus ? StyleColors.focus : palette.text
+        selectionColor: StyleColors.focus
+        selectedTextColor: palette.highlightedText
         verticalAlignment: Text.AlignVCenter
         opacity: control.enabled ? 1 : 0.3
 
@@ -75,17 +77,17 @@ T.ComboBox {
             visible: control.editable && !control.flat
             border.width: parent && parent.activeFocus ? 2 : 1
             border.color: parent
-                          && parent.activeFocus ? Colors.focus : Colors.border
+                          && parent.activeFocus ? StyleColors.focus : StyleColors.border
             implicitHeight: 40
         }
     }
 
     background: Rectangle {
         implicitWidth: 120
-        implicitHeight: Sizes.comboBoxHeight
+        implicitHeight: StyleSizes.comboBoxHeight
 
-        color: Colors.dark
-        border.color: Colors.border
+        color: palette.dark
+        border.color: StyleColors.border
         border.width: 1
     }
 
@@ -149,15 +151,15 @@ T.ComboBox {
                 width: parent.width
                 height: parent.height
                 color: "transparent"
-                border.color: Colors.border
+                border.color: StyleColors.border
             }
 
             T.ScrollIndicator.vertical: ScrollIndicator {}
         }
 
         background: Rectangle {
-            color: Colors.dark
-            border.color: Colors.alternateBase
+            color: palette.dark
+            border.color: palette.alternateBase
             border.width: 1
         }
     }

@@ -1,13 +1,17 @@
-#ifndef AUDIOCATEGORY_H
-#define AUDIOCATEGORY_H
+#pragma once
 
 #include "audioscenario.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QtQml/qqmlregistration.h>
 
 class AudioProject;
 
 class AudioCategory : public TreeItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
 public:
     explicit AudioCategory(const QString &name, const QString &path, QList<AudioScenario *> scenarios,
                            AudioProject *parent);
@@ -26,12 +30,6 @@ public:
         return m_path;
     }
 
-    Q_PROPERTY(QList<AudioScenario *> scenarios READ scenarios NOTIFY scenariosChanged)
-    [[nodiscard]] auto scenarios() const -> QList<AudioScenario *>
-    {
-        return m_scenarios;
-    }
-
     Q_PROPERTY(
         AudioScenario *currentScenario READ currentScenario WRITE setCurrentScenario NOTIFY currentScenarioChanged)
     [[nodiscard]] auto currentScenario() const -> AudioScenario *
@@ -43,7 +41,7 @@ public:
     Q_PROPERTY(int scenarioIndex READ scenarioIndex NOTIFY currentScenarioChanged)
     [[nodiscard]] auto scenarioIndex() const -> int
     {
-        return m_scenarios.indexOf(m_currentScenario);
+        return a_scenarios.indexOf(m_currentScenario);
     }
     [[nodiscard]] auto containsScenario(const QString &name) const -> bool;
 
@@ -56,17 +54,15 @@ public:
         if (m_currentScenario) m_currentScenario->refreshElements();
     }
 
+    READ_LIST_PROPERTY(AudioScenario, scenarios)
+
 signals:
     void pathChanged();
-    void scenariosChanged();
     void currentScenarioChanged(AudioScenario *scenario);
 
 private:
     QString m_path;
-    QList<AudioScenario *> m_scenarios;
     AudioScenario *m_currentScenario = nullptr;
 
     void prepareScenario(AudioScenario *scenario);
 };
-
-#endif

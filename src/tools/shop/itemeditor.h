@@ -7,10 +7,14 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QStringList>
+#include <QtQml/qqmlregistration.h>
 
 class ItemEditor : public AbstractTool
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     Q_PROPERTY(ItemModel *itemModel READ itemModel CONSTANT)
     READ_PROPERTY(QStringList, categories)
     AUTO_PROPERTY_VAL2(bool, isSaved, true)

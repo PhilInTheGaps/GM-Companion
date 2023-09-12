@@ -35,3 +35,9 @@ auto ConverterCategory::toJson() const -> QJsonObject
 
     return QJsonObject{{"name", name()}, {"units", unitsJson}};
 }
+
+void ConverterCategory::setUnits(const QList<ConverterUnit *> &units)
+{
+    a_units = units;
+    emit unitsChanged();
+}

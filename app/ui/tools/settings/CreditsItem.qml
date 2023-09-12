@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
 
 Rectangle {
@@ -10,7 +10,7 @@ Rectangle {
     property var license: []
     property var links: []
 
-    height: Math.max(column.height + 20, licens_column.height)
+    height: Math.max(column.height + 20, license_column.height)
     anchors.left: parent.left
     anchors.right: parent.right
 
@@ -45,6 +45,8 @@ Rectangle {
                 model: root.links
 
                 Button {
+                    required property var modelData
+
                     text: modelData[0]
                     onClicked: Qt.openUrlExternally(modelData[1])
                 }
@@ -53,13 +55,15 @@ Rectangle {
     }
 
     Column {
-        id: licens_column
+        id: license_column
         anchors.right: parent.right
 
         Repeater {
-            model: license
+            model: root.license
 
             CustomButton {
+                required property var modelData
+
                 buttonText: modelData[0]
                 onClicked: Qt.openUrlExternally(modelData[1])
                 iconText: FontAwesome.scaleBalanced

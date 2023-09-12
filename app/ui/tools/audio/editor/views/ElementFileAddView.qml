@@ -1,11 +1,10 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
+import src
 import ".."
-import "../../../../sizes.js" as Sizes
-import "../../../../colors.js" as Colors
+import "../../../.."
 
 Rectangle {
     id: root
@@ -22,10 +21,10 @@ Rectangle {
     }
 
     Connections {
-        target: audio_editor
+        target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            setMode(0)
+            root.setMode(0)
         }
     }
 
@@ -51,13 +50,13 @@ Rectangle {
                 centering: true
                 transparentBackground: true
 
-                onClicked: setMode(0)
+                onClicked: root.setMode(0)
             }
 
             CustomButton {
                 id: spotify_button
-                visible: audio_editor && audio_editor.currentElement
-                         && audio_editor.currentElement.type === 0
+                visible: AudioTool.editor.currentElement
+                         && AudioTool.editor.currentElement.type === 0
 
                 iconText: FontAwesome.spotify
                 iconFont: FontAwesome.fontBrands
@@ -71,7 +70,7 @@ Rectangle {
                 centering: true
                 transparentBackground: true
 
-                onClicked: setMode(1)
+                onClicked: root.setMode(1)
             }
 
             CustomButton {
@@ -87,7 +86,7 @@ Rectangle {
                 centering: true
                 transparentBackground: true
 
-                onClicked: setMode(2)
+                onClicked: root.setMode(2)
             }
         }
     }
@@ -111,7 +110,7 @@ Rectangle {
         anchors.left: parent.left
 
         height: Sizes.toolbarHeight
-        color: Colors.alternateBase
+        color: palette.alternateBase
 
         CustomToolBarButton {
             id: url_adder_icon
@@ -144,22 +143,22 @@ Rectangle {
             iconText: FontAwesome.plus
 
             onClicked: {
-                audio_editor.addUrl(url_text_field.text, root.mode)
+                AudioTool.editor.addUrl(url_text_field.text, root.mode)
             }
         }
     }
 
     Rectangle {
         id: youtube_adder
-        visible: root.mode > 1 && audio_editor && audio_editor.currentElement
-                 && audio_editor.currentElement.type < 2
+        visible: root.mode > 1 && AudioTool.editor.currentElement
+                 && AudioTool.editor.currentElement.type < 2
         anchors.topMargin: 5
         anchors.top: url_adder.bottom
         anchors.right: parent.right
         anchors.left: parent.left
 
         height: Sizes.toolbarHeight
-        color: Colors.alternateBase
+        color: palette.alternateBase
 
         CustomToolBarButton {
             id: youtube_adder_icon
@@ -192,7 +191,7 @@ Rectangle {
             iconText: FontAwesome.plus
 
             onClicked: {
-                audio_editor.addYtUrl(youtube_text_field.text)
+                AudioTool.editor.addYtUrl(youtube_text_field.text)
             }
         }
     }

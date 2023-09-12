@@ -3,10 +3,14 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QList>
+#include <QtQml/qqmlregistration.h>
 
 class CustomObjectListModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     READONLY_PROPERTY2(bool, isOwning, false)
 public:
     explicit CustomObjectListModel(bool isOwning, QObject *parent = nullptr);
@@ -35,3 +39,5 @@ protected:
 private:
     QList<QObject *> m_objects;
 };
+
+Q_DECLARE_METATYPE(CustomObjectListModel *)

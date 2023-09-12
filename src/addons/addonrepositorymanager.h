@@ -4,21 +4,28 @@
 #include "addonrepository.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QFuture>
+#include <QJSEngine>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QQmlContext>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class AddonRepositoryManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
-    READ_PROPERTY(QList<AddonRepository *>, repositories)
+    READ_LIST_PROPERTY(AddonRepository, repositories)
     AUTO_PROPERTY_VAL2(bool, isLoading, false)
 
 public:
-    explicit AddonRepositoryManager(QObject *parent = nullptr);
+    AddonRepositoryManager() = delete;
+    explicit AddonRepositoryManager(QObject *parent);
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AddonRepositoryManager *;
 
     Q_INVOKABLE bool addRepository(const QString &url);
     Q_INVOKABLE bool removeRepository(int repositoryIndex);

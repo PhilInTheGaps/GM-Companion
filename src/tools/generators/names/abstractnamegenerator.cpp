@@ -2,18 +2,12 @@
 
 #include <utility>
 
-AbstractNameGenerator::AbstractNameGenerator(QObject *parent, QString name, QStringList categories, QStringList prefixes, QStringList suffixes)
-    : QObject{parent},
-      a_name{std::move(name)},
-      a_categories(std::move(categories)),
-      a_prefixes(std::move(prefixes)),
-      a_suffixes(std::move(suffixes)),
-      a_generatedNames(buildEmptyNameList()),
-      a_enabledCategories(buildInitialEnabledCategoryList()),
-      a_activePrefix(0),
-      a_activeSuffix(0)
+AbstractNameGenerator::AbstractNameGenerator(QObject *parent, QString name, QStringList categories,
+                                             QStringList prefixes, QStringList suffixes)
+    : QObject{parent}, a_name{std::move(name)}, a_categories(std::move(categories)), a_prefixes(std::move(prefixes)),
+      a_suffixes(std::move(suffixes)), a_generatedNames(buildEmptyNameList()),
+      a_enabledCategories(buildInitialEnabledCategoryList()), a_activePrefix(0), a_activeSuffix(0)
 {
-
 }
 
 auto AbstractNameGenerator::setCategoryEnabled(int index, bool value) -> bool
@@ -22,7 +16,9 @@ auto AbstractNameGenerator::setCategoryEnabled(int index, bool value) -> bool
 
     auto list = enabledCategories();
     list[index] = value;
-    enabledCategories(list);
+
+    a_enabledCategories = list;
+    emit enabledCategoriesChanged(list);
 
     return true;
 }

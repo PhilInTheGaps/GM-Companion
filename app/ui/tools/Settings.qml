@@ -1,14 +1,16 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import common
 import "../common"
-import "./settings"
 
 Item {
-    id: settings_page
+    id: root
 
-    FileDialog {
+    CustomFileDialog {
         id: file_dialog
     }
 
@@ -38,7 +40,10 @@ Item {
                     }, {
                         "name": qsTr("Paths"),
                         "icon": FontAwesome.folderOpen,
-                        "source": "settings/PathsPage.qml"
+                        "source": "settings/PathsPage.qml",
+                        "properties": {
+                            "fileDialog": file_dialog
+                        }
                     }, {
                         "name": qsTr("Addons"),
                         "icon": FontAwesome.puzzlePiece,
@@ -49,13 +54,16 @@ Item {
                         "source": "settings/InfoPage.qml"
                     }]
                 CustomButton {
+                    required property var modelData
+
                     buttonText: modelData.name
                     iconText: modelData.icon
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.left: parent ? parent.left : undefined
+                    anchors.right: parent ? parent.right : undefined
 
-                    onClicked: loader.setSource(modelData.source)
+                    onClicked: loader.setSource(modelData.source,
+                                                modelData.properties)
                 }
             }
         }
@@ -64,7 +72,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.margins: 10
-            text: "Version: " + update_manager.getCurrentVersion()
+            text: "Version: " + UpdateManager.getCurrentVersion()
         }
     }
 

@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls
-import QtQuick.Controls.impl
-import "./colors.js" as Colors
 
 T.Dialog {
     id: control
@@ -64,8 +62,8 @@ T.Dialog {
     }
 
     background: Rectangle {
-        border.color: Colors.dark
-        color: Colors.window
+        border.color: palette.dark
+        color: palette.window
     }
 
     header: Label {
@@ -79,10 +77,10 @@ T.Dialog {
             y: 1
             width: parent.width - 2
             height: parent.height - 1
-            color: Colors.alternateBase
+            color: palette.alternateBase
 
             Rectangle {
-                color: Colors.dark
+                color: palette.dark
                 height: 1
                 anchors.left: parent.left
                 anchors.right: parent.right

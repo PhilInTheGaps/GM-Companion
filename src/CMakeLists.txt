@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.19)
 
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
+
 add_subdirectory(common)
 add_subdirectory(services)
 add_subdirectory(filesystem)
@@ -183,6 +189,13 @@ set(SRC_CONVERTER
     tools/converter/project/converterprojectupgrader.h
     tools/converter/project/converterprojectupgrader.cpp)
 
+set(SRC_MESSAGES
+    messages/message.h
+    messages/messagemanager.h
+    messages/messagemanager.cpp
+    messages/messagedispatcher.h
+    messages/messagedispatcher.cpp)
+
 set(SOURCES
     ${SRC_AUDIO}
     ${SRC_MAPS}
@@ -193,9 +206,15 @@ set(SOURCES
     ${SRC_SHOP}
     ${SRC_CHARACTERS}
     ${SRC_CONVERTER}
-    ${SRC_ADDONS})
+    ${SRC_ADDONS}
+    ${SRC_MESSAGES})
 
-qt_add_library(gm-companion-lib STATIC ${SOURCES} ${RESOURCES})
+qt_add_library(gm-companion-lib STATIC)
+
+qt_add_qml_module(gm-companion-lib
+    URI src
+    SOURCES ${SOURCES}
+)
 
 qt_add_resources(gm-companion-lib "libresources"
     PREFIX "/"
@@ -205,10 +224,38 @@ qt_add_resources(gm-companion-lib "libresources"
         resources/notes/style.css
         resources/names/generic.json)
 
+target_include_directories(gm-companion-lib
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/addons
+        ${CMAKE_CURRENT_SOURCE_DIR}/messages
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/editor
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/editor/unsplash
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/metadata
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/players
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/project
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/audio/thumbnails
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/characters
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/characters/viewers
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/combat_tracker
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/converter
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/converter/project
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/generators/names
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/maps
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/notes
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/shop
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/shop/project)
+
 target_link_libraries(gm-companion-lib PUBLIC
   common
+  commonplugin
   services
+  servicesplugin
   filesystem
+  filesystemplugin
   propertyhelper
   Qt6::Core
   Qt6::Gui

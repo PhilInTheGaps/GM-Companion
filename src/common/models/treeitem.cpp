@@ -19,28 +19,39 @@ TreeItem::TreeItem(const QString &name, int depth, bool canToggle, QObject *pare
 /**
  * Get all children of the TreeItems that are TreeItems too.
  */
-auto TreeItem::childItems() const -> QList<QObject *>
+auto TreeItem::childItems() const -> QList<TreeItem *>
 {
     if (!isOpen()) return {};
 
     auto directChildren = children();
     std::sort(directChildren.begin(), directChildren.end(), sortChildren);
 
-    QList<QObject *> items;
+    QList<TreeItem *> items;
     items.reserve(directChildren.size());
 
-    for (auto *child : qAsConst(directChildren))
+    foreach (auto *child, directChildren)
     {
-        const auto *item = qobject_cast<TreeItem *>(child);
+        auto *item = qobject_cast<TreeItem *>(child);
 
         if (item)
         {
-            items.append(child);
+            items.append(item);
             items.append(item->childItems());
         }
     }
 
     return items;
+}
+
+auto TreeItem::childItemsQml() -> QQmlListProperty<TreeItem>
+{
+    // Weird workaround.
+    // Updating the list of child items when required and only returning the list
+    // in both childItems() and childItemsQml() caused a weird bug where
+    // the NotePage elements would sometimes only have the properties they inherit
+    // from TreeItem, while all other ones would be undefined.
+    m_childItems = childItems();
+    return QQmlListProperty(this, &m_childItems);
 }
 
 auto TreeItem::creatables() const -> QStringList

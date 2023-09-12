@@ -1,9 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
-import "../../colors.js" as Colors
+import src
+import "../.."
 
 Item {
     id: root
@@ -52,11 +52,8 @@ Item {
                     anchors.bottom: parent.bottom
 
                     onClicked: {
-                        if (addon_repository_manager) {
-                            if (addon_repository_manager.addRepository(
-                                        add_text_field.text)) {
-                                add_text_field.clear()
-                            }
+                        if (AddonRepositoryManager.addRepository(add_text_field.text)) {
+                            add_text_field.clear()
                         }
                     }
                 }
@@ -70,16 +67,21 @@ Item {
             }
 
             Repeater {
-                model: addon_repository_manager ? addon_repository_manager.repositories : []
+                model: AddonRepositoryManager ? AddonRepositoryManager.repositories : []
 
                 Item {
+                    id: repo_delegate
+
+                    required property AddonRepository modelData
+                    required property int index
+
                     anchors.left: parent.left
                     anchors.right: parent.right
                     height: text_field.height
 
                     TextField {
                         id: text_field
-                        text: modelData.url
+                        text: repo_delegate.modelData.url
                         readOnly: true
                         selectByMouse: true
                         anchors.left: parent.left
@@ -89,16 +91,14 @@ Item {
                     Button {
                         id: delete_button
                         text: qsTr("Remove")
-                        enabled: !modelData.isDefault
+                        enabled: !repo_delegate.modelData.isDefault
 
                         anchors.right: parent.right
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
 
                         onClicked: {
-                            if (addon_repository_manager) {
-                                addon_repository_manager.removeRepository(index)
-                            }
+                            AddonRepositoryManager.removeRepository(repo_delegate.index)
                         }
                     }
                 }
@@ -133,13 +133,15 @@ Item {
             Label {
                 text: qsTr("No addons available")
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: addon_manager.addons.length < 1
+                visible: AddonManager.addons.length < 1
             }
 
             Repeater {
-                model: addon_manager.addons
+                model: AddonManager.addons
 
                 AddonItem {
+                    required property Addon modelData
+
                     addon: modelData
 
                     anchors.left: parent.left
@@ -154,7 +156,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
 
         color: palette.dark
 
@@ -170,9 +172,9 @@ Item {
                 buttonText: qsTr("Refresh")
                 iconText: FontAwesome.rotate
 
-                enabled: !addon_repository_manager.isLoading
+                enabled: !AddonRepositoryManager.isLoading
 
-                onClicked: addon_manager.refresh()
+                onClicked: AddonManager.refresh()
             }
 
             CustomButton {

@@ -61,7 +61,7 @@ auto ItemEditor::addItem(const QString &name, const QString &price, const QStrin
     if (name.isEmpty() || category.isEmpty()) return false;
 
     auto *item = new Item(name, price, description.replace("\n"_L1, " "_L1), category, this);
-    int insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
+    const auto insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
 
     if (insert <= 0)
     {

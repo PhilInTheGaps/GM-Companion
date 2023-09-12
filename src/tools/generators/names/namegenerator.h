@@ -4,20 +4,27 @@
 #include "abstracttool.h"
 #include "utils/stringutils.h"
 #include <QByteArrayList>
+#include <QJSEngine>
 #include <QObject>
-#include <QQmlApplicationEngine>
+#include <QQmlEngine>
 #include <QStringList>
+#include <QtQml/qqmlregistration.h>
 
 class NameGenerator : public AbstractTool
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(NameGeneratorTool)
+    QML_SINGLETON
 
     READ_PROPERTY(QStringList, categories)
-    READ_PROPERTY(AbstractNameGenerator *, currentGenerator)
-    AUTO_PROPERTY(QList<AbstractNameGenerator *>, generators)
+    READ_PROPERTY2(AbstractNameGenerator *, currentGenerator, nullptr)
+    READ_LIST_PROPERTY(AbstractNameGenerator, generators)
 
 public:
-    explicit NameGenerator(const QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    NameGenerator() = delete;
+    using AbstractTool::AbstractTool;
+
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> NameGenerator *;
 
     Q_INVOKABLE bool loadCategory(int index);
     Q_INVOKABLE bool loadGenerator(int index);

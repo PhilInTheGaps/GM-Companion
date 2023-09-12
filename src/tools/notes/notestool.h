@@ -1,56 +1,49 @@
-#ifndef NOTESTOOL_H
-#define NOTESTOOL_H
+#pragma once
 
 #include "common/abstracttool.h"
 #include "htmlgenerator.h"
 #include "markdownhighlighter.h"
 #include "notessaveload.h"
-#include <QQmlApplicationEngine>
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QJSEngine>
+#include <QQmlEngine>
 #include <QQuickTextDocument>
 
 class NotesTool : public AbstractTool
 {
     Q_OBJECT
-public:
-    explicit NotesTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    QML_ELEMENT
+    QML_SINGLETON
 
-    Q_PROPERTY(QObject *notesModel READ notesModel WRITE setNotesModel NOTIFY notesModelChanged)
-    QObject *notesModel() const
-    {
-        return m_notesModel;
-    }
-    void setNotesModel(QObject *model)
-    {
-        m_notesModel = model;
-        emit notesModelChanged();
-    }
+public:
+    NotesTool() = delete;
+    explicit NotesTool(QObject *parent = nullptr);
+
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> NotesTool *;
 
     Q_PROPERTY(QQuickTextDocument *qmlTextDoc READ qmlTextDoc WRITE setQmlTextDoc NOTIFY qmlTextDocChanged)
-    QQuickTextDocument *qmlTextDoc() const
+    [[nodiscard]] auto qmlTextDoc() const -> QQuickTextDocument *
     {
         return m_qmlTextDoc;
     }
     void setQmlTextDoc(QQuickTextDocument *qmlTextDoc);
 
-    Q_PROPERTY(QObject *currentPage READ currentPage NOTIFY currentPageChanged)
-    QObject *currentPage() const
+    Q_PROPERTY(NoteBookPage *currentPage READ currentPage NOTIFY currentPageChanged)
+    [[nodiscard]] auto currentPage() const -> NoteBookPage *
     {
         return m_currentPage;
     }
     void setCurrentPage(NoteBookPage *page);
 
     Q_PROPERTY(bool editMode READ editMode WRITE setEditMode NOTIFY editModeChanged)
-    bool editMode() const
+    [[nodiscard]] auto editMode() const -> bool
     {
         return m_editMode;
     }
     void setEditMode(bool editMode);
 
-    Q_PROPERTY(QList<QObject *> openedPages READ openedPages NOTIFY openedPagesChanged)
-    QList<QObject *> openedPages() const
-    {
-        return m_openedPages;
-    }
+    AUTO_PROPERTY_VAL2(TreeItem *, notesModel, nullptr)
+    READ_LIST_PROPERTY(NoteBookPage, openedPages)
 
 public slots:
     void loadData() override;
@@ -61,11 +54,9 @@ public slots:
 
 signals:
     void loadBooks();
-    void notesModelChanged();
     void qmlTextDocChanged();
     void currentPageChanged();
     void editModeChanged();
-    void openedPagesChanged();
     void setCursorPosition(int position);
 
 private:
@@ -75,23 +66,20 @@ private:
     HtmlGenerator m_htmlGenerator;
     MarkdownHighlighter m_markdownHighlighter;
 
-    QObject *m_notesModel = nullptr;
-    QList<QObject *> m_openedPages;
     bool m_editMode = false;
     int m_cursorPosition = 0;
 
     void closeUnneededPages();
     void displayPageContent();
+
     [[nodiscard]] auto doesBookExist(const QString &name) const -> bool;
 
 private slots:
-    void onNoteBooksLoaded(QObject *root);
-    void onPagesLoaded(const QList<NoteBookPage *> &pages) const;
+    void onNoteBooksLoaded(TreeItem *root);
+    void onPagesLoaded(const QList<NoteBookPage *> &pages);
     void onPageClicked();
     void onPageContentLoaded();
     void onPageHtmlLoaded();
     void onDocumentEdited();
     void onClosePage();
 };
-
-#endif // NOTESTOOL_H

@@ -3,20 +3,23 @@
 #include <QDesktopServices>
 #include <QFile>
 #include <QLoggingCategory>
-#include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmNotesTool, "gm.notes.tool")
 
-NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent)
+NotesTool::NotesTool(QObject *parent)
     : AbstractTool(parent), m_saveLoad(this), m_htmlGenerator(this), m_markdownHighlighter(this)
 {
-    engine->rootContext()->setContextProperty(u"notes_tool"_s, this);
-
     connect(this, &NotesTool::loadBooks, &m_saveLoad, &NotesSaveLoad::loadBooks);
     connect(&m_saveLoad, &NotesSaveLoad::booksLoaded, this, &NotesTool::onNoteBooksLoaded);
     connect(&m_saveLoad, &NotesSaveLoad::pagesLoaded, this, &NotesTool::onPagesLoaded);
+}
+
+auto NotesTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> NotesTool *
+{
+    Q_UNUSED(jsEngine)
+    return new NotesTool(qmlEngine);
 }
 
 void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
@@ -124,9 +127,9 @@ void NotesTool::createBook(const QString &name)
 /**
  * Connect signals of newly loaded pages
  */
-void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages) const
+void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages)
 {
-    for (const auto *page : qAsConst(pages))
+    foreach (const auto *page, pages)
     {
         connect(page, &NoteBookPage::selected, this, &NotesTool::onPageClicked);
         connect(page, &NoteBookPage::closePage, this, &NotesTool::onClosePage);
@@ -142,13 +145,11 @@ void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages) const
  */
 void NotesTool::closeUnneededPages()
 {
-    for (auto *page : qAsConst(m_openedPages))
+    foreach (auto *page, a_openedPages)
     {
-        auto wasEdited = page->property("wasEdited");
-
-        if (wasEdited.isValid() && !wasEdited.toBool())
+        if (!page->keepOpen())
         {
-            m_openedPages.removeOne(page);
+            a_openedPages.removeOne(page);
         }
     }
 }
@@ -168,7 +169,7 @@ void NotesTool::displayPageContent()
  */
 auto NotesTool::doesBookExist(const QString &name) const -> bool
 {
-    const auto books = m_notesModel->children();
+    const auto books = a_notesModel->children();
 
     return std::any_of(books.constBegin(), books.constEnd(), [name](const QObject *object) {
         const auto *book = qobject_cast<const NoteBook *>(object);
@@ -176,21 +177,22 @@ auto NotesTool::doesBookExist(const QString &name) const -> bool
     });
 }
 
-void NotesTool::onNoteBooksLoaded(QObject *root)
+void NotesTool::onNoteBooksLoaded(TreeItem *root)
 {
-    setNotesModel(root);
+    notesModel(root);
 }
 
 void NotesTool::onPageClicked()
 {
-    if (!m_openedPages.contains(sender()))
+    auto *page = qobject_cast<NoteBookPage *>(sender());
+
+    if (!a_openedPages.contains(page))
     {
         closeUnneededPages();
-        m_openedPages.append(sender());
+        a_openedPages.append(page);
         emit openedPagesChanged();
     }
 
-    auto *page = qobject_cast<NoteBookPage *>(sender());
     setCurrentPage(page);
 }
 
@@ -200,22 +202,22 @@ void NotesTool::onClosePage()
 
     int i = 0;
 
-    for (auto *page : qAsConst(m_openedPages))
+    foreach (auto *page, a_openedPages)
     {
         if (page->objectName() == sender()->objectName())
         {
-            m_openedPages.removeOne(page);
+            a_openedPages.removeOne(page);
 
-            if (m_openedPages.isEmpty())
+            if (a_openedPages.isEmpty())
             {
                 m_currentPage = nullptr;
                 m_qmlTextDoc->textDocument()->clear();
                 break;
             }
 
-            if (i >= m_openedPages.length()) i = m_openedPages.length() - 1;
+            if (i >= a_openedPages.length()) i = a_openedPages.length() - 1;
 
-            auto *newPage = qobject_cast<NoteBookPage *>(m_openedPages.at(i));
+            auto *newPage = a_openedPages.at(i);
 
             if (newPage) newPage->toggle();
 

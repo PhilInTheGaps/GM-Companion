@@ -1,5 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 import "./shop/item_editor"
 import "./shop/shop_editor"
 import "./shop/shop_page"

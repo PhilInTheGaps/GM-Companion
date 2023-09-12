@@ -1,9 +1,11 @@
 #pragma once
 
 #include "file.h"
+#include "qmlsingletonfactory.h"
 #include <QJSEngine>
 #include <QObject>
 #include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 namespace Files
 {
@@ -11,7 +13,12 @@ namespace Files
 class FileAccessSwitcher : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+    QML_SINGLETON_FACTORY(FileAccessSwitcher)
+
 public:
+    FileAccessSwitcher() = delete;
     static auto instance() -> FileAccessSwitcher *
     {
         if (!single)
@@ -19,14 +26,6 @@ public:
             single = new FileAccessSwitcher(nullptr);
         }
         return single;
-    }
-
-    static auto QmlSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject *
-    {
-        Q_UNUSED(engine)
-        Q_UNUSED(scriptEngine)
-
-        return instance();
     }
 
     Q_INVOKABLE static void updateFileAccess()

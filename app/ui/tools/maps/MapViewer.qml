@@ -1,18 +1,21 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
 import "../../common"
 
 Item {
     id: root
+
+    required property Label markerNameLabel
 
     signal toMarkerList
     signal toMarkerDetails
     signal markerMenuToggled
 
     function openDeleteDialog() {
-        marker_delete_rect.visible = true
+        marker_delete_dialog.visible = true
     }
 
     function setImageSource(source) {
@@ -24,19 +27,18 @@ Item {
         id: image_viewer
         anchors.fill: parent
 
-        image.source: map_tool.currentMap ? map_tool.currentMap.imageData : ""
+        image.source: MapTool.currentMap ? MapTool.currentMap.imageData : ""
 
-        Component.onCompleted: {
-            var component = Qt.createComponent("MapMarkerLayer.qml")
-            if (component.status === Component.Ready) {
-                component.createObject(image_viewer.image)
-            }
+        MapMarkerLayer {
+            parent: image_viewer.image
+            markerNameLabel: root.markerNameLabel
+            markerDeleteDialog: marker_delete_dialog
         }
     }
 
     // Delete Marker ?
     Rectangle {
-        id: marker_delete_rect
+        id: marker_delete_dialog
         anchors.horizontalCenter: image_viewer.horizontalCenter
         anchors.bottom: image_viewer.bottom
         anchors.bottomMargin: 20
@@ -65,9 +67,9 @@ Item {
                 height: 30
 
                 onClicked: {
-                    marker_delete_rect.visible = false
-                    map_tool.deleteMarker(map_tool.markerIndex)
-                    toMarkerList()
+                    marker_delete_dialog.visible = false
+                    MapTool.deleteMarker(MapTool.markerIndex)
+                    root.toMarkerList()
                 }
             }
 
@@ -77,7 +79,7 @@ Item {
                 anchors.bottom: undefined
                 height: 30
 
-                onClicked: marker_delete_rect.visible = false
+                onClicked: marker_delete_dialog.visible = false
             }
         }
     }
@@ -101,7 +103,7 @@ Item {
         onFitToScreen: image_viewer.fitToScreen()
 
         onToggleMarkerMenu: {
-            markerMenuToggled()
+            root.markerMenuToggled()
         }
     }
 }

@@ -1,8 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import CustomComponents
 import IconFonts
-import "../defines.js" as Defines
+import ".."
 
 Item {
     id: root
@@ -14,7 +13,7 @@ Item {
     signal currentIndexChanged(int index)
     signal editorButtonClicked
 
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.toolbarHeight
     anchors.leftMargin: 5
     anchors.rightMargin: 5
 
@@ -42,6 +41,6 @@ Item {
         anchors.topMargin: 8
         anchors.bottomMargin: 8
 
-        onClicked: editorButtonClicked()
+        onClicked: root.editorButtonClicked()
     }
 }

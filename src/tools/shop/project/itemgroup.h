@@ -5,11 +5,15 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ItemGroup : public BaseProjectItem
 {
     Q_OBJECT
-    AUTO_PROPERTY(QList<Item *>, items)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    AUTO_LIST_PROPERTY(Item, items)
     READONLY_PROPERTY(QStringList, categories)
 
 public:

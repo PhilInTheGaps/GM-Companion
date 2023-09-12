@@ -3,20 +3,14 @@
 #include "src/common/utils/fileutils.h"
 #include <QDir>
 #include <QLoggingCategory>
-#include <QQmlContext>
 #include <gsl/gsl>
 
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmConverterEditor, "gm.converter.editor")
 
-ConverterEditor::ConverterEditor(const QQmlApplicationEngine *engine, QObject *parent) : AbstractTool{parent}
+ConverterEditor::ConverterEditor(QObject *parent) : AbstractTool{parent}
 {
-    if (engine)
-    {
-        engine->rootContext()->setContextProperty(u"converter_editor"_s, this);
-    }
-
     connect(this, &ConverterEditor::projectsChanged, this, &ConverterEditor::onProjectsChanged);
     connect(this, &ConverterEditor::currentProjectChanged, this, &ConverterEditor::onCurrentProjectChanged);
 }
@@ -28,7 +22,7 @@ auto ConverterEditor::createProject(const QString &name) -> bool
     gsl::owner<ConverterProject *> project = new ConverterProject(name, this);
 
     a_projects << project;
-    emit projectsChanged(a_projects);
+    emit projectsChanged();
 
     currentProject(project);
 
@@ -58,7 +52,7 @@ auto ConverterEditor::deleteProject(ConverterProject *project) -> bool
     a_projects.removeOne(project);
     project->deleteLater();
 
-    emit projectsChanged(a_projects);
+    emit projectsChanged();
     madeChanges();
     return true;
 }
@@ -71,7 +65,7 @@ auto ConverterEditor::createCategory(const QString &name) -> bool
 
     auto categories = currentProject()->categories();
     categories << category;
-    currentProject()->categories(categories);
+    currentProject()->setCategories(categories);
     currentCategory(category);
 
     madeChanges();
@@ -101,7 +95,7 @@ auto ConverterEditor::deleteCategory(ConverterCategory *category) -> bool
     {
         auto categories = currentProject()->categories();
         categories.removeOne(category);
-        currentProject()->categories(categories);
+        currentProject()->setCategories(categories);
     }
 
     if (!currentProject()->categories().isEmpty())
@@ -129,7 +123,7 @@ auto ConverterEditor::createUnit(const QString &name, const QString &value) -> b
 
     auto units = currentCategory()->units();
     units << unit;
-    currentCategory()->units(units);
+    currentCategory()->setUnits(units);
 
     madeChanges();
     return true;
@@ -168,7 +162,7 @@ auto ConverterEditor::deleteUnit(ConverterUnit *unit) -> bool
     {
         auto units = currentCategory()->units();
         units.removeOne(unit);
-        currentCategory()->units(units);
+        currentCategory()->setUnits(units);
     }
 
     unit->deleteLater();
@@ -208,14 +202,14 @@ void ConverterEditor::loadData()
     isLoading(false);
     setIsDataLoaded(true);
 
-    emit projectsChanged(a_projects);
+    emit projectsChanged();
 }
 
-void ConverterEditor::onProjectsChanged(const QList<ConverterProject *> &projects)
+void ConverterEditor::onProjectsChanged()
 {
-    if (projects.isEmpty() || currentProject()) return;
+    if (a_projects.isEmpty() || currentProject()) return;
 
-    currentProject(projects.first());
+    currentProject(a_projects.constFirst());
 }
 
 void ConverterEditor::onCurrentProjectChanged(ConverterProject *project)

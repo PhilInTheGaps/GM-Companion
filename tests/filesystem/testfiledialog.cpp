@@ -1,18 +1,21 @@
-#include <QtTest>
 #include <QObject>
+#include <QtTest>
 #include <functional>
 
 #include "file.h"
 #include "fileaccess.h"
 #include "fileaccesslocal.h"
-#include "filedialog/filedialog.h"
-#include "filedialog/fileobject.h"
+#include "filedialogbackend.h"
+#include "fileobject.h"
 
 using namespace Files;
+using namespace Qt::Literals::StringLiterals;
 
 class TestFileDialog : public QObject
 {
     Q_OBJECT
+public:
+    using QObject::QObject;
 
 private slots:
     void initTestCase();
@@ -24,47 +27,32 @@ private slots:
 
 private:
     QTemporaryDir tempDir;
-    FileDialog *dialog = nullptr;
+    FileDialogBackend *dialog = nullptr;
 
     static constexpr int WAIT_TIME_MS = 1000;
-    const QStringList topLevelFiles = {
-        "file1", "file2", "file3", "file4"
-    };
-    const QStringList topLevelFolders = {
-        "dir1", "dir2", "dir3", "dir4"
-    };
+    const QStringList topLevelFiles = {"file1", "file2", "file3", "file4"};
+    const QStringList topLevelFolders = {"dir1", "dir2", "dir3", "dir4"};
 
     int previousEntryCount = 0;
 
-    void createFile(const QString& file);
-    void createDir(const QString& directory);
+    void createFile(const QString &file);
+    void createDir(const QString &directory);
     void createTestFiles();
     void waitForSignals(QSignalSpy &spy, int count, const QString &dir);
 
-    void enterDir(const std::function<void()>& enter,
-                  const QString &dir,
-                  bool canGoForward, bool canGoBack,
-                  const QStringList &expectedFiles,
+    void enterDir(const std::function<void()> &enter, const QString &dir, bool canGoForward, bool canGoBack,
+                  const QStringList &expectedFiles, const QStringList &expectedFolders);
+
+    void enterDir(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                   const QStringList &expectedFolders);
 
-    void enterDir(const QString& dir,
-                  bool canGoForward, bool canGoBack,
-                  const QStringList &expectedFiles,
+    void enterDir(int index, const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                   const QStringList &expectedFolders);
 
-    void enterDir(int index, const QString &dir,
-                  bool canGoForward, bool canGoBack,
-                  const QStringList &expectedFiles,
-                  const QStringList &expectedFolders);
-
-    void goForward(const QString& dir,
-                   bool canGoForward, bool canGoBack,
-                   const QStringList &expectedFiles,
+    void goForward(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                    const QStringList &expectedFolders);
 
-    void goBack(const QString &dir,
-                bool canGoForward, bool canGoBack,
-                const QStringList &expectedFiles,
+    void goBack(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                 const QStringList &expectedFolders);
 };
 
@@ -82,41 +70,38 @@ void TestFileDialog::createDir(const QString &directory)
 
 void TestFileDialog::createTestFiles()
 {
-    for (const auto& dirName : topLevelFolders)
+    for (const auto &dirName : topLevelFolders)
     {
         createDir(dirName);
     }
 
-    createDir("dir1/dir1_1/dir1_1_1");
-    createDir("dir1/dir1_1/dir1_1_2");
-    createDir("dir1/dir1_2/dir1_2_1");
+    createDir(u"dir1/dir1_1/dir1_1_1"_s);
+    createDir(u"dir1/dir1_1/dir1_1_2"_s);
+    createDir(u"dir1/dir1_2/dir1_2_1"_s);
 
-    for (const auto& fileName : topLevelFiles)
+    for (const auto &fileName : topLevelFiles)
     {
         createFile(fileName);
     }
 }
 
-void TestFileDialog::waitForSignals(QSignalSpy &spy, int count, const QString& dir)
+void TestFileDialog::waitForSignals(QSignalSpy &spy, int count, const QString &dir)
 {
     while (spy.count() < count)
     {
         QVERIFY2(spy.wait(WAIT_TIME_MS),
-                 QString("Timeout at signal %1/%2 (entering %3)")
-                 .arg(spy.count())
-                 .arg(count)
-                 .arg(dir).toUtf8());
+                 u"Timeout at signal %1/%2 (entering %3)"_s.arg(spy.count()).arg(count).arg(dir).toUtf8());
     }
 }
 
-void TestFileDialog::enterDir(const std::function<void ()> &enter, const QString& dir, bool canGoForward, bool canGoBack,
+void TestFileDialog::enterDir(const std::function<void()> &enter, const QString &dir, bool canGoForward, bool canGoBack,
                               const QStringList &expectedFiles, const QStringList &expectedFolders)
 {
-    QSignalSpy dirChangeSpy(dialog, &FileDialog::currentDirChanged);
-    QSignalSpy forwardChangeSpy(dialog, &FileDialog::canGoForwardChanged);
-    QSignalSpy backChangeSpy(dialog, &FileDialog::canGoBackChanged);
-    QSignalSpy filesChangeSpy(dialog, &FileDialog::entriesChanged);
-    QSignalSpy loadingSpy(dialog, &FileDialog::isLoadingChanged);
+    QSignalSpy dirChangeSpy(dialog, &FileDialogBackend::currentDirChanged);
+    QSignalSpy forwardChangeSpy(dialog, &FileDialogBackend::canGoForwardChanged);
+    QSignalSpy backChangeSpy(dialog, &FileDialogBackend::canGoBackChanged);
+    QSignalSpy filesChangeSpy(dialog, &FileDialogBackend::entriesChanged);
+    QSignalSpy loadingSpy(dialog, &FileDialogBackend::isLoadingChanged);
 
     enter();
 
@@ -130,7 +115,7 @@ void TestFileDialog::enterDir(const std::function<void ()> &enter, const QString
 
     waitForSignals(dirChangeSpy, 1, dir);
     QCOMPARE(dialog->currentDir(), dir);
-    QCOMPARE(dialog->currentDir(), dirChangeSpy.takeFirst().first().toString());
+    QCOMPARE(dialog->currentDir(), dirChangeSpy.takeFirst().constFirst().toString());
 
     waitForSignals(forwardChangeSpy, 1, dir);
     QCOMPARE(dialog->canGoForward(), canGoForward);
@@ -144,9 +129,8 @@ void TestFileDialog::enterDir(const std::function<void ()> &enter, const QString
     QStringList files;
     QStringList folders;
 
-    for (auto *object : dialog->entries())
+    for (auto *fileObject : dialog->entries())
     {
-        auto *fileObject = qobject_cast<FileObject*>(object);
         QVERIFY(fileObject);
 
         if (fileObject->isFolder())
@@ -166,30 +150,31 @@ void TestFileDialog::enterDir(const std::function<void ()> &enter, const QString
     previousEntryCount = files.count() + folders.count();
 }
 
-void TestFileDialog::enterDir(const QString &dir, bool canGoForward,
-                              bool canGoBack, const QStringList &expectedFiles,
+void TestFileDialog::enterDir(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                               const QStringList &expectedFolders)
 {
-    auto enter = [this, dir](){ dialog->setCurrentDir(dir); };
+    auto enter = [this, dir]() { dialog->setCurrentDir(dir); };
     enterDir(enter, dir, canGoForward, canGoBack, expectedFiles, expectedFolders);
 }
 
-void TestFileDialog::enterDir(int index, const QString& dir, bool canGoForward, bool canGoBack,
+void TestFileDialog::enterDir(int index, const QString &dir, bool canGoForward, bool canGoBack,
                               const QStringList &expectedFiles, const QStringList &expectedFolders)
 {
-    auto enter = [this, index](){ dialog->enterFolder(index); };
+    auto enter = [this, index]() { dialog->enterFolder(index); };
     enterDir(enter, dir, canGoForward, canGoBack, expectedFiles, expectedFolders);
 }
 
-void TestFileDialog::goForward(const QString& dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles, const QStringList &expectedFolders)
+void TestFileDialog::goForward(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
+                               const QStringList &expectedFolders)
 {
-    auto enter = [this](){ dialog->forward(); };
+    auto enter = [this]() { dialog->forward(); };
     enterDir(enter, dir, canGoForward, canGoBack, expectedFiles, expectedFolders);
 }
 
-void TestFileDialog::goBack(const QString& dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles, const QStringList &expectedFolders)
+void TestFileDialog::goBack(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
+                            const QStringList &expectedFolders)
 {
-    auto enter = [this](){ dialog->back(); };
+    auto enter = [this]() { dialog->back(); };
     enterDir(enter, dir, canGoForward, canGoBack, expectedFiles, expectedFolders);
 }
 
@@ -198,7 +183,7 @@ void TestFileDialog::initTestCase()
     FileAccess::setInstance(new FileAccessLocal(this));
     createTestFiles();
 
-    dialog = new FileDialog(this);
+    dialog = new FileDialogBackend(this);
     QVERIFY(dialog);
 }
 
@@ -224,28 +209,28 @@ void TestFileDialog::moveThroughStructure()
     dialog->folderMode(false);
     enterDir(tempDir.path(), false, true, topLevelFiles, topLevelFolders);
 
-    enterDir(0, tempDir.filePath("dir1"), false, true, {}, { "dir1_1", "dir1_2" });
-    enterDir(0, tempDir.filePath("dir1/dir1_1"), false, true, {}, { "dir1_1_1", "dir1_1_2" });
-    enterDir(1, tempDir.filePath("dir1/dir1_1/dir1_1_2"), false, true, {}, {});
+    enterDir(0, tempDir.filePath(u"dir1"_s), false, true, {}, {"dir1_1", "dir1_2"});
+    enterDir(0, tempDir.filePath(u"dir1/dir1_1"_s), false, true, {}, {"dir1_1_1", "dir1_1_2"});
+    enterDir(1, tempDir.filePath(u"dir1/dir1_1/dir1_1_2"_s), false, true, {}, {});
 
     // No subfolder exists, stay in current one
-    enterDir(1, tempDir.filePath("dir1/dir1_1/dir1_1_2"), false, true, {}, {});
+    enterDir(1, tempDir.filePath(u"dir1/dir1_1/dir1_1_2"_s), false, true, {}, {});
 
-    goBack(tempDir.filePath("dir1/dir1_1"), true, true, {}, { "dir1_1_1", "dir1_1_2" });
-    goForward(tempDir.filePath("dir1/dir1_1/dir1_1_2"), false, true, {}, {});
+    goBack(tempDir.filePath(u"dir1/dir1_1"_s), true, true, {}, {"dir1_1_1", "dir1_1_2"});
+    goForward(tempDir.filePath(u"dir1/dir1_1/dir1_1_2"_s), false, true, {}, {});
 
-    goBack(tempDir.filePath("dir1/dir1_1"), true, true, {}, { "dir1_1_1", "dir1_1_2" });
-    goBack(tempDir.filePath("dir1"), true, true, {}, { "dir1_1", "dir1_2" });
+    goBack(tempDir.filePath(u"dir1/dir1_1"_s), true, true, {}, {"dir1_1_1", "dir1_1_2"});
+    goBack(tempDir.filePath(u"dir1"_s), true, true, {}, {"dir1_1", "dir1_2"});
     goBack(tempDir.path(), true, true, topLevelFiles, topLevelFolders);
 
-    enterDir(1, tempDir.filePath("dir2"), false, true, {}, {});
+    enterDir(1, tempDir.filePath(u"dir2"_s), false, true, {}, {});
     goBack(tempDir.path(), true, true, topLevelFiles, topLevelFolders);
-    goForward(tempDir.filePath("dir2"), false, true, {}, {});
+    goForward(tempDir.filePath(u"dir2"_s), false, true, {}, {});
     goBack(tempDir.path(), true, true, topLevelFiles, topLevelFolders);
 
-    enterDir(0, tempDir.filePath("dir1"), false, true, {}, { "dir1_1", "dir1_2" });
-    enterDir(1, tempDir.filePath("dir1/dir1_2"), false, true, {}, { "dir1_2_1" });
-    goBack(tempDir.filePath("dir1"), true, true, {}, { "dir1_1", "dir1_2" });
+    enterDir(0, tempDir.filePath(u"dir1"_s), false, true, {}, {"dir1_1", "dir1_2"});
+    enterDir(1, tempDir.filePath(u"dir1/dir1_2"_s), false, true, {}, {"dir1_2_1"});
+    goBack(tempDir.filePath(u"dir1"_s), true, true, {}, {"dir1_1", "dir1_2"});
 }
 
 QTEST_GUILESS_MAIN(TestFileDialog)

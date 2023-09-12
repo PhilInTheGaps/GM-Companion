@@ -13,17 +13,21 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
-CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
+CombatTracker::CombatTracker(QQmlEngine *qmlEngine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
 {
-    if (engine)
+    if (qmlEngine)
     {
-        engine->rootContext()->setContextProperty(u"combat_tracker"_s, this);
-        engine->rootContext()->setContextProperty(u"combat_tracker_effects"_s, &m_effectTool);
-        engine->rootContext()->setContextProperty(u"combatantListModel"_s, &m_state.model());
+        qmlEngine->rootContext()->setContextProperty(u"combat_tracker_effects"_s, &m_effectTool);
     }
 
     connect(&m_state, &CombatTrackerState::currentIndexChanged, this, &CombatTracker::currentIndexChanged);
     connect(&m_state, &CombatTrackerState::currentRoundChanged, this, &CombatTracker::currentRoundChanged);
+}
+
+auto CombatTracker::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *
+{
+    Q_UNUSED(jsEngine);
+    return new CombatTracker(qmlEngine, qmlEngine);
 }
 
 /**

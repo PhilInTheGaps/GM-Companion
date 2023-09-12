@@ -13,10 +13,9 @@ add_test(NAME test_localaccess COMMAND test_localaccess)
 
 # File Dialog
 qt_add_executable(test_filedialog testfiledialog.cpp)
-target_link_libraries(test_filedialog PRIVATE testhelper filesystem Qt6::Core Qt6::Test)
+target_link_libraries(test_filedialog PRIVATE testhelper filesystem gm-companion-ui-filedialog gm-companion-ui-filedialogplugin Qt6::Core Qt6::Test)
 set_target_properties(test_filedialog PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_filedialog COMMAND test_filedialog)
-
 
 # Nextcloud
 qt_add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp mocknextcloud.cpp mocknextcloud.h oputils.h oputils.cpp)

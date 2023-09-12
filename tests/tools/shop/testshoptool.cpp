@@ -34,7 +34,7 @@ void TestShopTool::initTestCase()
     copyResourceToFile(QStringLiteral(":/resources/shopproject/project.shop"),
                        FileUtils::fileInDir(QStringLiteral("project.shop"), userPath));
 
-    tool = new ShopTool(nullptr, this);
+    tool = new ShopTool(this);
     QVERIFY(tool);
 
     QVERIFY(!tool->isDataLoaded());

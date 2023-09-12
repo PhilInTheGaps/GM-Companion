@@ -1,14 +1,15 @@
-#ifndef AUDIOFILE_H
-#define AUDIOFILE_H
-
-#include <QJsonObject>
-#include <QObject>
+#pragma once
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QJsonObject>
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AudioFile : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     enum class Source
@@ -38,4 +39,4 @@ public:
     Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY urlChanged)
 };
 
-#endif // AUDIOFILE_H
+Q_DECLARE_METATYPE(AudioFile *)

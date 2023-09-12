@@ -1,5 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import common
 import "../common"
 
 Dialog {
@@ -26,8 +27,8 @@ Dialog {
             CheckBox {
                 id: crash_reports_box
                 text: qsTr("Automated crash reports")
-                checked: settings_manager.crashReports
-                onClicked: settings_manager.crashReports = checked
+                checked: SettingsManager.crashReports
+                onClicked: SettingsManager.crashReports = checked
             }
 
             HelpAnnotation {
@@ -41,8 +42,8 @@ Dialog {
             CheckBox {
                 id: session_tracking_box
                 text: qsTr("Session tracking")
-                checked: settings_manager.sessionTracking
-                onClicked: settings_manager.sessionTracking = checked
+                checked: SettingsManager.sessionTracking
+                onClicked: SettingsManager.sessionTracking = checked
             }
 
             HelpAnnotation {
@@ -53,7 +54,7 @@ Dialog {
     }
 
     onClosed: {
-        settings_manager.crashReports = crash_reports_box.checked
-        settings_manager.sessionTracking = session_tracking_box.checked
+        SettingsManager.crashReports = crash_reports_box.checked
+        SettingsManager.sessionTracking = session_tracking_box.checked
     }
 }

@@ -1,32 +1,34 @@
-#ifndef MAP_H
-#define MAP_H
-
-#include <QAbstractListModel>
-#include <QList>
-#include <QObject>
+#pragma once
 
 #include "mapmarker.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QAbstractListModel>
+#include <QList>
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class Map : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QString, path)
     AUTO_PROPERTY(QString, imageData)
 
 public:
+    explicit Map(QObject *parent = nullptr);
     explicit Map(const QString &name, const QString &path, QObject *parent);
 
     Q_PROPERTY(MapMarkerModel *markers READ markers NOTIFY markersChanged)
 
     Q_PROPERTY(bool hasMarkers READ hasMarkers NOTIFY markersChanged)
-    [[nodiscard]] bool hasMarkers() const
+    [[nodiscard]] auto hasMarkers() const -> bool
     {
         return !m_markers.isEmpty();
     }
 
-    MapMarkerModel *markers()
+    auto markers() -> MapMarkerModel *
     {
         return &m_markers;
     }
@@ -51,6 +53,8 @@ private:
 class MapListModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
     using QAbstractListModel::QAbstractListModel;
 
@@ -70,7 +74,8 @@ public:
     QList<Map *> elements() const
     {
         QList<Map *> list;
-        for (auto i : m_items)
+        list.reserve(m_items.size());
+        foreach (auto i, m_items)
             list.append(static_cast<Map *>(i));
         return list;
     }
@@ -80,7 +85,7 @@ public slots:
     void remove(QObject *item);
 
 protected:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
 private:
     QList<QObject *> m_items = {};
@@ -89,10 +94,13 @@ private:
 class MapCategory : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QList<Map *>, maps)
 public:
-    MapCategory(const QString &name, const QList<Map *> &maps, QObject *parent);
+    using QObject::QObject;
+    explicit MapCategory(const QString &name, const QList<Map *> &maps, QObject *parent);
 
     void addMap(Map *map);
     void loadMaps();
@@ -104,5 +112,3 @@ private:
     int m_getFileListRequestId = -1;
     bool m_wasLoaded = false;
 };
-
-#endif // MAP_H

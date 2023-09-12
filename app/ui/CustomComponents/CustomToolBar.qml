@@ -1,10 +1,8 @@
 import QtQuick
-import QtQuick.Controls
 import IconFonts
-import "./sizes.js" as Sizes
 
 Rectangle {
-    id: tool_bar
+    id: root
 
     property alias button_row: row
 
@@ -18,7 +16,7 @@ Rectangle {
     property bool enableExport: false
     signal exportClicked
 
-    height: Sizes.toolbarHeight
+    height: CCSizes.toolbarHeight
     color: palette.alternateBase
 
     Rectangle {
@@ -37,32 +35,32 @@ Rectangle {
 
         // Back
         CustomToolBarButton {
-            visible: enableBack
+            visible: root.enableBack
             iconText: FontAwesome.circleArrowLeft
             toolTipText: qsTr("Back")
-            onClicked: backClicked()
+            onClicked: root.backClicked()
             pointSize: 18
         }
 
         // Add
         CustomToolBarButton {
-            visible: enableAdd
+            visible: root.enableAdd
             iconText: FontAwesome.fileMedical
             toolTipText: qsTr("Add")
-            onClicked: addClicked()
+            onClicked: root.addClicked()
             pointSize: 18
         }
 
         // Save
         CustomToolBarButton {
-            visible: enableSave
+            visible: root.enableSave
             iconText: FontAwesome.fileArrowDown
             toolTipText: qsTr("Save")
-            onClicked: saveClicked()
+            onClicked: root.saveClicked()
             pointSize: 18
 
             Text {
-                visible: !isSaved
+                visible: !root.isSaved
                 text: FontAwesome.asterisk
                 color: "darkred"
                 font.family: FontAwesome.fontSolid.family
@@ -74,10 +72,10 @@ Rectangle {
 
         // Export
         CustomToolBarButton {
-            visible: enableExport
+            visible: root.enableExport
             iconText: FontAwesome.fileExport
             toolTipText: qsTr("Export")
-            onClicked: exportClicked()
+            onClicked: root.exportClicked()
             pointSize: 18
         }
     }

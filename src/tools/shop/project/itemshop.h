@@ -5,13 +5,17 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ItemShop : public BaseProjectItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     AUTO_PROPERTY(QString, owner)
     AUTO_PROPERTY(QString, description)
-    AUTO_PROPERTY(QList<Item *>, items)
+    AUTO_LIST_PROPERTY(Item, items)
 
 public:
     explicit ItemShop(const QString &name, const QString &owner, const QString &description, const QList<Item *> &items,

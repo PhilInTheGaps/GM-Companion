@@ -1,10 +1,17 @@
 import QtQuick
 import QtQuick.Controls
-
 import ".."
+import "../dialogs"
+import "../../../../common"
 
 SplitView {
-    id: main_item
+    id: root
+
+    required property CustomFileDialog fileDialog
+    required property EditorDeleteDialog deleteDialog
+    required property IconFinderUnsplash unsplashDialog
+    required property Dialog largeImageDialog
+
     anchors.fill: parent
     orientation: Qt.Horizontal
 
@@ -18,6 +25,8 @@ SplitView {
 
         EditorElementColumn {
             id: element_column
+
+            deleteDialog: root.deleteDialog
         }
     }
 
@@ -35,9 +44,13 @@ SplitView {
 
         SplitView.minimumWidth: 180
         SplitView.preferredWidth: 300
-        SplitView.maximumWidth: main_item.width / 2
+        SplitView.maximumWidth: root.width / 2
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+        fileDialog: root.fileDialog
+        unsplashDialog: root.unsplashDialog
+        largeImageDialog: root.largeImageDialog
     }
 }

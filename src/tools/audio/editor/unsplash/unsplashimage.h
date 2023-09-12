@@ -1,84 +1,46 @@
-#ifndef UNSPLASHIMAGE_H
-#define UNSPLASHIMAGE_H
+#pragma once
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class UnsplashImage : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString id READ id WRITE setId NOTIFY imageChanged)
-    Q_PROPERTY(QString author READ author WRITE setAuthor NOTIFY imageChanged)
-    Q_PROPERTY(QString authorId READ authorId WRITE setAuthorId NOTIFY imageChanged)
-    Q_PROPERTY(QString authorLink READ authorLink NOTIFY imageChanged)
-    Q_PROPERTY(QStringList tags READ tags WRITE setTags NOTIFY imageChanged)
+    QML_ELEMENT
+
+    Q_PROPERTY(QString authorLink READ authorLink NOTIFY authorIdChanged)
+
+    AUTO_PROPERTY(QString, id)
+    AUTO_PROPERTY(QString, author)
+    AUTO_PROPERTY(QString, authorId)
+    AUTO_PROPERTY(QStringList, tags)
 
 public:
     explicit UnsplashImage(QObject *parent = nullptr);
 
-    QString id() const
+    [[nodiscard]] auto authorLink() const -> QString
     {
-        return m_id;
-    }
-    void setId(QString id)
-    {
-        m_id = id;
-        emit imageChanged();
+        return QStringLiteral("https://unsplash.com/@%1").arg(authorId());
     }
 
-    QString author() const
+    void addTag(const QString &tag)
     {
-        return m_author;
+        a_tags.append(tag);
+        emit tagsChanged(tags());
     }
-    void setAuthor(QString author)
-    {
-        m_author = author;
-        emit imageChanged();
-    }
-
-    QString authorId() const
-    {
-        return m_authorId;
-    }
-    void setAuthorId(QString authorId)
-    {
-        m_authorId = authorId;
-        emit imageChanged();
-    }
-
-    QString authorLink() const
-    {
-        return "https://unsplash.com/@" + m_authorId;
-    }
-
-    QStringList tags() const
-    {
-        return m_tags;
-    }
-    void setTags(QStringList tags)
-    {
-        m_tags = tags;
-        emit imageChanged();
-    }
-    void addTag(QString tag)
-    {
-        m_tags.append(tag);
-        emit imageChanged();
-    }
-
-signals:
-    void imageChanged();
-
-private:
-    QString m_id, m_author, m_authorId;
-    QStringList m_tags;
 };
 
 class ImageListModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
+    using QAbstractListModel::QAbstractListModel;
+
     int rowCount(const QModelIndex &) const override
     {
         return m_items.size();
@@ -99,4 +61,4 @@ private:
     QList<QObject *> m_items = {};
 };
 
-#endif // UNSPLASHIMAGE_H
+Q_DECLARE_METATYPE(ImageListModel *)

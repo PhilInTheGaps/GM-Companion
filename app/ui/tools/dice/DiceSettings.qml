@@ -1,5 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import src
 
 Dialog {
     id: root
@@ -13,13 +14,13 @@ Dialog {
         CheckBox {
             id: enable_criticals_checkbox
             text: qsTr("Enable Criticals")
-            checked: dice_tool.getCriticalEnabled()
+            checked: DiceTool.getCriticalEnabled()
         }
 
         RadioButton {
             id: min_max_radiobutton
             text: qsTr("Min / Max")
-            checked: dice_tool.getMinMax()
+            checked: DiceTool.getMinMax()
             enabled: enable_criticals_checkbox.checked
         }
 
@@ -30,20 +31,20 @@ Dialog {
             RadioButton {
                 id: success_max_radiobutton
                 text: qsTr("Success: Maximum, Failure: Minimum")
-                checked: dice_tool.getSuccessMax()
+                checked: DiceTool.getSuccessMax()
                 enabled: enable_criticals_checkbox.checked
             }
 
             RadioButton {
                 text: qsTr("Success: Minimum, Failure: Maximum")
-                checked: !dice_tool.getSuccessMax()
+                checked: !DiceTool.getSuccessMax()
                 enabled: enable_criticals_checkbox.checked
             }
         }
 
         RadioButton {
             text: qsTr("Fixed Values")
-            checked: !dice_tool.getMinMax()
+            checked: !DiceTool.getMinMax()
             enabled: enable_criticals_checkbox.checked
         }
 
@@ -59,7 +60,7 @@ Dialog {
                 id: success_spinbox
                 from: 0
                 to: 1000
-                value: dice_tool.getSuccess()
+                value: DiceTool.getSuccess()
                 editable: true
                 enabled: enable_criticals_checkbox.checked
             }
@@ -72,7 +73,7 @@ Dialog {
                 id: failure_spinbox
                 from: 0
                 to: 1000
-                value: dice_tool.getFailure()
+                value: DiceTool.getFailure()
                 editable: true
                 enabled: enable_criticals_checkbox.checked
             }
@@ -82,7 +83,7 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onAccepted: {
-        dice_tool.setDiceSettings(enable_criticals_checkbox.checked,
+        DiceTool.setDiceSettings(enable_criticals_checkbox.checked,
                                   success_spinbox.value, failure_spinbox.value,
                                   min_max_radiobutton.checked,
                                   success_max_radiobutton.checked)

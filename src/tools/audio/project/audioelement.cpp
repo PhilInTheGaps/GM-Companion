@@ -16,7 +16,7 @@ AudioElement::AudioElement(const QString &name, Type type, const QString &path, 
 {
     this->name(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
-    m_thumbnail = new AudioThumbnail(m_path, this);
+    a_thumbnail = new AudioThumbnail(m_path, this);
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent)
@@ -26,8 +26,8 @@ AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &
     mode(static_cast<Mode>(object["mode"_L1].toInt()));
     m_path = path + "/" + typeToString(type) + "/" + name();
 
-    m_thumbnail = new AudioThumbnail(m_path, this);
-    m_thumbnail->setRelativeUrl(object["icon"_L1].toString());
+    a_thumbnail = new AudioThumbnail(m_path, this);
+    a_thumbnail->setRelativeUrl(object["icon"_L1].toString());
 
     foreach (const auto &file, object.value("files"_L1).toArray())
     {
@@ -41,7 +41,7 @@ AudioElement::AudioElement(const AudioElement &other)
 {
     mode(other.mode());
     m_files = Utils::copyList(other.files());
-    setThumbnail(other.thumbnail());
+    thumbnail(other.thumbnail());
 }
 
 /**
@@ -59,11 +59,6 @@ auto AudioElement::toJson() const -> QJsonObject
     }
     object.insert(u"files"_s, files);
     return object;
-}
-
-auto AudioElement::thumnailObject() const -> QObject *
-{
-    return thumbnail();
 }
 
 /**

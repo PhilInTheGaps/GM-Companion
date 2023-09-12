@@ -1,14 +1,14 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
 import IconFonts
-import CustomComponents 1.0
+import CustomComponents
+import src
 
 CustomButton {
     id: file_browser_button
 
     property string file
     property var path
-    property var type
+    property int type
     property bool opened
     property int depth: 0
 
@@ -44,10 +44,10 @@ CustomButton {
     onClicked: {
         if (type === 3) {
             // Is Folder
-            audio_editor_file_browser.openFolder(!opened, file, path)
+            AudioTool.editor.fileBrowser.openFolder(!opened, file, path)
             folderClicked()
         } else {
-            audio_editor.addFile(path, file)
+            AudioTool.editor.addFile(path, file)
         }
     }
 }

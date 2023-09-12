@@ -1,19 +1,29 @@
 #pragma once
 
-#include "googledriveconnectorlocal.h"
+#include "qmlsingletonfactory.h"
+#include "rest/restserviceconnector.h"
 #include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class GoogleDrive : public Service
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+    QML_ONLY_SINGLETON_FACTORY(GoogleDrive)
+
     AUTO_PROPERTY(QString, clientId)
 
 public:
-    GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
-    GoogleDrive(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    explicit GoogleDrive(QQmlEngine &engine, QObject *parent);
+    explicit GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    explicit GoogleDrive(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+
+    static auto qmlInstance(QQmlEngine *engine) -> GoogleDrive *;
 
     void grant()
     {
@@ -39,6 +49,8 @@ public slots:
     void disconnectService() override;
 
 private:
+    inline static GoogleDrive *s_qmlInstance = nullptr;
+
     QNetworkAccessManager &m_networkManager;
     RESTServiceConnector *m_connector = nullptr;
 

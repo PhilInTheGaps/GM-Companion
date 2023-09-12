@@ -1,8 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import "./sizes.js" as Sizes
-import "./colors.js" as Colors
 
 Control {
     id: root
@@ -11,18 +9,19 @@ Control {
     property alias textItem: text_item
     property alias iconItem: icon_item
     property alias mouseArea: mouse_area
+    property alias pressed: mouse_area.pressed
 
     // Content
     property string buttonText: ""
     property string iconText: ""
     property string toolTipText: ""
-    property var iconFont: FontAwesome.fontSolid
+    property font iconFont: FontAwesome.fontSolid
 
     // Visual options
     property int pointSize: 12
-    readonly property var textColor: mouse_area.pressed ? Colors.mid : (mouse_area.containsMouse ? Colors.focus : Colors.text)
-    property var iconColor: undefined
-    property string backgroundColor: Colors.dark
+    readonly property color textColor: mouse_area.pressed ? palette.mid : (mouse_area.containsMouse ? CCColors.focus : palette.text)
+    property color iconColor: textColor
+    property color backgroundColor: palette.dark
     property bool transparentBackground: false
     property int borderWidth: 1
 
@@ -35,7 +34,7 @@ Control {
     signal rightClicked(string info)
 
     padding: 5
-    height: Sizes.customButtonHeight
+    height: CCSizes.customButtonHeight
     anchors.left: undefined
     hoverEnabled: true
 
@@ -48,18 +47,18 @@ Control {
         property int contentWidth: (icon_item.visible ? icon_item.width : 0)
                                    + (text_item.visible ? text_item.width : 0) + spacingCount
 
-        padding: centering ? (width - contentWidth) / 2 : 0
+        padding: root.centering ? (width - contentWidth) / 2 : 0
 
         Label {
             id: icon_item
             visible: text.length
             text: root.iconText
-            color: iconColor ? iconColor : root.textColor
+            color: root.iconColor
             opacity: root.enabled ? 1 : 0.7
 
             font.family: root.iconFont.family
             font.styleName: root.iconFont.styleName
-            font.bold: enableBold && mouse_area.containsMouse
+            font.bold: root.enableBold && mouse_area.containsMouse
             font.pointSize: root.pointSize
 
             width: height
@@ -75,13 +74,13 @@ Control {
             color: root.textColor
             opacity: root.enabled ? 1 : 0.7
 
-            font.bold: enableBold && mouse_area.containsMouse
+            font.bold: root.enableBold && mouse_area.containsMouse
 
             font.pointSize: root.pointSize
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
 
-            width: usesFixedWidth ? main_row.width - x : implicitWidth
+            width: root.usesFixedWidth ? main_row.width - x : implicitWidth
 
             clip: true
             elide: Text.ElideRight
@@ -89,9 +88,9 @@ Control {
     }
 
     background: Rectangle {
-        visible: !transparentBackground
+        visible: !root.transparentBackground
         color: root.backgroundColor
-        border.color: Colors.button
+        border.color: palette.button
         border.width: mouse_area.containsMouse ? root.borderWidth : 0
     }
 

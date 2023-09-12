@@ -3,10 +3,14 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QStringList>
+#include <QtQml/qqmlregistration.h>
 
 class AbstractNameGenerator : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
 public:
     explicit AbstractNameGenerator(QObject *parent, QString name, QStringList categories, QStringList prefixes,
                                    QStringList suffixes);
@@ -21,8 +25,8 @@ public:
 
     AUTO_PROPERTY(QList<QStringList>, generatedNames)
     AUTO_PROPERTY(QList<bool>, enabledCategories)
-    AUTO_PROPERTY(int, activePrefix)
-    AUTO_PROPERTY(int, activeSuffix)
+    AUTO_PROPERTY_VAL(int, activePrefix)
+    AUTO_PROPERTY_VAL(int, activeSuffix)
 
 private:
     [[nodiscard]] auto buildEmptyNameList() const -> QList<QStringList>;

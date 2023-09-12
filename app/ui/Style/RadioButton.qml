@@ -1,9 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import IconFonts
-import "./colors.js" as Colors
 
 T.RadioButton {
     id: control
@@ -35,7 +31,7 @@ T.RadioButton {
 
         text: control.text
         font: control.font
-        color: control.down ? Colors.textDisabled : Colors.text
+        color: control.down ? StyleColors.textDisabled : palette.text
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
         opacity: enabled ? 1 : 0.3

@@ -1,12 +1,11 @@
-#ifndef AUDIOEXPORTER_H
-#define AUDIOEXPORTER_H
+#pragma once
 
+#include "../project/audioproject.h"
 #include <QObject>
 #include <QPointer>
 #include <QQueue>
 #include <QThread>
-
-#include "../project/audioproject.h"
+#include <QtQml/qqmlregistration.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -37,45 +36,46 @@ private:
     void copyElements(AudioScenario *scenario);
     void collectFilesToExport();
 
-    bool copyNext();
-    bool copyNextMusic();
-    bool copyNextSound();
-    bool copyNextRadio();
-    bool copyFile(const QString &filePath, const QString &base, const QString &subfolder);
+    auto copyNext() -> bool;
+    auto copyNextMusic() -> bool;
+    auto copyNextSound() -> bool;
+    auto copyNextRadio() -> bool;
+    auto copyFile(const QString &filePath, const QString &base, const QString &subfolder) -> bool;
 };
 
 class AudioExporter : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
-    Q_PROPERTY(QObject *model READ model NOTIFY modelChanged)
+    Q_PROPERTY(AudioProject *model READ model NOTIFY modelChanged)
     Q_PROPERTY(float progress READ progress NOTIFY progressChanged)
 
     QThread workerThread;
 
 public:
-    explicit AudioExporter(QObject *parent = nullptr) : QObject(parent)
-    {
-    }
-    ~AudioExporter()
+    using QObject::QObject;
+    ~AudioExporter() override
     {
         workerThread.quit();
         workerThread.wait();
     }
+    Q_DISABLE_COPY_MOVE(AudioExporter)
 
-    QObject *model() const
+    [[nodiscard]] auto model() const -> AudioProject *
     {
         return m_model;
     }
     void setProject(AudioProject *project);
 
-    Q_INVOKABLE void setPath(QString path)
+    Q_INVOKABLE void setPath(const QString &path)
     {
         m_path = path;
     }
     Q_INVOKABLE void exportFiles();
 
-    float progress() const
+    [[nodiscard]] auto progress() const -> float
     {
         return m_progress;
     }
@@ -87,7 +87,7 @@ signals:
 
 private:
     AudioProject *m_project = nullptr;
-    QPointer<QObject> m_model = nullptr;
+    QPointer<AudioProject> m_model = nullptr;
 
     float m_progress = 0;
     QString m_path = u""_s;
@@ -95,5 +95,3 @@ private:
 public slots:
     void updateProgress(float progress);
 };
-
-#endif // AUDIOEXPORTER_H

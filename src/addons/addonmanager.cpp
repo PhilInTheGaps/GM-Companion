@@ -338,7 +338,7 @@ void AddonManager::sortAddons()
         return first->name() > second->name();
     });
 
-    emit addonsChanged(a_addons);
+    emit addonsChanged();
 }
 
 auto AddonManager::getRemotePath(const QString &file) -> QString

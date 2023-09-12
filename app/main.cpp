@@ -1,20 +1,16 @@
-#include "addons/addonmanager.h"
 #include "filesystem/file.h"
-#include "filesystem/fileaccessswitcher.h"
-#include "filesystem/filedialog/filedialog.h"
 #include "logger.h"
-#include "messages/messagemanager.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
-#include "services/spotify/spotify.h"
 #include "settings/quicksettingsmanager.h"
-#include "tools.h"
-#include "updates/updatemanager.h"
+#include "tools/audio/thumbnails/audiothumbnailprovider.h"
+#include "updates/version.h"
 #include <QFontDatabase>
 #include <QFuture>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLoggingCategory>
+#include <QPalette>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -33,13 +29,6 @@ Q_DECLARE_METATYPE(QFuture<void>)
 /// Register meta types for signals and slots
 void registerMetaTypes()
 {
-    qmlRegisterType<Files::FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
-    qmlRegisterSingletonType<Files::FileAccessSwitcher>("lol.rophil.gmcompanion.fileaccessswitcher", 1, 0,
-                                                        "FileAccessSwitcher",
-                                                        Files::FileAccessSwitcher::QmlSingletonProvider);
-
-    qRegisterMetaType<AudioElement *>();
-    qRegisterMetaType<QList<AudioProject *>>();
     qRegisterMetaType<QList<QNetworkReply::RawHeaderPair>>();
     qRegisterMetaType<QFuture<void>>();
 }
@@ -60,16 +49,17 @@ void updateTranslation(QTranslator &translator)
 }
 
 /// Set the language and install a translator
-void initTranslations(QTranslator &translator, QuickSettingsManager &quickSettings, QQmlEngine &engine)
+void initTranslations(QTranslator &translator, QQmlEngine &engine)
 {
     qCDebug(gmMain()) << "Initializing translations ...";
 
     updateTranslation(translator);
 
-    QObject::connect(&quickSettings, &QuickSettingsManager::languageChanged, &translator, [&translator, &engine]() {
-        updateTranslation(translator);
-        engine.retranslate();
-    });
+    QObject::connect(QuickSettingsManager::instance(), &QuickSettingsManager::languageChanged, &translator,
+                     [&translator, &engine]() {
+                         updateTranslation(translator);
+                         engine.retranslate();
+                     });
 }
 
 void initResources()
@@ -78,16 +68,39 @@ void initResources()
     Q_INIT_RESOURCE(services_resources);
 }
 
+void setPalette()
+{
+    QPalette palette;
+    palette.setColor(QPalette::ColorRole::Text, "#f6f7f8"_L1);
+    palette.setColor(QPalette::ColorRole::Base, "#2e2e2e"_L1);
+    palette.setColor(QPalette::ColorRole::AlternateBase, "#343a43"_L1);
+    palette.setColor(QPalette::ColorRole::Window, "#2e2e2e"_L1);
+    palette.setColor(QPalette::ColorRole::WindowText, "#f6f7f8"_L1);
+    palette.setColor(QPalette::ColorRole::Button, "#3f4957"_L1);
+    palette.setColor(QPalette::ColorRole::ButtonText, "#f6f7f8"_L1);
+    palette.setColor(QPalette::ColorRole::Light, "#ebedef"_L1);
+    palette.setColor(QPalette::ColorRole::Midlight, "#d5dade"_L1);
+    palette.setColor(QPalette::ColorRole::Mid, "#bfc6cd"_L1);
+    palette.setColor(QPalette::ColorRole::Dark, "#1f1f1f"_L1);
+    palette.setColor(QPalette::ColorRole::Highlight, "#3f4957"_L1);
+    palette.setColor(QPalette::ColorRole::HighlightedText, "#f6f7f8"_L1);
+    palette.setColor(QPalette::ColorRole::ToolTipText, "#f6f7f8"_L1);
+    palette.setColor(QPalette::ColorRole::ToolTipBase, "#1f1f1f"_L1);
+
+    QGuiApplication::setPalette(palette);
+}
+
 auto main(int argc, char *argv[]) -> int
 {
-    QGuiApplication app(argc, argv);
+    const QGuiApplication app(argc, argv);
     QGuiApplication::setApplicationName(u"GM-Companion"_s);
     QGuiApplication::setOrganizationName(u"GM-Companion"_s);
     QGuiApplication::setOrganizationDomain(u"gm-companion.github.io"_s);
     QGuiApplication::setWindowIcon(QIcon(u":/resources/icons/icon.png"_s));
+    setPalette();
 
 #if defined(Q_OS_WIN)
-    app.setFont(QFont("Segoe UI"));
+    QGuiApplication::setFont(QFont("Segoe UI"));
 #endif // if defined(Q_OS_WIN)
 
     const Logger logger;
@@ -100,9 +113,8 @@ auto main(int argc, char *argv[]) -> int
     QQuickStyle::setStyle(u"Style"_s);
 
     QTranslator translator;
-    QuickSettingsManager quickSettings;
     QQmlApplicationEngine engine;
-    initTranslations(translator, quickSettings, engine);
+    initTranslations(translator, engine);
 
     // Sentry.io crash reporting
     // Crash reports and session tracking are opt-in settings
@@ -126,37 +138,9 @@ auto main(int argc, char *argv[]) -> int
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
     // Misc
-    QNetworkAccessManager networkManager(nullptr);
-    networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    Files::File::init(NextCloud::qmlInstance(&engine), GoogleDrive::qmlInstance(&engine));
 
-    NextCloud nc(networkManager, nullptr);
-    GoogleDrive gd(networkManager, nullptr);
-    Files::File::init(&nc, &gd);
-
-    engine.rootContext()->setContextProperty(u"settings_manager"_s, &quickSettings);
-    engine.rootContext()->setContextProperty(u"update_manager"_s, new UpdateManager);
-    engine.rootContext()->setContextProperty(u"addon_manager"_s, AddonManager::instance());
-    engine.rootContext()->setContextProperty(u"addon_repository_manager"_s,
-                                             &(AddonManager::instance()->repositoryManager()));
-    engine.rootContext()->setContextProperty(u"message_manager"_s, MessageManager::instance());
-    engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider);
-
-    // Services
-    engine.rootContext()->setContextProperty(u"spotify_service"_s, Spotify::instance());
-    engine.rootContext()->setContextProperty(u"googledrive_service"_s, &gd);
-    engine.rootContext()->setContextProperty(u"nextcloud_service"_s, &nc);
-
-    // Load tools
-    const AudioTool audioTool(&engine, networkManager);
-    const MapTool mapTool(&engine);
-    const DiceTool diceTool(&engine);
-    const CombatTracker combatTracker(&engine);
-    const ShopTool shopTool(&engine);
-    const CharacterTool characterTool(&engine);
-    const NameGenerator nameGenerator(&engine);
-    const NotesTool notesTool(&engine);
-    const ConverterTool converterTool(&engine);
-
+    engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider());
     engine.loadFromModule("ui"_L1, "Main"_L1);
 
     if (engine.rootObjects().isEmpty()) return -1;

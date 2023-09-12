@@ -12,16 +12,16 @@ Q_LOGGING_CATEGORY(gmAudioCategory, "gm.audio.project.category")
 
 AudioCategory::AudioCategory(const QString &name, const QString &parentPath, QList<AudioScenario *> scenarios,
                              AudioProject *parent)
-    : TreeItem(name, 0, true, parent), m_path(parentPath + "/" + name), m_scenarios(std::move(scenarios))
+    : TreeItem(name, 0, true, parent), a_scenarios(std::move(scenarios)), m_path(parentPath + "/" + name)
 {
     this->name(name);
 
-    for (auto *scenario : qAsConst(m_scenarios))
+    foreach (auto *scenario, a_scenarios)
     {
         prepareScenario(scenario);
     }
 
-    if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
+    if (!a_scenarios.isEmpty()) setCurrentScenario(a_scenarios.first());
 }
 
 AudioCategory::AudioCategory(const AudioCategory &other)
@@ -37,16 +37,16 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, Aud
     m_path = path + "/" + name();
 
     const auto scenarios = object["scenarios"_L1].toArray();
-    m_scenarios.reserve(scenarios.size());
+    a_scenarios.reserve(scenarios.size());
 
-    for (const auto &scenario : scenarios)
+    foreach (const auto &scenario, scenarios)
     {
         auto *object = new AudioScenario(scenario.toObject(), m_path, this);
         prepareScenario(object);
-        m_scenarios.append(object);
+        a_scenarios.append(object);
     }
 
-    if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
+    if (!a_scenarios.isEmpty()) setCurrentScenario(a_scenarios.first());
 }
 
 /**
@@ -57,7 +57,7 @@ auto AudioCategory::toJson() const -> QJsonObject
     QJsonObject object = {{"name", name()}};
     QJsonArray scenariosJson;
 
-    foreach (const auto *scenario, m_scenarios)
+    foreach (const auto *scenario, a_scenarios)
     {
         if (scenario)
         {
@@ -75,7 +75,7 @@ auto AudioCategory::toJson() const -> QJsonObject
  */
 auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
 {
-    if (!scenario || !m_scenarios.contains(scenario))
+    if (!scenario || !a_scenarios.contains(scenario))
     {
         m_currentScenario = nullptr;
         emit currentScenarioChanged(nullptr);
@@ -91,7 +91,7 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
 
 auto AudioCategory::containsScenario(const QString &name) const -> bool
 {
-    return std::any_of(m_scenarios.constBegin(), m_scenarios.constEnd(),
+    return std::any_of(a_scenarios.constBegin(), a_scenarios.constEnd(),
                        [name](const AudioScenario *scenario) { return scenario && scenario->name() == name; });
 }
 
@@ -104,7 +104,7 @@ auto AudioCategory::addScenario(AudioScenario *scenario, bool setAsCurrent) -> b
     if (!scenario) return false;
 
     prepareScenario(scenario);
-    m_scenarios.append(scenario);
+    a_scenarios.append(scenario);
     emit scenariosChanged();
 
     if (setAsCurrent)
@@ -121,9 +121,9 @@ auto AudioCategory::addScenario(AudioScenario *scenario, bool setAsCurrent) -> b
  */
 auto AudioCategory::deleteScenario(AudioScenario *scenario) -> bool
 {
-    if (!scenario || !m_scenarios.contains(scenario)) return false;
+    if (!scenario || !a_scenarios.contains(scenario)) return false;
 
-    if (!m_scenarios.removeOne(scenario)) return false;
+    if (!a_scenarios.removeOne(scenario)) return false;
 
     scenario->deleteLater();
     emit scenariosChanged();
@@ -137,7 +137,7 @@ auto AudioCategory::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    foreach (auto *scenario, m_scenarios)
+    foreach (auto *scenario, a_scenarios)
     {
         list.append(scenario->elements(true));
     }

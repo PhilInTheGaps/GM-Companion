@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Page {
     id: control
@@ -27,6 +24,6 @@ T.Page {
                    || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
     background: Rectangle {
-        color: Colors.window
+        color: palette.window
     }
 }

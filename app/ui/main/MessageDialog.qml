@@ -1,7 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
 
 Dialog {
     id: root
@@ -22,7 +22,7 @@ Dialog {
 
         Button {
             text: qsTr("Clear")
-            onClicked: message_manager.clearMessages()
+            onClicked: MessageManager.clearMessages()
         }
 
         Button {
@@ -57,13 +57,25 @@ Dialog {
             spacing: 10
 
             Repeater {
-                model: message_manager.messages
+                model: MessageManager.messages
 
                 Rectangle {
+                    id: message_box
+                    required property Message modelData
+
                     color: "transparent"
-                    border.color: modelData.type
-                                  === 1 ? "orange" : modelData.type === 2
-                                          || modelData.type === 3 ? "red" : palette.button
+                    border.color: switch (modelData.type) {
+                                  case 1:
+                                      "orange"
+                                      break
+                                  case 2:
+                                  case 3:
+                                      "red"
+                                      break
+                                  default:
+                                      palette.button
+                                  }
+
                     border.width: 1
                     height: header.height + text_field.height
                     anchors.left: parent.left
@@ -93,7 +105,7 @@ Dialog {
                                 font.styleName: FontAwesome.fontSolid.styleName
                                 font.pointSize: 12
                                 verticalAlignment: Text.AlignVCenter
-                                text: modelData.type === 4 ? FontAwesome.circleInfo : FontAwesome.triangleExclamation
+                                text: message_box.modelData.type === 4 ? FontAwesome.circleInfo : FontAwesome.triangleExclamation
 
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
@@ -105,7 +117,7 @@ Dialog {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                text: modelData.timestamp.toLocaleString(
+                                text: message_box.modelData.timestamp.toLocaleString(
                                           Qt.locale("en_US"),
                                           Locale.ShortFormat)
                                 font.pointSize: 10
@@ -118,7 +130,7 @@ Dialog {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                text: modelData.category
+                                text: message_box.modelData.category
                                 font.pointSize: 10
                                 wrapMode: Label.NoWrap
                                 verticalAlignment: Text.AlignVCenter
@@ -133,7 +145,7 @@ Dialog {
                         anchors.right: parent.right
                         padding: 10
 
-                        text: modelData.body
+                        text: message_box.modelData.body
                         font.pointSize: 12
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         readOnly: true

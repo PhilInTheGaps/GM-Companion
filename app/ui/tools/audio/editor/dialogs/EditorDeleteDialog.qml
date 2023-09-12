@@ -1,5 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import src
 
 Dialog {
     id: root
@@ -31,8 +32,8 @@ Dialog {
 
     contentItem: Column {
         Label {
-            text: qsTr("Delete" + " " + modeString + " "
-                       + (element ? element.name : "UNKNOWN") + "?")
+            text: qsTr("Delete" + " " + root.modeString + " "
+                       + (root.element ? root.element.name : "UNKNOWN") + "?")
         }
 
         Label {
@@ -45,16 +46,16 @@ Dialog {
     onAccepted: {
         switch (mode) {
         case 0:
-            audio_editor.deleteProject()
+            AudioTool.editor.deleteProject()
             break
         case 1:
-            audio_editor.deleteCategory()
+            AudioTool.editor.deleteCategory()
             break
         case 2:
-            audio_editor.deleteScenario()
+            AudioTool.editor.deleteScenario()
             break
         case 3:
-            audio_editor.deleteSubScenario(element)
+            AudioTool.editor.deleteSubScenario(element)
             break
         }
 

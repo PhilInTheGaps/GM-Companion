@@ -6,12 +6,14 @@
 #include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QSortFilterProxyModel>
+#include <QtQml/qqmlregistration.h>
 
 class ShopEditor : public BaseShopTool
 {
     Q_OBJECT
+    QML_ELEMENT
 
-    AUTO_PROPERTY(QList<ItemGroup *>, itemGroups)
+    AUTO_LIST_PROPERTY(ItemGroup, itemGroups)
     AUTO_PROPERTY_VAL2(ItemGroup *, currentItemGroup, nullptr)
     READ_PROPERTY(QStringList, disabledItemCategories)
 

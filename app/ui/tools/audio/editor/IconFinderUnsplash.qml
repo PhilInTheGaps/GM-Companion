@@ -1,10 +1,12 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import CustomComponents 1.0
+import src
 
 Dialog {
-    id: unsplash_dialog
+    id: root
     title: qsTr("Find icon from unsplash.com")
 
     x: parent.width / 2 - width / 2
@@ -34,7 +36,7 @@ Dialog {
                 selectByMouse: true
                 placeholderText: qsTr("Type to search ...")
 
-                onTextChanged: audio_editor.findUnsplashImages(
+                onTextChanged: AudioTool.editor.findUnsplashImages(
                                    search_field.text)
             }
 
@@ -45,7 +47,7 @@ Dialog {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
-                onClicked: audio_editor.shuffleUnsplashImages()
+                onClicked: AudioTool.editor.shuffleUnsplashImages()
             }
         }
 
@@ -66,7 +68,7 @@ Dialog {
                 anchors.rightMargin: 5
 
                 clip: true
-                model: unsplashImageListModel
+                model: AudioTool.editor.unsplash.model
                 cellWidth: width / 5
                 cellHeight: cellWidth
 
@@ -75,13 +77,17 @@ Dialog {
                 }
 
                 delegate: Rectangle {
+                    id: image_delegate
+
+                    required property UnsplashImage modelData
+
                     width: grid.cellWidth - 10
                     height: grid.cellHeight - 10
                     color: "grey"
 
                     Image {
                         id: image
-                        source: "https://source.unsplash.com/" + modelData.id + "/500x500"
+                        source: "https://source.unsplash.com/" + image_delegate.modelData.id + "/500x500"
                         sourceSize.width: width
                         sourceSize.height: height
                         anchors.fill: parent
@@ -109,9 +115,9 @@ Dialog {
                         hoverEnabled: true
 
                         onClicked: {
-                            unsplash_author.text = modelData.author
-                            unsplash_author_id.text = "@" + modelData.authorId
-                            imageSource = image.source
+                            unsplash_author.text = image_delegate.modelData.author
+                            unsplash_author_id.text = "@" + image_delegate.modelData.authorId
+                            root.imageSource = image.source
                         }
                     }
                 }
@@ -146,7 +152,7 @@ Dialog {
 
                     Row {
                         id: unsplash_link_row
-                        visible: unsplash_author_id.text != ""
+                        visible: unsplash_author_id.text !== ""
                         spacing: 5
 
                         Label {

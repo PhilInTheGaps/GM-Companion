@@ -1,13 +1,19 @@
-#ifndef AUDIOPROJECT_H
-#define AUDIOPROJECT_H
+#pragma once
 
 #include "audiocategory.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QSharedPointer>
+#include <QtQml/qqmlregistration.h>
 
 class AudioProject : public TreeItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    READ_LIST_PROPERTY(AudioCategory, categories)
+    AUTO_PROPERTY_VAL2(bool, isSaved, true)
+    READONLY_PROPERTY(int, version)
 
 public:
     AudioProject(const QString &name, int version, QList<AudioCategory *> categories, QObject *parent = nullptr);
@@ -22,23 +28,11 @@ public:
 
     Q_PROPERTY(
         AudioCategory *currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
-    [[nodiscard]] auto currentCategory() const -> AudioCategory *
-    {
-        return m_currentCategory;
-    }
+    [[nodiscard]] auto currentCategory() const -> AudioCategory *;
     auto setCurrentCategory(AudioCategory *category) -> bool;
 
-    Q_PROPERTY(QList<AudioCategory *> categories READ categories NOTIFY categoriesChanged)
-    [[nodiscard]] auto categories() const -> QList<AudioCategory *>
-    {
-        return m_categories;
-    }
-
     Q_PROPERTY(int categoryIndex READ categoryIndex NOTIFY currentCategoryChanged)
-    [[nodiscard]] auto categoryIndex() const -> int
-    {
-        return m_categories.indexOf(m_currentCategory);
-    }
+    [[nodiscard]] auto categoryIndex() const -> int;
     auto deleteCategory(AudioCategory *category) -> bool;
     auto addCategory(AudioCategory *category, bool setAsCurrent = false) -> bool;
     [[nodiscard]] auto containsCategory(const QString &name) const -> bool;
@@ -47,16 +41,11 @@ public:
     [[nodiscard]] auto currentScenario() const -> AudioScenario *;
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
 
-    AUTO_PROPERTY_VAL2(bool, isSaved, true)
-    READONLY_PROPERTY(int, version)
-
 signals:
-    void categoriesChanged();
     void currentScenarioChanged(AudioScenario *scenario);
     void currentCategoryChanged(AudioCategory *category);
 
 private:
-    QList<AudioCategory *> m_categories;
     AudioCategory *m_currentCategory = nullptr;
 
     void connectSignals() const;
@@ -65,5 +54,3 @@ private:
 private slots:
     void onWasEdited();
 };
-
-#endif // AUDIOPROJECT_H

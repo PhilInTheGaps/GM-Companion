@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../../../defines.js" as Defines
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
+import "../../.."
 import "../../../common"
 
 Rectangle {
@@ -17,18 +17,17 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
-        model: shop_tool ? shop_tool.projects : []
-        emptyString: shop_tool
-                     && shop_tool.isLoading ? qsTr("Loading ...") : qsTr(
+        model: ShopTool.projects
+        emptyString: ShopTool.isLoading ? qsTr("Loading ...") : qsTr(
                                                   "No Projects")
 
         onCurrentIndexChanged: function (index) {
-            if (!shop_tool || shop_tool.projects.length < 1)
+            if (!ShopTool || ShopTool.projects.length < 1)
                 return
 
-            shop_tool.currentProject = shop_tool.projects[index]
+            ShopTool.currentProject = ShopTool.projects[index]
         }
 
         onEditorButtonClicked: left_menu.editorButtonClicked()
@@ -51,16 +50,17 @@ Rectangle {
             anchors.right: parent.right
 
             Repeater {
-                model: shop_tool
-                       && shop_tool.currentProject ? shop_tool.currentProject.categories : []
+                model: ShopTool.currentProject ? ShopTool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData.name
+                    required property ShopCategory modelData
+
+                    buttonText: modelData.name // qmllint disable missing-property
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    onClicked: shop_tool.currentProject.currentCategory = modelData
+                    onClicked: ShopTool.currentProject.currentCategory = modelData
                 }
             }
         }

@@ -1,13 +1,14 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import "../../../defines.js" as Defines
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import services
+import "../../.."
 
 Rectangle {
     id: root
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.toolbarHeight
 
-    property var status: undefined
+    property ServiceStatus status: undefined
 
     visible: status.message !== ""
 

@@ -8,27 +8,26 @@
 #include <QDir>
 #include <QJsonDocument>
 #include <QLoggingCategory>
-#include <QQmlContext>
 #include <QSettings>
 
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmConverter, "gm.converter")
 
-ConverterTool::ConverterTool(const QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), m_editor(new ConverterEditor(engine, this))
+ConverterTool::ConverterTool(QObject *parent) : AbstractTool(parent), m_editor(new ConverterEditor(this))
 {
-    if (engine)
-    {
-        engine->rootContext()->setContextProperty(u"converter_tool"_s, this);
-    }
-
     connect(this, &ConverterTool::projectsChanged, this, &ConverterTool::onProjectsChanged);
     connect(this, &ConverterTool::currentProjectChanged, this, &ConverterTool::onCurrentProjectChanged);
     connect(this, &ConverterTool::currentCategoryChanged, this, &ConverterTool::onCurrentCategoryChanged);
     connect(m_editor, &ConverterEditor::isSavedChanged, this, &ConverterTool::onEditorSavedChanged);
     connect(AddonManager::instance(), &AddonManager::isLoadingChanged, this,
             &ConverterTool::onAddonManagerLoadingChanged);
+}
+
+auto ConverterTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> ConverterTool *
+{
+    Q_UNUSED(jsEngine)
+    return new ConverterTool(qmlEngine);
 }
 
 void ConverterTool::loadData()
@@ -46,20 +45,20 @@ void ConverterTool::loadData()
     isLoading(false);
     setIsDataLoaded(true);
 
-    emit projectsChanged(a_projects);
+    emit projectsChanged();
 
     m_editor->loadData();
 }
 
-void ConverterTool::onProjectsChanged(const QList<ConverterProject *> &projects)
+void ConverterTool::onProjectsChanged()
 {
-    if (projects.isEmpty())
+    if (a_projects.isEmpty())
     {
         currentProject(nullptr);
         return;
     }
 
-    currentProject(projects.first());
+    currentProject(a_projects.constFirst());
 }
 
 void ConverterTool::onCurrentProjectChanged(ConverterProject *project)
@@ -203,6 +202,11 @@ auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, C
     const auto factor = fromUnit->value() / toUnit->value();
     const auto value = textToNumber(fromValue);
     return QString::number(factor * value, 'g', 6);
+}
+
+auto ConverterTool::editor() -> ConverterEditor *
+{
+    return m_editor;
 }
 
 auto ConverterTool::textToNumber(QStringView text, bool *ok) -> double

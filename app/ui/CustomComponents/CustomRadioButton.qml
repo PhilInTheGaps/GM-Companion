@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
 
 RadioButton {
@@ -8,7 +8,7 @@ RadioButton {
     hoverEnabled: true
 
     property string iconText: ""
-    property var iconFont: FontAwesome.fontSolid
+    property font iconFont: FontAwesome.fontSolid
 
     contentItem: Row {
         leftPadding: root.indicator.width + root.spacing

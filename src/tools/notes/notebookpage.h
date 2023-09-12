@@ -1,14 +1,18 @@
-#ifndef NOTEBOOKPAGE_H
-#define NOTEBOOKPAGE_H
+#pragma once
 
 #include "models/treeitem.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class NoteBookPage : public TreeItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
 public:
-    explicit NoteBookPage(const QString &name, int depth, QObject *chapter = nullptr);
+    explicit NoteBookPage(const QString &name, int depth, QObject *parent = nullptr);
 
     [[nodiscard]] auto content() -> QString;
     void setContent(const QString &content, bool edited = true);
@@ -29,20 +33,21 @@ public:
     }
     void setIsSaved(bool isSaved);
 
+    Q_INVOKABLE void save();
+    Q_INVOKABLE void close();
+    Q_INVOKABLE void rename(const QString &newName) override;
+    Q_INVOKABLE void remove() override
+    {
+        emit deletePage();
+    }
+
     AUTO_PROPERTY_VAL2(bool, isCurrent, false)
-    AUTO_PROPERTY_VAL2(bool, wasEdited, false)
+    AUTO_PROPERTY_VAL2(bool, keepOpen, false)
     AUTO_PROPERTY_VAL2(int, cursorPosition, 0)
 
 public slots:
     void onContentLoaded(const QString &content);
     void onHtmlGenerated(const QString &html, int id);
-    void save();
-    void close();
-    void rename(const QString &newName) override;
-    void remove() override
-    {
-        emit deletePage();
-    }
 
 signals:
     void loadPageContent();
@@ -67,4 +72,4 @@ private:
     int m_editCount = 0;
 };
 
-#endif // NOTEBOOKPAGE_H
+Q_DECLARE_METATYPE(NoteBookPage *)

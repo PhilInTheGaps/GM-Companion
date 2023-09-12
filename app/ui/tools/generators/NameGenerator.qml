@@ -1,20 +1,23 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 Page {
     id: root
 
-    Component.onCompleted: name_generator.loadData()
+    Component.onCompleted: NameGeneratorTool.loadData()
 
     Rectangle {
         id: left_column
 
         color: palette.dark
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
 
         anchors.left: parent.left
         anchors.top: parent.top
@@ -27,15 +30,12 @@ Page {
             anchors.right: parent.right
             anchors.margins: 5
 
-            model: name_generator ? name_generator.categories : []
-            emptyString: name_generator
-                         && name_generator.isLoading ? qsTr("Loading ...") : qsTr(
+            model: NameGeneratorTool.categories
+            emptyString: NameGeneratorTool.isLoading ? qsTr("Loading ...") : qsTr(
                                                            "No Names")
 
             onCurrentIndexChanged: {
-                if (name_generator) {
-                    name_generator.loadCategory(currentIndex)
-                }
+                NameGeneratorTool.loadCategory(currentIndex)
             }
         }
 
@@ -60,20 +60,20 @@ Page {
                 Repeater {
                     id: generators_repeater
 
-                    model: name_generator ? name_generator.generators : []
+                    model: NameGeneratorTool.generators
 
                     CustomButton {
+                        required property AbstractNameGenerator modelData
+                        required property int index
+
                         buttonText: modelData.name
 
                         anchors.left: parent.left
                         anchors.right: parent.right
 
                         onClicked: {
-                            if (name_generator) {
-                                if (name_generator.loadGenerator(index)) {
-                                    name_generator.currentGenerator.generate(
-                                                count_spinbox.value)
-                                }
+                            if (NameGeneratorTool.loadGenerator(index)) {
+                                NameGeneratorTool.currentGenerator.generate(count_spinbox.value)
                             }
                         }
                     }
@@ -97,17 +97,21 @@ Page {
 
             Repeater {
                 id: mid_repeater
-                model: name_generator
-                       && name_generator.currentGenerator ? name_generator.currentGenerator.categories : []
+                model: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.categories : []
 
                 Item {
+                    id: category_delegate
+
+                    required property string modelData
+                    required property int index
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     visible: text_area.text.length > 0
 
                     Label {
                         id: header
-                        text: modelData
+                        text: category_delegate.modelData
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.top: parent.top
@@ -127,9 +131,8 @@ Page {
                         font.pointSize: 12
                         wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
 
-                        text: name_generator
-                              && name_generator.currentGenerator ? name_generator.currentGenerator.generatedNames[index].join(
-                                                                       "\n") : ""
+                        // qmllint disable unresolved-type
+                        text: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.generatedNames[category_delegate.index].join("\n") : ""
                     }
                 }
             }
@@ -140,7 +143,7 @@ Page {
         id: right_column
 
         color: palette.dark
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
 
         anchors.right: parent.right
         anchors.top: parent.top
@@ -158,8 +161,8 @@ Page {
                 anchors.right: parent.right
 
                 onClicked: {
-                    if (name_generator && name_generator.currentGenerator) {
-                        name_generator.currentGenerator.generate(
+                    if (NameGeneratorTool.currentGenerator) {
+                        NameGeneratorTool.currentGenerator.generate(
                                     count_spinbox.value)
                     }
                 }
@@ -207,20 +210,20 @@ Page {
 
                     Repeater {
                         id: generator_categories_repeater
-                        model: name_generator
-                               && name_generator.currentGenerator ? name_generator.currentGenerator.categories : []
+                        model: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.categories : []
 
                         CheckBox {
+                            required property string modelData
+                            required property int index
+
                             text: modelData
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            checked: name_generator
-                                     && name_generator.currentGenerator ? name_generator.currentGenerator.enabledCategories[index] : true
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
+                            checked: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.enabledCategories[index] : true
 
                             onClicked: {
-                                if (name_generator
-                                        && name_generator.currentGenerator) {
-                                    name_generator.currentGenerator.setCategoryEnabled(
+                                if (NameGeneratorTool.currentGenerator) {
+                                    NameGeneratorTool.currentGenerator.setCategoryEnabled(
                                                 index, checked)
                                 }
                             }
@@ -248,20 +251,20 @@ Page {
 
                     Repeater {
                         id: generator_prefixes_repeater
-                        model: name_generator
-                               && name_generator.currentGenerator ? name_generator.currentGenerator.prefixes : []
+                        model: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.prefixes : []
 
                         RadioButton {
+                            required property string modelData
+                            required property int index
+
                             text: modelData
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            checked: name_generator
-                                     && name_generator.currentGenerator ? name_generator.currentGenerator.activePrefix === index : false
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
+                            checked: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.activePrefix === index : false
 
                             onClicked: {
-                                if (name_generator
-                                        && name_generator.currentGenerator) {
-                                    name_generator.currentGenerator.activePrefix = index
+                                if (NameGeneratorTool.currentGenerator) {
+                                    NameGeneratorTool.currentGenerator.activePrefix = index
                                 }
                             }
                         }
@@ -288,20 +291,20 @@ Page {
 
                     Repeater {
                         id: generator_suffixes_repeater
-                        model: name_generator
-                               && name_generator.currentGenerator ? name_generator.currentGenerator.suffixes : []
+                        model: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.suffixes : []
 
                         RadioButton {
+                            required property string modelData
+                            required property int index
+
                             text: modelData
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            checked: name_generator
-                                     && name_generator.currentGenerator ? name_generator.currentGenerator.activeSuffix === index : false
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
+                            checked: NameGeneratorTool.currentGenerator ? NameGeneratorTool.currentGenerator.activeSuffix === index : false
 
                             onClicked: {
-                                if (name_generator
-                                        && name_generator.currentGenerator) {
-                                    name_generator.currentGenerator.activeSuffix = index
+                                if (NameGeneratorTool.currentGenerator) {
+                                    NameGeneratorTool.currentGenerator.activeSuffix = index
                                 }
                             }
                         }

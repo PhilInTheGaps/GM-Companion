@@ -1,7 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
+import common
 
 Dialog {
     id: root
@@ -19,7 +20,7 @@ Dialog {
     property int lastMode: ConverterEditorNewThingDialog.Mode.Project
 
     function updateCanAccept() {
-        if (!converter_editor) {
+        if (!ConverterTool.editor) {
             canAccept = false
             return
         }
@@ -29,11 +30,11 @@ Dialog {
             canAccept = true
             break
         case ConverterEditorNewThingDialog.Mode.Category:
-            canAccept = converter_editor.currentProject
+            canAccept = ConverterTool.editor.currentProject
             error_label.text = qsTr("No Project!")
             break
         case ConverterEditorNewThingDialog.Mode.Unit:
-            canAccept = converter_editor.currentCategory
+            canAccept = ConverterTool.editor.currentCategory
             error_label.text = qsTr("No Category!")
             break
         default:
@@ -52,7 +53,7 @@ Dialog {
             width: name_field.width
 
             onCurrentIndexChanged: {
-                updateCanAccept()
+                root.updateCanAccept()
                 name_field.forceActiveFocus()
             }
         }
@@ -61,10 +62,10 @@ Dialog {
             id: name_field
             placeholderText: qsTr("Element Name")
             selectByMouse: true
-            enabled: canAccept
-            visible: canAccept
+            enabled: root.canAccept
+            visible: root.canAccept
             onAccepted: {
-                if (currentMode !== ConverterEditorNewThingDialog.Mode.Unit) {
+                if (root.currentMode !== ConverterEditorNewThingDialog.Mode.Unit) {
                     root.accept()
                     return
                 }
@@ -81,18 +82,19 @@ Dialog {
             placeholderText: qsTr("Unit Value")
             selectByMouse: true
             onAccepted: root.accept()
-            enabled: canAccept
-            visible: canAccept
-                     && currentMode === ConverterEditorNewThingDialog.Mode.Unit
+            enabled: root.canAccept
+            visible: root.canAccept
+                     && root.currentMode === ConverterEditorNewThingDialog.Mode.Unit
 
             validator: DoubleValidator {
                 notation: DoubleValidator.ScientificNotation
+                locale: SettingsManager.languageBcp47
             }
         }
 
         Label {
             id: error_label
-            visible: !canAccept
+            visible: !root.canAccept
 
             text: qsTr("Unknown Error")
             leftPadding: error_icon.width + 10
@@ -122,17 +124,17 @@ Dialog {
     }
 
     onAccepted: {
-        if (name_field.text != "" && canAccept) {
+        if (name_field.text !== "" && canAccept) {
 
             switch (currentMode) {
             case ConverterEditorNewThingDialog.Mode.Project:
-                converter_editor.createProject(name_field.text)
+                ConverterTool.editor.createProject(name_field.text)
                 break
             case ConverterEditorNewThingDialog.Mode.Category:
-                converter_editor.createCategory(name_field.text)
+                ConverterTool.editor.createCategory(name_field.text)
                 break
             case ConverterEditorNewThingDialog.Mode.Unit:
-                converter_editor.createUnit(name_field.text, value_field.text)
+                ConverterTool.editor.createUnit(name_field.text, value_field.text)
                 break
             }
         }

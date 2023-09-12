@@ -1,40 +1,22 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
-import IconFonts 1.0
-import "./tools"
+import IconFonts
+import common
+import src
 import "./main"
-import "defines.js" as Defines
 
 ApplicationWindow {
-    id: main_window
+    id: root
     title: qsTr("GM-Companion")
     visible: true
-
-    palette.text: "#f6f7f8"
-    palette.base: "#2e2e2e"
-    palette.alternateBase: "#343a43"
-    palette.window: "#2e2e2e"
-    palette.windowText: "#f6f7f8"
-    palette.button: "#3f4957"
-    palette.buttonText: "#f6f7f8"
-    palette.light: "#ebedef"
-    palette.midlight: "#d5dade"
-    palette.mid: "#bfc6cd"
-    palette.dark: "#1f1f1f"
-    palette.highlight: "#3f4957"
-    palette.highlightedText: "#f6f7f8"
-    palette.toolTipText: "#f6f7f8"
-    palette.toolTipBase: "#1f1f1f"
 
     width: 1280
     height: 720
 
     minimumWidth: 640
     minimumHeight: 480
-
-    signal zoomIn
-    signal zoomOut
-    signal save
 
     property int currentToolIndex: 0
 
@@ -85,37 +67,37 @@ ApplicationWindow {
             "faIcon": FontAwesome.scaleBalanced
         }]
 
-    Component.onCompleted: {
-        if (settings_manager.checkForUpdates) {
-            update_manager.checkForUpdates()
-        }
+    Connections {
+        target: UpdateManager
 
-        if (!settings_manager.has("crashReports", "Telemetry")) {
-            console.debug("CrashReports preference has not been set.")
-            new_settings_dialog.open()
+        function onUpdateAvailable() {
+            update_dialog.open()
         }
     }
 
     UpdateDialog {
         id: update_dialog
-
-        Connections {
-            target: update_manager
-
-            function onUpdateAvailable() {
-                update_dialog.open()
-            }
-        }
     }
 
     NewSettingsDialog {
         id: new_settings_dialog
     }
 
+    Component.onCompleted: {
+        if (SettingsManager.checkForUpdates) {
+            UpdateManager.checkForUpdates()
+        }
+
+        if (!SettingsManager.has("crashReports", "Telemetry")) {
+            console.debug("CrashReports preference has not been set.")
+            new_settings_dialog.open()
+        }
+    }
+
     MessageDialog {
         id: message_dialog
-        width: main_window.width - 100
-        height: main_window.height - 100
+        width: root.width - 100
+        height: root.height - 100
     }
 
     LoadingScreen {
@@ -125,7 +107,7 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: settings_manager.showToolNames ? Defines.SIDEBAR_WIDTH : Defines.TOOLBAR_WIDTH
+        width: SettingsManager.showToolNames ? Sizes.sidebarWidth : Sizes.toolbarWidth
         height: parent.height
         modal: false
         interactive: false
@@ -150,32 +132,28 @@ ApplicationWindow {
                 id: tool_column
                 width: drawer.width
 
-                function buttonClicked(tool) {
-                    if (stack.currentItem !== tool) {
-                        stack.pop(null)
-                        tool.active = true
-                        stack.push(tool)
-                    }
-                }
-
                 Repeater {
-                    model: main_window.tools
+                    model: root.tools
 
                     SideMenuButton {
+                        id: side_menu_button
+                        required property var modelData
+                        required property int index
+
                         toolName: modelData.name
                         iconSource: modelData.classicIcon
                         faIcon: modelData.faIcon
 
                         Shortcut {
-                            onActivated: setTool()
-                            sequences: ["Ctrl+" + (index + 1)]
+                            onActivated: side_menu_button.setTool()
+                            sequences: ["Ctrl+" + (side_menu_button.index + 1)]
                             context: Qt.ApplicationShortcut
                         }
 
                         onClicked: setTool()
 
                         function setTool() {
-                            currentToolIndex = index
+                            root.currentToolIndex = index
                         }
                     }
                 }
@@ -189,17 +167,16 @@ ApplicationWindow {
             toolName: qsTr("Messages")
             faIcon: FontAwesome.circleExclamation
             altColor: "orange"
-            useAltColor: message_manager.hasNewErrors
+            useAltColor: MessageManager.hasNewErrors
 
-            visible: message_manager.messages.length > 0
+            visible: MessageManager.messages.length > 0
 
             onClicked: {
-
                 if (message_dialog.opened) {
                     message_dialog.close()
                 } else {
                     message_dialog.open()
-                    message_manager.markAllAsRead()
+                    MessageManager.markAllAsRead()
                 }
             }
         }
@@ -213,7 +190,7 @@ ApplicationWindow {
             faIcon: FontAwesome.gear
 
             onClicked: {
-                currentToolIndex = -1
+                root.currentToolIndex = -1
             }
         }
     }
@@ -225,32 +202,10 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         asynchronous: true
-        source: currentToolIndex
-                < 0 ? "tools/Settings.qml" : main_window.tools[currentToolIndex].source
+        source: root.currentToolIndex
+                < 0 ? "tools/Settings.qml" : root.tools[root.currentToolIndex].source
         active: true
 
         onLoaded: splash.close()
-    }
-
-
-    /**
-     * Keyboard Shortcuts
-     */
-    Shortcut {
-        sequences: [StandardKey.ZoomIn]
-        onActivated: zoomIn()
-        context: Qt.ApplicationShortcut
-    }
-
-    Shortcut {
-        sequences: [StandardKey.ZoomOut]
-        onActivated: zoomOut()
-        context: Qt.ApplicationShortcut
-    }
-
-    Shortcut {
-        sequences: [StandardKey.Save]
-        onActivated: save()
-        context: Qt.ApplicationShortcut
     }
 }

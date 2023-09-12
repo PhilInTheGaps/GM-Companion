@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls
-import QtQuick.Controls.impl
-import "./colors.js" as Colors
 
 T.CheckDelegate {
     id: control
@@ -25,7 +23,7 @@ T.CheckDelegate {
 
         text: control.text
         font: control.font
-        color: control.enabled ? Colors.text : Colors.textDisabled
+        color: control.enabled ? palette.text : StyleColors.textDisabled
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
     }
@@ -35,12 +33,13 @@ T.CheckDelegate {
         y: control.topPadding + (control.availableHeight - height) / 2
 
         control: control
+        checkState: control.checkState
     }
 
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 40
         visible: control.down || control.highlighted
-        color: Colors.dark
+        color: palette.dark
     }
 }

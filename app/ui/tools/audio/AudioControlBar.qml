@@ -1,14 +1,16 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 ToolBar {
-    id: audio_control_bar
+    id: root
 
-    height: Defines.TOOLBAR_HEIGHT
+    signal togglePlaylist
+
+    height: Sizes.toolbarHeight
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -19,7 +21,7 @@ ToolBar {
         iconText: FontAwesome.listOl
         anchors.right: parent.right
         anchors.rightMargin: 10
-        onClicked: info_view.visible = !info_view.visible
+        onClicked: root.togglePlaylist()
         pointSize: 18
     }
 
@@ -32,23 +34,22 @@ ToolBar {
         // Back
         CustomToolBarButton {
             iconText: FontAwesome.backward
-            onClicked: audio_tool.again()
+            onClicked: AudioTool.again()
             pointSize: 18
         }
 
         // Play Pause
         CustomToolBarButton {
             anchors.margins: 0
-            iconText: !audio_tool
-                      || audio_tool.isPaused ? FontAwesome.circlePlay : FontAwesome.circlePause
-            onClicked: audio_tool.playPause()
+            iconText: AudioTool.isPaused ? FontAwesome.circlePlay : FontAwesome.circlePause
+            onClicked: AudioTool.playPause()
             pointSize: 24
         }
 
         // Skip
         CustomToolBarButton {
             iconText: FontAwesome.forward
-            onClicked: audio_tool.next()
+            onClicked: AudioTool.next()
             pointSize: 18
         }
     }

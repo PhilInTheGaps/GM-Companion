@@ -409,6 +409,11 @@ void MusicPlayer::setIndex(int index)
     loadMedia(playlist[index]);
 }
 
+auto MusicPlayer::playlistQml() -> QQmlListProperty<AudioFile>
+{
+    return QQmlListProperty(this, &a_playlist);
+}
+
 void MusicPlayer::setVolume(int linear, int logarithmic)
 {
     m_audioOutput.setVolume(normalizeVolume(logarithmic));

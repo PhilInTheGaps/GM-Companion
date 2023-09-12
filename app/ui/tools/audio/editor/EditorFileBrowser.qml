@@ -1,18 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
+import QtQuick
+import QtQuick.Controls
+import src
 import "../buttons"
 
 Item {
     id: file_browser
 
     Connections {
-        target: audio_editor
+        target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            audio_editor_file_browser.type
-                    = audio_editor.currentElement ? audio_editor.currentElement.type : 0
+            AudioTool.editor.fileBrowser.type
+                    = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.type : 0
         }
     }
 
@@ -21,14 +20,16 @@ Item {
         clip: true
         spacing: 2
 
-        model: audioEditorFileBrowserModel
+        model: AudioTool.editor.fileBrowser.model
 
         delegate: FileBrowserButton {
-            file: modelData.name
-            type: modelData.type
-            path: modelData.path
-            depth: modelData.depth
-            opened: modelData.opened
+            required property AudioEditorFile modelData
+
+            file: modelData ? modelData.name : ""
+            type: modelData ? modelData.type : 0
+            path: modelData ? modelData.path : []
+            depth: modelData ? modelData.depth : 0
+            opened: modelData ? modelData.opened : false
 
             onFolderClicked: modelData.opened = !opened
         }

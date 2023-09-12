@@ -1,6 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
 
 Rectangle {
     id: root
@@ -28,7 +29,7 @@ Rectangle {
 
             onClicked: {
                 if (category_name_field.text != "") {
-                    shop_tool.editor.itemEditor.addCategory(
+                    ShopTool.editor.itemEditor.addCategory(
                                 category_name_field.text)
                 }
             }
@@ -56,8 +57,8 @@ Rectangle {
             id: category_combobox
             anchors.left: parent.left
             anchors.right: parent.right
-            model: shop_tool && shop_tool.editor
-                   && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.categories : []
+            model: ShopTool && ShopTool.editor
+                   && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor.categories : []
         }
 
         CustomTextEdit {
@@ -76,7 +77,7 @@ Rectangle {
             text: qsTr("Add Item")
             enabled: category_combobox.currentText != ""
 
-            onClicked: shop_tool.editor.itemEditor.addItem(
+            onClicked: ShopTool.editor.itemEditor.addItem(
                            item_name_field.text, item_price_field.text,
                            category_combobox.currentText,
                            item_description_field.text)

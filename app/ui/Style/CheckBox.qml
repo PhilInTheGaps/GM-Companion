@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls
-import QtQuick.Controls.impl
-import "./colors.js" as Colors
 
 T.CheckBox {
     id: control
@@ -26,6 +24,7 @@ T.CheckBox {
                   + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
         control: control
+        checkState: control.checkState
     }
 
     contentItem: Label {
@@ -36,7 +35,7 @@ T.CheckBox {
 
         text: control.text
         font: control.font
-        color: control.down ? Colors.textDisabled : Colors.text
+        color: control.down ? StyleColors.textDisabled : palette.text
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
         opacity: enabled ? 1 : 0.3

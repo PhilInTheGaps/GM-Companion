@@ -16,7 +16,7 @@ private slots:
     void cleanupTestCase();
 
 private:
-    NameGenerator ng = NameGenerator(nullptr, this);
+    NameGenerator ng = NameGenerator(this);
 };
 
 void TestNameGenerator::initTestCase()

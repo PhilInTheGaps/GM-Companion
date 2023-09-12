@@ -1,5 +1,4 @@
-#ifndef NOTESSAVELOAD_H
-#define NOTESSAVELOAD_H
+#pragma once
 
 #include "notebook.h"
 #include <QObject>
@@ -11,14 +10,14 @@ class NotesSaveLoad : public QObject
 public:
     using QObject::QObject;
 
-    void exportPage(NoteBookPage *page, QTextDocument *document);
+    static void exportPage(NoteBookPage *page, const QTextDocument *document);
 
 public slots:
     void loadBooks();
-    void createBook(const QString &name, QObject *root);
+    void createBook(const QString &name, TreeItem *root);
 
 signals:
-    void booksLoaded(QObject *root);
+    void booksLoaded(TreeItem *root);
     void pagesLoaded(const QList<NoteBookPage *> &pages);
 
 private:
@@ -27,7 +26,7 @@ private:
     void buildPages(const QStringList &files, NoteBookChapter *chapter);
     auto buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal = true) -> NoteBookPage *;
 
-    static auto getPdfPath(NoteBookPage *page) -> QString;
+    static auto getPdfPath(const NoteBookPage *page) -> QString;
 
 private slots:
     void loadChapters();
@@ -44,5 +43,3 @@ private slots:
     void deleteChapter() const;
     void deletePage() const;
 };
-
-#endif // NOTESSAVELOAD_H

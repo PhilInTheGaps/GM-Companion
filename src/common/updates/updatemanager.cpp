@@ -9,7 +9,7 @@ constexpr ConstQString DEFAULT_FEED_URL = "https://github.com/PhilInTheGaps/GM-C
 
 using namespace Qt::Literals::StringLiterals;
 
-UpdateManager::UpdateManager()
+UpdateManager::UpdateManager(QObject *parent) : QObject(parent)
 {
     qCDebug(gmUpdateManager()) << "Initializing UpdateManager ...";
 
@@ -57,6 +57,16 @@ void UpdateManager::checkForUpdates()
             emit updateAvailable();
         }
     });
+}
+
+auto UpdateManager::getNewestVersion() const -> QString
+{
+    return m_newestVersion;
+}
+
+auto UpdateManager::getCurrentVersion() -> QString
+{
+    return CURRENT_VERSION;
 }
 
 /**

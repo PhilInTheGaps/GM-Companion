@@ -4,7 +4,7 @@ auto MessageManager::instance() -> MessageManager *
 {
     if (!single)
     {
-        single = new MessageManager();
+        single = new MessageManager(nullptr);
     }
 
     return single;
@@ -21,7 +21,7 @@ void MessageManager::addMessage(Message *message)
 {
     makeMessageReadyForAdding(message);
 
-    a_messages.prepend(message);
+    m_messages.prepend(message);
 
     // filter errors
     if (message->type() > 0 && message->type() < 4)
@@ -29,7 +29,7 @@ void MessageManager::addMessage(Message *message)
         hasNewErrors(true);
     }
 
-    emit messagesChanged(messages());
+    emit messagesChanged();
 }
 
 void MessageManager::makeMessageReadyForAdding(Message *message)
@@ -57,14 +57,17 @@ void MessageManager::markAllAsRead()
 
 void MessageManager::clearMessages()
 {
-    auto list = messages();
-
-    while (!list.isEmpty())
+    while (!m_messages.isEmpty())
     {
-        auto *message = list.takeFirst();
+        auto *message = m_messages.takeFirst();
         message->deleteLater();
     }
 
-    messages({});
+    emit messagesChanged();
     hasNewErrors(false);
+}
+
+auto MessageManager::messages() -> QQmlListProperty<Message>
+{
+    return {this, &m_messages};
 }

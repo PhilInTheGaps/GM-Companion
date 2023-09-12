@@ -6,13 +6,17 @@
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ShopProject : public BaseProjectItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     READONLY_PROPERTY2(int, version, 3)
     AUTO_PROPERTY_VAL2(bool, isSaved, true)
-    AUTO_PROPERTY(QList<ShopCategory *>, categories)
+    AUTO_LIST_PROPERTY(ShopCategory, categories)
     AUTO_PROPERTY_VAL2(ShopCategory *, currentCategory, nullptr)
 
 public:

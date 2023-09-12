@@ -1,7 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
 
 Dialog {
     id: root
@@ -16,12 +17,7 @@ Dialog {
     signal openAddonDialog
 
     function updateCanAccept() {
-        if (!audio_editor) {
-            canAccept = false
-            return
-        }
-
-        var project = audio_editor.currentProject
+        var project = AudioTool.editor.currentProject
 
         switch (combo_box.currentIndex) {
         case 0:
@@ -62,18 +58,18 @@ Dialog {
             width: textfield.width
 
             onCurrentIndexChanged: {
-                updateCanAccept()
+                root.updateCanAccept()
             }
         }
 
         CheckBox {
             id: subscenario_check_box
-            text: (combo_box.currentIndex == 2 ? qsTr("As") : qsTr(
+            text: (combo_box.currentIndex === 2 ? qsTr("As") : qsTr(
                                                      "In")) + " " + qsTr(
                       "Subscenario")
             checked: false
-            enabled: canAccept
-            visible: canAccept && combo_box.currentIndex > 1
+            enabled: root.canAccept
+            visible: root.canAccept && combo_box.currentIndex > 1
             anchors.left: parent.left
             anchors.right: parent.right
         }
@@ -81,11 +77,11 @@ Dialog {
         CustomComboBox {
             id: subscenario_combo_box
             model: {
-                if (audio_editor && audio_editor.currentProject
-                        && audio_editor.currentProject.currentCategory
-                        && audio_editor.currentProject.currentCategory.currentScenario) {
+                if (AudioTool.editor.currentProject
+                        && AudioTool.editor.currentProject.currentCategory
+                        && AudioTool.editor.currentProject.currentCategory.currentScenario) {
 
-                    audio_editor.currentProject.currentCategory.currentScenario.scenarios
+                    AudioTool.editor.currentProject.currentCategory.currentScenario.scenarios
                 } else {
                     []
                 }
@@ -93,7 +89,7 @@ Dialog {
 
             emptyString: qsTr("No Subscenario")
             textRole: "name"
-            visible: canAccept && combo_box.currentIndex > 2
+            visible: root.canAccept && combo_box.currentIndex > 2
                      && subscenario_check_box.checked
             anchors.left: parent.left
             anchors.right: parent.right
@@ -102,15 +98,14 @@ Dialog {
         Button {
             id: add_from_addons_button
 
-            visible: canAccept
-            enabled: audio_addon_element_manager ? audio_addon_element_manager.addons.length
-                                                   > 0 : false
+            visible: root.canAccept
+            enabled: AudioTool.editor.addons.addons.length > 0
 
             anchors.left: parent.left
             anchors.right: parent.right
 
             text: qsTr("Add from Addons")
-            onClicked: openAddonDialog()
+            onClicked: root.openAddonDialog()
         }
 
         TextField {
@@ -118,13 +113,13 @@ Dialog {
             placeholderText: qsTr("Element Name")
             selectByMouse: true
             onAccepted: root.accept()
-            enabled: canAccept
-            visible: canAccept
+            enabled: root.canAccept
+            visible: root.canAccept
         }
 
         Label {
             id: error_label
-            visible: !canAccept
+            visible: !root.canAccept
 
             text: qsTr("Unknown Error")
             leftPadding: error_icon.width + 10
@@ -149,35 +144,32 @@ Dialog {
 
     onOpened: {
         textfield.forceActiveFocus()
-
-        if (audio_addon_element_manager) {
-            audio_addon_element_manager.loadData()
-        }
+        AudioTool.editor.addons.loadData()
     }
 
     onAccepted: {
-        if (textfield.text != "" && canAccept) {
+        if (textfield.text !== "" && canAccept) {
             var subscenario = subscenario_check_box.checked ? subscenario_combo_box.currentIndex : -1
 
             switch (combo_box.currentIndex) {
             case 0:
-                audio_editor.createProject(textfield.text)
+                AudioTool.editor.createProject(textfield.text)
                 break
             case 1:
-                audio_editor.createCategory(textfield.text)
+                AudioTool.editor.createCategory(textfield.text)
                 break
             case 2:
-                audio_editor.createScenario(textfield.text,
+                AudioTool.editor.createScenario(textfield.text,
                                             subscenario_check_box.checked)
                 break
             case 3:
-                audio_editor.createElement(textfield.text, 0, subscenario)
+                AudioTool.editor.createElement(textfield.text, 0, subscenario)
                 break
             case 4:
-                audio_editor.createElement(textfield.text, 1, subscenario)
+                AudioTool.editor.createElement(textfield.text, 1, subscenario)
                 break
             case 5:
-                audio_editor.createElement(textfield.text, 2, subscenario)
+                AudioTool.editor.createElement(textfield.text, 2, subscenario)
                 break
             }
         }

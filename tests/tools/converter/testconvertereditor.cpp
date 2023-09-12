@@ -28,7 +28,7 @@ private slots:
 
 void TestConverterEditor::canCreateNewProject()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.projects().isEmpty());
     QVERIFY(editor.isSaved());
 
@@ -41,7 +41,7 @@ void TestConverterEditor::canCreateNewProject()
 
 void TestConverterEditor::canRenameProject()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Test")));
     editor.isSaved(true);
 
@@ -55,7 +55,7 @@ void TestConverterEditor::canRenameProject()
 
 void TestConverterEditor::canDeleteProject()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Test")));
     auto projects = editor.projects();
 
@@ -79,7 +79,7 @@ void TestConverterEditor::canDeleteProject()
 
 void TestConverterEditor::canCreateCategory()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
 
     // needs project first
     QVERIFY(!editor.createCategory(QStringLiteral("Category")));
@@ -99,7 +99,7 @@ void TestConverterEditor::canCreateCategory()
 
 void TestConverterEditor::canRenameCategory()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Test")));
     QVERIFY(editor.createCategory(QStringLiteral("Category")));
 
@@ -112,7 +112,7 @@ void TestConverterEditor::canRenameCategory()
 
 void TestConverterEditor::canDeleteCategory()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Test")));
 
     QVERIFY(!editor.deleteCategory(nullptr));
@@ -137,7 +137,7 @@ void TestConverterEditor::canDeleteCategory()
 
 void TestConverterEditor::canCreateUnit()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
 
     QVERIFY(!editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
     QVERIFY(editor.createProject(QStringLiteral("Project")));
@@ -159,7 +159,7 @@ void TestConverterEditor::canCreateUnit()
 
 void TestConverterEditor::canRenameUnit()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Project")));
     QVERIFY(editor.createCategory(QStringLiteral("Category")));
     QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
@@ -174,7 +174,7 @@ void TestConverterEditor::canRenameUnit()
 
 void TestConverterEditor::canChangeUnitValue()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Project")));
     QVERIFY(editor.createCategory(QStringLiteral("Category")));
     QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
@@ -189,7 +189,7 @@ void TestConverterEditor::canChangeUnitValue()
 
 void TestConverterEditor::canDeleteUnit()
 {
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     QVERIFY(editor.createProject(QStringLiteral("Project")));
     QVERIFY(editor.createCategory(QStringLiteral("Category")));
 
@@ -239,7 +239,7 @@ void TestConverterEditor::canSaveProjects()
     f1.write(R"({"name": "Test", "version": 2, "categories": []})");
     f1.close();
 
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
 
     // first test project
     editor.createProject(QStringLiteral("Test"));
@@ -279,7 +279,7 @@ void TestConverterEditor::canSaveAndCreateDestinationDir()
     QDir d(unitDir);
     if (d.exists()) d.removeRecursively();
 
-    ConverterEditor editor(nullptr, nullptr);
+    ConverterEditor editor(nullptr);
     editor.createProject(QStringLiteral("Test"));
     editor.save();
     QVERIFY(editor.isSaved());

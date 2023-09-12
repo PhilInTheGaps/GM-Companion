@@ -1,3 +1,0 @@
-const TOOLBAR_HEIGHT = 45
-const TOOLBAR_WIDTH = 45
-const SIDEBAR_WIDTH = 175

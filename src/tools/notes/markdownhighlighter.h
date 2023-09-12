@@ -1,5 +1,4 @@
-#ifndef MARKDOWNHIGHLIGHTER_H
-#define MARKDOWNHIGHLIGHTER_H
+#pragma once
 
 #include <QSyntaxHighlighter>
 #include <QTextDocument>
@@ -26,5 +25,3 @@ private:
     static auto quoteFormat() -> QTextCharFormat;
     static auto listFormat() -> QTextCharFormat;
 };
-
-#endif // MARKDOWNHIGHLIGHTER_H

@@ -1,13 +1,16 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 Item {
     id: root
 
-    signal markerSelected(var data)
+    signal markerSelected(MapMarker data)
 
     Column {
         id: marker_list_column
@@ -28,7 +31,7 @@ Item {
             CustomToolBarButton {
                 iconText: FontAwesome.plus
 
-                height: Defines.TOOLBAR_HEIGHT - 15
+                height: Sizes.toolbarHeight - 15
                 anchors.top: undefined
                 anchors.bottom: undefined
                 anchors.right: parent.right
@@ -36,7 +39,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 onClicked: {
-                    map_tool.addMarker()
+                    MapTool.addMarker()
                 }
             }
         }
@@ -58,20 +61,23 @@ Item {
             anchors.right: parent.right
 
             Repeater {
-                model: mapMarkerModel
+                model: MapTool.markerModel
 
                 CustomButton {
+                    required property MapMarker modelData
+                    required property int index
+
                     iconText: modelData.icon
                     buttonText: modelData.name
 
                     iconColor: modelData.color
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.left: parent ? parent.left : undefined
+                    anchors.right: parent ? parent.right : undefined
 
                     onClicked: {
-                        map_tool.markerIndex = index
-                        markerSelected(modelData)
+                        MapTool.markerIndex = index
+                        root.markerSelected(modelData)
                     }
                 }
             }

@@ -1,19 +1,19 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
+import QtQuick.Templates as T
 import IconFonts
-import "./colors.js" as Colors
 
 Label {
-    id: indicator
+    id: root
 
-    property Item control
+    required property T.AbstractButton control
+    required property int checkState
 
     font.pixelSize: control.height > 26 ? 26 : control.height
-    x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding
-                      + (control.availableWidth - width) / 2
+    x: root.control.text ? (root.control.mirrored ? root.control.width - width - root.control.rightPadding : root.control.leftPadding) : root.control.leftPadding
+                           + (root.control.availableWidth - width) / 2
     y: parent.height / 2 - height / 2
-    color: Colors.border
+    color: StyleColors.border
 
     text: FontAwesome.square
     font.family: FontAwesome.fontRegular.family
@@ -23,11 +23,11 @@ Label {
     opacity: enabled ? 1 : 0.3
 
     Label {
-        text: control.checkState === Qt.Checked ? FontAwesome.check : FontAwesome.square
+        text: root.checkState === Qt.Checked ? FontAwesome.check : FontAwesome.square
         anchors.centerIn: parent
-        color: control.down ? Colors.focus : control.enabled ? Colors.text : Colors.textDisabled
-        visible: control.checkState !== Qt.Unchecked
-        font.pixelSize: indicator.font.pixelSize / 2
+        color: root.control.down ? StyleColors.focus : root.control.enabled ? palette.text : StyleColors.textDisabled
+        visible: root.checkState !== Qt.Unchecked
+        font.pixelSize: root.font.pixelSize / 2
         font.family: FontAwesome.fontSolid.family
         font.styleName: FontAwesome.fontSolid.styleName
 

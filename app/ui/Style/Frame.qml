@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Frame {
     id: control
@@ -21,6 +18,6 @@ T.Frame {
 
     background: Rectangle {
         color: "transparent"
-        border.color: Colors.border
+        border.color: StyleColors.border
     }
 }

@@ -1,8 +1,5 @@
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Controls
-import QtQuick.Controls.impl
-import "./colors.js" as Colors
 
 T.ToolTip {
     id: control
@@ -50,11 +47,11 @@ T.ToolTip {
     contentItem: Text {
         text: control.text
         font: control.font
-        color: Colors.toolTipText
+        color: palette.toolTipText
     }
 
     background: Rectangle {
-        color: Colors.toolTipBase
+        color: palette.toolTipBase
         opacity: 0.95
     }
 }

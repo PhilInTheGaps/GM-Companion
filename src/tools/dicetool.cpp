@@ -2,7 +2,6 @@
 #include "settings/settingsmanager.h"
 #include "utils/stringutils.h"
 #include <QLoggingCategory>
-#include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -15,9 +14,10 @@ constexpr ConstQString SUCCESS_MAX_SETTING = "successMax";
 
 Q_LOGGING_CATEGORY(gmDiceTool, "gm.dice.tool")
 
-DiceTool::DiceTool(QQmlEngine *engine, QObject *parent) : QObject(parent)
+auto DiceTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> DiceTool *
 {
-    engine->rootContext()->setContextProperty(u"dice_tool"_s, this);
+    Q_UNUSED(jsEngine)
+    return new DiceTool(qmlEngine);
 }
 
 void DiceTool::setSides(int sides)
@@ -60,7 +60,7 @@ auto DiceTool::getSuccessMax() -> int
     return SettingsManager::instance()->get(SUCCESS_MAX_SETTING, true, DICE_SETTINGS);
 }
 
-int DiceTool::roll()
+auto DiceTool::roll() -> int
 {
     int result = 0;
     int criticalSuccesses = 0, criticalFailures = 0;

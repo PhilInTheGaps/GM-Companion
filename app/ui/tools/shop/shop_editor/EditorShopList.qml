@@ -1,6 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
 
 Rectangle {
     id: left_item
@@ -27,15 +28,17 @@ Rectangle {
             topPadding: 5
 
             Repeater {
-                model: shop_tool && shop_tool.editor
-                       && shop_tool.editor.currentProject
-                       && shop_tool.editor.currentProject.currentCategory ? shop_tool.editor.currentProject.currentCategory.shops : []
+                model: ShopTool && ShopTool.editor
+                       && ShopTool.editor.currentProject
+                       && ShopTool.editor.currentProject.currentCategory ? ShopTool.editor.currentProject.currentCategory.shops : []
 
                 CustomButton {
-                    buttonText: modelData.name
+                    required property ItemShop modelData
+
+                    buttonText: modelData.name // qmllint disable missing-property
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    onClicked: shop_tool.editor.currentProject.currentCategory.currentShop
+                    onClicked: ShopTool.editor.currentProject.currentCategory.currentShop
                                = modelData
                 }
             }

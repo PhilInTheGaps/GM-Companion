@@ -5,11 +5,15 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ShopCategory : public BaseProjectItem
 {
     Q_OBJECT
-    AUTO_PROPERTY(QList<ItemShop *>, shops)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    AUTO_LIST_PROPERTY(ItemShop, shops)
     AUTO_PROPERTY_VAL2(ItemShop *, currentShop, nullptr)
 
 public:

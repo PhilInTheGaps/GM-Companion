@@ -1,24 +1,22 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../../../defines.js" as Defines
+import QtQuick
+import src
+import "../../.."
 
 Item {
     id: root
 
     signal openEditor
 
-    Component.onCompleted: shop_tool.loadData()
+    Component.onCompleted: ShopTool.loadData()
 
     CategoryList {
         id: category_list
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
 
-        onEditorButtonClicked: openEditor()
+        onEditorButtonClicked: root.openEditor()
     }
 
     ShopView {
@@ -32,15 +30,15 @@ Item {
 
         visible: shop != undefined
 
-        shop: shop_tool && shop_tool.currentProject
-              && shop_tool.currentProject.currentCategory ? shop_tool.currentProject.currentCategory.currentShop : undefined
+        shop: ShopTool.currentProject
+              && ShopTool.currentProject.currentCategory ? ShopTool.currentProject.currentCategory.currentShop : undefined
     }
 
-    ShopList {
+    PageShopList {
         id: shop_list
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
     }
 }

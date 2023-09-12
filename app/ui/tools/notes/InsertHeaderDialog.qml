@@ -1,7 +1,8 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import "../../defines.js" as Defines
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 
 Dialog {
     id: root
@@ -23,6 +24,7 @@ Dialog {
                 model: 6
 
                 CustomButton {
+                    required property int modelData
                     property int headerNum: modelData + 1
                     property string openTag: "<h" + headerNum + ">"
                     property string closeTag: "</h" + headerNum + ">"
@@ -42,7 +44,7 @@ Dialog {
                             hashes += "#"
                         }
 
-                        insert(hashes + " ")
+                        root.insert(hashes + " ")
                     }
                 }
             }

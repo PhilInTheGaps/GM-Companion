@@ -1,8 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../../../defines.js" as Defines
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import src
+import "../../.."
 
 Page {
     id: root
@@ -10,10 +11,10 @@ Page {
     signal backToViewer
     signal switchToItemEditor
 
-    Component.onCompleted: shop_tool.editor.loadData()
+    Component.onCompleted: ShopTool.editor.loadData()
 
     Connections {
-        target: shop_tool ? shop_tool.editor : undefined
+        target: ShopTool.editor
 
         function onShowInfoBar(message) {
             info_text.text = message
@@ -28,12 +29,14 @@ Page {
         y: (parent.height - height) / 2
     }
 
-    header: EditorHeader {
+    header: ShopEditorHeader {
         id: tool_bar
+        newThingDialog: new_thing_dialog
+        onBackToViewer: root.backToViewer()
+        onSwitchToItemEditor: root.switchToItemEditor()
     }
 
-    // Shop List
-    ShopList {
+    EditorShopList {
         id: shop_list
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -41,7 +44,6 @@ Page {
         width: 175
     }
 
-    // Shop Info
     ShopInfo {
         id: shop_info
         anchors.top: parent.top
@@ -51,7 +53,6 @@ Page {
         anchors.margins: 5
     }
 
-    // Item List
     ItemList {
         id: item_list
         anchors.top: parent.top
@@ -75,7 +76,7 @@ Page {
             text: qsTr("All Categories")
             checked: true
 
-            height: Defines.TOOLBAR_HEIGHT
+            height: Sizes.toolbarHeight
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -83,7 +84,7 @@ Page {
                 color: palette.button
             }
 
-            onClicked: shop_tool.editor.enableAllItemCategories(checked)
+            onClicked: ShopTool.editor.enableAllItemCategories(checked)
         }
 
         Flickable {
@@ -108,23 +109,23 @@ Page {
                 Repeater {
                     id: item_category_repeater
 
-                    model: shop_tool && shop_tool.editor
-                           && shop_tool.editor.currentItemGroup ? shop_tool
-                                                                  && shop_tool.editor
-                                                                  && shop_tool.editor.currentItemGroup.categories : []
+                    model: ShopTool.editor
+                           && ShopTool.editor.currentItemGroup ? ShopTool.editor && ShopTool.editor.currentItemGroup.categories : []
                     CheckBox {
                         id: category_checkbox
+
+                        required property string modelData
+
                         anchors.left: parent.left
                         anchors.right: parent.right
 
                         text: modelData
 
-                        onClicked: shop_tool.editor.setItemCategoryEnabled(
+                        onClicked: ShopTool.editor.setItemCategoryEnabled(
                                        modelData, checked)
 
                         Component.onCompleted: {
-                            checked = shop_tool
-                                    && shop_tool.editor ? shop_tool.editor.isItemCategoryEnabled(
+                            checked = ShopTool.editor ? ShopTool.editor.isItemCategoryEnabled(
                                                               modelData) : false
                         }
 
@@ -146,7 +147,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.alternateBase
         visible: false
 

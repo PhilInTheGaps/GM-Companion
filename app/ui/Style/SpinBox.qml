@@ -1,10 +1,6 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
 import IconFonts
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.SpinBox {
     id: control
@@ -27,20 +23,22 @@ T.SpinBox {
     hoverEnabled: true
 
     validator: IntValidator {
+        // qmllint disable missing-property
         locale: control.locale.name
+        // qmllint enable missing-property
         bottom: Math.min(control.from, control.to)
         top: Math.max(control.from, control.to)
     }
 
     contentItem: TextInput {
         z: 2
-        text: control.textFromValue(control.value, control.locale)
+        text: control.displayText
         opacity: control.enabled ? 1 : 0.3
 
         font: control.font
-        color: Colors.text
-        selectionColor: Colors.highlight
-        selectedTextColor: Colors.highlightedText
+        color: palette.text
+        selectionColor: palette.highlight
+        selectedTextColor: palette.highlightedText
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 
@@ -49,13 +47,13 @@ T.SpinBox {
         inputMethodHints: control.inputMethodHints
 
         Rectangle {
-            x: -6 - (down.indicator ? 1 : 0)
+            x: -6 - (control.down.indicator ? 1 : 0)
             y: -6
-            width: control.width - (up.indicator ? up.indicator.width - 1 : 0)
-                   - (down.indicator ? down.indicator.width - 1 : 0)
+            width: control.width - (control.up.indicator ? control.up.indicator.width - 1 : 0)
+                   - (control.down.indicator ? control.down.indicator.width - 1 : 0)
             height: control.height
             color: "transparent"
-            border.color: control.activeFocus ? Colors.borderFocus : Colors.border
+            border.color: control.activeFocus ? StyleColors.borderFocus : StyleColors.border
             border.width: control.activeFocus ? 2 : 1
         }
     }
@@ -64,17 +62,17 @@ T.SpinBox {
         x: control.mirrored ? 0 : parent.width - width
         height: parent.height
         implicitWidth: height
-        implicitHeight: Sizes.spinBoxHeight
-        color: Colors.dark
-        border.color: Colors.border
-        border.width: up.hovered ? 1 : 0
+        implicitHeight: StyleSizes.spinBoxHeight
+        color: palette.dark
+        border.color: StyleColors.border
+        border.width: control.up.hovered ? 1 : 0
 
         Label {
             text: FontAwesome.plus
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             anchors.centerIn: parent
-            color: enabled ? Colors.text : Colors.textDisabled
+            color: enabled ? palette.text : StyleColors.textDisabled
         }
     }
 
@@ -82,22 +80,22 @@ T.SpinBox {
         x: control.mirrored ? parent.width - width : 0
         height: parent.height
         implicitWidth: height
-        implicitHeight: Sizes.spinBoxHeight
-        color: Colors.dark
-        border.color: Colors.border
-        border.width: down.hovered ? 1 : 0
+        implicitHeight: StyleSizes.spinBoxHeight
+        color: palette.dark
+        border.color: StyleColors.border
+        border.width: control.down.hovered ? 1 : 0
 
         Label {
             text: FontAwesome.minus
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             anchors.centerIn: parent
-            color: enabled ? Colors.text : Colors.textDisabled
+            color: enabled ? palette.text : StyleColors.textDisabled
         }
     }
     background: Rectangle {
         implicitWidth: 140
         color: "transparent"
-        border.color: Colors.border
+        border.color: StyleColors.border
     }
 }

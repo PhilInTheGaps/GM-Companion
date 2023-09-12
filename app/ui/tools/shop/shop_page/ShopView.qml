@@ -1,7 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import "../../../defines.js" as Defines
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import src
+import "../../.."
 
 Page {
     id: root
@@ -10,10 +12,10 @@ Page {
 
     header: Row {
         spacing: 10
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
         Label {
-            text: shop ? shop.name : ""
+            text: root.shop ? root.shop.name : ""
             font.pixelSize: height - 20
             font.bold: true
             anchors.top: parent.top
@@ -27,13 +29,13 @@ Page {
 
             Label {
                 id: shop_owner_text
-                text: shop ? shop.owner : ""
+                text: root.shop ? root.shop.owner : ""
                 font.pointSize: 10
             }
 
             Label {
                 id: shop_description_text
-                text: shop ? shop.description : ""
+                text: root.shop ? root.shop.description : ""
                 font.pointSize: 10
             }
         }
@@ -55,7 +57,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            height: Defines.TOOLBAR_HEIGHT - 10
+            height: Sizes.toolbarHeight - 10
             color: palette.button
 
             Row {
@@ -105,9 +107,16 @@ Page {
                 visible: list_view.contentHeight > list_view.height
             }
 
-            model: shop_tool ? shop_tool.itemModel : []
+            model: ShopTool.itemModel
 
             delegate: Rectangle {
+                id: item_rect
+
+                required property int index
+                required property string name
+                required property string price
+                required property string description
+
                 height: delegate_row.height
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
@@ -125,11 +134,11 @@ Page {
 
                     anchors.left: parent ? parent.left : undefined
                     anchors.right: parent ? parent.right : undefined
-                    height: description_label.height > Defines.TOOLBAR_HEIGHT
-                            - 10 ? description_label.height : Defines.TOOLBAR_HEIGHT - 10
+                    height: description_label.height > Sizes.toolbarHeight
+                            - 10 ? description_label.height : Sizes.toolbarHeight - 10
 
                     Label {
-                        text: name
+                        text: item_rect.name
                         width: main.itemColumnWidth
                         clip: true
                         elide: Text.ElideRight
@@ -140,7 +149,7 @@ Page {
                     }
 
                     Label {
-                        text: price
+                        text: item_rect.price
                         width: main.priceColumnWidth
                         clip: true
                         elide: Text.ElideRight
@@ -152,7 +161,7 @@ Page {
 
                     Label {
                         id: description_label
-                        text: description
+                        text: item_rect.description
                         topPadding: 5
                         font.pointSize: 12
                         width: main.descriptionColumnWidth
@@ -166,7 +175,7 @@ Page {
                     anchors.fill: parent
                     hoverEnabled: true
 
-                    onClicked: list_view.currentIndex = index
+                    onClicked: list_view.currentIndex = item_rect.index
                 }
             }
         }

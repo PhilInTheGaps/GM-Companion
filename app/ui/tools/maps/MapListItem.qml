@@ -1,13 +1,13 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
 
 Rectangle {
-    property var name
-    property var path
-    property var imageData: ""
-    property var markers
-    property bool hasMarkers: false
+    id: root
+
+    required property Map map
+
     property int mapIndex: -1
 
     anchors.left: parent.left
@@ -23,7 +23,7 @@ Rectangle {
 
         sourceSize.width: width
         sourceSize.height: height
-        source: imageData
+        source: root.map.imageData
 
         asynchronous: true
     }
@@ -34,7 +34,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        text: parent.name
+        text: root.map.name
         wrapMode: Text.WordWrap
         elide: Text.ElideRight
         padding: 5
@@ -58,7 +58,7 @@ Rectangle {
 
         font.pixelSize: 25
 
-        visible: hasMarkers
+        visible: root.map.hasMarkers
     }
 
     BusyIndicator {
@@ -71,7 +71,7 @@ Rectangle {
         id: mouse_area
 
         onClicked: {
-            map_tool.mapIndex = mapIndex
+            MapTool.mapIndex = root.mapIndex
         }
     }
 }

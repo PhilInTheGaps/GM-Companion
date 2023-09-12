@@ -1,5 +1,4 @@
-#ifndef HTMLGENERATOR_H
-#define HTMLGENERATOR_H
+#pragma once
 
 #include <QObject>
 #include <QThread>
@@ -8,8 +7,7 @@ class HtmlWorker : public QObject
 {
     Q_OBJECT
 public:
-    HtmlWorker(QObject *parent = nullptr) : QObject(parent) {}
-    ~HtmlWorker() {}
+    using QObject::QObject;
 
 public slots:
     void generate(const QString &raw, int id);
@@ -23,16 +21,13 @@ class HtmlGenerator : public QObject
     Q_OBJECT
 public:
     explicit HtmlGenerator(QObject *parent = nullptr);
-    ~HtmlGenerator();
+    ~HtmlGenerator() override;
 
 signals:
-    void startGenerating(const QString& raw, int id);
+    void startGenerating(const QString &raw, int id);
     void generated(const QString &html, int id);
 
 private:
     QThread m_workerThread;
     HtmlWorker *m_worker = nullptr;
-
 };
-
-#endif // HTMLGENERATOR_H

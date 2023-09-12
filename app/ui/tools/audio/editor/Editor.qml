@@ -1,26 +1,35 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
-import CustomComponents 1.0
-import IconFonts
-
+import src
 import "../audio_exporter"
 import "./dialogs"
 import "./views"
-import "./views/element_properties"
-import "../../../defines.js" as Defines
+import "../../.."
 import "../../../common"
 
 Page {
     id: editor_root
 
     signal projectAdded
+    signal backToTool
 
-    Component.onCompleted: audio_editor.loadData()
+    Component.onCompleted: AudioTool.editor.loadData()
 
-    header: EditorHeader {}
+    header: EditorHeader {
+        deleteDialog: delete_dialog
+        newThingDialog: new_thing_dialog
+        renameDialog: rename_dialog
+        exporterDialog: audio_exporter_dialog
+
+        onBackClicked: {
+            editor_root.backToTool()
+        }
+    }
 
     Connections {
-        target: audio_editor
+        target: AudioTool.editor
 
         function onShowInfoBar(message) {
             info_text.text = message
@@ -52,7 +61,7 @@ Page {
 
     IconFinderUnsplash {
         id: unsplash_dialog
-        x: (parent.width - width - audio_stack.x) / 2
+        x: (parent.width - width) / 2
         y: (parent.height - height) / 2
     }
 
@@ -72,12 +81,10 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.absoluteUrl : ""
+            source: AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
 
             fillMode: Image.PreserveAspectFit
         }
-        onOpened: console.log(contentItem.source)
     }
 
     EditorRenameDialog {
@@ -88,13 +95,18 @@ Page {
         id: delete_dialog
     }
 
-    FileDialog {
+    CustomFileDialog {
         id: audio_editor_file_dialog
     }
 
     EditorMainView {
         id: main_view
         anchors.fill: parent
+
+        fileDialog: audio_editor_file_dialog // qmllint disable incompatible-type
+        deleteDialog: delete_dialog
+        unsplashDialog: unsplash_dialog
+        largeImageDialog: large_image_dialog
     }
 
     Rectangle {
@@ -102,7 +114,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.alternateBase
         visible: false
 

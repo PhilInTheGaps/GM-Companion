@@ -1,6 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
 
 Rectangle {
     id: root
@@ -26,9 +27,13 @@ Rectangle {
             anchors.right: parent.right
 
             Repeater {
-                model: map_tool.categories
+                model: MapTool.categories
 
                 Column {
+                    id: category_delegate
+                    required property string modelData
+                    required property int index
+
                     anchors.left: parent.left
                     anchors.right: parent.right
                     spacing: 10
@@ -38,10 +43,10 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.right: parent.right
 
-                        buttonText: modelData
+                        buttonText: category_delegate.modelData
 
                         onClicked: {
-                            map_tool.setCurrentCategory(index)
+                            MapTool.setCurrentCategory(category_delegate.index)
                         }
                     }
 
@@ -51,17 +56,16 @@ Rectangle {
                         anchors.right: parent.right
                         spacing: 10
 
-                        visible: map_tool.currentCategory === index
+                        visible: MapTool.currentCategory === category_delegate.index
 
                         Repeater {
-                            model: column.visible ? mapListModel : []
+                            model: column.visible ? MapTool.listModel : []
 
                             MapListItem {
-                                name: modelData.name
-                                path: modelData.path
-                                imageData: modelData.imageData
-                                markers: modelData.markers
-                                hasMarkers: modelData.hasMarkers
+                                required property int index
+                                required property Map modelData
+
+                                map: modelData
                                 mapIndex: index
                             }
                         }

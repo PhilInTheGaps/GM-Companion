@@ -1,14 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
+import src
 import "../buttons"
-import "../../../sizes.js" as Sizes
-import "../../../colors.js" as Colors
+import "../../.."
+import "./dialogs"
 
 Pane {
     id: root
+
+    required property EditorDeleteDialog deleteDialog
 
     anchors.fill: parent
 
@@ -21,8 +24,8 @@ Pane {
 
         clip: true
         spacing: 10
-        model: (audio_editor && audio_editor.currentProject
-                && audio_editor.currentProject.currentScenario) ? audio_editor.currentProject.currentScenario.model : []
+        model: (AudioTool.editor.currentProject
+                && AudioTool.editor.currentProject.currentScenario) ? AudioTool.editor.currentProject.currentScenario.model : []
 
         ScrollBar.vertical: ScrollBar {
             id: scroll_bar
@@ -31,6 +34,8 @@ Pane {
 
         delegate: Column {
             id: elements_column
+
+            required property AudioScenario modelData
 
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
@@ -42,13 +47,13 @@ Pane {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: subscenario_text.height + 4
-                visible: modelData.isSubscenario
-                color: Colors.button
+                visible: elements_column.modelData.isSubscenario
+                color: palette.button
 
                 Label {
                     id: subscenario_text
-                    text: modelData.name
-                    color: Colors.buttonText
+                    text: elements_column.modelData.name // qmllint disable missing-property
+                    color: palette.buttonText
                     font.bold: true
 
                     anchors.verticalCenter: parent.verticalCenter
@@ -73,7 +78,7 @@ Pane {
                         anchors.margins: 0
                         pointSize: 12
                         padding: 2
-                        onClicked: audio_editor.moveSubscenario(modelData, -1)
+                        onClicked: AudioTool.editor.moveSubscenario(elements_column.modelData, -1)
                     }
 
                     CustomToolBarButton {
@@ -81,7 +86,7 @@ Pane {
                         anchors.margins: 0
                         pointSize: 12
                         padding: 2
-                        onClicked: audio_editor.moveSubscenario(modelData, 1)
+                        onClicked: AudioTool.editor.moveSubscenario(elements_column.modelData, 1)
                     }
 
                     CustomToolBarButton {
@@ -89,11 +94,11 @@ Pane {
                         anchors.margins: 0
                         pointSize: 10
                         onClicked: {
-                            delete_dialog.x = element_column.width
-                            delete_dialog.y = Sizes.toolbarHeight
-                            delete_dialog.mode = 3
-                            delete_dialog.element = modelData
-                            delete_dialog.open()
+                            root.deleteDialog.x = root.width
+                            root.deleteDialog.y = Sizes.toolbarHeight
+                            root.deleteDialog.mode = 3
+                            root.deleteDialog.element = elements_column.modelData
+                            root.deleteDialog.open()
                         }
                     }
                 }
@@ -101,10 +106,12 @@ Pane {
 
             Repeater {
                 id: repeater
-                model: modelData.elements
+                model: elements_column.modelData.elements
 
                 AudioButton {
-                    element_name: modelData.name
+                    required property AudioElement modelData
+
+                    element_name: modelData.name // qmllint disable missing-property
                     element_type: modelData.type
                     subscenario_name: subscenario_text.text
                     thumbnail: modelData.thumbnail
@@ -112,11 +119,11 @@ Pane {
                     overlay_enabled: false
                     small_mode: list.small_mode
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.left: elements_column.left
+                    anchors.right: elements_column.right
 
                     onClicked: {
-                        audio_editor.loadElement(modelData)
+                        AudioTool.editor.loadElement(modelData)
                     }
                 }
             }

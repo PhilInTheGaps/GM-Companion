@@ -9,16 +9,16 @@ using namespace Qt::Literals::StringLiterals;
 Q_LOGGING_CATEGORY(gmAudioProject, "gm.audio.project")
 
 AudioProject::AudioProject(const QString &name, int version, QList<AudioCategory *> categories, QObject *parent)
-    : TreeItem(name, 0, true, parent), a_version(version), m_categories(std::move(categories))
+    : TreeItem(name, 0, true, parent), a_categories(std::move(categories)), a_version(version)
 {
     qCDebug(gmAudioProject()) << "Initializing AudioProject:" << name << "[Version:" << version
-                              << "Categories:" << m_categories.size() << "]";
+                              << "Categories:" << a_categories.size() << "]";
 
     this->name(name);
 
-    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.constFirst());
+    if (!a_categories.isEmpty()) setCurrentCategory(a_categories.constFirst());
 
-    for (auto *category : qAsConst(m_categories))
+    foreach (auto *category, a_categories)
     {
         prepareCategory(category);
     }
@@ -35,16 +35,16 @@ AudioProject::AudioProject(QJsonObject object, QObject *parent)
     : TreeItem(object["name"_L1].toString(), 0, true, parent), a_version(object["version"_L1].toInt())
 {
     const auto categories = object["categories"_L1].toArray();
-    m_categories.reserve(categories.size());
+    a_categories.reserve(categories.size());
 
     foreach (const auto &category, categories)
     {
         auto *object = new AudioCategory(category.toObject(), name(), this);
         prepareCategory(object);
-        m_categories.append(object);
+        a_categories.append(object);
     }
 
-    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.constFirst());
+    if (!a_categories.isEmpty()) setCurrentCategory(a_categories.constFirst());
     connectSignals();
 }
 
@@ -61,7 +61,7 @@ auto AudioProject::toJson() const -> QJsonObject
     // Save Categories
     QJsonArray categoriesJson;
 
-    for (auto *category : m_categories)
+    foreach (auto *category, a_categories)
     {
         if (category) categoriesJson.append(category->toJson());
     }
@@ -75,13 +75,18 @@ auto AudioProject::toJson() const -> QJsonObject
  */
 auto AudioProject::deleteCategory(AudioCategory *category) -> bool
 {
-    if (!category || !m_categories.contains(category)) return false;
+    if (!category || !a_categories.contains(category)) return false;
 
-    if (!m_categories.removeOne(category)) return false;
+    if (!a_categories.removeOne(category)) return false;
 
     category->deleteLater();
     emit categoriesChanged();
     return true;
+}
+
+auto AudioProject::currentCategory() const -> AudioCategory *
+{
+    return m_currentCategory;
 }
 
 /**
@@ -110,6 +115,11 @@ auto AudioProject::setCurrentCategory(AudioCategory *category) -> bool
     return false;
 }
 
+auto AudioProject::categoryIndex() const -> int
+{
+    return a_categories.indexOf(m_currentCategory);
+}
+
 /**
  * @brief Add a new category to the project
  * @param category The category to be added.
@@ -121,7 +131,7 @@ auto AudioProject::addCategory(AudioCategory *category, bool setAsCurrent) -> bo
     if (!category) return false;
 
     prepareCategory(category);
-    m_categories.append(category);
+    a_categories.append(category);
     emit categoriesChanged();
 
     if (setAsCurrent)
@@ -134,7 +144,7 @@ auto AudioProject::addCategory(AudioCategory *category, bool setAsCurrent) -> bo
 
 auto AudioProject::containsCategory(const QString &name) const -> bool
 {
-    return std::any_of(m_categories.constBegin(), m_categories.constEnd(),
+    return std::any_of(a_categories.constBegin(), a_categories.constEnd(),
                        [name](const AudioCategory *category) { return category && category->name() == name; });
 }
 
@@ -155,7 +165,7 @@ auto AudioProject::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    foreach (const auto *category, m_categories)
+    foreach (const auto *category, a_categories)
     {
         if (category) list.append(category->elements());
     }

@@ -85,7 +85,7 @@ auto CustomObjectListModel::removeRows(int row, int count, const QModelIndex &pa
 
 auto CustomObjectListModel::insert(int row, QObject *object, const QModelIndex &parent) -> bool
 {
-    if (!Utils::isInBounds(m_objects, row)) return false;
+    if (!Utils::isInBounds(m_objects, row) && row != rowCount()) return false;
 
     takeOwnershipIfRequired(object);
 

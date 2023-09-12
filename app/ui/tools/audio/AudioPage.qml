@@ -1,5 +1,6 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import src
 
 Page {
     id: root
@@ -7,9 +8,13 @@ Page {
     readonly property int sidebarWidth: 180
     signal openEditor
 
-    footer: AudioControlBar {}
+    footer: AudioControlBar {
+        onTogglePlaylist: {
+            info_view.visible = !info_view.visible
+        }
+    }
 
-    Component.onCompleted: audio_tool.loadData()
+    Component.onCompleted: AudioTool.loadData()
 
     AudioCategoryView {
         id: category_view
@@ -17,9 +22,9 @@ Page {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: sidebarWidth
+        width: root.sidebarWidth
 
-        onEditorButtonClicked: openEditor()
+        onEditorButtonClicked: root.openEditor()
     }
 
     AudioElementView {
@@ -37,6 +42,6 @@ Page {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: sidebarWidth
+        width: root.sidebarWidth
     }
 }

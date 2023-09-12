@@ -1,4 +1,5 @@
 #include "soundplayer.h"
+#include "filesystem/file.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
@@ -9,6 +10,11 @@
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioSounds, "gm.audio.sounds")
+
+SoundPlayerController::SoundPlayerController(QObject *parent) : AudioPlayer(parent)
+{
+    connect(this, &SoundPlayerController::soundsChanged, this, &SoundPlayerController::onSoundsChanged);
+}
 
 /**
  * @brief Play a sound element
@@ -41,22 +47,6 @@ void SoundPlayerController::stop(const QString &element)
     emit stopElement(element);
 }
 
-auto SoundPlayerController::activeElements() const -> QList<QObject *>
-{
-    QList<QObject *> list;
-    list.reserve(m_players.size());
-
-    foreach (const auto *player, m_players)
-    {
-        if (player)
-        {
-            list.append(player->element());
-        }
-    }
-
-    return list;
-}
-
 /**
  * @brief Check if a sound element is currently playing
  * @param element SoundElement to be checked
@@ -75,6 +65,22 @@ auto SoundPlayerController::isSoundPlaying(AudioElement *element) const -> bool
     }
 
     return false;
+}
+
+void SoundPlayerController::updateActiveElements()
+{
+    a_activeElements.clear();
+    a_activeElements.reserve(m_players.size());
+
+    foreach (const auto *player, m_players)
+    {
+        if (player)
+        {
+            a_activeElements.append(player->element());
+        }
+    }
+
+    emit activeElementsChanged();
 }
 
 /**
@@ -111,6 +117,12 @@ void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
     player->deleteLater();
 
     emit soundsChanged(elements());
+}
+
+void SoundPlayerController::onSoundsChanged(const QList<AudioElement *> &sounds)
+{
+    Q_UNUSED(sounds)
+    updateActiveElements();
 }
 
 SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) : AudioPlayer(parent), m_element(element)

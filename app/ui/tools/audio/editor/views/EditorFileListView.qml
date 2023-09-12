@@ -1,24 +1,24 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
+pragma ComponentBehavior: Bound
 
-import "../../buttons"
-import "../../../../sizes.js" as Sizes
-import "../../../../colors.js" as Colors
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import IconFonts
+import src
+import "../../../.."
 import "../../../../common"
 
 Item {
     id: file_list_view
 
-    FileDialog {
+    CustomFileDialog {
         id: file_dialog
 
         property int index: 0
 
         foldersOnly: true
         onAccepted: {
-            audio_editor.replaceFileFolder(index, selectedPath)
+            AudioTool.editor.replaceFileFolder(index, selectedPath)
         }
     }
 
@@ -28,7 +28,7 @@ Item {
         anchors.margins: 5
         anchors.rightMargin: 0
 
-        model: audio_editor_file_model
+        model: AudioTool.editor.files
         interactive: true
         clip: true
         focus: true
@@ -45,6 +45,9 @@ Item {
         delegate: Item {
             id: delegate_root
 
+            required property AudioFile modelData
+            required property int index
+
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? 10 : 5
@@ -54,9 +57,9 @@ Item {
             // Background
             Rectangle {
                 anchors.fill: parent
-                color: modelData
-                       && modelData.missing ? "darkred" : Colors.window
-                border.color: parent.ListView.isCurrentItem ? Colors.alternateBase : Colors.dark
+                color: delegate_root.modelData
+                       && delegate_root.modelData.missing ? "darkred" : palette.window
+                border.color: parent.ListView.isCurrentItem ? palette.alternateBase : palette.dark
                 border.width: parent.ListView.isCurrentItem ? 2 : mouse_area.containsMouse ? 1 : 0
             }
 
@@ -68,7 +71,7 @@ Item {
                 anchors.right: parent.ListView.isCurrentItem ? delegate_row.left : parent.right
                 anchors.margins: 5
 
-                text: modelData ? modelData.printableUrl : ""
+                text: delegate_root.modelData ? delegate_root.modelData.printableUrl : ""
 
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
@@ -79,7 +82,7 @@ Item {
                 id: mouse_area
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: file_list.currentIndex = index
+                onClicked: file_list.currentIndex = delegate_root.index
             }
 
             // Buttons on the right
@@ -96,14 +99,14 @@ Item {
 
                 // Folder
                 CustomToolBarButton {
-                    visible: modelData && modelData.missing
-                             && modelData.source === 0
+                    visible: delegate_root.modelData && delegate_root.modelData.missing
+                             && delegate_root.modelData.source === 0
                     iconText: FontAwesome.folder
                     toolTipText: qsTr("Select folder for file")
 
                     onClicked: {
-                        file_dialog.index = index
-                        file_dialog.folder = audio_editor.basePath()
+                        file_dialog.index = delegate_root.index
+                        file_dialog.folder = AudioTool.editor.basePath()
                         file_dialog.open()
                     }
                 }
@@ -139,7 +142,7 @@ Item {
                             delegate_root.ListView.view.lastIndex
                                     = delegate_root.ListView.view.currentIndex
 
-                            audio_editor.moveFile(index, -1)
+                            AudioTool.editor.moveFile(index, -1)
 
                             if (delegate_root.ListView.view.lastIndex > 0)
                                 delegate_root.ListView.view.currentIndex
@@ -172,8 +175,8 @@ Item {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.lastIndex = index
-                            audio_editor.moveFile(index, 1)
+                            delegate_root.ListView.view.lastIndex = delegate_root.index
+                            AudioTool.editor.moveFile(index, 1)
 
                             if (delegate_root.ListView.view.currentIndex
                                     < delegate_root.ListView.view.lastIndex) {
@@ -194,13 +197,11 @@ Item {
                     toolTipText: qsTr("Remove file from list")
 
                     onClicked: {
-                        var modelLength = audio_editor_file_model.rowCount()
+                        var modelLength = AudioTool.editor.files.rowCount() // qmllint disable missing-property
                         var lastIndex = index < (modelLength - 1) ? index : (modelLength - 2)
 
-                        console.log(index, lastIndex, modelLength)
-
                         delegate_root.ListView.view.lastIndex = lastIndex
-                        audio_editor.removeFile(index, false)
+                        AudioTool.editor.removeFile(index, false)
                         delegate_root.ListView.view.currentIndex = lastIndex
                         delegate_root.ListView.view.positionViewAtIndex(
                                     lastIndex, ListView.Contain)

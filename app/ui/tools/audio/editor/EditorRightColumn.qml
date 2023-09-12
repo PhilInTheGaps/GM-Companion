@@ -1,13 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import IconFonts
+import QtQuick.Controls
+import src
 import "views"
 import "views/element_properties"
+import "../../../common"
 
 Pane {
-    id: element_info_item
+    id: root
 
-    visible: audio_editor && audio_editor.currentElement
+    required property CustomFileDialog fileDialog
+    required property IconFinderUnsplash unsplashDialog
+    required property Dialog largeImageDialog
+
+    visible: AudioTool.editor.currentElement
 
     ElementPropertiesView {
         id: properties_view
@@ -15,6 +19,10 @@ Pane {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+
+        fileDialog: root.fileDialog
+        unsplashDialog: root.unsplashDialog
+        largeImageDialog: root.largeImageDialog
     }
 
     ElementFileAddView {

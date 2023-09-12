@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 // Zoom functionality adapted from an example by oniongarlic:
 // https://github.com/oniongarlic/qtquick-flickable-image-zoom
@@ -11,36 +11,36 @@ Item {
     property real maxZoom: 5
     property real zoomStep: 0.25
 
-    property alias image: image
+    property alias image: image_element
 
-    readonly property bool isRotated: image.rotation == 90
-                                      || image.rotation == 270
+    readonly property bool isRotated: image_element.rotation === 90
+                                      || image_element.rotation === 270
 
     function scaleImage(value) {
         fitToScreenActive = false
 
         if (value < minZoom) {
-            image.scale = minZoom
+            image_element.scale = minZoom
         } else {
-            image.scale = value
+            image_element.scale = value
         }
     }
 
     function fitToScreen() {
-        var w = flickable.width / (isRotated ? image.height : image.width)
-        var h = flickable.height / (isRotated ? image.width : image.height)
+        var w = flickable.width / (isRotated ? image_element.height : image_element.width)
+        var h = flickable.height / (isRotated ? image_element.width : image_element.height)
         var s = Math.min(w, h, 1)
 
-        image.scale = s
+        image_element.scale = s
         minZoom = s
-        image.prevScale = scale
+        image_element.prevScale = scale
         fitToScreenActive = true
         flickable.returnToBounds()
     }
 
     function zoomIn() {
-        if (image.scale < maxZoom) {
-            image.scale += zoomStep
+        if (image_element.scale < maxZoom) {
+            image_element.scale += zoomStep
         }
 
         flickable.returnToBounds()
@@ -49,10 +49,10 @@ Item {
     }
 
     function zoomOut() {
-        if (image.scale > minZoom) {
-            image.scale -= zoomStep
+        if (image_element.scale > minZoom) {
+            image_element.scale -= zoomStep
         } else {
-            image.scale = minZoom
+            image_element.scale = minZoom
         }
 
         flickable.returnToBounds()
@@ -61,16 +61,16 @@ Item {
     }
 
     function zoomFull() {
-        image.scale = 1
+        image_element.scale = 1
         fitToScreenActive = false
         flickable.returnToBounds()
     }
 
     function rotateLeft() {
-        image.rotation -= 90
+        image_element.rotation -= 90
 
-        if (image.rotation < 0) {
-            image.rotation = 270
+        if (image_element.rotation < 0) {
+            image_element.rotation = 270
         }
 
         if (fitToScreenActive) {
@@ -79,10 +79,10 @@ Item {
     }
 
     function rotateRight() {
-        image.rotation += 90
+        image_element.rotation += 90
 
-        if (image.rotation > 270) {
-            image.rotation = 0
+        if (image_element.rotation > 270) {
+            image_element.rotation = 0
         }
 
         if (fitToScreenActive) {
@@ -90,17 +90,18 @@ Item {
         }
     }
 
-    Connections {
-        target: main_window
-
-        function onZoomIn() {
-            zoomIn()
-        }
-
-        function onZoomOut() {
-            zoomOut()
-        }
+    Shortcut {
+        sequences: [StandardKey.ZoomIn]
+        onActivated: root.zoomIn()
+        context: Qt.ApplicationShortcut
     }
+
+    Shortcut {
+        sequences: [StandardKey.ZoomOut]
+        onActivated: root.zoomOut()
+        context: Qt.ApplicationShortcut
+    }
+
 
     Flickable {
         id: flickable
@@ -113,26 +114,26 @@ Item {
         interactive: true
 
         onWidthChanged: {
-            if (fitToScreenActive)
-                fitToScreen()
+            if (root.fitToScreenActive)
+                root.fitToScreen()
         }
 
         onHeightChanged: {
-            if (fitToScreenActive)
-                fitToScreen()
+            if (root.fitToScreenActive)
+                root.fitToScreen()
         }
 
         Item {
             id: image_container
             width: Math.max(
-                       (isRotated ? image.height : image.width) * image.scale,
+                       (root.isRotated ? image_element.height : image_element.width) * image_element.scale,
                        flickable.width)
             height: Math.max(
-                        (isRotated ? image.width : image.height) * image.scale,
+                        (root.isRotated ? image_element.width : image_element.height) * image_element.scale,
                         flickable.height)
 
             Image {
-                id: image
+                id: image_element
 
                 property real prevScale: 1.0
 
@@ -160,7 +161,7 @@ Item {
 
                 onStatusChanged: {
                     if (status === Image.Ready) {
-                        fitToScreen()
+                        root.fitToScreen()
                     }
                 }
 
@@ -172,9 +173,9 @@ Item {
                     onWheel: function (wheel) {
                         if (wheel.modifiers & Qt.ControlModifier) {
                             if (wheel.angleDelta.y > 0)
-                                zoomIn()
+                                root.zoomIn()
                             else
-                                zoomOut()
+                                root.zoomOut()
                         }
                     }
                 }
@@ -188,25 +189,25 @@ Item {
     // Busy Indicator
     BusyIndicator {
         anchors.centerIn: parent
-        visible: image.source !== "" && image.status === Image.Loading
+        visible: image_element.source !== "" && image_element.status === Image.Loading
     }
 
     PinchArea {
         id: pinch_area
         anchors.fill: flickable
-        enabled: image.status === Image.Ready
-        pinch.target: image
-        pinch.maximumScale: maxZoom
-        pinch.minimumScale: minZoom
+        enabled: image_element.status === Image.Ready
+        pinch.target: image_element
+        pinch.maximumScale: root.maxZoom
+        pinch.minimumScale: root.minZoom
 
         onPinchStarted: {
             flickable.interactive = false
         }
 
-        onPinchUpdated: {
-            flickable.contentX += pinch.previousCenter.x - pinch.center.x
-            flickable.contentY += pinch.previousCenter.y - pinch.center.y
-        }
+        onPinchUpdated: pinch => {
+                            flickable.contentX += pinch.previousCenter.x - pinch.center.x
+                            flickable.contentY += pinch.previousCenter.y - pinch.center.y
+                        }
 
         onPinchFinished: {
             flickable.interactive = true

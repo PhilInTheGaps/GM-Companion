@@ -1,6 +1,7 @@
-#include "filedialog.h"
+#include "filedialogbackend.h"
 #include "file.h"
 #include "fileobject.h"
+#include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
 
@@ -8,12 +9,17 @@ using namespace Files;
 
 Q_LOGGING_CATEGORY(gmFileDialog, "gm.files.dialog")
 
-FileDialog::FileDialog(QObject *parent) : QObject(parent), a_folderMode(false), a_isLoading(false)
+FileDialogBackend::FileDialogBackend(QObject *parent) : QObject(parent)
 {
-    connect(this, &FileDialog::currentDirChanged, &FileDialog::onCurrentDirChanged);
+    connect(this, &FileDialogBackend::currentDirChanged, &FileDialogBackend::onCurrentDirChanged);
 }
 
-void FileDialog::setCurrentDir(const QString &dir)
+auto FileDialogBackend::currentDir() const -> QString
+{
+    return FileUtils::dirFromFolders(m_currentDir);
+}
+
+void FileDialogBackend::setCurrentDir(const QString &dir)
 {
     qCDebug(gmFileDialog()) << "Setting current dir:" << dir;
     m_currentDir = dir.split('/');
@@ -22,11 +28,21 @@ void FileDialog::setCurrentDir(const QString &dir)
     emit currentDirChanged(dir);
 }
 
-void FileDialog::enterFolder(int index)
+auto FileDialogBackend::canGoForward() const -> bool
+{
+    return !m_forwardFolders.isEmpty();
+}
+
+auto FileDialogBackend::canGoBack() const -> bool
+{
+    return m_currentDir.length() > 1;
+}
+
+void FileDialogBackend::enterFolder(int index)
 {
     if (Utils::isInBounds(entries(), index))
     {
-        const auto *folder = qobject_cast<FileObject *>(entries().at(index));
+        const auto *folder = entries().at(index);
 
         if (folder->isFolder())
         {
@@ -44,19 +60,19 @@ void FileDialog::enterFolder(int index)
     emit currentDirChanged(currentDir());
 }
 
-auto FileDialog::getSelected(int index) const -> QString
+auto FileDialogBackend::getSelected(int index) const -> QString
 {
     auto selectedFolder = m_currentDir;
 
     if (Utils::isInBounds(entries(), index))
     {
-        selectedFolder.append(qobject_cast<FileObject *>(entries().at(index))->name());
+        selectedFolder.append(entries().at(index)->name());
     }
 
     return FileUtils::dirFromFolders(selectedFolder);
 }
 
-void FileDialog::forward()
+void FileDialogBackend::forward()
 {
     qCDebug(gmFileDialog()) << "forward()";
 
@@ -68,12 +84,12 @@ void FileDialog::forward()
     emit currentDirChanged(currentDir());
 }
 
-void FileDialog::clearForward()
+void FileDialogBackend::clearForward()
 {
     m_forwardFolders.clear();
 }
 
-auto FileDialog::back() -> void
+auto FileDialogBackend::back() -> void
 {
     qCDebug(gmFileDialog()) << "back()";
 
@@ -85,7 +101,7 @@ auto FileDialog::back() -> void
     emit currentDirChanged(currentDir());
 }
 
-void FileDialog::createFolder(const QString &folderName)
+void FileDialogBackend::createFolder(const QString &folderName)
 {
     const auto path = FileUtils::fileInDir(folderName, currentDir());
 
@@ -106,7 +122,7 @@ void FileDialog::createFolder(const QString &folderName)
     });
 }
 
-void FileDialog::updateFileList()
+void FileDialogBackend::updateFileList()
 {
     qCDebug(gmFileDialog()) << "updateFileList()";
 
@@ -123,17 +139,20 @@ void FileDialog::updateFileList()
         });
 }
 
-void FileDialog::clearFileList()
+void FileDialogBackend::clearFileList()
 {
+    if (a_entries.isEmpty()) return;
+
     foreach (const auto &file, entries())
     {
         if (file) file->deleteLater();
     }
 
-    entries({});
+    a_entries.clear();
+    emit entriesChanged();
 }
 
-void FileDialog::stopCurrentRequest()
+void FileDialogBackend::stopCurrentRequest()
 {
     if (m_currentFuture.isRunning())
     {
@@ -141,26 +160,31 @@ void FileDialog::stopCurrentRequest()
     }
 }
 
-void FileDialog::onFileListReceived(FileListResult *result)
+void FileDialogBackend::onFileListReceived(FileListResult *result)
 {
-    QList<QObject *> objects;
+    auto countBefore = a_entries.count();
 
     foreach (const auto &folder, result->folders())
     {
-        objects.append(new FileObject(folder, true, this));
+        a_entries.append(new FileObject(folder, true, this));
     }
 
     foreach (const auto &file, result->files())
     {
-        objects.append(new FileObject(file, false, this));
+        a_entries.append(new FileObject(file, false, this));
     }
 
     isLoading(false);
-    entries(objects);
+
+    if (countBefore != a_entries.count())
+    {
+        emit entriesChanged();
+    }
+
     result->deleteLater();
 }
 
-void FileDialog::onCurrentDirChanged(const QString & /*dir*/)
+void FileDialogBackend::onCurrentDirChanged(const QString & /*dir*/)
 {
     emit canGoForwardChanged(canGoForward());
     emit canGoBackChanged(canGoBack());

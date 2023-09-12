@@ -1,8 +1,14 @@
 #include "audiothumbnail.h"
+#include "../project/audioelement.h"
 #include "settings/settingsmanager.h"
 #include "utils/networkutils.h"
 
 using namespace Qt::Literals::StringLiterals;
+
+AudioThumbnail::AudioThumbnail(const QString &imageId, AudioElement *parent)
+    : QObject(parent), element(parent), m_imageId(imageId)
+{
+}
 
 auto AudioThumbnail::imageIdForReload() -> QString
 {
@@ -32,7 +38,7 @@ void AudioThumbnail::setRelativeUrl(const QString &url)
 auto AudioThumbnail::addCollageImage(const std::pair<QString, QPixmap> &icon) -> bool
 {
     // Check if icon already exists
-    for (const auto &entry : m_collageIcons)
+    foreach (const auto &entry, m_collageIcons)
     {
         if (entry.first == icon.first) return false;
 

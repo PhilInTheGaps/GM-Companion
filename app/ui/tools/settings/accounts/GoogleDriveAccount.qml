@@ -1,8 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.1
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 import IconFonts
+import common
+import services
 
 BaseAccountPage {
     id: root
@@ -10,14 +11,14 @@ BaseAccountPage {
     name: "GoogleDrive"
     icon: FontAwesome.googleDrive
     iconFont: FontAwesome.fontBrands
-    status: [googledrive_service.status]
+    statuses: [GoogleDrive.status]
 
     leftPanel: Column {
         spacing: 10
 
         // Connected
         GridLayout {
-            visible: googledrive_service.connected
+            visible: GoogleDrive.connected
             columns: 2
             columnSpacing: 10
             anchors.left: parent.left
@@ -29,7 +30,7 @@ BaseAccountPage {
             }
 
             Label {
-                Component.onCompleted: text = googledrive_service.clientId
+                Component.onCompleted: text = GoogleDrive.clientId
                 wrapMode: Label.WrapAnywhere
                 Layout.fillWidth: true
             }
@@ -37,7 +38,7 @@ BaseAccountPage {
 
         // Not connected
         GridLayout {
-            visible: !googledrive_service.connected
+            visible: !GoogleDrive.connected
             columns: 2
             columnSpacing: 10
             anchors.left: parent.left
@@ -52,7 +53,7 @@ BaseAccountPage {
                 id: google_id_textfield
                 selectByMouse: true
                 Layout.fillWidth: true
-                Component.onCompleted: text = settings_manager.googleID
+                Component.onCompleted: text = SettingsManager.googleID
             }
 
             Label {
@@ -64,21 +65,21 @@ BaseAccountPage {
                 id: google_secret_textfield
                 selectByMouse: true
                 Layout.fillWidth: true
-                Component.onCompleted: text = settings_manager.googleSecret
+                Component.onCompleted: text = SettingsManager.googleSecret
             }
         }
 
         Button {
-            text: googledrive_service.connected ? qsTr("Disconnect") : qsTr(
+            text: GoogleDrive.connected ? qsTr("Disconnect") : qsTr(
                                                       "Connect")
             onClicked: {
-                if (googledrive_service.connected) {
-                    googledrive_service.disconnectService()
+                if (GoogleDrive.connected) {
+                    GoogleDrive.disconnectService()
                 } else {
-                    settings_manager.googleID = google_id_textfield.text
-                    settings_manager.googleSecret = google_secret_textfield.text
+                    SettingsManager.googleID = google_id_textfield.text
+                    SettingsManager.googleSecret = google_secret_textfield.text
                     google_secret_textfield.text = ""
-                    googledrive_service.connectService()
+                    GoogleDrive.connectService()
                 }
             }
         }

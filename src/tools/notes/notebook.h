@@ -1,11 +1,14 @@
-#ifndef NOTEBOOK_H
-#define NOTEBOOK_H
+#pragma once
 
 #include "notebookchapter.h"
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class NoteBook : public NoteBookChapter
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     explicit NoteBook(const QString &name, QObject *parent = nullptr);
@@ -32,5 +35,3 @@ private:
 private slots:
     void onIsOpenChanged() override;
 };
-
-#endif // NOTEBOOK_H

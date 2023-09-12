@@ -61,3 +61,13 @@ void QuickSettingsManager::setPassword(const QString &username, const QString &p
 {
     SettingsManager::setPassword(username, password, service);
 }
+
+auto QuickSettingsManager::instance() -> QuickSettingsManager *
+{
+    if (!m_instance)
+    {
+        m_instance = new QuickSettingsManager(nullptr);
+    }
+
+    return m_instance;
+}

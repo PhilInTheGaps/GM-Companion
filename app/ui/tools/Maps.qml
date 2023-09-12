@@ -1,24 +1,21 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../defines.js" as Defines
+import QtQuick
+import src
 import "./maps"
 
 Item {
     id: maps_page
 
-    Component.onCompleted: map_tool.loadData()
+    Component.onCompleted: MapTool.loadData()
 
     Connections {
-        target: map_tool
+        target: MapTool
 
         function onMapIndexChanged() {
-            marker_menu.visible = map_tool.currentMap ? map_tool.currentMap.hasMarkers : false
+            marker_menu.visible = MapTool.currentMap ? MapTool.currentMap.hasMarkers : false
         }
 
         function onMarkerIndexChanged() {
-            if (map_tool.markerIndex > -1) {
+            if (MapTool.markerIndex > -1) {
                 marker_menu.openMarkerDetails()
             } else {
                 marker_menu.openMarkerList()
@@ -40,6 +37,8 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: map_list.visible ? map_list.right : parent.left
         anchors.right: marker_menu.visible ? marker_menu.left : parent.right
+
+        markerNameLabel: marker_name_label
 
         onToMarkerList: {
             marker_menu.visible = true
@@ -63,6 +62,8 @@ Item {
         anchors.right: parent.right
         width: 200
         visible: false
+
+        markerEditor: marker_editor
 
         onOpenDeleteDialog: map_viewer.openDeleteDialog()
     }

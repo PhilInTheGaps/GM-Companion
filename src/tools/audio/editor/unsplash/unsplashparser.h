@@ -1,31 +1,34 @@
-#ifndef UNSPLASHPARSER_H
-#define UNSPLASHPARSER_H
-
-#include <QObject>
-#include <QQmlApplicationEngine>
-#include <QJsonDocument>
-#include <QNetworkAccessManager>
+#pragma once
 
 #include "unsplashimage.h"
+#include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QObject>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class UnsplashParser : public QObject
 {
     Q_OBJECT
-public:
-    explicit UnsplashParser(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
-    void findImage(const QString& text);
+    Q_PROPERTY(ImageListModel *model READ model CONSTANT)
+
+public:
+    explicit UnsplashParser(QQmlEngine *engine, QObject *parent = nullptr);
+
+    [[nodiscard]] auto model() -> ImageListModel *;
+
+    void findImage(const QString &text);
     void shuffle();
 
 private:
-    QQmlApplicationEngine *qmlEngine;
-    ImageListModel *m_imageModel;
+    ImageListModel m_imageModel;
     QList<UnsplashImage *> m_images;
-    QNetworkAccessManager *m_manager;
+    QNetworkAccessManager *m_networkManager;
 
     QJsonDocument m_doc;
 
     void parse();
 };
-
-#endif // UNSPLASHPARSER_H

@@ -1,9 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import CustomComponents 1.0
-import "../../../../../sizes.js" as Sizes
-import "../../../../../colors.js" as Colors
+import CustomComponents
+import src
+import "../../../../.."
 
 Rectangle {
     id: root
@@ -13,7 +13,7 @@ Rectangle {
     height: Sizes.toolbarHeight
     border.color: Colors.border
     border.width: 1
-    color: Colors.window
+    color: palette.window
 
     Row {
         anchors.top: parent.top
@@ -26,8 +26,8 @@ Rectangle {
             toolTipText: qsTr("Playlist is shuffled before playing. Loops.")
             iconText: FontAwesome.listOl
             pointSize: 18
-            iconColor: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode === 0 ? "green" : Colors.text
+            iconColor: AudioTool.editor.currentElement
+                       && AudioTool.editor.currentElement.mode === 0 ? "green" : palette.text
 
             Label {
                 text: FontAwesome.shuffle
@@ -40,17 +40,16 @@ Rectangle {
                 x: parent.width - width * 1.5
                 y: parent.height - height * 1.5
 
-                color: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode
+                color: AudioTool.editor.currentElement && AudioTool.editor.currentElement.mode
                        === parent.modeNum ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {
                     radius: 5
-                    color: Colors.alternateBase
+                    color: palette.alternateBase
                 }
             }
 
-            onClicked: audio_editor.currentElement.mode = modeNum
+            onClicked: AudioTool.editor.currentElement.mode = modeNum
         }
 
         CustomToolBarButton {
@@ -58,10 +57,10 @@ Rectangle {
             toolTipText: qsTr("Files are played randomly, does not stop.")
             iconText: FontAwesome.shuffle
             pointSize: 18
-            iconColor: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode === modeNum ? "green" : Colors.text
+            iconColor: AudioTool.editor.currentElement
+                       && AudioTool.editor.currentElement.mode === modeNum ? "green" : palette.text
 
-            onClicked: audio_editor.currentElement.mode = modeNum
+            onClicked: AudioTool.editor.currentElement.mode = modeNum
         }
 
         CustomToolBarButton {
@@ -70,8 +69,8 @@ Rectangle {
             toolTipText: qsTr("Playlist loops in sequential order.")
             iconText: FontAwesome.listOl
             pointSize: 18
-            iconColor: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode === 2 ? "green" : Colors.text
+            iconColor: AudioTool.editor.currentElement
+                       && AudioTool.editor.currentElement.mode === 2 ? "green" : palette.text
 
             Label {
                 text: FontAwesome.rotate
@@ -84,17 +83,17 @@ Rectangle {
                 x: parent.width - width * 1.5
                 y: parent.height - height * 1.5
 
-                color: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode
+                color: AudioTool.editor.currentElement
+                       && AudioTool.editor.currentElement.mode
                        === parent.modeNum ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {
                     radius: 5
-                    color: Colors.alternateBase
+                    color: palette.alternateBase
                 }
             }
 
-            onClicked: audio_editor.currentElement.mode = modeNum
+            onClicked: AudioTool.editor.currentElement.mode = modeNum
         }
 
         CustomToolBarButton {
@@ -102,10 +101,10 @@ Rectangle {
             toolTipText: qsTr("Playlist is played in set order. Does not loop.")
             iconText: FontAwesome.listOl
             pointSize: 18
-            iconColor: audio_editor && audio_editor.currentElement
-                       && audio_editor.currentElement.mode === modeNum ? "green" : Colors.text
+            iconColor: AudioTool.editor.currentElement
+                       && AudioTool.editor.currentElement.mode === modeNum ? "green" : palette.text
 
-            onClicked: audio_editor.currentElement.mode = modeNum
+            onClicked: AudioTool.editor.currentElement.mode = modeNum
         }
     }
 }

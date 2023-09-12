@@ -1,8 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../sizes.js" as Sizes
+import src
+import ".."
 import "./dice"
 import "../common"
 
@@ -10,16 +13,15 @@ Page {
     id: dice_page
 
     property bool combat_tracker_mode: false
-    readonly property bool inPortrait: width < height
     property var diceSides: [4, 6, 8, 10, 12, 20]
     property alias diceTypeSpinBox: dice_type_spin_box
     readonly property int minimalHeight: main_column.height
 
     Connections {
-        target: dice_tool
+        target: DiceTool
 
         function onCalculationStringChanged() {
-            calculation_text_edit.text = dice_tool.calculationString
+            calculation_text_edit.text = DiceTool.calculationString
         }
 
         function onMixedCriticalResult() {
@@ -44,7 +46,7 @@ Page {
         }
 
         function onNormalResult() {
-            roll_result.color = palette.text
+            roll_result.color = dice_page.palette.text
             roll_result_help.visible = false
         }
     }
@@ -58,11 +60,10 @@ Page {
     // Top Bar
     header: ToolBar {
         id: top_rect
-        visible: !combat_tracker_mode
+        visible: !dice_page.combat_tracker_mode
 
         Row {
             id: top_row
-            padding: 5
             leftPadding: 10
             spacing: 10
             anchors.left: parent.left
@@ -74,6 +75,12 @@ Page {
                 model: dice_page.diceSides
 
                 DiceButton {
+                    required property int modelData
+
+                    anchors.top: top_row.top
+                    anchors.bottom: top_row.bottom
+                    anchors.margins: 5
+
                     sides: modelData
                     isCurrentType: dice_type_spin_box.value == sides
                     onClicked: dice_type_spin_box.value = sides
@@ -102,9 +109,8 @@ Page {
         padding: 10
         topPadding: 0
         anchors.left: parent.left
-        anchors.right: combat_tracker_mode
-                       || inPortrait ? parent.right : undefined
-        width: combat_tracker_mode || inPortrait ? 0 : 620
+        anchors.right: dice_page.combat_tracker_mode ? parent.right : undefined
+        width: dice_page.combat_tracker_mode ? 0 : 620
 
         Row {
             id: spinbox_titles
@@ -159,7 +165,7 @@ Page {
                 width: (parent.width - parent.spacing * 2) / 3
                 value: 1
                 from: 1
-                onValueChanged: dice_tool.setAmount(value)
+                onValueChanged: DiceTool.setAmount(value)
                 editable: true
                 font.pixelSize: value_row.width / 25
             }
@@ -170,7 +176,7 @@ Page {
                 to: 1000
                 width: (parent.width - parent.spacing * 2) / 3
                 editable: true
-                onValueChanged: dice_tool.setSides(value)
+                onValueChanged: DiceTool.setSides(value)
                 font.pixelSize: value_row.width / 25
             }
 
@@ -180,7 +186,7 @@ Page {
                 value: 0
                 from: -99
                 to: 99
-                onValueChanged: dice_tool.setModifier(value)
+                onValueChanged: DiceTool.setModifier(value)
                 editable: true
                 font.pixelSize: value_row.width / 25
             }
@@ -210,7 +216,7 @@ Page {
                 hoverEnabled: true
 
                 onClicked: {
-                    roll_result.text = dice_tool.roll
+                    roll_result.text = DiceTool.roll
                 }
             }
 

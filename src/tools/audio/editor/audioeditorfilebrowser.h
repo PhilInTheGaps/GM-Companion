@@ -1,16 +1,17 @@
-#ifndef AUDIOEDITORFILEBROWSER_H
-#define AUDIOEDITORFILEBROWSER_H
+#pragma once
 
 #include "../project/audioelement.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QObject>
-#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 #include <utility>
 
 class AudioEditorFile : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QStringList, path)
@@ -20,7 +21,8 @@ class AudioEditorFile : public QObject
     Q_PROPERTY(int depth READ depth NOTIFY pathChanged)
 
 public:
-    AudioEditorFile(QString name, QStringList path, int type, QObject *parent)
+    using QObject::QObject;
+    explicit AudioEditorFile(QString name, QStringList path, int type, QObject *parent)
         : QObject(parent), a_name(std::move(name)), a_path(std::move(path)), a_type(type)
     {
     }
@@ -31,14 +33,14 @@ public:
     }
 };
 
-class AudioEditorFileModel : public QAbstractListModel
+class AudioEditorFileBrowserModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 public:
-    explicit AudioEditorFileModel(QObject *parent) : QAbstractListModel(parent)
-    {
-    }
+    using QAbstractListModel::QAbstractListModel;
 
     int rowCount(const QModelIndex &) const override
     {
@@ -85,18 +87,26 @@ private:
 class AudioEditorFileBrowser : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     AUTO_PROPERTY_VAL2(AudioElement::Type, type, AudioElement::Type::Music)
+    Q_PROPERTY(AudioEditorFileBrowserModel *model READ model CONSTANT)
 
 public:
-    explicit AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent);
+    explicit AudioEditorFileBrowser(QObject *parent);
+
+    [[nodiscard]] auto model() -> AudioEditorFileBrowserModel *
+    {
+        return &m_fileModel;
+    }
 
 public slots:
     void openFolder(bool open, const QString &folder, const QStringList &path);
 
 private:
     QString m_basePath;
-
-    AudioEditorFileModel *m_fileModel = nullptr;
+    AudioEditorFileBrowserModel m_fileModel;
 
     void updateFiles();
     void addFiles(const QStringList &path, int index, bool folders);
@@ -107,5 +117,3 @@ private:
 private slots:
     void onTypeChanged(AudioElement::Type type);
 };
-
-#endif // AUDIOEDITORFILEBROWSER_H

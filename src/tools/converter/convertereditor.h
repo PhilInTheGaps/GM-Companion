@@ -4,13 +4,16 @@
 #include "src/common/abstracttool.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
-#include <QQmlApplicationEngine>
+#include <QtQml/qqmlregistration.h>
 
 class ConverterEditor : public AbstractTool
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
 public:
-    explicit ConverterEditor(const QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ConverterEditor(QObject *parent = nullptr);
 
     Q_INVOKABLE bool createProject(const QString &name);
     Q_INVOKABLE bool renameProject(ConverterProject *project, const QString &name);
@@ -27,7 +30,7 @@ public:
 
     Q_INVOKABLE void save();
 
-    AUTO_PROPERTY(QList<ConverterProject *>, projects)
+    READ_LIST_PROPERTY(ConverterProject, projects)
     AUTO_PROPERTY_VAL2(ConverterProject *, currentProject, nullptr)
     AUTO_PROPERTY_VAL2(ConverterCategory *, currentCategory, nullptr)
 
@@ -37,7 +40,7 @@ public slots:
     void loadData() override;
 
 private slots:
-    void onProjectsChanged(const QList<ConverterProject *> &projects);
+    void onProjectsChanged();
     void onCurrentProjectChanged(ConverterProject *project);
 
 private:

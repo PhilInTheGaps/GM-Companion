@@ -1,31 +1,36 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
+import src
 import "../.."
-import "../../../../../colors.js" as Colors
-import "../../../../../defines.js" as Defines
+import "../../../../.."
+import "../../../../../common"
 
 Item {
     id: root
+
+    required property CustomFileDialog fileDialog
+    required property IconFinderUnsplash unsplashDialog
+    required property Dialog largeImageDialog
+
     anchors.left: parent.left
     anchors.right: parent.right
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.toolbarHeight
 
     Connections {
-        target: audio_editor
+        target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            element_icon_field.text = audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
+            element_icon_field.text = AudioTool.editor.currentElement
+                    ? AudioTool.editor.currentElement.thumbnail.relativeUrl : ""
         }
     }
 
     Connections {
-        target: unsplash_dialog
+        target: root.unsplashDialog
         function onAccepted() {
-            element_icon_field.text = unsplash_dialog.imageSource
+            element_icon_field.text = root.unsplashDialog.imageSource
         }
     }
 
@@ -43,8 +48,7 @@ Item {
             id: element_icon_image
             anchors.fill: parent
             anchors.margins: 1
-            source: audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.absoluteUrl : ""
+            source: AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
         }
 
         Text {
@@ -61,7 +65,7 @@ Item {
         MouseArea {
             id: element_icon_mouse_area
             anchors.fill: parent
-            onClicked: large_image_dialog.open()
+            onClicked: root.largeImageDialog.open()
             hoverEnabled: true
         }
     }
@@ -81,21 +85,19 @@ Item {
             qsTr("Icon Path (Leave empty for default icon)")
         }
 
-        text: audio_editor
-              && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
+        text: AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.relativeUrl : ""
 
         onTextChanged: {
-            if (save && audio_editor && audio_editor.currentElement) {
-                audio_editor.currentElement.thumbnail.relativeUrl = text
+            if (save && AudioTool.editor.currentElement) {
+                AudioTool.editor.currentElement.thumbnail.relativeUrl = text
             }
         }
 
         Connections {
-            target: audio_editor
+            target: AudioTool.editor
             function onCurrentElementChanged() {
                 element_icon_field.save = false
-                element_icon_field.text = audio_editor
-                        && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
+                element_icon_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.relativeUrl : ""
                 element_icon_field.save = true
             }
         }
@@ -113,13 +115,14 @@ Item {
         pointSize: 12
 
         onClicked: {
-            unsplash_dialog.open()
+            root.unsplashDialog.open()
         }
     }
 
     IconFinder {
         id: icon_finder
         anchors.right: parent.right
-        text_field: element_icon_field
+        textField: element_icon_field
+        fileDialog: root.fileDialog // qmllint disable incompatible-type
     }
 }

@@ -8,6 +8,7 @@
 #include <QAudioOutput>
 #include <QMediaPlayer>
 #include <QPointer>
+#include <QQmlListProperty>
 #include <gsl/gsl>
 
 #ifdef Q_OS_WIN
@@ -22,6 +23,8 @@ public:
 
     void play(AudioElement *element);
     void setIndex(int index);
+
+    [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
 
     AUTO_PROPERTY_VAL2(int, playlistIndex, 0);
     READ_PROPERTY(QList<AudioFile *>, playlist)

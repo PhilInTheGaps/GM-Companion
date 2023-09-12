@@ -25,17 +25,17 @@ void AddonElementManager::loadData()
 
     if (!AddonManager::instance()->isLoading())
     {
-        onInstalledAddonsChanged(AddonManager::instance()->addons());
+        onInstalledAddonsChanged();
     }
 
     setIsDataLoaded(true);
 }
 
-void AddonElementManager::onInstalledAddonsChanged(const QList<Addon *> &addons)
+void AddonElementManager::onInstalledAddonsChanged()
 {
     QList<Addon *> list;
 
-    for (auto *addon : addons)
+    foreach (auto *addon, AddonManager::instance()->addons())
     {
         if (addon->isInstalledAndEnabled())
         {
@@ -51,7 +51,7 @@ void AddonElementManager::onInstalledAddonsChanged(const QList<Addon *> &addons)
     }
 
     a_addons = list;
-    emit addonsChanged(a_addons);
+    emit addonsChanged();
     isLoading(false);
 }
 
@@ -64,7 +64,7 @@ void AddonElementManager::onCurrentIndexChanged(int index)
     if (!addon) return;
 
     a_projects = m_projects[addon->id()];
-    emit projectsChanged(a_projects);
+    emit projectsChanged();
 }
 
 void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario) const
@@ -72,9 +72,9 @@ void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario) cons
     AudioThumbnailGenerator::generateThumbnails(scenario);
 }
 
-void AddonElementManager::onProjectsChanged(QList<AudioProject *> projects) const
+void AddonElementManager::onProjectsChanged() const
 {
-    for (auto *project : qAsConst(projects))
+    foreach (auto *project, projects())
     {
         if (!project || !project->currentScenario()) continue;
 
@@ -89,8 +89,9 @@ void AddonElementManager::loadAddonProjects(const Addon &addon)
     auto projectFiles = reader.findAllFiles(u"/audio"_s, {u"*.audio"_s, u"*.json"_s});
 
     QList<AudioProject *> projects;
+    projects.reserve(projectFiles.count());
 
-    for (const auto &file : projectFiles)
+    foreach (const auto &file, projectFiles)
     {
         const auto data = reader.readFile(FileUtils::fileInDir(file, u"/audio"_s));
         auto *project = AudioSaveLoad::loadProject(data, this);
@@ -118,10 +119,9 @@ void AddonElementManager::loadAddonProjects(const Addon &addon)
 /// Remove element types that are not supported (yet)
 void AddonElementManager::removeUnsupportedElementsFromProject(AudioProject &project)
 {
-    const auto categories = project.categories();
     QList<AudioCategory *> categoriesToDelete;
 
-    for (auto *category : categories)
+    foreach (auto *category, project.categories())
     {
         if (!category) continue;
 

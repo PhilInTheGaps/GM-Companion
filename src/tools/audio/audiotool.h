@@ -1,23 +1,26 @@
-#ifndef AUDIOTOOL_H
-#define AUDIOTOOL_H
-
-#include <QQmlApplicationEngine>
-#include <QStringList>
+#pragma once
 
 #include "common/abstracttool.h"
-#include "common/utils/utils.h"
 #include "editor/audioeditor.h"
 #include "metadata/metadatareader.h"
 #include "mpris/mprismanager.h"
 #include "players/musicplayer.h"
 #include "players/radioplayer.h"
 #include "players/soundplayer.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QJSEngine>
+#include <QQmlEngine>
+#include <QStringList>
+#include <QtQml/qqmlregistration.h>
 
 class AudioTool : public AbstractTool
 {
     Q_OBJECT
-    Q_PROPERTY(QObject *currentProject READ currentProject NOTIFY currentProjectChanged)
-    Q_PROPERTY(QList<QObject *> projects READ projects NOTIFY projectsChanged)
+    QML_ELEMENT
+    QML_SINGLETON
+
+    READ_PROPERTY2(AudioProject *, currentProject, nullptr)
+    READ_LIST_PROPERTY(AudioProject, projects)
 
     Q_PROPERTY(SoundPlayerController *soundController READ soundController CONSTANT)
 
@@ -25,24 +28,23 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(qreal musicVolume READ musicVolume NOTIFY musicVolumeChanged)
     Q_PROPERTY(qreal soundVolume READ soundVolume NOTIFY soundVolumeChanged)
 
-    Q_PROPERTY(QObject *metaData READ metaData NOTIFY metaDataChanged)
-    Q_PROPERTY(QList<AudioFile *> playlist READ playlist NOTIFY playlistChanged)
+    Q_PROPERTY(AudioMetaData *metaData READ metaData NOTIFY metaDataChanged)
+    Q_PROPERTY(QQmlListProperty<AudioFile> playlist READ playlistQml NOTIFY playlistChanged)
     Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
 
 public:
-    explicit AudioTool(QQmlApplicationEngine *engine, QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    AudioTool() = delete;
+    explicit AudioTool(QQmlEngine *engine, QObject *parent = nullptr);
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AudioTool *;
+
+    Q_PROPERTY(AudioEditor *editor READ editor CONSTANT)
+    [[nodiscard]] auto editor() -> AudioEditor *
+    {
+        return &m_editor;
+    }
 
     // Project
-    [[nodiscard]] auto projects() const -> QList<QObject *>
-    {
-        return Utils::toQObjectList(m_projects);
-    }
-    [[nodiscard]] auto currentProject() const -> QObject *
-    {
-        return m_currentProject;
-    }
     void updateProjectList();
-    [[nodiscard]] auto currentProjectName() const -> QString;
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();
 
@@ -83,28 +85,26 @@ public:
     Q_INVOKABLE void findElement(const QString &term) const;
 
     // Meta Data
-    [[nodiscard]] auto metaData() const -> QObject *
+    [[nodiscard]] auto metaData() const -> AudioMetaData *
     {
         return metaDataReader.metaData();
     }
     [[nodiscard]] auto index() const -> int;
     [[nodiscard]] auto playlist() const -> QList<AudioFile *>;
+    [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
 
 public slots:
     void loadData() override;
 
 signals:
-    void projectsChanged();
-    void currentProjectChanged();
-
     void isPausedChanged();
     void soundsChanged();
-    void playlistChanged();
     void metaDataChanged();
     void currentIndexChanged();
     void spotifyAuthorized();
     void musicVolumeChanged();
     void soundVolumeChanged();
+    void playlistChanged();
 
 private slots:
     void onProjectsChanged(const std::vector<AudioProject *> &projects);
@@ -117,7 +117,7 @@ private slots:
     }
 
 private:
-    AudioEditor editor;
+    AudioEditor m_editor;
     MetaDataReader metaDataReader;
     MprisManager mprisManager;
 
@@ -139,10 +139,4 @@ private:
 
     static auto makeLinearVolume(qreal linearVolume) -> int;
     static auto makeLogarithmicVolume(qreal linearVolume) -> int;
-
-    // Project
-    QList<AudioProject *> m_projects;
-    AudioProject *m_currentProject = nullptr;
 };
-
-#endif // AUDIOTOOL_H

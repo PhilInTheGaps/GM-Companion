@@ -45,6 +45,7 @@ Makefile*
 *build-*
 !*build-*.bat
 !*build-*.sh
+*.qml.bak
 
 # Qt unit tests
 target_wrapper.*

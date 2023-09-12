@@ -1,23 +1,26 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import "../../../defines.js" as Defines
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
+import "../../.."
 
 Column {
     id: root
     spacing: 5
 
-    property var currentShop: shop_tool && shop_tool.editor
-                              && shop_tool.editor.currentProject
-                              && shop_tool.editor.currentProject.currentCategory ? shop_tool.editor.currentProject.currentCategory.currentShop : undefined
+    property var currentShop: ShopTool.editor
+                              && ShopTool.editor.currentProject
+                              && ShopTool.editor.currentProject.currentCategory ? ShopTool.editor.currentProject.currentCategory.currentShop : undefined
 
     // Shop Info
     Item {
         id: shop_info_item
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
         // Move up and down
         Item {
@@ -53,7 +56,7 @@ Column {
                         shop_name_field.editMode = false
                         root.currentShop.name = shop_name_field.text
                     } else {
-                        shop_tool.editor.moveShop(-1)
+                        ShopTool.editor.moveShop(-1)
                     }
                 }
             }
@@ -85,7 +88,7 @@ Column {
                         shop_name_field.editMode = false
                         shop_name_field.text = root.currentShop.name
                     } else {
-                        shop_tool.editor.moveShop(1)
+                        ShopTool.editor.moveShop(1)
                     }
                 }
             }
@@ -191,7 +194,7 @@ Column {
                         }
 
                         onClicked: {
-                            shop_tool.editor.deleteShop()
+                            ShopTool.editor.deleteShop()
                             shop_delete_overlay.visible = false
                         }
                     }
@@ -267,7 +270,7 @@ Column {
         id: item_header
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         color: palette.button
 
         Row {
@@ -328,19 +331,25 @@ Column {
             visible: shop_items_table.contentHeight > shop_items_table.height
         }
 
-        model: shop_tool
-               && shop_tool.editor ? shop_tool.editor.itemModelShop : []
+        model: ShopTool.editor ? ShopTool.editor.itemModelShop : []
 
         delegate: Rectangle {
             id: delegate_item
+
+            required property string name
+            required property string price
+            required property string category
+            required property string description
+            required property int index
+
             height: shop_items_table.currentIndex
-                    == index ? (description_text.lineCount
+                    === index ? (description_text.lineCount
                                 > 1 ? description_text.height
-                                      + 10 : Defines.TOOLBAR_HEIGHT) : delegate_row.height + 10
+                                      + 10 : Sizes.toolbarHeight) : delegate_row.height + 10
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
-            color: shop_items_table.currentIndex == index ? palette.alternateBase : "transparent"
+            color: shop_items_table.currentIndex === index ? palette.alternateBase : "transparent"
 
             Row {
                 id: delegate_row
@@ -350,12 +359,12 @@ Column {
                 spacing: 10
                 anchors.left: parent.left
                 anchors.right: shop_items_table.currentIndex
-                               == index ? delete_item_button.left : parent.right
+                               === delegate_item.index ? delete_item_button.left : parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 height: 30
 
                 Label {
-                    text: name
+                    text: delegate_item.name
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 4
                     clip: true
                     elide: Text.ElideRight
@@ -364,7 +373,7 @@ Column {
                 }
 
                 Label {
-                    text: price
+                    text: delegate_item.price
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                     clip: true
                     elide: Text.ElideRight
@@ -374,7 +383,7 @@ Column {
                 }
 
                 Label {
-                    text: category
+                    text: delegate_item.category
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                     clip: true
                     elide: Text.ElideRight
@@ -384,13 +393,13 @@ Column {
 
                 Label {
                     id: description_text
-                    text: description
+                    text: delegate_item.description
                     width: parent.width - x - parent.rightPadding
                     clip: true
                     elide: Text.ElideRight
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: 12
-                    wrapMode: shop_items_table.currentIndex == index ? Text.WordWrap : Text.NoWrap
+                    wrapMode: shop_items_table.currentIndex == delegate_item.index ? Text.WordWrap : Text.NoWrap
                 }
             }
 
@@ -399,7 +408,7 @@ Column {
                 anchors.fill: parent
                 onClicked: {
                     shop_items_table.forceActiveFocus()
-                    shop_items_table.currentIndex = index
+                    shop_items_table.currentIndex = delegate_item.index
                 }
             }
 
@@ -412,8 +421,8 @@ Column {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
 
-                visible: shop_items_table.currentIndex == index
-                onClicked: shop_tool.editor.deleteItem(index)
+                visible: shop_items_table.currentIndex === delegate_item.index
+                onClicked: ShopTool.editor.deleteItem(delegate_item.index)
             }
         }
     }

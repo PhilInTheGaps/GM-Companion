@@ -5,10 +5,18 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ConverterProject : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    AUTO_PROPERTY(QString, name);
+    READONLY_PROPERTY2(int, version, 2);
+    READ_LIST_PROPERTY(ConverterCategory, categories);
+
 public:
     explicit ConverterProject(const QString &name, QObject *parent);
     explicit ConverterProject(const QString &name, const QList<ConverterCategory *> &categories, QObject *parent);
@@ -16,7 +24,5 @@ public:
 
     [[nodiscard]] auto toJson() const -> QJsonDocument;
 
-    AUTO_PROPERTY(QString, name);
-    AUTO_PROPERTY(QList<ConverterCategory *>, categories);
-    READONLY_PROPERTY(int, version);
+    void setCategories(const QList<ConverterCategory *> &categories);
 };

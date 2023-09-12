@@ -1,21 +1,22 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import "../../../defines.js" as Defines
+import src
+import "../../.."
 
 Button {
     id: root
-    property var element
-    property var element_icon
+    property string elementName
+    property AudioThumbnail elementThumbnail
 
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.toolbarHeight
     hoverEnabled: true
 
     Image {
         id: thumbnail
         property bool counter: false
 
-        source: "image://audioElementIcons/" + element_icon.imageId
+        source: "image://audioElementIcons/" + root.elementThumbnail.imageId
         anchors.fill: parent
 
         asynchronous: true
@@ -28,11 +29,11 @@ Button {
 
         function reload() {
             counter = !counter
-            source = "image://audioElementIcons/" + element_icon.imageId + "?r=" + counter
+            source = "image://audioElementIcons/" + root.elementThumbnail.imageId + "?r=" + counter
         }
 
         Connections {
-            target: element_icon
+            target: root.elementThumbnail
             function onThumbnailChanged() {
                 thumbnail.reload()
             }
@@ -46,7 +47,7 @@ Button {
 
         Text {
             id: text
-            text: element
+            text: root.elementName
             color: "white"
 
             anchors.fill: parent
@@ -72,7 +73,7 @@ Button {
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             anchors.centerIn: parent
-            color: parent.parent.pressed ? "darkgrey" : "white"
+            color: root.pressed ? "darkgrey" : "white"
         }
     }
 
@@ -81,6 +82,6 @@ Button {
     }
 
     onClicked: {
-        audio_tool.stopSound(element)
+        AudioTool.stopSound(elementName)
     }
 }

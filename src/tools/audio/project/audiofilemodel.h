@@ -1,13 +1,15 @@
-#ifndef AUDIOFILEMODEL_H
-#define AUDIOFILEMODEL_H
+#pragma once
 
 #include "audiofile.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
+#include <QtQml/qqmlregistration.h>
 
 class AudioFileModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     AUTO_PROPERTY(QString, name)
 
@@ -49,4 +51,4 @@ private:
     QList<QObject *> m_items = {};
 };
 
-#endif // AUDIOFILEMODEL_H
+Q_DECLARE_METATYPE(AudioFileModel *)

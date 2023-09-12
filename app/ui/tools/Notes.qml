@@ -1,14 +1,12 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../defines.js" as Defines
+import QtQuick
+import QtQuick.Controls
+import src
 import "./notes"
 
 Page {
     id: notes_page
 
-    Component.onCompleted: notes_tool.loadData()
+    Component.onCompleted: NotesTool.loadData()
 
     NotesControlView {
         id: control_view
@@ -34,7 +32,7 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            textedit: page.textedit
+            textArea: page.textArea
         }
 
         NotesPage {

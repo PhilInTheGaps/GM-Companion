@@ -1,18 +1,20 @@
-#ifndef AUDIOELEMENT_H
-#define AUDIOELEMENT_H
+#pragma once
 
+#include "../thumbnails/audiothumbnail.h"
 #include "audiofile.h"
 #include "models/treeitem.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
-class AudioThumbnail;
 class AudioScenario;
 
 class AudioElement : public TreeItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     enum class Type
@@ -37,18 +39,6 @@ public:
     explicit AudioElement(const AudioElement &other);
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
-
-    Q_PROPERTY(QObject *thumbnail READ thumnailObject NOTIFY thumbnailChanged)
-    [[nodiscard]] auto thumbnail() const -> AudioThumbnail *
-    {
-        return m_thumbnail;
-    }
-    [[nodiscard]] auto thumnailObject() const -> QObject *;
-    void setThumbnail(AudioThumbnail *icon)
-    {
-        m_thumbnail = icon;
-        emit thumbnailChanged();
-    }
 
     [[nodiscard]] auto files() const -> QList<AudioFile *>
     {
@@ -84,19 +74,15 @@ public:
     static auto typeToSettings(AudioElement::Type type) -> QString;
     READONLY_PROPERTY(Type, type)
 
+    AUTO_PROPERTY_VAL(AudioThumbnail *, thumbnail)
     AUTO_PROPERTY_VAL2(AudioElement::Mode, mode, Mode::RandomList)
 
 private:
     QString m_path;
     QList<AudioFile *> m_files;
-    AudioThumbnail *m_thumbnail = nullptr;
 
 signals:
-    void thumbnailChanged();
     void filesChanged();
 };
 
 Q_DECLARE_METATYPE(AudioElement *)
-Q_DECLARE_METATYPE(QList<AudioElement *>)
-
-#endif // AUDIOELEMENT_H

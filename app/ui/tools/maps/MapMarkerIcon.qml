@@ -1,9 +1,14 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
 
 Item {
     id: root
+
+    required property Label markerNameLabel
+    required property Item markerDeleteDialog
+
     property string name: qsTr("New Location")
     property string description
     property string color: "red"
@@ -28,7 +33,7 @@ Item {
             id: marker_text
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
-            text: icon
+            text: root.icon
             anchors.centerIn: parent
 
             color: root.color
@@ -49,20 +54,20 @@ Item {
 
             onContainsMouseChanged: {
                 if (containsMouse) {
-                    marker_name_label.text = root.name
+                    root.markerNameLabel.text = root.name
                 }
 
-                marker_name_label.visible = containsMouse
+                root.markerNameLabel.visible = containsMouse
             }
 
             onClicked: {
-                map_tool.markerIndex = root.markerIndex
-                markerSelected()
+                MapTool.markerIndex = root.markerIndex
+                root.markerSelected()
             }
 
             drag.onActiveChanged: {
                 if (!drag.active)
-                    map_tool.setMarkerPosition(markerIndex, root.x, root.y)
+                    MapTool.setMarkerPosition(root.markerIndex, root.x, root.y)
             }
         }
 
@@ -74,8 +79,8 @@ Item {
             acceptedButtons: Qt.RightButton
 
             onClicked: {
-                map_tool.markerIndex = root.markerIndex
-                marker_delete_rect.visible = true
+                MapTool.markerIndex = root.markerIndex
+                root.markerDeleteDialog.visible = true
             }
         }
     }

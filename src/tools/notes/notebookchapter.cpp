@@ -1,16 +1,20 @@
 #include "notebookchapter.h"
 
+NoteBookChapter::NoteBookChapter(const QString &name, QObject *parent) : NoteBookChapter(name, 1, parent)
+{
+}
+
 NoteBookChapter::NoteBookChapter(const QString &name, int depth, QObject *parent) : TreeItem(name, depth, true, parent)
 {
     connect(this, &TreeItem::isOpenChanged, this, &NoteBookChapter::onIsOpenChanged);
 }
 
-QList<NoteBookPage *> NoteBookChapter::pages() const
+auto NoteBookChapter::pages() const -> QList<NoteBookPage *>
 {
     QList<NoteBookPage *> pages;
-    pages.reserve(children().size());
+    pages.reserve(childItems().size());
 
-    foreach (auto *child, children())
+    foreach (auto *child, childItems())
     {
         auto *page = qobject_cast<NoteBookPage *>(child);
         if (page) pages.append(page);
@@ -19,12 +23,9 @@ QList<NoteBookPage *> NoteBookChapter::pages() const
     return pages;
 }
 
-NoteBookChapter::NoteBookChapter(const QString &name, QObject *parent) : NoteBookChapter(name, 1, parent)
-{
-}
-
 void NoteBookChapter::onPagesLoaded()
 {
+    m_werePagesLoaded = true;
     emit childItemsChanged();
 }
 
@@ -50,7 +51,6 @@ void NoteBookChapter::onIsOpenChanged()
 {
     if (isOpen() && !m_werePagesLoaded)
     {
-        m_werePagesLoaded = true;
         emit loadPages();
     }
 }

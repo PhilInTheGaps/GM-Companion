@@ -1,9 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../colors.js" as Colors
-import "../../sizes.js" as Sizes
+import src
+import "../.."
 
 ListView {
     id: list_view
@@ -11,10 +13,8 @@ ListView {
     clip: true
     spacing: 10
 
-    model: combatantListModel
-    currentIndex: combat_tracker.currentIndex
-
-    onCurrentIndexChanged: console.log(currentIndex)
+    model: CombatTrackerTool.model
+    currentIndex: CombatTrackerTool.currentIndex
 
     ScrollBar.vertical: ScrollBar {
         id: scroll_bar
@@ -23,12 +23,16 @@ ListView {
 
     delegate: Rectangle {
         id: delegate_root
+
+        required property Combatant modelData
+        required property int index
+
         height: delegate_row.height
         anchors.left: parent ? parent.left : undefined
         anchors.right: parent ? parent.right : undefined
         anchors.margins: 5
         anchors.rightMargin: scroll_bar.visible ? scroll_bar.width + 5 : 5
-        color: ListView.isCurrentItem ? Colors.dark : "transparent"
+        color: ListView.isCurrentItem ? palette.dark : "transparent"
         border.color: Colors.border
         border.width: ListView.isCurrentItem ? 1 : 0
 
@@ -47,8 +51,8 @@ ListView {
                 anchors.bottom: parent.bottom
 
                 Label {
-                    text: modelData.name
-                    color: delegate_root.ListView.isCurrentItem ? Colors.buttonText : Colors.text
+                    text: delegate_root.modelData.name
+                    color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
                     width: delay_indicator.visible ? parent.width - delay_indicator.width
                                                      - 5 : parent.width
 
@@ -61,12 +65,12 @@ ListView {
                     // Delay indicator
                     Label {
                         id: delay_indicator
-                        visible: modelData ? modelData.delay : false
+                        visible: delegate_root.modelData ? delegate_root.modelData.delay : false
 
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
 
-                        color: Colors.text
+                        color: palette.text
                         opacity: 0.7
 
                         text: FontAwesome.clock
@@ -78,13 +82,13 @@ ListView {
 
             // INI
             ListSpinBox {
-                value: modelData.ini
+                value: delegate_root.modelData.ini
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                font_color: delegate_root.ListView.isCurrentItem ? Colors.buttonText : Colors.text
-                onValueEdited: combat_tracker.setIni(index, new_value)
-                onValueIncreased: combat_tracker.modifyIni(index, steps)
+                font_color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
+                onValueEdited: new_value => CombatTrackerTool.setIni(delegate_root.index, new_value)
+                onValueIncreased: steps => CombatTrackerTool.modifyIni(delegate_root.index, steps)
             }
 
             // Health
@@ -92,10 +96,11 @@ ListView {
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                value: modelData.health
-                font_color: delegate_root.ListView.isCurrentItem ? Colors.buttonText : Colors.text
-                onValueEdited: combat_tracker.setHealth(index, new_value)
-                onValueIncreased: combat_tracker.modifyHealth(index, steps)
+                value: delegate_root.modelData.health
+                font_color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
+                onValueEdited: new_value => CombatTrackerTool.setHealth(delegate_root.index,
+                                                                     new_value)
+                onValueIncreased: steps => CombatTrackerTool.modifyHealth(delegate_root.index, steps)
             }
 
             // Priority
@@ -103,18 +108,19 @@ ListView {
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                value: modelData.priority
-                font_color: delegate_root.ListView.isCurrentItem ? Colors.buttonText : Colors.text
-                onValueEdited: combat_tracker.setPriority(index, new_value)
-                onValueIncreased: combat_tracker.modifyPriority(index, steps)
+                value: delegate_root.modelData.priority
+                font_color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
+                onValueEdited: new_value => CombatTrackerTool.setPriority(
+                                   delegate_root.index, new_value)
+                onValueIncreased: steps => CombatTrackerTool.modifyPriority(delegate_root.index, steps)
             }
 
             // Notes
             ListTextField {
                 width: parent.width - x - parent.padding - parent.spacing
                        - delegate_button_row.width
-                onFieldTextChanged: combat_tracker.setNotes(index, fieldText)
-                text: modelData.notes
+                onFieldTextChanged: CombatTrackerTool.setNotes(delegate_root.index, fieldText)
+                text: delegate_root.modelData.notes
             }
 
             // Buttons
@@ -129,7 +135,7 @@ ListView {
                     id: delegate_delay_button
                     iconText: FontAwesome.clock
                     visible: delegate_root.ListView.isCurrentItem
-                    onClicked: combat_tracker.delayTurn(index)
+                    onClicked: CombatTrackerTool.delayTurn(delegate_root.index)
                     toolTipText: qsTr("Delay Turn")
                 }
 
@@ -138,7 +144,7 @@ ListView {
                     id: deletgate_remove_button
                     iconText: FontAwesome.xmark
                     toolTipText: qsTr("Remove from tracker")
-                    onClicked: combat_tracker.remove(index)
+                    onClicked: CombatTrackerTool.remove(delegate_root.index)
                 }
             }
         }

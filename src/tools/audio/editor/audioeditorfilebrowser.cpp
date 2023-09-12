@@ -9,11 +9,8 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
 
-AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
+AudioEditorFileBrowser::AudioEditorFileBrowser(QObject *parent) : QObject(parent), m_fileModel(this)
 {
-    m_fileModel = new AudioEditorFileModel(this);
-    engine->rootContext()->setContextProperty(u"audioEditorFileBrowserModel"_s, m_fileModel);
-
     onTypeChanged(type());
     connect(this, &AudioEditorFileBrowser::typeChanged, this, &AudioEditorFileBrowser::onTypeChanged);
 }
@@ -52,11 +49,11 @@ void AudioEditorFileBrowser::addFilesToModel(const QStringList &files, const QSt
 
         if (index > -1)
         {
-            m_fileModel->insert(index, editorFile);
+            m_fileModel.insert(index, editorFile);
         }
         else
         {
-            m_fileModel->append(editorFile);
+            m_fileModel.append(editorFile);
         }
 
         index++;
@@ -65,21 +62,21 @@ void AudioEditorFileBrowser::addFilesToModel(const QStringList &files, const QSt
 
 void AudioEditorFileBrowser::removeElement(const QStringList &path)
 {
-    foreach (auto *element, m_fileModel->elements())
+    foreach (auto *element, m_fileModel.elements())
     {
         auto *file = qobject_cast<AudioEditorFile *>(element);
 
         if ((file->path() == path) ||
             FileUtils::dirFromFolders(file->path()).startsWith(FileUtils::dirFromFolders(path)))
         {
-            m_fileModel->remove(file);
+            m_fileModel.remove(file);
         }
     }
 }
 
 void AudioEditorFileBrowser::clearFiles()
 {
-    m_fileModel->clear();
+    m_fileModel.clear();
 }
 
 void AudioEditorFileBrowser::onTypeChanged(AudioElement::Type type)
@@ -114,7 +111,7 @@ void AudioEditorFileBrowser::openFolder(bool open, const QString &folder, const 
     auto folderPath = path;
     folderPath.append(folder);
 
-    foreach (auto *element, m_fileModel->elements())
+    foreach (auto *element, m_fileModel.elements())
     {
         auto *file = qobject_cast<AudioEditorFile *>(element);
 
@@ -134,12 +131,12 @@ void AudioEditorFileBrowser::openFolder(bool open, const QString &folder, const 
     }
 }
 
-auto AudioEditorFileModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
+auto AudioEditorFileBrowserModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
 {
     return QVariant::fromValue(m_items.at(index.row()));
 }
 
-void AudioEditorFileModel::insert(int index, QObject *item)
+void AudioEditorFileBrowserModel::insert(int index, QObject *item)
 {
     beginInsertRows(QModelIndex(), index, index);
     m_items.insert(index, item);
@@ -148,7 +145,7 @@ void AudioEditorFileModel::insert(int index, QObject *item)
     emit isEmptyChanged();
 }
 
-void AudioEditorFileModel::append(QObject *item)
+void AudioEditorFileBrowserModel::append(QObject *item)
 {
     beginInsertRows(QModelIndex(), 0, 0);
     m_items.append(item);
@@ -157,7 +154,7 @@ void AudioEditorFileModel::append(QObject *item)
     emit isEmptyChanged();
 }
 
-void AudioEditorFileModel::remove(QObject *item)
+void AudioEditorFileBrowserModel::remove(QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {
@@ -173,7 +170,7 @@ void AudioEditorFileModel::remove(QObject *item)
     emit isEmptyChanged();
 }
 
-auto AudioEditorFileModel::roleNames() const -> QHash<int, QByteArray>
+auto AudioEditorFileBrowserModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -181,7 +178,7 @@ auto AudioEditorFileModel::roleNames() const -> QHash<int, QByteArray>
     return roles;
 }
 
-void AudioEditorFileModel::clear()
+void AudioEditorFileBrowserModel::clear()
 {
     beginRemoveRows(QModelIndex(), 0, m_items.count() - 1);
 
@@ -195,7 +192,7 @@ void AudioEditorFileModel::clear()
     emit isEmptyChanged();
 }
 
-void AudioEditorFileModel::setElements(const QList<AudioEditorFile *> &elements)
+void AudioEditorFileBrowserModel::setElements(const QList<AudioEditorFile *> &elements)
 {
     clear();
 

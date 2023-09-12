@@ -1,9 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import src
 
 Dialog {
     id: root
-    property string origName: ""
+
+    property string originalName: ""
     property int mode: -1
 
     modal: true
@@ -16,7 +18,7 @@ Dialog {
     contentItem: Column {
         TextField {
             id: field
-            text: origName
+            text: root.originalName
             selectByMouse: true
             onAccepted: root.accept()
         }
@@ -29,13 +31,13 @@ Dialog {
     onAccepted: {
         switch (root.mode) {
         case 0:
-            audio_editor.renameProject(field.text)
+            AudioTool.editor.renameProject(field.text)
             break
         case 1:
-            audio_editor.renameCategory(field.text)
+            AudioTool.editor.renameCategory(field.text)
             break
         case 2:
-            audio_editor.renameScenario(field.text)
+            AudioTool.editor.renameScenario(field.text)
             break
         default:
             console.log("Error: Rename dialog in undefined mode")

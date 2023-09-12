@@ -1,17 +1,19 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 Dialog {
-    id: add_dialog
+    id: root
+
+    property double spinboxWidth
 
     modal: true
 
     function addCombatants() {
-        if (name_textfield.text != "") {
-            combat_tracker.add(name_textfield.text, ini_spinbox.value,
+        if (name_textfield.text !== "") {
+            CombatTrackerTool.add(name_textfield.text, ini_spinbox.value,
                                health_spinbox.value, priority_spinbox.value,
                                notes_textfield.text)
         }
@@ -35,7 +37,7 @@ Dialog {
 
     contentItem: Grid {
         id: main_item
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
         spacing: 10
         padding: 10
@@ -43,8 +45,8 @@ Dialog {
         rows: 1
 
         function addCombatant() {
-            add_dialog.addCombatants()
-            add_dialog.clearAddFields()
+            root.addCombatants()
+            root.clearAddFields()
             name_textfield.forceActiveFocus()
         }
 
@@ -63,7 +65,7 @@ Dialog {
         SpinBox {
             id: ini_spinbox
             height: name_textfield.height
-            width: list_view.width / 6
+            width: root.spinboxWidth
             from: -99999
             to: 99999
             editable: true
@@ -72,7 +74,7 @@ Dialog {
         SpinBox {
             id: health_spinbox
             height: name_textfield.height
-            width: list_view.width / 6
+            width: root.spinboxWidth
             from: -99999
             to: 99999
             editable: true
@@ -81,7 +83,7 @@ Dialog {
         SpinBox {
             id: priority_spinbox
             height: name_textfield.height
-            width: list_view.width / 6
+            width: root.spinboxWidth
             from: -99999
             to: 99999
             editable: true
@@ -108,9 +110,9 @@ Dialog {
             font.pointSize: 16
 
             onClicked: {
-                add_dialog.addCombatants()
-                add_dialog.clearAddFields()
-                add_dialog.visible = false
+                root.addCombatants()
+                root.clearAddFields()
+                root.visible = false
             }
         }
     }

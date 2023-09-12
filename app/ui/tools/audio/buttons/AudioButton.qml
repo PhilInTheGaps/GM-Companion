@@ -1,13 +1,13 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import "../../../defines.js" as Defines
+import src
+import "../../.."
 
 Rectangle {
     id: root
     property string element_name
-    property var thumbnail
+    property AudioThumbnail thumbnail
     property int element_type
     property bool overlay_enabled: true
     property bool small_mode: false
@@ -16,7 +16,7 @@ Rectangle {
 
     signal clicked
 
-    property var type_icon: {
+    property string type_icon: {
         if (element_type === 0) {
             FontAwesome.music
         } else if (element_type === 1) {
@@ -28,17 +28,17 @@ Rectangle {
 
     color: palette.dark
 
-    height: small_mode ? Defines.TOOLBAR_HEIGHT : width
+    height: small_mode ? Sizes.toolbarHeight : width
 
     Image {
         id: thumbnail_image
 
-        source: "image://audioElementIcons/" + thumbnail.imageId
+        source: root.thumbnail ? "image://audioElementIcons/" + root.thumbnail.imageId : ""
         anchors.fill: parent
         asynchronous: true
         cache: false
 
-        fillMode: small_mode ? Image.PreserveAspectCrop : Image.Stretch
+        fillMode: root.small_mode ? Image.PreserveAspectCrop : Image.Stretch
 
         sourceSize.width: 400
         sourceSize.height: 400
@@ -64,7 +64,7 @@ Rectangle {
             font.styleName: FontAwesome.fontRegular.styleName
             color: mouse_area.pressed ? "silver" : "white"
             anchors.centerIn: parent
-            visible: overlay_enabled
+            visible: root.overlay_enabled
         }
     }
 
@@ -74,7 +74,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: small_mode ? parent.height : parent.width / 4
+        height: root.small_mode ? parent.height : parent.width / 4
 
         color: Qt.rgba(0, 0, 0, 0.5)
 
@@ -91,7 +91,7 @@ Rectangle {
             elide: Text.ElideRight
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
-            text: element_name
+            text: root.element_name
             color: "white"
         }
 
@@ -103,10 +103,10 @@ Rectangle {
 
             font.pixelSize: parent.height * 0.5
             color: "white"
-            text: type_icon
-            font.family: element_type
+            text: root.type_icon
+            font.family: root.element_type
                          === 3 ? FontAwesome.fontBrands.family : FontAwesome.fontSolid.family
-            font.styleName: element_type === 3 ? FontAwesome.fontBrands.styleName : FontAwesome.fontSolid.styleName
+            font.styleName: root.element_type === 3 ? FontAwesome.fontBrands.styleName : FontAwesome.fontSolid.styleName
         }
     }
 

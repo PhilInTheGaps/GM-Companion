@@ -4,15 +4,16 @@
 
 using namespace Qt::Literals::StringLiterals;
 
-ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent) : BaseShopTool(parent), m_shopEditor(engine)
+ShopTool::ShopTool(QObject *parent) : BaseShopTool(parent), m_shopEditor(this)
 {
-    if (engine)
-    {
-        engine->rootContext()->setContextProperty(u"shop_tool"_s, this);
-    }
-
     connect(&m_shopEditor, &ShopEditor::projectsSaved, this, &ShopTool::onShopEditorSaved);
     connect(this, &ShopTool::currentProjectChanged, this, &ShopTool::onCurrentProjectChanged);
+}
+
+auto ShopTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> ShopTool *
+{
+    Q_UNUSED(jsEngine);
+    return new ShopTool(qmlEngine);
 }
 
 void ShopTool::onCurrentProjectChanged(ShopProject *project)

@@ -1,23 +1,26 @@
-#ifndef COMBATANT_H
-#define COMBATANT_H
+#pragma once
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 using namespace Qt::Literals::StringLiterals;
 
 class Combatant : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QString, notes)
-    AUTO_PROPERTY(int, ini)
-    AUTO_PROPERTY(int, health)
-    AUTO_PROPERTY(int, priority)
-    AUTO_PROPERTY(bool, delay)
+    AUTO_PROPERTY_VAL(int, ini)
+    AUTO_PROPERTY_VAL(int, health)
+    AUTO_PROPERTY_VAL(int, priority)
+    AUTO_PROPERTY_VAL(bool, delay)
 
 public:
     explicit Combatant(const QString &name, const QString &notes, int ini, int health, int priority, QObject *parent);
@@ -38,10 +41,10 @@ public:
 class CombatantListModel : public QAbstractListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
-    CombatantListModel(QObject *parent = nullptr) : QAbstractListModel(parent)
-    {
-    }
+    using QAbstractListModel::QAbstractListModel;
 
     int rowCount(const QModelIndex &) const override
     {
@@ -63,5 +66,3 @@ protected:
 private:
     QList<QObject *> m_items = {};
 };
-
-#endif // COMBATANT_H

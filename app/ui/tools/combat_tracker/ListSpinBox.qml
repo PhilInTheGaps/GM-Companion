@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
 
 Item {
@@ -7,7 +7,7 @@ Item {
 
     property string value
     property bool edit_mode: false
-    property string font_color: "black"
+    property color font_color: "black"
 
     signal valueEdited(string new_value)
     signal valueIncreased(int steps)
@@ -25,7 +25,7 @@ Item {
 
     Dialog {
         id: input_item
-        visible: edit_mode
+        visible: root.edit_mode
 
         width: parent.width
         height: parent.height
@@ -85,7 +85,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: 10
-        visible: !edit_mode
+        visible: !root.edit_mode
         width: left_icon.width + 20
 
         Text {
@@ -94,7 +94,7 @@ Item {
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
-            color: left_area.pressed ? "black" : left_area.containsMouse ? "grey" : font_color
+            color: left_area.pressed ? "black" : left_area.containsMouse ? "grey" : root.font_color
             anchors.centerIn: parent
         }
 
@@ -102,7 +102,7 @@ Item {
             id: left_area
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: valueIncreased(-1)
+            onClicked: root.valueIncreased(-1)
         }
     }
 
@@ -112,7 +112,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: 10
-        visible: !edit_mode
+        visible: !root.edit_mode
         width: right_icon.width + 20
 
         Text {
@@ -121,7 +121,7 @@ Item {
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
-            color: right_area.pressed ? "black" : right_area.containsMouse ? "grey" : font_color
+            color: right_area.pressed ? "black" : right_area.containsMouse ? "grey" : root.font_color
             anchors.centerIn: parent
         }
 
@@ -129,13 +129,13 @@ Item {
             id: right_area
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: valueIncreased(1)
+            onClicked: root.valueIncreased(1)
         }
     }
 
     MouseArea {
         id: mouse_area
-        visible: !edit_mode
+        visible: !root.edit_mode
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: left_button.right

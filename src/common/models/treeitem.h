@@ -3,11 +3,14 @@
 #include "baseprojectitem.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 #include <limits>
 
 class TreeItem : public BaseProjectItem
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     enum class CheckedState
@@ -18,6 +21,11 @@ public:
     };
     Q_ENUM(CheckedState)
 
+    Q_PROPERTY(bool isCheckable READ isCheckable CONSTANT)
+    Q_PROPERTY(CheckedState isChecked READ isChecked WRITE setIsChecked NOTIFY isCheckedChanged)
+    Q_PROPERTY(QQmlListProperty<TreeItem> childItems READ childItemsQml NOTIFY childItemsChanged)
+    Q_PROPERTY(QStringList creatables READ creatables NOTIFY creatablesChanged)
+
     /// Whether children are shown or not.
     AUTO_PROPERTY_VAL2(bool, isOpen, false)
 
@@ -26,11 +34,6 @@ public:
 
     /// Sorting priority. Smaller means higher priority.
     AUTO_PROPERTY_VAL2(int, priority, std::numeric_limits<int>::max())
-
-    Q_PROPERTY(bool isCheckable READ isCheckable CONSTANT)
-    Q_PROPERTY(CheckedState isChecked READ isChecked WRITE setIsChecked NOTIFY isCheckedChanged)
-    Q_PROPERTY(QList<QObject *> childItems READ childItems NOTIFY childItemsChanged)
-    Q_PROPERTY(QStringList creatables READ creatables NOTIFY creatablesChanged)
 
     READ_PROPERTY(int, depth)
 
@@ -42,7 +45,8 @@ public:
     [[nodiscard]] auto isChecked() const -> CheckedState;
     void setIsChecked(CheckedState isChecked);
 
-    [[nodiscard]] auto childItems() const -> QList<QObject *>;
+    [[nodiscard]] auto childItems() const -> QList<TreeItem *>;
+    [[nodiscard]] auto childItemsQml() -> QQmlListProperty<TreeItem>;
     [[nodiscard]] virtual auto creatables() const -> QStringList;
 
     [[nodiscard]] virtual auto path() const -> QString;
@@ -64,8 +68,12 @@ signals:
 private:
     CheckedState m_isChecked = CheckedState::Checked;
 
+    QList<TreeItem *> m_childItems;
+
     static auto sortChildren(QObject *o1, QObject *o2) -> bool;
 
 private slots:
     void onChildIsCheckedChanged();
 };
+
+Q_DECLARE_METATYPE(TreeItem *)

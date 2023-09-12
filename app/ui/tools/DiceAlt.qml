@@ -1,6 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
 import "../common"
 
 Item {
@@ -8,7 +9,7 @@ Item {
     height: main_item.height
 
     Connections {
-        target: dice_tool
+        target: DiceTool
 
         function onMixedCriticalResult() {
             roll_result.color = "orange"
@@ -32,7 +33,7 @@ Item {
         }
 
         function onNormalResult() {
-            roll_result.color = palette.text
+            roll_result.color = dice_page.palette.text
             roll_result_help.visible = false
         }
     }
@@ -56,7 +57,7 @@ Item {
                 id: count_spinbox
                 value: 1
                 from: 1
-                onValueChanged: dice_tool.setAmount(value)
+                onValueChanged: DiceTool.setAmount(value)
                 editable: true
                 font.pixelSize: parent.height * 0.4
             }
@@ -74,7 +75,7 @@ Item {
                 value: 20
                 to: 1000
                 editable: true
-                onValueChanged: dice_tool.setSides(value)
+                onValueChanged: DiceTool.setSides(value)
                 font.pixelSize: parent.height * 0.4
             }
 
@@ -90,7 +91,7 @@ Item {
                 value: 0
                 from: -99
                 to: 99
-                onValueChanged: dice_tool.setModifier(value)
+                onValueChanged: DiceTool.setModifier(value)
                 editable: true
                 font.pixelSize: parent.height * 0.4
             }
@@ -113,7 +114,7 @@ Item {
                 hoverEnabled: true
 
                 onClicked: {
-                    roll_result.text = dice_tool.roll
+                    roll_result.text = DiceTool.roll
                 }
             }
 

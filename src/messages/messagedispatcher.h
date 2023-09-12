@@ -1,10 +1,9 @@
 #pragma once
 
+#include "message.h"
 #include <QDateTime>
 #include <QObject>
 #include <QString>
-
-#include "message.h"
 
 class MessageDispatcher : public QObject
 {

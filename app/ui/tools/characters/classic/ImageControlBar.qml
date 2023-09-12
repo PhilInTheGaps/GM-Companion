@@ -1,11 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../../defines.js" as Defines
+import "../../.."
 
 Rectangle {
-    id: control_bar
+    id: root
 
     property double minZoom: 0
     property double maxZoom: 2
@@ -20,7 +20,7 @@ Rectangle {
     signal fitToScreen
     signal toggleMarkerMenu
 
-    width: Defines.TOOLBAR_WIDTH
+    width: Sizes.toolbarWidth
     color: palette.alternateBase
 
     Column {
@@ -31,7 +31,7 @@ Rectangle {
         CustomToolBarButton {
             id: fit_button
             iconText: FontAwesome.expand
-            onClicked: fitToScreen()
+            onClicked: root.fitToScreen()
             verticalMode: true
             outline: true
             height: width
@@ -40,7 +40,7 @@ Rectangle {
         CustomToolBarButton {
             id: larger_button
             iconText: FontAwesome.plus
-            onClicked: zoomIn()
+            onClicked: root.zoomIn()
             verticalMode: true
             outline: true
             height: width
@@ -51,13 +51,13 @@ Rectangle {
             orientation: Qt.Vertical
             anchors.horizontalCenter: parent.horizontalCenter
 
-            from: minZoom
-            to: maxZoom
-            stepSize: zoomStep
+            from: root.minZoom
+            to: root.maxZoom
+            stepSize: root.zoomStep
             snapMode: Slider.SnapAlways
-            value: currentScale
+            value: root.currentScale
 
-            onMoved: setScale(value)
+            onMoved: root.setScale(value)
 
             handle: Rectangle {
                 x: scale_slider.leftPadding + scale_slider.availableWidth / 2 - width / 2
@@ -94,7 +94,7 @@ Rectangle {
         CustomToolBarButton {
             id: smaller_button
             iconText: FontAwesome.minus
-            onClicked: zoomOut()
+            onClicked: root.zoomOut()
             verticalMode: true
             outline: true
             height: width
@@ -103,7 +103,7 @@ Rectangle {
         CustomToolBarButton {
             id: rotate_left_button
             iconText: FontAwesome.rotateLeft
-            onClicked: rotateLeft()
+            onClicked: root.rotateLeft()
             verticalMode: true
             outline: true
             height: width
@@ -112,7 +112,7 @@ Rectangle {
         CustomToolBarButton {
             id: rotate_right_button
             iconText: FontAwesome.rotateRight
-            onClicked: rotateRight()
+            onClicked: root.rotateRight()
             verticalMode: true
             outline: true
             height: width

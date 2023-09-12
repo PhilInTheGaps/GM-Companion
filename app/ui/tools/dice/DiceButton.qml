@@ -7,10 +7,9 @@ Button {
 
     property int sides: 20
     property string imageSource: "qrc:/resources/icons/dice/d" + sides + ".png"
-    property string toolTipText: "D" + sides
+    property string toolTipText: qsTr("D") + sides
     property bool isCurrentType: false
 
-    height: parent.height - parent.padding * 2
     width: height
 
     background: Item {}
@@ -28,7 +27,7 @@ Button {
         anchors.fill: image
         source: image
         colorization: 1
-        colorizationColor: parent.pressed ? "grey" : isCurrentType ? "tomato" : "white"
+        colorizationColor: parent.pressed ? "grey" : root.isCurrentType ? "tomato" : "white"
     }
 
     ToolTip.text: toolTipText

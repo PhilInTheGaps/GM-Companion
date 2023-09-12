@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Pane {
     id: control
@@ -20,8 +17,6 @@ T.Pane {
     padding: 5
 
     background: Rectangle {
-        color: Colors.dark
-        // border.color: Colors.border
-        // border.width: 1
+        color: palette.dark
     }
 }

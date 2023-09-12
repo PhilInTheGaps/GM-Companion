@@ -1,9 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.ItemDelegate {
     id: control
@@ -31,7 +28,7 @@ T.ItemDelegate {
 
         text: control.text
         font: control.font
-        color: control.enabled ? Colors.text : Colors.textDisabled
+        color: control.enabled ? palette.text : StyleColors.textDisabled
         opacity: control.pressed ? 0.7 : 1
         elide: Text.ElideRight
         verticalAlignment: Text.AlignVCenter
@@ -39,10 +36,10 @@ T.ItemDelegate {
 
     background: Rectangle {
         implicitWidth: 100
-        implicitHeight: Sizes.delegateHeight
+        implicitHeight: StyleSizes.delegateHeight
         visible: control.down || control.highlighted || control.visualFocus
-        color: Colors.dark
-        border.color: Colors.border
-        border.width: hovered ? 1 : 0
+        color: palette.dark
+        border.color: StyleColors.border
+        border.width: control.hovered ? 1 : 0
     }
 }

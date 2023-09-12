@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Menu {
     id: control
@@ -69,7 +67,7 @@ T.Menu {
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 40
-        color: Colors.dark
-        border.color: Colors.border
+        color: palette.dark
+        border.color: StyleColors.border
     }
 }

@@ -1,12 +1,13 @@
-#ifndef AUDIOMETADATA_H
-#define AUDIOMETADATA_H
+#pragma once
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AudioMetaData : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
 public:
     using QObject::QObject;
@@ -18,5 +19,3 @@ public:
     AUTO_PROPERTY(QString, type)
     AUTO_PROPERTY_VAL2(qint64, length, 0)
 };
-
-#endif // AUDIOMETADATA_H

@@ -100,7 +100,7 @@ auto Worker::copyNext() -> bool
 {
     if (m_fileCount > 0)
     {
-        float percent = static_cast<float>(m_exportCount++) / m_fileCount;
+        const float percent = static_cast<float>(m_exportCount++) / m_fileCount;
         emit progressChanged(percent);
         qCDebug(gmAudioExporter()) << "   Progress:" << m_exportCount << "/" << m_fileCount << "(" << percent * 100
                                    << "%)";

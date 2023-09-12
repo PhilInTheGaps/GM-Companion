@@ -1,7 +1,6 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-
+import QtQuick
 import IconFonts
+import src
 
 Rectangle {
     id: root
@@ -31,28 +30,24 @@ Rectangle {
         VolumeSlider {
             id: music
             icon: FontAwesome.music
-            initialVolume: initialMusicVolume
+            initialVolume: root.initialMusicVolume
             anchors.left: parent.left
             anchors.right: parent.right
 
             onValueChanged: {
-                if (audio_tool) {
-                    audio_tool.setMusicVolume(value)
-                }
+                AudioTool.setMusicVolume(value)
             }
         }
 
         VolumeSlider {
             id: sound
             icon: FontAwesome.drum
-            initialVolume: initialSoundVolume
+            initialVolume: root.initialSoundVolume
             anchors.left: parent.left
             anchors.right: parent.right
 
             onValueChanged: {
-                if (audio_tool) {
-                    audio_tool.setSoundVolume(value)
-                }
+                AudioTool.setSoundVolume(value)
             }
         }
     }

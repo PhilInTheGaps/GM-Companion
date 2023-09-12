@@ -1,8 +1,4 @@
-#ifndef AUDIOEDITOR_H
-#define AUDIOEDITOR_H
-
-#include <QPointer>
-#include <QQmlApplicationEngine>
+#pragma once
 
 #include "../project/audiofilemodel.h"
 #include "addonelementmanager.h"
@@ -10,22 +6,58 @@
 #include "audioexporter.h"
 #include "common/abstracttool.h"
 #include "settings/settingsmanager.h"
-#include "unsplash/unsplashparser.h"
-
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include "unsplash/unsplashparser.h"
+#include <QPointer>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class AudioEditor : public AbstractTool
 {
     Q_OBJECT
-    Q_PROPERTY(QList<AudioProject *> projects READ projects NOTIFY projectsChanged)
-    Q_PROPERTY(QObject *currentProject READ currentProject NOTIFY currentProjectChanged)
-    Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
-    Q_PROPERTY(QObject *currentElement READ currentElement NOTIFY currentElementChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
-    AUTO_PROPERTY(bool, isSaved)
+    READ_LIST_PROPERTY(AudioProject, projects)
+    Q_PROPERTY(AudioProject *currentProject READ currentProject NOTIFY currentProjectChanged)
+    Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
+    Q_PROPERTY(AudioElement *currentElement READ currentElement NOTIFY currentElementChanged)
+
+    Q_PROPERTY(AudioExporter *exporter READ exporter CONSTANT)
+    Q_PROPERTY(AudioEditorFileBrowser *fileBrowser READ fileBrowser CONSTANT)
+    Q_PROPERTY(UnsplashParser *unsplash READ unsplash CONSTANT)
+    Q_PROPERTY(AddonElementManager *addons READ addons CONSTANT)
+    Q_PROPERTY(AudioFileModel *files READ files CONSTANT)
+
+    AUTO_PROPERTY_VAL2(bool, isSaved, true)
 
 public:
-    explicit AudioEditor(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit AudioEditor(QQmlEngine *engine, QObject *parent = nullptr);
+
+    [[nodiscard]] auto exporter() -> AudioExporter *
+    {
+        return &m_audioExporter;
+    }
+
+    [[nodiscard]] auto fileBrowser() -> AudioEditorFileBrowser *
+    {
+        return &m_fileBrowser;
+    }
+
+    [[nodiscard]] auto unsplash() -> UnsplashParser *
+    {
+        return &m_unsplashParser;
+    }
+
+    [[nodiscard]] auto addons() -> AddonElementManager *
+    {
+        return &m_addonElementManager;
+    }
+
+    [[nodiscard]] auto files() -> AudioFileModel *
+    {
+        return &m_fileModel;
+    }
 
     // Project
     Q_INVOKABLE void setCurrentProject(int index);
@@ -34,13 +66,9 @@ public:
     Q_INVOKABLE void renameProject(const QString &name);
     Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
-    QList<AudioProject *> projects() const
+    AudioProject *currentProject() const
     {
-        return m_projects;
-    }
-    QObject *currentProject() const
-    {
-        return qobject_cast<QObject *>(m_currentProject);
+        return m_currentProject;
     }
     void setCurrentProject(AudioProject *project);
     int projectIndex() const;
@@ -84,23 +112,23 @@ public:
 
     Q_INVOKABLE void findUnsplashImages(const QString &text)
     {
-        unsplashParser.findImage(text);
+        m_unsplashParser.findImage(text);
     }
     Q_INVOKABLE void shuffleUnsplashImages()
     {
-        unsplashParser.shuffle();
+        m_unsplashParser.shuffle();
     }
 
     // Elements
-    QObject *currentElement() const
+    AudioElement *currentElement() const
     {
-        return qobject_cast<QObject *>(m_currentElement);
+        return m_currentElement;
     }
 
     Q_INVOKABLE void loadElement(QObject *element);
     Q_INVOKABLE QString resourcesPath() const
     {
-        return SettingsManager::getPath("resources");
+        return SettingsManager::getPath(QStringLiteral("resources"));
     }
     Q_INVOKABLE QString basePath() const;
 
@@ -113,7 +141,6 @@ public slots:
     void loadData() override;
 
 signals:
-    void projectsChanged();
     void currentProjectChanged();
     void currentCategoryChanged();
     void currentScenarioChanged();
@@ -123,16 +150,15 @@ signals:
     void showInfoBar(const QString &message);
 
 private:
-    AddonElementManager addonElementManager;
-    AudioExporter audioExporter;
-    AudioEditorFileBrowser fileBrowser;
-    UnsplashParser unsplashParser;
+    AddonElementManager m_addonElementManager;
+    AudioExporter m_audioExporter;
+    AudioEditorFileBrowser m_fileBrowser;
+    UnsplashParser m_unsplashParser;
+    AudioFileModel m_fileModel;
 
-    QList<AudioProject *> m_projects;
     AudioProject *m_currentProject = nullptr;
-
-    AudioFileModel fileModel;
     QPointer<AudioElement> m_currentElement;
+
     bool loadFirstElement(AudioScenario *scenario = nullptr);
     void clearCurrentElement();
     int m_fileIndex{};
@@ -140,7 +166,7 @@ private:
     void madeChanges();
     bool addAudioFile(AudioFile *audioFile);
 
-    // Helper function
+    // Helper functions
     [[nodiscard]] bool categoryExists() const;
     [[nodiscard]] bool scenarioExists() const;
 
@@ -150,5 +176,3 @@ private slots:
     void onCurrentScenarioChanged() const;
     void onProjectSavedChanged();
 };
-
-#endif // AUDIOEDITOR_H

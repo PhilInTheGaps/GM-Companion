@@ -1,12 +1,13 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import "../../defines.js" as Defines
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
+import "../.."
 
 Dialog {
     id: root
 
-    property var page: undefined
+    property NoteBookPage page
 
     modal: true
 
@@ -29,6 +30,7 @@ Dialog {
 
     contentItem: Column {
         Label {
+            // qmllint disable missing-property
             text: qsTr("Do you want to save your changes to ")
                   + (root.page ? root.page.name : "UNDEFINED") + "?"
             font.bold: true
@@ -46,7 +48,7 @@ Dialog {
         Row {
             id: buttons
             anchors.right: parent.right
-            height: Defines.TOOLBAR_HEIGHT
+            height: Sizes.toolbarHeight
             spacing: 5
 
             CustomButton {

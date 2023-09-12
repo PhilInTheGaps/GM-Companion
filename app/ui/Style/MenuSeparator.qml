@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.MenuSeparator {
     id: control
@@ -18,6 +17,6 @@ T.MenuSeparator {
     contentItem: Rectangle {
         implicitWidth: 200
         implicitHeight: 1
-        color: Colors.menuSeparator
+        color: StyleColors.menuSeparator
     }
 }

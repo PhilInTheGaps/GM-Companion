@@ -1,10 +1,11 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-
+import src
 import "./buttons"
-import "../../defines.js" as Defines
+import "../.."
 
 Item {
     id: audio_scenario_element_column
@@ -19,16 +20,18 @@ Item {
         Repeater {
             id: scenario_repeater
 
-            model: audio_tool && audio_tool.currentProject
-                   && audio_tool.currentProject.currentCategory ? audio_tool.currentProject.currentCategory.scenarios : []
+            model: AudioTool.currentProject && AudioTool.currentProject.currentCategory ?
+                       AudioTool.currentProject.currentCategory.scenarios : []
 
             CustomButton {
-                buttonText: modelData.name
+                required property AudioScenario modelData
+
+                buttonText: modelData.name // qmllint disable missing-property
                 padding: 10
                 backgroundColor: "transparent"
                 usesFixedWidth: false
                 onClicked: {
-                    var project = audio_tool.currentProject
+                    var project = AudioTool.currentProject
                     if (project && project.currentCategory) {
                         project.currentCategory.currentScenario = modelData
                     }
@@ -54,8 +57,8 @@ Item {
         spacing: 10
 
         clip: true
-        model: (audio_tool && audio_tool.currentProject
-                && audio_tool.currentProject.currentScenario) ? audio_tool.currentProject.currentScenario.model : []
+        model: (AudioTool.currentProject && AudioTool.currentProject.currentScenario) ?
+                   AudioTool.currentProject.currentScenario.model : []
 
         ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
@@ -68,16 +71,21 @@ Item {
         }
 
         delegate: Column {
+            id: list_delegate
+
+            required property AudioScenario modelData
+            required property int index
+
             spacing: 5
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
 
             Label {
                 id: subscenario_text
-                text: modelData.name
+                text: list_delegate.modelData.name // qmllint disable missing-property
                 font.pointSize: 12
                 verticalAlignment: Text.AlignVCenter
-                visible: index > 0
+                visible: list_delegate.index > 0
 
                 anchors.right: parent.right
                 anchors.left: parent.left
@@ -89,22 +97,27 @@ Item {
                 anchors.right: parent.right
 
                 Repeater {
-                    model: modelData.elements
+                    model: list_delegate.modelData.elements
 
                     Item {
+                        id: flow_delegate
+
+                        required property AudioElement modelData
+
                         width: list.button_width
                         height: width
 
                         AudioButton {
                             id: element_button
-                            element_name: modelData.name
-                            element_type: modelData.type
+
+                            element_name: flow_delegate.modelData.name // qmllint disable missing-property
+                            element_type: flow_delegate.modelData.type
                             subscenario_name: subscenario_text.text
-                            thumbnail: modelData.thumbnail
+                            thumbnail: flow_delegate.modelData.thumbnail
                             width: parent.width - 4
                             anchors.centerIn: parent
 
-                            onClicked: audio_tool.play(modelData)
+                            onClicked: AudioTool.play(flow_delegate.modelData)
                         }
                     }
                 }
@@ -114,7 +127,7 @@ Item {
 
     // Search
     Rectangle {
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.margins: 5
@@ -174,7 +187,7 @@ Item {
                 }
             }
 
-            onTextChanged: audio_tool.findElement(text)
+            onTextChanged: AudioTool.findElement(text)
 
             Keys.onEscapePressed: {
                 if (search_field.activeFocus) {

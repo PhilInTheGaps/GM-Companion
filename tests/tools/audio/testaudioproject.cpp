@@ -103,11 +103,11 @@ void TestAudioProject::testModifications()
     auto *category = new AudioCategory("Added in test for scenarios", project->name(), {}, project);
     QVERIFY(project->addCategory(category));
 
-    auto *scenario = new AudioScenario("Added in test", category->path(), {}, category);
+    auto *scenario = new AudioScenario("Added in test", category->path(), {}, {}, category);
     QVERIFY(category->addScenario(scenario));
 
-    auto *subscenario = new AudioScenario("Sub added in test", scenario->path(), {}, scenario);
-    auto *subscenario2 = new AudioScenario("Sub added in test 2", scenario->path(), {}, scenario);
+    auto *subscenario = new AudioScenario("Sub added in test", scenario->path(), {}, {}, scenario);
+    auto *subscenario2 = new AudioScenario("Sub added in test 2", scenario->path(), {}, {}, scenario);
     QVERIFY(scenario->addScenario(subscenario));
     QVERIFY(scenario->addScenario(subscenario2));
 
@@ -131,9 +131,6 @@ void TestAudioProject::testModifications()
     QCOMPARE(scenario->model().length(), 3); // Main scenario now has elements
     QCOMPARE(scenario->elements(false).length(), 3);
     QCOMPARE(scenario->elements(true).length(), 5);
-    QCOMPARE(scenario->elements(AudioElement::Type::Music, false).length(), 1);
-    QCOMPARE(scenario->elements(AudioElement::Type::Sound, false).length(), 1);
-    QCOMPARE(scenario->elements(AudioElement::Type::Radio, false).length(), 1);
     QCOMPARE(elementCount + 5, project->elements().length());
 }
 

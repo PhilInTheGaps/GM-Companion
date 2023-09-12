@@ -1,18 +1,18 @@
-﻿import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../defines.js" as Defines
+import src
+import ".."
 import "./combat_tracker"
-import "./dice"
 
 Page {
     id: root
 
     readonly property bool inPortrait: width < height || width < 1200
-    property bool dice_enabled: false
+    property bool diceEnabled: false
 
-    Component.onCompleted: combat_tracker.loadData()
+    Component.onCompleted: CombatTrackerTool.loadData()
 
     // Top Bar
     header: ToolBar {
@@ -27,7 +27,7 @@ Page {
             CustomToolBarButton {
                 iconText: FontAwesome.chevronRight
                 buttonText: qsTr("Next")
-                onClicked: combat_tracker.next()
+                onClicked: CombatTrackerTool.next()
                 usesFixedWidth: false
             }
 
@@ -43,7 +43,7 @@ Page {
             CustomToolBarButton {
                 iconText: FontAwesome.dice
                 buttonText: qsTr("Dice")
-                onClicked: dice_enabled ? dice_enabled = false : dice_enabled = true
+                onClicked: root.diceEnabled ? root.diceEnabled = false : root.diceEnabled = true
                 usesFixedWidth: false
             }
         }
@@ -71,6 +71,8 @@ Page {
             visible: false
             y: list_header.height
             width: list_header.width
+
+            spinboxWidth: list_view.width / 6
         }
 
         // Combatant List
@@ -95,7 +97,7 @@ Page {
     // Right Item
     Item {
         id: right_item
-        visible: !inPortrait && dice_enabled
+        visible: !root.inPortrait && root.diceEnabled
 
         anchors.right: parent.right
         anchors.top: parent.top
@@ -135,13 +137,13 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                visible: inPortrait && dice_enabled
+                visible: root.inPortrait && root.diceEnabled
                 asynchronous: true
             }
 
             Item {
                 id: bottom_rect
-                height: Defines.TOOLBAR_HEIGHT
+                height: Sizes.toolbarHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -167,7 +169,7 @@ Page {
                         }
 
                         Label {
-                            text: combat_tracker.currentRound
+                            text: CombatTrackerTool.currentRound
                             anchors.verticalCenter: parent.verticalCenter
                             font.bold: true
                             font.pointSize: 12
@@ -179,7 +181,7 @@ Page {
                         iconText: FontAwesome.arrowRotateLeft
                         buttonText: qsTr("Reset")
                         usesFixedWidth: false
-                        onClicked: combat_tracker.reset()
+                        onClicked: CombatTrackerTool.reset()
 
                         toolTipText: qsTr("Start again at round 1 but keep all entries.")
                     }
@@ -189,7 +191,7 @@ Page {
                         iconText: FontAwesome.xmark
                         buttonText: qsTr("Clear")
                         usesFixedWidth: false
-                        onClicked: combat_tracker.clear()
+                        onClicked: CombatTrackerTool.clear()
 
                         toolTipText: qsTr("Remove all entries and reset counter to 1.")
                     }

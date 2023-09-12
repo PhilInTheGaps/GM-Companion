@@ -1,14 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
 
 Dialog {
     id: root
 
     property string markerName: "Placeholder"
     property string markerDescription: "Placeholder"
-    property string markerColor: "red"
+    property color markerColor: "red"
     property string markerIcon: FontAwesome.locationDot
 
     title: qsTr("Edit Marker")
@@ -17,7 +20,7 @@ Dialog {
     standardButtons: Dialog.Cancel | Dialog.Save
 
     onAccepted: {
-        map_tool.setMarkerProperties(marker_name_field.text,
+        MapTool.setMarkerProperties(marker_name_field.text,
                                      marker_description_edit.text,
                                      icon_text.text, color_field.text)
     }
@@ -77,6 +80,7 @@ Dialog {
             }
 
             Grid {
+                id: icon_grid
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -87,11 +91,14 @@ Dialog {
                     model: [FontAwesome.locationDot, FontAwesome.locationPin, FontAwesome.anchor, FontAwesome.rocket, FontAwesome.plane, FontAwesome.squareParking, FontAwesome.bed, FontAwesome.beerMugEmpty, FontAwesome.book, FontAwesome.building, FontAwesome.suitcase, FontAwesome.crosshairs, FontAwesome.flag, FontAwesome.flask, FontAwesome.house, FontAwesome.industry, FontAwesome.hospital, FontAwesome.fireExtinguisher, FontAwesome.gavel, FontAwesome.landmark, FontAwesome.basketShopping, FontAwesome.train, FontAwesome.tree, FontAwesome.trophy]
 
                     Rectangle {
-                        width: (parent.width - parent.spacing * 3) / 4
+                        id: icon_delegate
+                        required property string modelData
+
+                        width: (parent.width - icon_grid.spacing * 3) / 4
                         height: width
 
                         Label {
-                            text: modelData
+                            text: icon_delegate.modelData
                             font.family: FontAwesome.fontSolid.family
                             font.styleName: FontAwesome.fontSolid.styleName
                             font.pixelSize: parent.height - 10
@@ -108,7 +115,7 @@ Dialog {
                             hoverEnabled: true
 
                             onClicked: {
-                                icon_text.text = modelData
+                                icon_text.text = icon_delegate.modelData
                             }
                         }
                     }
@@ -127,7 +134,7 @@ Dialog {
 
             TextField {
                 id: color_field
-                text: root.markerColor
+                text: "%1".arg(root.markerColor)
                 font.pointSize: 12
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -136,6 +143,7 @@ Dialog {
             }
 
             Grid {
+                id: color_grid
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -146,7 +154,10 @@ Dialog {
                     model: ["orange", "red", "crimson", "darkred", "blueviolet", "blue", "cornflowerblue", "dodgerblue", "deepskyblue", "cadetblue", "green", "limegreen", "yellowgreen", "chartreuse", "gold", "yellow", "khaki", "moccasin", "darkslategray", "slategrey", "grey", "silver", "lightsteelblue", "lightgrey"]
 
                     Rectangle {
-                        width: (parent.width - parent.spacing * 3) / 4
+                        id: color_delegate
+                        required property string modelData
+
+                        width: (parent.width - color_grid.spacing * 3) / 4
                         height: width
 
                         color: modelData
@@ -159,7 +170,7 @@ Dialog {
                             hoverEnabled: true
 
                             onClicked: {
-                                color_field.text = modelData
+                                color_field.text = color_delegate.modelData
                             }
                         }
                     }

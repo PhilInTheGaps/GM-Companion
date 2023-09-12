@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../../defines.js" as Defines
+import src
 import "../../../common"
 
 Item {
@@ -16,7 +16,7 @@ Item {
         anchors.right: control_bar.left
         anchors.rightMargin: 5
 
-        image.source: character_image_viewer.image
+        image.source: CharacterTool.imageViewer.image
     }
 
     ImageControlBar {
@@ -41,22 +41,25 @@ Item {
     Item {
         id: image_overlay_item
         anchors.fill: image_viewer
-        visible: character_tool.categories.length > 1
+        visible: CharacterTool.categories.length > 1
 
         PageIndicator {
+            id: indicator
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            count: character_tool.categories.length
-            currentIndex: character_image_viewer.imageIndex
+            count: CharacterTool.categories.length
+            currentIndex: CharacterTool.imageViewer.imageIndex
 
             delegate: Rectangle {
+                required property int index
+
                 implicitWidth: 8
                 implicitHeight: 8
 
                 radius: width / 2
                 color: palette.alternateBase
 
-                opacity: index === character_image_viewer.imageIndex ? 1 : 0.7
+                opacity: index === CharacterTool.imageViewer.imageIndex ? 1 : 0.7
             }
         }
 
@@ -67,7 +70,7 @@ Item {
 
             iconText: FontAwesome.chevronLeft
 
-            onClicked: character_image_viewer.nextImage(false)
+            onClicked: CharacterTool.imageViewer.nextImage(false)
         }
 
         CustomButton {
@@ -77,7 +80,7 @@ Item {
 
             iconText: FontAwesome.chevronRight
 
-            onClicked: character_image_viewer.nextImage(true)
+            onClicked: CharacterTool.imageViewer.nextImage(true)
         }
     }
 }

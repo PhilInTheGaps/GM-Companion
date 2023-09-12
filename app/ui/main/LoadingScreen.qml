@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 Popup {
     id: splash
@@ -16,11 +16,11 @@ Popup {
         anchors.centerIn: parent
         spacing: 10
 
-        width: showImage ? image.width : parent.width / 2
+        width: splash.showImage ? image.width : parent.width / 2
 
         Image {
             id: image
-            visible: showImage
+            visible: splash.showImage
             source: "qrc:/resources/splash.jpg"
         }
 

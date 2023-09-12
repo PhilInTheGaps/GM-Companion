@@ -1,11 +1,14 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 Item {
     id: root
+
+    required property MapMarkerEditor markerEditor
 
     signal back
     signal deleteButtonClicked
@@ -18,14 +21,14 @@ Item {
 
         // Back
         Row {
-            height: Defines.TOOLBAR_HEIGHT
+            height: Sizes.toolbarHeight
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 5
 
             CustomToolBarButton {
                 iconText: FontAwesome.chevronLeft
-                onClicked: back()
+                onClicked: root.back()
                 anchors.margins: 7
             }
 
@@ -38,7 +41,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: back()
+                    onClicked: root.back()
                 }
             }
         }
@@ -61,8 +64,8 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
 
-                text: map_tool.currentMarker ? map_tool.currentMarker.icon : ""
-                color: map_tool.currentMarker ? map_tool.currentMarker.color : ""
+                text: MapTool.currentMarker ? MapTool.currentMarker.icon : ""
+                color: MapTool.currentMarker ? MapTool.currentMarker.color : ""
             }
 
             Label {
@@ -72,7 +75,7 @@ Item {
                 elide: Text.ElideRight
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
-                text: map_tool.currentMarker ? map_tool.currentMarker.name : ""
+                text: MapTool.currentMarker ? MapTool.currentMarker.name : ""
             }
         }
     }
@@ -92,7 +95,7 @@ Item {
             id: marker_description
             anchors.left: parent.left
             anchors.right: parent.right
-            text: map_tool.currentMarker ? map_tool.currentMarker.description : ""
+            text: MapTool.currentMarker ? MapTool.currentMarker.description : ""
 
             font.pointSize: 11
             selectByMouse: true
@@ -119,11 +122,11 @@ Item {
         padding: 10
 
         onClicked: {
-            marker_editor.markerName = marker_name.text
-            marker_editor.markerDescription = marker_description.text
-            marker_editor.markerIcon = marker_icon.text
-            marker_editor.markerColor = marker_icon.color
-            marker_editor.open()
+            root.markerEditor.markerName = marker_name.text
+            root.markerEditor.markerDescription = marker_description.text
+            root.markerEditor.markerIcon = marker_icon.text
+            root.markerEditor.markerColor = marker_icon.color
+            root.markerEditor.open()
         }
     }
 
@@ -140,7 +143,7 @@ Item {
         padding: 10
 
         onClicked: {
-            deleteButtonClicked()
+            root.deleteButtonClicked()
         }
     }
 }

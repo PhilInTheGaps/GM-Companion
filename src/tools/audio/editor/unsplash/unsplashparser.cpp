@@ -14,13 +14,15 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmUnsplashParser, "gm.unsplash.parser")
 
-UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
+UnsplashParser::UnsplashParser(QQmlEngine *engine, QObject *parent) : QObject(parent)
 {
-    qmlEngine = engine;
-    m_imageModel = new ImageListModel;
-    m_manager = new QNetworkAccessManager;
-    qmlEngine->rootContext()->setContextProperty(u"unsplashImageListModel"_s, m_imageModel);
+    m_networkManager = engine->networkAccessManager();
     parse();
+}
+
+auto UnsplashParser::model() -> ImageListModel *
+{
+    return &m_imageModel;
 }
 
 void UnsplashParser::parse()
@@ -28,7 +30,7 @@ void UnsplashParser::parse()
     QNetworkRequest request(QUrl("https://gist.githubusercontent.com/PhilInTheGaps/0d61b30b0f5ccc00f4abd81566a4cf77/"
                                  "raw/gm-companion-unsplash.json"));
 
-    auto reply = m_manager->get(request);
+    auto reply = m_networkManager->get(request);
 
     connect(reply, &QNetworkReply::finished, this, [=]() {
         qCDebug(gmUnsplashParser()) << "Received Unsplash JSON file.";
@@ -45,9 +47,9 @@ void UnsplashParser::parse()
         foreach (auto o, m_doc.array())
         {
             auto *image = new UnsplashImage;
-            image->setId(o["id"_L1].toString());
-            image->setAuthor(o["author"_L1].toString());
-            image->setAuthorId(o["author_id"_L1].toString());
+            image->id(o["id"_L1].toString());
+            image->author(o["author"_L1].toString());
+            image->authorId(o["author_id"_L1].toString());
 
             QStringList tags;
 
@@ -56,12 +58,12 @@ void UnsplashParser::parse()
                 tags.append(t.toString());
             }
 
-            image->setTags(tags);
+            image->tags(tags);
 
             m_images.append(image);
         }
 
-        m_imageModel->setElements(m_images);
+        m_imageModel.setElements(m_images);
 
         reply->deleteLater();
     });
@@ -73,33 +75,33 @@ void UnsplashParser::findImage(const QString &text)
 
     if (text.isEmpty())
     {
-        m_imageModel->setElements(m_images);
+        m_imageModel.setElements(m_images);
         return;
     }
 
     QList<UnsplashImage *> images;
     QStringList terms = text.split(u" "_s);
 
-    for (auto i : m_images)
+    foreach (auto *image, m_images)
     {
-        for (const auto &term : terms)
+        foreach (const auto &term, terms)
         {
-            if (images.contains(i)) break;
+            if (images.contains(image)) break;
 
-            for (const auto &tag : i->tags())
+            foreach (const auto &tag, image->tags())
             {
-                if (images.contains(i)) break;
+                if (images.contains(image)) break;
 
                 if (tag.contains(term, Qt::CaseInsensitive))
                 {
-                    images.append(i);
+                    images.append(image);
                     break;
                 }
             }
         }
     }
 
-    m_imageModel->setElements(images);
+    m_imageModel.setElements(images);
 }
 
 void UnsplashParser::shuffle()
@@ -108,5 +110,5 @@ void UnsplashParser::shuffle()
 
     std::shuffle(images.begin(), images.end(), std::mt19937(std::random_device()()));
 
-    m_imageModel->setElements(images);
+    m_imageModel.setElements(images);
 }

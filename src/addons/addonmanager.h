@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QtQml/qqmlregistration.h>
 
 // I don't exactly know what this include does but if it is not there,
 // the application won't compile on some systems.
@@ -9,15 +10,20 @@
 
 #include "addon.h"
 #include "addonrepositorymanager.h"
+#include "qmlsingletonfactory.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AddonManager : public QObject
 {
     Q_OBJECT
-    READ_PROPERTY(QList<Addon *>, addons)
+    QML_ELEMENT
+    QML_SINGLETON
+    QML_SINGLETON_FACTORY(AddonManager)
+    READ_LIST_PROPERTY(Addon, addons)
     AUTO_PROPERTY_VAL2(bool, isLoading, false)
 
 public:
+    AddonManager() = delete;
     static auto instance() -> QPointer<AddonManager>;
 
     Q_INVOKABLE bool setAddonEnabled(Addon *addon, bool value);
@@ -56,6 +62,6 @@ private:
     void applyReleaseInfos();
 
     inline static QPointer<AddonManager> s_instance = nullptr;
-    AddonRepositoryManager m_repoManager;
+    AddonRepositoryManager m_repoManager = AddonRepositoryManager(nullptr);
     QNetworkAccessManager m_networkManager;
 };

@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.ScrollBar {
     id: control
@@ -22,8 +19,8 @@ T.ScrollBar {
         implicitHeight: control.interactive ? 6 : 2
 
         radius: width / 2
-        color: control.pressed ? Colors.dark : Colors.button
-        border.color: Colors.border
+        color: control.pressed ? palette.dark : palette.button
+        border.color: StyleColors.border
         border.width: control.pressed ? 1 : 0
         opacity: control.size < 1.0 ? 0.5 : 0.0
 
@@ -33,8 +30,7 @@ T.ScrollBar {
                   || (control.active && control.size < 1.0)
 
             PropertyChanges {
-                target: control.contentItem
-                opacity: 0.75
+                control.contentItem.opacity: 0.75
             }
         }
 

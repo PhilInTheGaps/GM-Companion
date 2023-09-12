@@ -1,19 +1,18 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
+import QtQuick.Templates as T
 import IconFonts
-import "./colors.js" as Colors
 
 Label {
     id: indicator
 
-    property Item control
+    property T.RadioButton control
 
     font.pixelSize: 26
     x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding
                       + (control.availableWidth - width) / 2
     y: parent.height / 2 - height / 2
-    color: Colors.border
+    color: StyleColors.border
 
     text: FontAwesome.circle
     font.family: FontAwesome.fontRegular.family
@@ -25,8 +24,8 @@ Label {
     Label {
         text: FontAwesome.check
         anchors.centerIn: parent
-        color: control.down ? Colors.focus : control.enabled ? Colors.text : Colors.textDisabled
-        visible: control.checked
+        color: indicator.control.down ? StyleColors.focus : indicator.control.enabled ? palette.text : StyleColors.textDisabled
+        visible: indicator.control.checked
         font.pixelSize: 14
         font.family: FontAwesome.fontSolid.family
         font.styleName: FontAwesome.fontSolid.styleName

@@ -1,32 +1,37 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
+import src
+import "./dialogs"
+import "../audio_exporter"
 
 CustomToolBar {
-    id: tool_bar
+    id: root
+
+    required property EditorDeleteDialog deleteDialog
+    required property EditorNewThingDialog newThingDialog
+    required property EditorRenameDialog renameDialog
+    required property AudioExporter exporterDialog
 
     enableBack: true
     enableAdd: true
     enableSave: true
     enableExport: true
 
-    isSaved: audio_editor ? audio_editor.isSaved : true
+    isSaved: AudioTool.editor.isSaved
 
-    onBackClicked: {
-        stack.pop()
-        loader.active = false
-    }
-
-    onAddClicked: new_thing_dialog.open()
-    onSaveClicked: audio_editor.saveProject()
+    onAddClicked: newThingDialog.open()
+    onSaveClicked: AudioTool.editor.saveProject()
     onExportClicked: {
-        audio_exporter.project = project_box.currentText
-        audio_exporter_dialog.open()
+        AudioTool.editor.exporter.project = project_box.currentText
+        exporterDialog.open()
     }
 
     Row {
-        anchors.left: tool_bar.button_row.right
+        anchors.left: root.button_row.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
@@ -36,33 +41,27 @@ CustomToolBar {
         CustomToolBarComboBox {
             id: project_box
 
-            property int projectIndex: audio_editor ? audio_editor.projectIndex : -1
+            property int projectIndex: AudioTool.editor.projectIndex
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: 150
             textRole: "name"
-            emptyString: audio_editor
-                         && audio_editor.isLoading ? qsTr("Loading ...") : qsTr(
+            emptyString: AudioTool.editor.isLoading ? qsTr("Loading ...") : qsTr(
                                                          "No Projects")
 
-            model: audio_editor ? audio_editor.projects : []
+            model: AudioTool.editor.projects
 
             onCurrentTextChanged: {
-                if (audio_editor) {
-                    audio_editor.setCurrentProject(currentIndex)
-                }
+                AudioTool.editor.setCurrentProject(currentIndex)
             }
 
             // If a project is created and set as the current project,
             // change the current index accordingly.
-            // Previously this was done by listening to the currentProjectChanged
-            // signal of the audio_editor, but the syntax for Connections changed
-            // and the old one is deprecated, but we want to still support Qt 5.9
             onProjectIndexChanged: {
-                var project = audio_editor.currentProject
-                if (project && project.name !== project_box.currentText) {
-                    project_box.currentIndex = audio_editor.projectIndex
+                var project = AudioTool.editor.currentProject
+                if (project && project.name !== project_box.currentText) { // qmllint disable missing-property
+                    project_box.currentIndex = AudioTool.editor.projectIndex
                 }
             }
         }
@@ -73,12 +72,12 @@ CustomToolBar {
             toolTipText: qsTr("Rename Project")
             enabled: project_box.model.length > 0
             onClicked: {
-                rename_dialog.mode = 0
-                rename_dialog.title = qsTr("Rename Project")
-                rename_dialog.origName = project_box.currentText
-                rename_dialog.x = project_box.x
-                rename_dialog.y = 0
-                rename_dialog.open()
+                root.renameDialog.mode = 0
+                root.renameDialog.title = qsTr("Rename Project")
+                root.renameDialog.originalName = project_box.currentText
+                root.renameDialog.x = project_box.x
+                root.renameDialog.y = 0
+                root.renameDialog.open()
             }
         }
 
@@ -88,11 +87,11 @@ CustomToolBar {
             toolTipText: qsTr("Delete Project")
             enabled: project_box.model.length > 0
             onClicked: {
-                delete_dialog.x = project_box.x
-                delete_dialog.y = 0
-                delete_dialog.element = audio_editor.currentProject
-                delete_dialog.mode = 0
-                delete_dialog.open()
+                root.deleteDialog.x = project_box.x
+                root.deleteDialog.y = 0
+                root.deleteDialog.element = AudioTool.editor.currentProject
+                root.deleteDialog.mode = 0
+                root.deleteDialog.open()
             }
         }
 
@@ -105,21 +104,19 @@ CustomToolBar {
             emptyString: qsTr("No Categories")
 
             model: {
-                audio_editor
-                        && audio_editor.currentProject ? audio_editor.currentProject.categories : []
+                AudioTool.editor.currentProject ? AudioTool.editor.currentProject.categories : []
             }
 
             currentIndex: {
-                audio_editor
-                        && audio_editor.currentProject ? audio_editor.currentProject.categoryIndex : -1
+                AudioTool.editor.currentProject ? AudioTool.editor.currentProject.categoryIndex : -1
             }
 
             onCurrentTextChanged: {
-                if (audio_editor && audio_editor.currentProject
-                        && audio_editor.currentProject.currentCategory
-                        && audio_editor.currentProject.currentCategory.name
+                if (AudioTool.editor.currentProject
+                        && AudioTool.editor.currentProject.currentCategory
+                        && AudioTool.editor.currentProject.currentCategory.name // qmllint disable missing-property
                         !== category_box.currentText) {
-                    audio_editor.setCurrentCategory(currentIndex)
+                    AudioTool.editor.setCurrentCategory(currentIndex)
                 }
             }
         }
@@ -130,12 +127,12 @@ CustomToolBar {
             toolTipText: qsTr("Rename Category")
             enabled: category_box.model.length > 0
             onClicked: {
-                rename_dialog.mode = 1
-                rename_dialog.title = qsTr("Rename Category")
-                rename_dialog.origName = category_box.currentText
-                rename_dialog.x = category_box.x
-                rename_dialog.y = 0
-                rename_dialog.open()
+                root.renameDialog.mode = 1
+                root.renameDialog.title = qsTr("Rename Category")
+                root.renameDialog.originalName = category_box.currentText
+                root.renameDialog.x = category_box.x
+                root.renameDialog.y = 0
+                root.renameDialog.open()
             }
         }
 
@@ -145,11 +142,11 @@ CustomToolBar {
             toolTipText: qsTr("Delete Category")
             enabled: category_box.model.length > 0
             onClicked: {
-                delete_dialog.x = category_box.x
-                delete_dialog.y = 0
-                delete_dialog.element = audio_editor.currentProject.currentCategory
-                delete_dialog.mode = 1
-                delete_dialog.open()
+                root.deleteDialog.x = category_box.x
+                root.deleteDialog.y = 0
+                root.deleteDialog.element = AudioTool.editor.currentProject.currentCategory
+                root.deleteDialog.mode = 1
+                root.deleteDialog.open()
             }
         }
 
@@ -162,19 +159,17 @@ CustomToolBar {
             textRole: "name"
 
             model: {
-                audio_editor && audio_editor.currentProject
-                        && audio_editor.currentProject.currentCategory ? audio_editor.currentProject.currentCategory.scenarios : []
+                AudioTool.editor.currentProject
+                        && AudioTool.editor.currentProject.currentCategory ? AudioTool.editor.currentProject.currentCategory.scenarios : []
             }
 
             currentIndex: {
-                audio_editor && audio_editor.currentProject
-                        && audio_editor.currentProject.currentCategory ? audio_editor.currentProject.currentCategory.scenarioIndex : -1
+                AudioTool.editor.currentProject
+                        && AudioTool.editor.currentProject.currentCategory ? AudioTool.editor.currentProject.currentCategory.scenarioIndex : -1
             }
 
             onCurrentTextChanged: {
-                if (audio_editor) {
-                    audio_editor.setCurrentScenario(currentIndex)
-                }
+                AudioTool.editor.setCurrentScenario(currentIndex)
             }
         }
 
@@ -184,12 +179,12 @@ CustomToolBar {
             toolTipText: qsTr("Rename Scenario")
             enabled: scenario_box.model.length > 0
             onClicked: {
-                rename_dialog.mode = 2
-                rename_dialog.title = qsTr("Rename Scenario")
-                rename_dialog.origName = scenario_box.currentText
-                rename_dialog.x = scenario_box.x
-                rename_dialog.y = 0
-                rename_dialog.open()
+                root.renameDialog.mode = 2
+                root.renameDialog.title = qsTr("Rename Scenario")
+                root.renameDialog.originalName = scenario_box.currentText
+                root.renameDialog.x = scenario_box.x
+                root.renameDialog.y = 0
+                root.renameDialog.open()
             }
         }
 
@@ -199,11 +194,11 @@ CustomToolBar {
             toolTipText: qsTr("Delete Scenario")
             enabled: scenario_box.model.length > 0
             onClicked: {
-                delete_dialog.x = scenario_box.x
-                delete_dialog.y = 0
-                delete_dialog.element = audio_editor.currentProject.currentScenario
-                delete_dialog.mode = 2
-                delete_dialog.open()
+                root.deleteDialog.x = scenario_box.x
+                root.deleteDialog.y = 0
+                root.deleteDialog.element = AudioTool.editor.currentProject.currentScenario
+                root.deleteDialog.mode = 2
+                root.deleteDialog.open()
             }
         }
 
@@ -218,7 +213,7 @@ CustomToolBar {
         CustomToolBarButton {
             iconText: FontAwesome.arrowDownAZ
             toolTipText: qsTr("Sort elements alphabetically")
-            onClicked: audio_editor.sortElements()
+            onClicked: AudioTool.editor.sortElements()
         }
 
         CustomToolBarButton {
@@ -238,15 +233,14 @@ CustomToolBar {
                 x: parent.width - width * 1.5
                 y: parent.height - height * 1.5
 
-                color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                color: parent.mouseArea.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
 
                 background: Rectangle {
                     color: palette.alternateBase
                 }
             }
 
-            onClicked: audio_editor.removeMissingFiles(audio_editor.name,
-                                                       audio_editor.type)
+            onClicked: AudioTool.editor.removeMissingFiles(AudioTool.editor.name, AudioTool.editor.type) // qmllint disable missing-property
         }
     }
 }

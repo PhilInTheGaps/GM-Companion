@@ -68,6 +68,7 @@ void TestCustomObjectList::addItems(TestModel &model)
     auto *item1 = createObject(QStringLiteral("item1"));
     auto *item2 = createObject(QStringLiteral("item2"));
     auto *item3 = createObject(QStringLiteral("item3"));
+    auto *item4 = createObject(QStringLiteral("item4"));
 
     model.append(item0);
     model.append(item1);
@@ -82,6 +83,10 @@ void TestCustomObjectList::addItems(TestModel &model)
     QCOMPARE(model.rowCount(), 4);
     QCOMPARE(model.get(0)->objectName(), QStringLiteral("item3"));
 
+    QVERIFY2(model.insert(4, item4), "Could not insert at the end");
+    QCOMPARE(model.rowCount(), 5);
+    QCOMPARE(model.get(4)->objectName(), QStringLiteral("item4"));
+
     QCOMPARE(model.rowCount(), model.getAll().count());
 }
 
@@ -89,7 +94,7 @@ void TestCustomObjectList::removeItems(TestModel &model)
 {
     QVERIFY(!model.removeRows(0, 100));
 
-    QVERIFY(model.removeRows(2, 2));
+    QVERIFY(model.removeRows(2, 3));
     QCOMPARE(model.rowCount(), 2);
 
     QVERIFY(model.removeRow(0));

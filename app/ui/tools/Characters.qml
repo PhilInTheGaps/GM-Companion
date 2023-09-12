@@ -1,15 +1,13 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
 import "./characters"
-import "../defines.js" as Defines
 
 Page {
     id: root
 
-    Component.onCompleted: character_tool.loadData()
+    Component.onCompleted: CharacterTool.loadData()
 
     header: ToolBar {
         id: top_rect
@@ -25,7 +23,7 @@ Page {
             CheckBox {
                 text: qsTr("Active Characters")
                 checked: true
-                onClicked: character_tool.displayActiveCharacters(checked)
+                onClicked: CharacterTool.displayActiveCharacters(checked)
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -37,16 +35,20 @@ Page {
             anchors.bottom: parent.bottom
 
             Repeater {
-                model: character_tool.categories
+                model: CharacterTool.categories
 
                 CustomToolBarButton {
+                    id: category_delegate
+                    required property string modelData
+                    required property int index
+
                     buttonText: modelData
-                    onClicked: character_tool.setCurrentCategory(index)
+                    onClicked: CharacterTool.setCurrentCategory(index)
                     usesFixedWidth: false
                     pointSize: 12
 
                     Rectangle {
-                        visible: index === character_tool.categoryIndex
+                        visible: category_delegate.index === CharacterTool.categoryIndex
 
                         color: palette.text
                         height: 1
@@ -77,7 +79,7 @@ Page {
         anchors.leftMargin: 5
         clip: true
 
-        currentIndex: character_tool.pageIndex
+        currentIndex: CharacterTool.pageIndex
         interactive: false
 
         Loader {

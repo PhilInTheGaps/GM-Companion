@@ -1,4 +1,10 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.19)
+
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
 set(HEADERS
     service.h
@@ -70,6 +76,13 @@ set(SOURCES
 
 qt_add_library(services STATIC ${HEADERS} ${SOURCES})
 
+qt_add_qml_module(services
+    URI services
+    SOURCES
+        ${HEADERS}
+        ${SOURCES}
+)
+
 qt_add_resources(services "services-resources"
     PREFIX "/"
     BASE resources
@@ -77,7 +90,13 @@ qt_add_resources(services "services-resources"
         resources/services/auth-success.html
         resources/services/nextcloud/getFileList.xml)
 
-target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(services
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/spotify
+        ${CMAKE_CURRENT_SOURCE_DIR}/google
+        ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud)
 
 target_link_libraries(services
     PUBLIC

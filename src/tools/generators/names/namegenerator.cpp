@@ -8,19 +8,15 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLoggingCategory>
-#include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmNameGenerator, "gm.generators.names")
 
-NameGenerator::NameGenerator(const QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), a_currentGenerator(nullptr)
+auto NameGenerator::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> NameGenerator *
 {
-    if (engine)
-    {
-        engine->rootContext()->setContextProperty(u"name_generator"_s, this);
-    }
+    Q_UNUSED(jsEngine)
+    return new NameGenerator(qmlEngine);
 }
 
 void NameGenerator::loadData()
@@ -121,11 +117,13 @@ auto NameGenerator::loadCategory(int index) -> bool
 {
     if (index < 0 || index >= m_generatorLists.length())
     {
-        generators({});
+        a_generators.clear();
+        emit generatorsChanged();
         return false;
     }
 
-    generators(m_generatorLists[index]);
+    a_generators = m_generatorLists.at(index);
+    emit generatorsChanged();
     return true;
 }
 
@@ -138,7 +136,7 @@ auto NameGenerator::loadGenerator(int index) -> bool
         return false;
     }
 
-    a_currentGenerator = qAsConst(a_generators)[index];
+    a_currentGenerator = a_generators.at(index);
     emit currentGeneratorChanged(a_currentGenerator);
     return true;
 }

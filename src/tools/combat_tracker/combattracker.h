@@ -8,25 +8,37 @@
 #include <QFile>
 #include <QList>
 #include <QObject>
-#include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 
 class CombatTracker : public AbstractTool
 {
     Q_OBJECT
-    Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
-    Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
+    QML_NAMED_ELEMENT(CombatTrackerTool)
+    QML_SINGLETON
 
 public:
-    explicit CombatTracker(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    CombatTracker() = delete;
+    explicit CombatTracker(QQmlEngine *qmlEngine, QObject *parent = nullptr);
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *;
 
+    Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
     [[nodiscard]] int currentRound() const
     {
         return m_state.currentRound();
     }
-    [[nodiscard]] int currentIndex() const
+
+    Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
+    [[nodiscard]] auto currentIndex() const -> int
     {
         return m_state.currentIndex();
+    }
+
+    Q_PROPERTY(CombatantListModel *model READ model CONSTANT)
+    [[nodiscard]] auto model() -> CombatantListModel *
+    {
+        return &m_state.model();
     }
 
     Q_INVOKABLE void next();

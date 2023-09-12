@@ -1,14 +1,20 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import "../.."
+import "../../../../../common"
 
 Column {
-    id: column
+    id: root
 
-    property bool enable_move_buttons: true
+    required property CustomFileDialog fileDialog
+    required property IconFinderUnsplash unsplashDialog
+    required property Dialog largeImageDialog
+
+    property bool enableMoveButtons: true
     signal moveUp
     signal moveDown
 
-    property bool enable_delete: true
+    property bool enableDelete: true
     signal deleteClicked
 
     anchors.left: parent.left
@@ -18,11 +24,19 @@ Column {
     // Name, move, delete
     ElementNameView {
         id: row0
+        enableMoveButtons: root.enableMoveButtons
+        enableDelete: root.enableDelete
+
+        onDeleteClicked: root.deleteClicked()
     }
 
     // Icon
     ElementIconView {
         id: row1
+
+        fileDialog: root.fileDialog
+        unsplashDialog: root.unsplashDialog // qmllint disable incompatible-type
+        largeImageDialog: root.largeImageDialog
     }
 
     // Playback Mode

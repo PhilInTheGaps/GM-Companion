@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 Item {
     id: root
@@ -23,10 +23,22 @@ Item {
             alwaysRunToEnd: true
             running: false
 
-            NumberAnimation { to: -label.scrollLength ; duration: label.implicitWidth * 10; easing.type: Easing.Linear}
-            PauseAnimation { duration: 1000 }
-            NumberAnimation { to: 0 ; duration: 2000 ; easing.type: Easing.OutSine}
-            PauseAnimation { duration: 1000 }
+            NumberAnimation {
+                to: -label.scrollLength
+                duration: label.implicitWidth * 10
+                easing.type: Easing.Linear
+            }
+            PauseAnimation {
+                duration: 1000
+            }
+            NumberAnimation {
+                to: 0
+                duration: 2000
+                easing.type: Easing.OutSine
+            }
+            PauseAnimation {
+                duration: 1000
+            }
         }
     }
 

@@ -8,7 +8,7 @@ ConverterProject::ConverterProject(const QString &name, QObject *parent) : Conve
 }
 
 ConverterProject::ConverterProject(const QString &name, const QList<ConverterCategory *> &categories, QObject *parent)
-    : QObject{parent}, a_name(name), a_categories(categories), a_version(2)
+    : QObject{parent}, a_name(name), a_categories(categories)
 {
 }
 
@@ -20,7 +20,7 @@ ConverterProject::ConverterProject(const QJsonObject &json, QObject *parent)
     const auto categories = json["categories"_L1].toArray();
     a_categories.reserve(categories.size());
 
-    for (const auto &category : categories)
+    foreach (const auto &category, categories)
     {
         a_categories << new ConverterCategory(category.toObject(), this);
     }
@@ -37,4 +37,10 @@ auto ConverterProject::toJson() const -> QJsonDocument
 
     const QJsonObject json{{"name", name()}, {"version", version()}, {"categories", categoriesJson}};
     return QJsonDocument(json);
+}
+
+void ConverterProject::setCategories(const QList<ConverterCategory *> &categories)
+{
+    a_categories = categories;
+    emit categoriesChanged();
 }

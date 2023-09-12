@@ -1,8 +1,5 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.ScrollIndicator {
     id: control
@@ -20,7 +17,7 @@ T.ScrollIndicator {
         implicitWidth: 2
         implicitHeight: 2
 
-        color: Colors.button
+        color: palette.button
         visible: control.size < 1.0
         opacity: 0.0
 
@@ -28,8 +25,7 @@ T.ScrollIndicator {
             name: "active"
             when: control.active
             PropertyChanges {
-                target: control.contentItem
-                opacity: 0.75
+                control.contentItem.opacity: 0.75
             }
         }
 

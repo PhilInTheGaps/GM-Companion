@@ -1,8 +1,9 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 import "../../common"
 
 Rectangle {
@@ -37,7 +38,7 @@ Rectangle {
         }
 
         onAccepted: {
-            notes_tool.createBook(name_field.text)
+            NotesTool.createBook(name_field.text)
             name_field.clear()
         }
 
@@ -58,7 +59,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        model: notes_tool.notesModel ? notes_tool.notesModel.childItems : []
+        model: NotesTool.notesModel ? NotesTool.notesModel.childItems : [] // qmllint disable unresolved-type
         itemIcon: FontAwesome.fileLines
     }
 }

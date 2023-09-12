@@ -1,16 +1,17 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
-import IconFonts
-import "../../defines.js" as Defines
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
+import src
+import "../.."
 import "../../common"
 
 Rectangle {
-    id: side_bar
-    color: palette.dark
-    width: Defines.SIDEBAR_WIDTH
+    id: root
 
     signal openEditor
+
+    color: palette.dark
+    width: Sizes.sidebarWidth
 
     ProjectComboBoxWithEditorButton {
         id: top_bar
@@ -19,19 +20,18 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: converter_tool ? converter_tool.projects : []
-        emptyString: converter_tool
-                     && converter_tool.isLoading ? qsTr("Loading ...") : qsTr(
+        model: ConverterTool.projects
+        emptyString: ConverterTool.isLoading ? qsTr("Loading ...") : qsTr(
                                                        "No Units")
 
         onCurrentIndexChanged: function (index) {
-            if (!converter_tool || converter_tool.projects.length < 1)
+            if (ConverterTool.projects.length < 1)
                 return
 
-            converter_tool.currentProject = converter_tool.projects[index]
+            ConverterTool.currentProject = ConverterTool.projects[index]
         }
 
-        onEditorButtonClicked: openEditor()
+        onEditorButtonClicked: root.openEditor()
     }
 
     ScrollView {
@@ -55,20 +55,18 @@ Rectangle {
             Repeater {
                 id: types_repeater
 
-                model: converter_tool
-                       && converter_tool.currentProject ? converter_tool.currentProject.categories : []
+                model: ConverterTool.currentProject ? ConverterTool.currentProject.categories : []
 
                 CustomButton {
+                    required property ConverterCategory modelData
+
                     buttonText: qsTranslate("Units", modelData.name)
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
                     onClicked: {
-                        if (!converter_tool)
-                            return
-
-                        converter_tool.currentCategory = modelData
+                        ConverterTool.currentCategory = modelData
                     }
                 }
             }

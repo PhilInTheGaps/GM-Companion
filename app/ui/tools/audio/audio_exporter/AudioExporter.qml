@@ -1,15 +1,16 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
+import src
 import "../../../common"
-import "../../../colors.js" as Colors
+import "../../.."
 
 Dialog {
     id: dialog
     title: qsTr("Export Audio Files")
     modal: true
 
-    FileDialog {
+    CustomFileDialog {
         id: file_dialog
         foldersOnly: true
         textField: path_text_field
@@ -23,7 +24,7 @@ Dialog {
             anchors.bottom: parent.bottom
             width: parent.width / 4
 
-            color: Colors.dark
+            color: palette.dark
             border.color: Colors.border
             border.width: 1
 
@@ -33,7 +34,7 @@ Dialog {
                 anchors.fill: parent
                 anchors.margins: 5
 
-                model: audio_exporter ? audio_exporter.model.childItems : []
+                model: AudioTool.editor.exporter.model ? AudioTool.editor.exporter.model.childItems : [] // qmllint disable missing-property
                 itemIcon: FontAwesome.bars
             }
         }
@@ -65,7 +66,7 @@ Dialog {
                     selectByMouse: true
                     placeholderText: qsTr("Export Folder")
 
-                    onTextChanged: audio_exporter.setPath(text)
+                    onTextChanged: AudioTool.editor.exporter.setPath(text)
                 }
 
                 Button {
@@ -92,7 +93,7 @@ Dialog {
                     property bool inProgress: Math.abs(
                                                   progress_bar.value - 0) >= Number.EPSILON
 
-                    value: audio_exporter.progress
+                    value: AudioTool.editor.exporter.progress
                     anchors.left: parent.left
                     anchors.right: buttons.left
                     anchors.top: parent.top
@@ -128,7 +129,7 @@ Dialog {
                         enabled: !progress_bar.inProgress
 
                         DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
-                        onClicked: audio_exporter.exportFiles()
+                        onClicked: AudioTool.editor.exporter.exportFiles()
                     }
 
                     standardButtons: Dialog.Close

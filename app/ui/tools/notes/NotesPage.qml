@@ -1,11 +1,46 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import CustomComponents
+import src
 
 Item {
     id: root
 
-    property alias textedit: textedit.edit
+    property alias textArea: textedit.area
+
+    function onSave() {
+        if (NotesTool.currentPage) {
+            if (NotesTool.editMode) {
+                // Trim whitespace
+                if (textArea.text.endsWith(" ")
+                        || textArea.text.startsWith(" ")) {
+                    textedit.text = textedit.text.trim()
+                }
+
+                // Ensure newline
+                if (!textedit.text.endsWith("\n")) {
+                    textArea.append("\n")
+                }
+            }
+
+            NotesTool.currentPage.save()
+        }
+    }
+
+    Shortcut {
+        sequences: [StandardKey.Save]
+        onActivated: root.onSave()
+        context: Qt.ApplicationShortcut
+    }
+
+    Connections {
+        target: NotesTool
+
+        function onSetCursorPosition(position) {
+            textedit.justChangedCursor = true
+            textedit.tempCursorPosition = position
+            root.textArea.cursorPosition = position
+        }
+    }
 
     CustomTextEdit {
         id: textedit
@@ -18,65 +53,34 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        background.color: palette.base
-        background.border.width: 0
+        color: palette.base
+        border.width: 0
         font.pointSize: 12
 
-        edit.readOnly: !notes_tool.currentPage || !notes_tool.editMode
+        area.readOnly: !NotesTool.currentPage || !NotesTool.editMode
 
         Component.onCompleted: {
-            notes_tool.qmlTextDoc = textDocument
+            NotesTool.qmlTextDoc = textDocument
         }
 
-        onCursorPositionChanged: function (position) {
+        onCursorPositionChanged: (position) => {
             // Sometimes the cursor position changes again
             // after it was manually set, so here is
             // an ugly workaround for that.
             if (position !== tempCursorPosition
-                    && position !== textedit.edit.length) {
+                    && position !== textedit.area.length) {
                 justChangedCursor = false
 
-                if (notes_tool.currentPage) {
-                    notes_tool.currentPage.cursorPosition = position
+                if (NotesTool.currentPage) {
+                    NotesTool.currentPage.cursorPosition = position
                 }
             } else if (justChangedCursor) {
-                textedit.edit.cursorPosition = tempCursorPosition
+                textedit.area.cursorPosition = tempCursorPosition
             }
         }
 
-        onLinkClicked: function (link) {
-            notes_tool.linkClicked(link)
-        }
-
-        Connections {
-            target: main_window
-            function onSave() {
-                if (notes_tool.currentPage) {
-                    if (notes_tool.editMode) {
-                        // Trim whitespace
-                        if (textedit.edit.text.endsWith(" ")
-                                || textedit.edit.text.startsWith(" ")) {
-                            textedit.text = textedit.text.trim()
-                        }
-
-                        // Ensure newline
-                        if (!textedit.text.endsWith("\n")) {
-                            textedit.edit.append("\n")
-                        }
-                    }
-
-                    notes_tool.currentPage.save()
-                }
-            }
-        }
-
-        Connections {
-            target: notes_tool
-            function onSetCursorPosition(position) {
-                textedit.justChangedCursor = true
-                textedit.tempCursorPosition = position
-                textedit.edit.cursorPosition = position
-            }
+        onLinkClicked: (link) => {
+            NotesTool.linkClicked(link)
         }
     }
 }

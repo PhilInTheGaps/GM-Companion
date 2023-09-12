@@ -1,13 +1,15 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import CustomComponents 1.0
-
+import CustomComponents
+import common
 import "../../../common"
 
 CustomToolBarButton {
-    id: icon_button
-    property var text_field
+    id: root
+
+    required property TextField textField
+    required property CustomFileDialog fileDialog
 
     width: height
     anchors.margins: 0
@@ -19,13 +21,11 @@ CustomToolBarButton {
     pointSize: 12
 
     onClicked: {
-        audio_editor_file_dialog.title = qsTr("Set Icon")
-
-        audio_editor_file_dialog.foldersOnly = false
-        audio_editor_file_dialog.textField = text_field
-        audio_editor_file_dialog.folder = settings_manager.getPath("resources")
-        audio_editor_file_dialog.replacePath = settings_manager.getPath(
-                    "resources")
-        audio_editor_file_dialog.open()
+        root.fileDialog.title = qsTr("Set Icon")
+        root.fileDialog.foldersOnly = false
+        root.fileDialog.textField = textField
+        root.fileDialog.folder = SettingsManager.getPath("resources")
+        root.fileDialog.replacePath = SettingsManager.getPath("resources")
+        root.fileDialog.open()
     }
 }

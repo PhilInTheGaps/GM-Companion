@@ -1,9 +1,13 @@
 #pragma once
 
+#include "qmlsingletonfactory.h"
 #include "settingsmanager.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QJSEngine>
 #include <QObject>
+#include <QQmlEngine>
 #include <QVariant>
+#include <QtQml/qqmlregistration.h>
 
 #define SETTINGS_PROPERTY(TYPE, NAME, DEFAULT) SETTINGS_PROPERTY2(TYPE, NAME, DEFAULT, DEFAULT_GROUP)
 
@@ -28,6 +32,9 @@ public:                                                                         
 class QuickSettingsManager : public QObject
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(SettingsManager)
+    QML_SINGLETON
+    QML_SINGLETON_FACTORY(QuickSettingsManager)
 
     // General Settings
     SETTINGS_PROPERTY(bool, showToolNames, false)
@@ -62,8 +69,7 @@ class QuickSettingsManager : public QObject
                        QStringLiteral("Spotify"))
 
 public:
-    using QObject::QObject;
-
+    QuickSettingsManager() = delete;
     Q_INVOKABLE static bool has(const QString &setting, const QString &group);
 
     Q_INVOKABLE static QString getPath(const QString &path);
@@ -78,6 +84,12 @@ public:
 
     Q_INVOKABLE static void setPassword(const QString &username, const QString &password, const QString &service);
 
+    static auto instance() -> QuickSettingsManager *;
+
 signals:
     void languageChanged(QString language);
+
+private:
+    using QObject::QObject;
+    inline static QuickSettingsManager *m_instance = nullptr;
 };

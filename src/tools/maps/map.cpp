@@ -14,6 +14,10 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmMapsMap, "gm.maps.map")
 
+Map::Map(QObject *parent) : QObject(parent), m_markers(this)
+{
+}
+
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {

@@ -2,14 +2,15 @@
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class ServiceStatus : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
-    ServiceStatus(QObject *parent) : QObject(parent)
-    {
-    }
+    using QObject::QObject;
 
     enum class Type
     {

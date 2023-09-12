@@ -1,4 +1,10 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.19)
+
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
 # configure markdown lib
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h.in
@@ -58,16 +64,29 @@ set(SOURCES
     ${SRC_PROJECTS}
     abstracttool.h
     abstracttool.cpp
+    qmlsingletonfactory.h
     exceptions/notimplementedexception.h)
 
-qt_add_library(common STATIC ${SOURCES})
-target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+qt_add_library(common STATIC)
+qt_add_qml_module(common
+    URI common
+    SOURCES ${SOURCES}
+)
+
+target_include_directories(common
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/models
+        ${CMAKE_CURRENT_SOURCE_DIR}/updates
+        ${CMAKE_CURRENT_SOURCE_DIR}/settings)
 
 target_link_libraries(common
     PUBLIC
     propertyhelper
     Qt6::Core
     Qt6::Gui
+    Qt6::Qml
     Qt6::Network
     PRIVATE
     ${MARKDOWN_LIBRARY}

@@ -12,17 +12,11 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioEditor, "gm.audio.editor")
 
-AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), a_isSaved(true), addonElementManager(this), audioExporter(this), fileBrowser(engine, this),
-      unsplashParser(engine, this), fileModel(this)
+AudioEditor::AudioEditor(QQmlEngine *engine, QObject *parent)
+    : AbstractTool(parent), m_addonElementManager(this), m_audioExporter(this), m_fileBrowser(this),
+      m_unsplashParser(engine, this), m_fileModel(this)
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
-
-    engine->rootContext()->setContextProperty(u"audio_exporter_addon_manager"_s, &audioExporter);
-    engine->rootContext()->setContextProperty(u"audio_exporter"_s, &audioExporter);
-    engine->rootContext()->setContextProperty(u"audio_addon_element_manager"_s, &addonElementManager);
-    engine->rootContext()->setContextProperty(u"audio_editor_file_browser"_s, &fileBrowser);
-    engine->rootContext()->setContextProperty(u"audio_editor_file_model"_s, &fileModel);
 
     connect(this, &AudioEditor::currentScenarioChanged, this, &AudioEditor::onCurrentScenarioChanged);
 }
@@ -41,12 +35,12 @@ void AudioEditor::loadData()
 void AudioEditor::onFoundProjects(const std::vector<AudioProject *> &projects)
 {
     qCDebug(gmAudioEditor) << "Projects changed!";
-    m_projects.clear();
-    m_projects.reserve(projects.size());
+    a_projects.clear();
+    a_projects.reserve(projects.size());
 
     foreach (auto *project, projects)
     {
-        m_projects << project;
+        a_projects << project;
 
         if (project)
         {
@@ -69,9 +63,9 @@ void AudioEditor::setCurrentProject(int index)
 {
     qCDebug(gmAudioEditor) << "Change project:" << index;
 
-    if (Utils::isInBounds(m_projects, index))
+    if (Utils::isInBounds(a_projects, index))
     {
-        setCurrentProject(m_projects.at(index));
+        setCurrentProject(a_projects.at(index));
     }
     else
     {
@@ -88,7 +82,7 @@ void AudioEditor::setCurrentProject(AudioProject *project)
     if (m_currentProject == project) return;
 
     m_currentProject = project;
-    audioExporter.setProject(project);
+    m_audioExporter.setProject(project);
     emit currentProjectChanged();
     emit currentCategoryChanged();
     emit currentScenarioChanged();
@@ -102,9 +96,9 @@ void AudioEditor::setCurrentProject(AudioProject *project)
  */
 auto AudioEditor::projectIndex() const -> int
 {
-    if (!m_currentProject || m_projects.isEmpty()) return -1;
+    if (!m_currentProject || a_projects.isEmpty()) return -1;
 
-    return m_projects.indexOf(m_currentProject);
+    return a_projects.indexOf(m_currentProject);
 }
 
 /**
@@ -119,7 +113,7 @@ void AudioEditor::createProject(const QString &name)
 
     auto *project = new AudioProject(name, 4, {}, this);
     project->isSaved(false);
-    m_projects.append(project);
+    a_projects.append(project);
     emit projectsChanged();
 
     connect(project, &AudioProject::isSavedChanged, this, &AudioEditor::onProjectSavedChanged);
@@ -136,7 +130,7 @@ void AudioEditor::createProjectFromTemplate(AudioProject *other)
 
     auto *project = new AudioProject(*other, this);
     project->isSaved(false);
-    m_projects.append(project);
+    a_projects.append(project);
     emit projectsChanged();
 
     connect(project, &AudioProject::isSavedChanged, this, &AudioEditor::onProjectSavedChanged);
@@ -175,7 +169,7 @@ void AudioEditor::deleteProject()
     }
 
     auto *project = m_currentProject;
-    m_projects.removeOne(project);
+    a_projects.removeOne(project);
     setCurrentProject(0);
 
     AudioSaveLoad::deleteProject(project);
@@ -388,7 +382,7 @@ void AudioEditor::createScenario(const QString &name, bool isSubscenario) const
         if (!category->currentScenario()->containsScenario(name))
         {
             auto *scenario =
-                new AudioScenario(name, category->currentScenario()->path(), {}, category->currentScenario());
+                new AudioScenario(name, category->currentScenario()->path(), {}, {}, category->currentScenario());
 
             if (!category->currentScenario()->addScenario(scenario))
             {
@@ -398,7 +392,7 @@ void AudioEditor::createScenario(const QString &name, bool isSubscenario) const
     }
     else if (!category->containsScenario(name))
     {
-        auto *scenario = new AudioScenario(name, category->path(), {}, category);
+        auto *scenario = new AudioScenario(name, category->path(), {}, {}, category);
 
         if (!category->addScenario(scenario, true))
         {
@@ -546,7 +540,7 @@ void AudioEditor::loadElement(QObject *element)
 
     qCDebug(gmAudioEditor) << "Loading element" << QString(*m_currentElement) << "...";
 
-    fileModel.setElements(m_currentElement->files());
+    m_fileModel.setElements(m_currentElement->files());
     emit currentElementChanged();
 
     foreach (const auto *file, m_currentElement->files())
@@ -595,7 +589,7 @@ auto AudioEditor::loadFirstElement(AudioScenario *scenario) -> bool
  */
 void AudioEditor::clearCurrentElement()
 {
-    fileModel.clear();
+    m_fileModel.clear();
     m_currentElement = nullptr;
     emit currentElementChanged();
 }
@@ -716,9 +710,9 @@ void AudioEditor::saveProject()
 {
     qCDebug(gmAudioEditor) << "Saving projects ...";
 
-    if (!m_projects.empty())
+    if (!a_projects.empty())
     {
-        foreach (auto *project, m_projects)
+        foreach (auto *project, a_projects)
         {
             if (project == m_currentProject)
             {
@@ -759,11 +753,11 @@ auto AudioEditor::addAudioFile(AudioFile *audioFile) -> bool
     if (m_currentElement->type() == AudioElement::Type::Radio)
     {
         m_currentElement->setFiles({audioFile});
-        fileModel.setElements({audioFile});
+        m_fileModel.setElements({audioFile});
     }
     else if (m_currentElement->addFile(audioFile))
     {
-        fileModel.append(audioFile);
+        m_fileModel.append(audioFile);
     }
     else
     {
@@ -873,7 +867,7 @@ void AudioEditor::removeFile(int index, bool findMissing)
 
     if (m_currentElement->removeFile(index))
     {
-        fileModel.remove(index);
+        m_fileModel.remove(index);
         emit currentElementChanged();
 
         if (findMissing)
@@ -926,7 +920,7 @@ void AudioEditor::moveFile(int index, int positions)
 
     if (m_currentElement->moveFile(index, positions))
     {
-        fileModel.moveRow(QModelIndex(), index, QModelIndex(), index + positions);
+        m_fileModel.moveRow(QModelIndex(), index, QModelIndex(), index + positions);
         emit currentElementChanged();
     }
 }

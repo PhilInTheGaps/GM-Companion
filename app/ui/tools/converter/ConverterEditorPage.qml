@@ -1,11 +1,15 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import common
+import src
+import "../.."
 
 Page {
     id: root
+
     signal backToTool
 
     enum Mode {
@@ -16,11 +20,11 @@ Page {
 
     function modeToString(mode) {
         switch (mode) {
-        case ConverterEditor.Mode.Project:
+        case ConverterEditorPage.Mode.Project:
             return qsTr("project")
-        case ConverterEditor.Mode.Category:
+        case ConverterEditorPage.Mode.Category:
             return qsTr("category")
-        case ConverterEditor.Mode.Unit:
+        case ConverterEditorPage.Mode.Unit:
             return qsTr("unit")
         }
     }
@@ -32,10 +36,10 @@ Page {
     Dialog {
         id: delete_dialog
         modal: true
-        title: qsTr("Delete ") + modeToString(delete_dialog.mode) + " "
+        title: qsTr("Delete ") + root.modeToString(delete_dialog.mode) + " "
                + (delete_dialog.element ? delete_dialog.element.name : "") + "?"
 
-        property int mode: ConverterEditor.Mode.Project
+        property int mode: ConverterEditorPage.Mode.Project
         property var element: undefined
 
         standardButtons: Dialog.Yes | Dialog.No
@@ -46,14 +50,14 @@ Page {
 
         onAccepted: {
             switch (delete_dialog.mode) {
-            case ConverterEditor.Mode.Project:
-                converter_editor.deleteProject(element)
+            case ConverterEditorPage.Mode.Project:
+                ConverterTool.editor.deleteProject(element)
                 break
-            case ConverterEditor.Mode.Category:
-                converter_editor.deleteCategory(element)
+            case ConverterEditorPage.Mode.Category:
+                ConverterTool.editor.deleteCategory(element)
                 break
-            case ConverterEditor.Mode.Unit:
-                converter_editor.deleteUnit(element)
+            case ConverterEditorPage.Mode.Unit:
+                ConverterTool.editor.deleteUnit(element)
                 break
             }
         }
@@ -67,7 +71,7 @@ Page {
     Dialog {
         id: rename_dialog
         property var element: undefined
-        property int mode: ConverterEditor.Mode.Project
+        property int mode: ConverterEditorPage.Mode.Project
 
         modal: true
         title: ""
@@ -87,14 +91,14 @@ Page {
 
         onAccepted: {
             switch (rename_dialog.mode) {
-            case ConverterEditor.Mode.Project:
-                converter_editor.renameProject(element, rename_field.text)
+            case ConverterEditorPage.Mode.Project:
+                ConverterTool.editor.renameProject(element, rename_field.text)
                 break
-            case ConverterEditor.Mode.Category:
-                converter_editor.renameCategory(element, rename_field.text)
+            case ConverterEditorPage.Mode.Category:
+                ConverterTool.editor.renameCategory(element, rename_field.text)
                 break
-            case ConverterEditor.Mode.Unit:
-                converter_editor.renameUnit(element, rename_field.text)
+            case ConverterEditorPage.Mode.Unit:
+                ConverterTool.editor.renameUnit(element, rename_field.text)
                 break
             default:
                 console.log("Error: Rename dialog in undefined mode")
@@ -115,11 +119,11 @@ Page {
         enableSave: true
         enableExport: false
 
-        isSaved: converter_editor ? converter_editor.isSaved : true
+        isSaved: ConverterTool.editor ? ConverterTool.editor.isSaved : true
 
         onBackClicked: root.backToTool()
         onAddClicked: new_thing_dialog.open()
-        onSaveClicked: converter_editor.save()
+        onSaveClicked: ConverterTool.editor.save()
 
         Row {
             anchors.left: tool_bar.button_row.right
@@ -136,14 +140,14 @@ Page {
                 emptyString: qsTr("No Projects")
                 textRole: "name"
 
-                model: converter_editor ? converter_editor.projects : []
+                model: ConverterTool.editor ? ConverterTool.editor.projects : []
 
                 onCurrentIndexChanged: {
-                    if (!converter_editor
-                            || currentIndex >= converter_editor.projects.length)
+                    if (!ConverterTool.editor
+                            || currentIndex >= ConverterTool.editor.projects.length)
                         return
 
-                    converter_editor.currentProject = converter_editor.projects[currentIndex]
+                    ConverterTool.editor.currentProject = ConverterTool.editor.projects[currentIndex]
                 }
             }
 
@@ -153,9 +157,9 @@ Page {
                 toolTipText: qsTr("Rename Project")
                 enabled: project_combo_box.model.length > 0
                 onClicked: {
-                    rename_dialog.mode = ConverterEditor.Mode.Project
+                    rename_dialog.mode = ConverterEditorPage.Mode.Project
                     rename_dialog.title = qsTr("Rename Project")
-                    rename_dialog.element = converter_editor.currentProject
+                    rename_dialog.element = ConverterTool.editor.currentProject
                     rename_dialog.x = project_combo_box.x
                     rename_dialog.y = 0
                     rename_dialog.open()
@@ -170,8 +174,8 @@ Page {
                 onClicked: {
                     delete_dialog.x = project_combo_box.x
                     delete_dialog.y = 0
-                    delete_dialog.element = converter_editor.currentProject
-                    delete_dialog.mode = ConverterEditor.Mode.Project
+                    delete_dialog.element = ConverterTool.editor.currentProject
+                    delete_dialog.mode = ConverterEditorPage.Mode.Project
                     delete_dialog.open()
                 }
             }
@@ -181,7 +185,7 @@ Page {
     Rectangle {
         id: side_bar
         color: palette.dark
-        width: Defines.SIDEBAR_WIDTH
+        width: Sizes.sidebarWidth
 
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -214,20 +218,22 @@ Page {
                 Repeater {
                     id: categories_repeater
 
-                    model: converter_editor
-                           && converter_editor.currentProject ? converter_editor.currentProject.categories : []
+                    model: ConverterTool.editor.currentProject ? ConverterTool.editor.currentProject.categories : []
 
                     CustomButton {
+                        id: category_delegate
+                        required property ConverterCategory modelData
+
                         buttonText: modelData.name
 
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        anchors.left: parent ? parent.left : undefined
+                        anchors.right: parent ? parent.right : undefined
 
                         onClicked: {
-                            if (!converter_editor)
+                            if (!ConverterTool.editor)
                                 return
 
-                            converter_editor.currentCategory = modelData
+                            ConverterTool.editor.currentCategory = modelData
                         }
 
                         Row {
@@ -245,8 +251,8 @@ Page {
                                 onClicked: {
                                     rename_dialog.x = project_combo_box.x
                                     rename_dialog.y = 0
-                                    rename_dialog.element = modelData
-                                    rename_dialog.mode = ConverterEditor.Mode.Category
+                                    rename_dialog.element = category_delegate.modelData
+                                    rename_dialog.mode = ConverterEditorPage.Mode.Category
                                     rename_dialog.open()
                                 }
                             }
@@ -261,8 +267,8 @@ Page {
                                 onClicked: {
                                     delete_dialog.x = project_combo_box.x
                                     delete_dialog.y = 0
-                                    delete_dialog.element = modelData
-                                    delete_dialog.mode = ConverterEditor.Mode.Category
+                                    delete_dialog.element = category_delegate.modelData
+                                    delete_dialog.mode = ConverterEditorPage.Mode.Category
                                     delete_dialog.open()
                                 }
                             }
@@ -307,16 +313,20 @@ Page {
                 Repeater {
                     id: items_repeater
 
-                    model: converter_editor
-                           && converter_editor.currentCategory ? converter_editor.currentCategory.units : []
+                    model: ConverterTool.editor
+                           && ConverterTool.editor.currentCategory ? ConverterTool.editor.currentCategory.units : []
 
                     Rectangle {
+                        id: unit_delegate
+
+                        required property ConverterUnit modelData
+
                         color: palette.dark
                         border.color: palette.button
                         border.width: 1
 
                         width: item_row.width
-                        height: Defines.TOOLBAR_HEIGHT
+                        height: Sizes.toolbarHeight
 
                         Row {
                             id: item_row
@@ -338,13 +348,13 @@ Page {
                             }
 
                             TextField {
-                                text: modelData.name
+                                text: unit_delegate.modelData.name
                                 selectByMouse: true
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
                                 onTextEdited: {
-                                    converter_editor.renameUnit(modelData, text)
+                                    ConverterTool.editor.renameUnit(unit_delegate.modelData, text)
                                 }
                             }
 
@@ -359,21 +369,20 @@ Page {
                             TextField {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
-                                text: Number(modelData.value).toLocaleString(
+                                text: Number(unit_delegate.modelData.value).toLocaleString(
                                           Qt.locale(
-                                              settings_manager.languageBcp47),
+                                              SettingsManager.languageBcp47),
                                           'G', 8)
 
                                 selectByMouse: true
 
                                 validator: DoubleValidator {
                                     notation: DoubleValidator.ScientificNotation
-                                    locale: settings_manager.languageBcp47
+                                    locale: SettingsManager.languageBcp47
                                 }
 
                                 onEditingFinished: {
-                                    converter_editor.changeUnitValue(modelData,
-                                                                     text)
+                                    ConverterTool.editor.changeUnitValue(unit_delegate.modelData, text)
                                 }
                             }
 
@@ -385,8 +394,8 @@ Page {
 
                                 onClicked: {
                                     delete_dialog.center()
-                                    delete_dialog.element = modelData
-                                    delete_dialog.mode = ConverterEditor.Mode.Unit
+                                    delete_dialog.element = unit_delegate.modelData
+                                    delete_dialog.mode = ConverterEditorPage.Mode.Unit
                                     delete_dialog.open()
                                 }
                             }

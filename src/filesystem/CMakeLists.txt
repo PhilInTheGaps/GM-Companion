@@ -1,40 +1,43 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.19)
 
-set(HEADERS
-    file.h
-    fileaccess.h
-    fileaccesslocal.h
-    fileaccessnextcloud.h
-    fileaccessgoogledrive.h
-    fileaccessswitcher.h
-    multigethelper.h
-    results/fileresult.h
-    results/filedataresult.h
-    results/filelistresult.h
-    results/filecheckresult.h
-    results/filemulticheckresult.h
-    cache/filecache.h
-    cache/filecacheentry.h
-    filedialog/filedialog.h
-    filedialog/fileobject.h
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
+
+qt_add_library(filesystem STATIC)
+
+qt_add_qml_module(filesystem
+    URI filesystem
+    SOURCES
+        file.h
+        file.cpp
+        fileaccess.h
+        fileaccess.cpp
+        fileaccesslocal.h
+        fileaccesslocal.cpp
+        fileaccessnextcloud.h
+        fileaccessnextcloud.cpp
+        fileaccessgoogledrive.h
+        fileaccessgoogledrive.cpp
+        fileaccessswitcher.h
+        cache/filecache.h
+        cache/filecache.cpp
+        cache/filecacheentry.h
+        cache/filecacheentry.cpp
+        results/fileresult.h
+        results/fileresult.cpp
+        results/filelistresult.h
+        results/filelistresult.cpp
+        results/filecheckresult.h
+        results/filecheckresult.cpp
+        results/filemulticheckresult.h
+        results/filedataresult.h
+        results/filedataresult.cpp
+        multigethelper.h
 )
 
-set(SOURCES
-    file.cpp
-    fileaccess.cpp
-    fileaccesslocal.cpp
-    fileaccessnextcloud.cpp
-    fileaccessgoogledrive.cpp
-    cache/filecache.cpp
-    cache/filecacheentry.cpp
-    filedialog/filedialog.cpp
-    results/fileresult.cpp
-    results/filelistresult.cpp
-    results/filecheckresult.cpp
-    results/filedataresult.cpp
-)
-
-qt_add_library(filesystem STATIC ${HEADERS} ${SOURCES})
 target_include_directories(filesystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(filesystem

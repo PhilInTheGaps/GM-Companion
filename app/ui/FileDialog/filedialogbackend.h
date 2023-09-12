@@ -1,32 +1,34 @@
 #pragma once
 
-#include <QObject>
-#include <QFuture>
-#include "utils/fileutils.h"
-#include "file.h"
-
+#include "fileobject.h"
+#include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QFuture>
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 
-namespace Files {
+namespace Files
+{
 
-class FileDialog : public QObject
+class FileDialogBackend : public QObject
 {
     Q_OBJECT
-    AUTO_PROPERTY(QList<QObject*>, entries)
-    AUTO_PROPERTY(bool, folderMode)
-    AUTO_PROPERTY(bool, isLoading)
+    READ_LIST_PROPERTY(Files::FileObject, entries)
+    AUTO_PROPERTY_VAL2(bool, folderMode, false)
+    AUTO_PROPERTY_VAL2(bool, isLoading, false)
+    QML_ELEMENT
 public:
-    explicit FileDialog(QObject *parent = nullptr);
+    explicit FileDialogBackend(QObject *parent = nullptr);
 
     Q_PROPERTY(QString currentDir READ currentDir WRITE setCurrentDir NOTIFY currentDirChanged)
-    QString currentDir() const { return FileUtils::dirFromFolders(m_currentDir); }
-    void setCurrentDir(const QString& dir);
+    [[nodiscard]] auto currentDir() const -> QString;
+    void setCurrentDir(const QString &dir);
 
     Q_PROPERTY(bool canGoForward READ canGoForward NOTIFY canGoForwardChanged)
-    bool canGoForward() const { return m_forwardFolders.length() > 0; }
+    [[nodiscard]] auto canGoForward() const -> bool;
 
     Q_PROPERTY(bool canGoBack READ canGoBack NOTIFY canGoBackChanged)
-    bool canGoBack() const { return m_currentDir.length() > 1; }
+    [[nodiscard]] auto canGoBack() const -> bool;
 
     Q_INVOKABLE QString getSelected(int index) const;
 
@@ -37,7 +39,7 @@ public slots:
     void createFolder(const QString &folderName);
 
 signals:
-    void currentDirChanged(const QString& dir);
+    void currentDirChanged(const QString &dir);
     void canGoForwardChanged(bool canGo);
     void canGoBackChanged(bool canGo);
 
@@ -45,7 +47,7 @@ private:
     QStringList m_currentDir;
     QStringList m_forwardFolders;
 
-    QFuture<FileListResult*> m_currentFuture;
+    QFuture<FileListResult *> m_currentFuture;
 
     void updateFileList();
     void clearFileList();
@@ -55,7 +57,7 @@ private:
     void onFileListReceived(FileListResult *result);
 
 private slots:
-    void onCurrentDirChanged(const QString& dir);
+    void onCurrentDirChanged(const QString &dir);
 };
 
-}
+} // namespace Files

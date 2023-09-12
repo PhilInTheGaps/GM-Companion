@@ -1,11 +1,14 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import src
 import "./converter"
 
 Page {
     id: converter
 
-    Component.onCompleted: converter_tool.loadData()
+    Component.onCompleted: ConverterTool.loadData()
 
     StackView {
         id: stack
@@ -14,7 +17,7 @@ Page {
         initialItem: converter_page
     }
 
-    ConverterTool {
+    ConverterPage {
         id: converter_page
 
         onOpenEditor: {
@@ -25,7 +28,7 @@ Page {
     Component {
         id: converter_editor_component
 
-        ConverterEditor {
+        ConverterEditorPage {
             id: converter_editor_page
 
             onBackToTool: {

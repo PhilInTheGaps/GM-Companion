@@ -7,7 +7,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLoggingCategory>
-#include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -16,22 +15,15 @@ static constexpr auto DEFAULT_ICON = "\uf3c5";
 
 Q_LOGGING_CATEGORY(gmMapsTool, "gm.maps.tool")
 
-MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), mapListModel(this), mapMarkerModel(this)
+MapTool::MapTool(QObject *parent) : AbstractTool(parent), m_mapListModel(this), m_mapMarkerModel(this)
 {
     qCDebug(gmMapsTool()) << "Loading Map Tool ...";
-
-    engine->rootContext()->setContextProperty(u"map_tool"_s, this);
-    engine->rootContext()->setContextProperty(u"mapListModel"_s, &mapListModel);
-    engine->rootContext()->setContextProperty(u"mapMarkerModel"_s, &mapMarkerModel);
 }
 
-MapTool::~MapTool()
+auto MapTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> MapTool *
 {
-    foreach (auto *category, m_categories)
-    {
-        if (category) category->deleteLater();
-    }
+    Q_UNUSED(jsEngine)
+    return new MapTool(qmlEngine);
 }
 
 auto MapTool::categories() const -> QStringList
@@ -68,7 +60,7 @@ void MapTool::setCurrentCategory(int index)
     else
     {
         m_currentCategory = nullptr;
-        mapListModel.clear();
+        m_mapListModel.clear();
     }
 
     m_currentCategoryIndex = index;
@@ -100,7 +92,7 @@ void MapTool::setMarkerProperties(const QString &name, const QString &descriptio
         marker->icon(icon);
         marker->color(color);
         m_currentMap->saveMarkers();
-        mapMarkerModel.setElements(m_currentMap->markers()->elements());
+        m_mapMarkerModel.setElements(m_currentMap->markers()->elements());
         return;
     }
 
@@ -119,8 +111,8 @@ void MapTool::addMarker()
 
         m_currentMap->addMarker(new MapMarker(tr("New Marker"), u""_s, x, y, DEFAULT_ICON, DEFAULT_COLOR, this));
         m_currentMap->saveMarkers();
-        mapMarkerModel.setElements(m_currentMap->markers()->elements());
-        mapListModel.setElements(m_currentCategory->maps());
+        m_mapMarkerModel.setElements(m_currentMap->markers()->elements());
+        m_mapListModel.setElements(m_currentCategory->maps());
         return;
     }
 
@@ -137,7 +129,7 @@ void MapTool::setMapIndex(int index)
 
         if (m_currentMap)
         {
-            mapMarkerModel.setElements(m_currentMap->markers()->elements());
+            m_mapMarkerModel.setElements(m_currentMap->markers()->elements());
         }
     }
     else
@@ -152,10 +144,10 @@ void MapTool::setMapIndex(int index)
 
 auto MapTool::currentMarker() const -> MapMarker *
 {
-    const auto &elements = mapMarkerModel.elements();
+    const auto &elements = m_mapMarkerModel.elements();
     if (Utils::isInBounds(elements, markerIndex()))
     {
-        return mapMarkerModel.elements().at(markerIndex());
+        return m_mapMarkerModel.elements().at(markerIndex());
     }
 
     return nullptr;
@@ -167,8 +159,8 @@ void MapTool::deleteMarker(int markerIndex)
     {
         m_currentMap->deleteMarker(markerIndex);
         m_currentMap->saveMarkers();
-        mapMarkerModel.setElements(m_currentMap->markers()->elements());
-        mapListModel.setElements(m_currentCategory->maps());
+        m_mapMarkerModel.setElements(m_currentMap->markers()->elements());
+        m_mapListModel.setElements(m_currentCategory->maps());
         return;
     }
 
@@ -210,6 +202,6 @@ void MapTool::onMapsLoaded(const QString &category)
 {
     if (m_currentCategory && (category == m_currentCategory->name()))
     {
-        mapListModel.setElements(m_currentCategory->maps());
+        m_mapListModel.setElements(m_currentCategory->maps());
     }
 }

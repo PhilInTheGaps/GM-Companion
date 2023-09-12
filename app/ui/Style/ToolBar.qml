@@ -1,9 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.ToolBar {
     id: control
@@ -19,11 +16,11 @@ T.ToolBar {
                    || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
     background: Rectangle {
-        implicitHeight: Sizes.toolbarHeight
-        color: Colors.alternateBase
+        implicitHeight: StyleSizes.toolbarHeight
+        color: palette.alternateBase
 
         Rectangle {
-            color: Colors.dark
+            color: palette.dark
             anchors.top: control.position === ToolBar.Footer ? parent.top : undefined
             anchors.bottom: control.position === ToolBar.Header ? parent.bottom : undefined
             anchors.left: parent.left

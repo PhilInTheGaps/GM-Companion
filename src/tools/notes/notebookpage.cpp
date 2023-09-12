@@ -4,7 +4,7 @@ using namespace Qt::Literals::StringLiterals;
 
 int NoteBookPage::editCount = 0;
 
-NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *chapter) : TreeItem(name, depth, false, chapter)
+NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *parent) : TreeItem(name, depth, false, parent)
 {
     priority(0);
 }
@@ -27,7 +27,7 @@ void NoteBookPage::setContent(const QString &content, bool edited)
     if (edited)
     {
         setIsSaved(false);
-        wasEdited(true);
+        keepOpen(true);
     }
     else
     {
@@ -77,7 +77,7 @@ void NoteBookPage::close()
         setIsSaved(true);
     }
 
-    wasEdited(false);
+    keepOpen(false);
     isCurrent(false);
 
     emit closePage();

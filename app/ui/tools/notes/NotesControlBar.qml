@@ -1,15 +1,40 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import CustomComponents
 import IconFonts
-import "../../defines.js" as Defines
+import src
+import "../.."
 
 Item {
     id: root
 
-    property var textedit: undefined
+    property TextArea textArea
 
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.toolbarHeight
+
+    function insertMarkdown(open: string, close: string) {
+        if (!root.textArea || !NotesTool.currentPage || !NotesTool.editMode)
+            return
+
+        if (root.textArea.selectedText.length) {
+            root.textArea.insert(root.textArea.selectionStart, open)
+            root.textArea.insert(root.textArea.selectionEnd, close)
+            root.textArea.select(root.textArea.selectionStart,
+                                 root.textArea.selectionEnd - close.length)
+        } else {
+            root.textArea.insert(root.textArea.cursorPosition, open + close)
+
+            if (close.length) {
+                moveCursor(close.length * -1)
+            }
+        }
+    }
+
+    function moveCursor(positions: int) {
+        root.textArea.cursorPosition += positions
+    }
 
     Row {
         anchors.top: parent.top
@@ -24,17 +49,17 @@ Item {
             anchors.bottom: parent.bottom
 
             CustomToolBarButton {
-                iconText: notes_tool.editMode ? FontAwesome.eye : FontAwesome.penToSquare
+                iconText: NotesTool && NotesTool.editMode ? FontAwesome.eye : FontAwesome.penToSquare
 
-                onClicked: notes_tool.editMode = !notes_tool.editMode
+                onClicked: NotesTool.editMode = !NotesTool.editMode
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.floppyDisk
 
                 onClicked: {
-                    if (notes_tool.currentPage) {
-                        notes_tool.currentPage.save()
+                    if (NotesTool.currentPage) {
+                        NotesTool.currentPage.save()
                     }
                 }
             }
@@ -42,14 +67,14 @@ Item {
             CustomToolBarButton {
                 iconText: FontAwesome.lock
                 toolTipText: qsTr("En-/Decrypt using ROT13.\nNote: This is not secure encryption and only intended to prevent others from accidentally reading your notes.")
-                onClicked: notes_tool.encrypt()
+                onClicked: NotesTool.encrypt()
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.filePdf
                 toolTipText: qsTr("Export as PDF")
-                visible: !notes_tool.editMode
-                onClicked: notes_tool.exportPdf()
+                visible: !NotesTool.editMode
+                onClicked: NotesTool.exportPdf()
             }
         }
 
@@ -58,14 +83,14 @@ Item {
             height: parent.height / 2
             width: 2
             color: palette.dark
-            visible: notes_tool.editMode
+            visible: NotesTool.editMode
         }
 
         Row {
             id: md_controls
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            visible: notes_tool.editMode
+            visible: NotesTool.editMode
 
             CustomToolBarButton {
                 iconText: FontAwesome.heading
@@ -74,46 +99,46 @@ Item {
 
             CustomToolBarButton {
                 iconText: FontAwesome.bold
-                onClicked: insertMarkdown("**", "**")
+                onClicked: root.insertMarkdown("**", "**")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.italic
-                onClicked: insertMarkdown("*", "*")
+                onClicked: root.insertMarkdown("*", "*")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.strikethrough
-                onClicked: insertMarkdown("~~", "~~")
+                onClicked: root.insertMarkdown("~~", "~~")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.quoteLeft
-                onClicked: insertMarkdown("> ", "")
+                onClicked: root.insertMarkdown("> ", "")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.code
-                onClicked: insertMarkdown("`", "`")
+                onClicked: root.insertMarkdown("`", "`")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.listUl
-                onClicked: insertMarkdown("* ", "")
+                onClicked: root.insertMarkdown("* ", "")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.listOl
-                onClicked: insertMarkdown("1. ", "")
+                onClicked: root.insertMarkdown("1. ", "")
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.table
                 onClicked: {
-                    insertMarkdown("| aaa | bbb |\n", "")
-                    insertMarkdown("| --- | --- |\n", "")
-                    insertMarkdown("| ccc | ddd |\n", "")
-                    insertMarkdown("| eee | fff |\n", "")
+                    root.insertMarkdown("| aaa | bbb |\n", "")
+                    root.insertMarkdown("| --- | --- |\n", "")
+                    root.insertMarkdown("| ccc | ddd |\n", "")
+                    root.insertMarkdown("| eee | fff |\n", "")
                 }
             }
         }
@@ -123,7 +148,7 @@ Item {
             height: parent.height / 2
             width: 2
             color: palette.dark
-            visible: notes_tool.editMode
+            visible: NotesTool.editMode
         }
 
         Row {
@@ -132,16 +157,19 @@ Item {
             anchors.bottom: parent.bottom
 
             Repeater {
-                model: notes_tool.openedPages
+                model: NotesTool.openedPages
 
                 CustomButton {
                     id: page_button
-                    buttonText: modelData.name
-                    usesFixedWidth: false
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
 
-                    textItem.font.italic: !modelData.wasEdited
+                    required property NoteBookPage modelData
+
+                    buttonText: modelData.name // qmllint disable missing-property
+                    usesFixedWidth: false
+                    anchors.top: parent ? parent.top : undefined
+                    anchors.bottom: parent ? parent.bottom : undefined
+
+                    textItem.font.italic: !modelData.keepOpen
                     enableBold: false
                     transparentBackground: !modelData.isCurrent
 
@@ -152,23 +180,23 @@ Item {
                         id: close_page_button
                         anchors.right: parent.right
                         visible: page_button.mouseArea.containsMouse
-                                 || mouseArea.containsMouse
-                                 || !modelData.isSaved || modelData.isCurrent
+                                 || page_button.mouseArea.containsMouse
+                                 || !page_button.modelData.isSaved || page_button.modelData.isCurrent
 
-                        iconText: mouseArea.containsMouse ? FontAwesome.circleXmark : (modelData.isSaved ? FontAwesome.xmark : FontAwesome.asterisk)
+                        iconText: page_button.mouseArea.containsMouse || mouseArea.containsMouse ? FontAwesome.circleXmark : (page_button.modelData.isSaved ? FontAwesome.xmark : FontAwesome.asterisk)
                         pointSize: 10
 
                         onClicked: {
-                            if (modelData.isSaved) {
-                                modelData.close()
+                            if (page_button.modelData.isSaved) {
+                                page_button.modelData.close()
                             } else {
-                                save_dialog.page = modelData
+                                save_dialog.page = page_button.modelData
                                 save_dialog.open()
                             }
                         }
                     }
 
-                    onClicked: modelData.toggle()
+                    onClicked: modelData.toggle() // qmllint disable missing-property
                 }
             }
         }
@@ -185,7 +213,7 @@ Item {
     InsertHeaderDialog {
         id: header_dialog
 
-        onInsert: insertMarkdown(text, "")
+        onInsert: (text) => root.insertMarkdown(text, "")
 
         y: parent.height
         x: md_controls.x + 5
@@ -196,27 +224,5 @@ Item {
 
         y: parent.height
         x: (root.width - width) / 2
-    }
-
-    function insertMarkdown(open, close) {
-        if (!root.textedit || !notes_tool.currentPage || !notes_tool.editMode)
-            return
-
-        if (root.textedit.selectedText.length) {
-            root.textedit.insert(root.textedit.selectionStart, open)
-            root.textedit.insert(root.textedit.selectionEnd, close)
-            root.textedit.select(root.textedit.selectionStart,
-                                 root.textedit.selectionEnd - close.length)
-        } else {
-            root.textedit.insert(root.textedit.cursorPosition, open + close)
-
-            if (close.length) {
-                moveCursor(close.length * -1)
-            }
-        }
-    }
-
-    function moveCursor(positions) {
-        root.textedit.cursorPosition += positions
     }
 }

@@ -2,15 +2,20 @@
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAudioOutput>
 #include <QBuffer>
 #include <QMediaPlayer>
+#include <QQmlListProperty>
 #include <QTemporaryDir>
+#include <QtQml/qqmlregistration.h>
 
 class SoundPlayer : public AudioPlayer
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     SoundPlayer(AudioElement *element, int volume, QObject *parent = nullptr);
@@ -64,15 +69,16 @@ signals:
 class SoundPlayerController : public AudioPlayer
 {
     Q_OBJECT
-    Q_PROPERTY(QList<QObject *> activeElements READ activeElements NOTIFY soundsChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    READ_LIST_PROPERTY(AudioElement, activeElements)
 
 public:
-    using AudioPlayer::AudioPlayer;
+    explicit SoundPlayerController(QObject *parent = nullptr);
 
     void play(AudioElement *elements);
     void stop(const QString &element);
-
-    [[nodiscard]] auto activeElements() const -> QList<QObject *>;
 
 public slots:
     void play() override
@@ -99,9 +105,11 @@ private:
 
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
     [[nodiscard]] auto isSoundPlaying(AudioElement *elements) const -> bool;
+    void updateActiveElements();
 
 private slots:
     void onPlayerStopped(SoundPlayer *player);
+    void onSoundsChanged(const QList<AudioElement *> &sounds);
 
 signals:
     void setPlayerVolume(int linear, int logarithmic);

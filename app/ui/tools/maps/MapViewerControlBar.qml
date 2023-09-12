@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import CustomComponents 1.0
-import "../../defines.js" as Defines
+import CustomComponents
+import "../.."
 
 Column {
     id: root
@@ -20,14 +20,14 @@ Column {
     signal fitToScreen
     signal toggleMarkerMenu
 
-    width: Defines.TOOLBAR_WIDTH
+    width: Sizes.toolbarWidth
     spacing: 5
     topPadding: 5
 
     CustomToolBarButton {
         id: fit_button
         iconText: FontAwesome.expand
-        onClicked: fitToScreen()
+        onClicked: root.fitToScreen()
         verticalMode: true
         outline: true
         height: width
@@ -36,7 +36,7 @@ Column {
     CustomToolBarButton {
         id: larger_button
         iconText: FontAwesome.plus
-        onClicked: zoomIn()
+        onClicked: root.zoomIn()
         verticalMode: true
         outline: true
         height: width
@@ -47,13 +47,13 @@ Column {
         orientation: Qt.Vertical
         anchors.horizontalCenter: parent.horizontalCenter
 
-        from: minZoom
-        to: maxZoom
-        stepSize: zoomStep
+        from: root.minZoom
+        to: root.maxZoom
+        stepSize: root.zoomStep
         snapMode: Slider.SnapAlways
-        value: currentScale
+        value: root.currentScale
 
-        onMoved: setScale(value)
+        onMoved: root.setScale(value)
 
         handle: Rectangle {
             x: scale_slider.leftPadding + scale_slider.availableWidth / 2 - width / 2
@@ -90,7 +90,7 @@ Column {
     CustomToolBarButton {
         id: smaller_button
         iconText: FontAwesome.minus
-        onClicked: zoomOut()
+        onClicked: root.zoomOut()
         verticalMode: true
         outline: true
         height: width
@@ -99,7 +99,7 @@ Column {
     CustomToolBarButton {
         id: rotate_left_button
         iconText: FontAwesome.rotateLeft
-        onClicked: rotateLeft()
+        onClicked: root.rotateLeft()
         verticalMode: true
         outline: true
         height: width
@@ -108,7 +108,7 @@ Column {
     CustomToolBarButton {
         id: rotate_right_button
         iconText: FontAwesome.rotateRight
-        onClicked: rotateRight()
+        onClicked: root.rotateRight()
         verticalMode: true
         outline: true
         height: width
@@ -118,7 +118,7 @@ Column {
         id: marker_button
         iconText: FontAwesome.locationDot
         iconColor: "red"
-        onClicked: toggleMarkerMenu()
+        onClicked: root.toggleMarkerMenu()
         verticalMode: true
         outline: true
         height: width

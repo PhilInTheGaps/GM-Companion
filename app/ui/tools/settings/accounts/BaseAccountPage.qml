@@ -1,22 +1,21 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
 import IconFonts
-import "./../../../defines.js" as Defines
-import "./../../../colors.js" as Colors
+import services
+import "./../../.."
 
 Item {
     id: root
 
     property string name: "Unknown Account"
     property string icon: FontAwesome.users
-    property var iconFont: FontAwesome.fontSolid
+    property font iconFont: FontAwesome.fontSolid
     property bool isExperimental: false
 
     property alias leftPanel: left_loader.sourceComponent
     property alias rightPanel: right_loader.sourceComponent
 
-    property var status: undefined
+    property var statuses
 
     Row {
         id: header
@@ -26,7 +25,7 @@ Item {
 
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Defines.TOOLBAR_HEIGHT
+        height: Sizes.toolbarHeight
 
         Label {
             id: header_icon_label
@@ -107,10 +106,13 @@ Item {
         spacing: 5
 
         Repeater {
-            model: root.status
+            model: root.statuses
 
             StatusBar {
                 id: status_label
+
+                required property ServiceStatus modelData
+
                 anchors.left: parent.left
                 anchors.right: parent.right
                 status: modelData

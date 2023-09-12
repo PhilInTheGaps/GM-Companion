@@ -4,10 +4,13 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJsonDocument>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class Addon : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     enum class Type

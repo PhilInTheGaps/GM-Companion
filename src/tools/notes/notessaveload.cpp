@@ -100,7 +100,7 @@ void NotesSaveLoad::savePage() const
  */
 void NotesSaveLoad::renameChapter(const QString &oldPath) const
 {
-    auto *chapter = qobject_cast<NoteBookChapter *>(sender());
+    const auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter || oldPath == chapter->path()) return;
 
     const auto basePath = SettingsManager::getPath(u"notes"_s);
@@ -117,7 +117,7 @@ void NotesSaveLoad::renameChapter(const QString &oldPath) const
  */
 void NotesSaveLoad::renamePage(const QString &oldPath) const
 {
-    auto *page = qobject_cast<NoteBookPage *>(sender());
+    const auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page || oldPath == page->path()) return;
 
     const auto basePath = SettingsManager::getPath(u"notes"_s);
@@ -171,15 +171,15 @@ void NotesSaveLoad::deletePage() const
 /**
  * Create a new book folder
  */
-void NotesSaveLoad::createBook(const QString &name, QObject *root)
+void NotesSaveLoad::createBook(const QString &name, TreeItem *root)
 {
     if (name.isEmpty()) return;
 
     qCDebug(gmNotesSaveLoad()) << "Creating book" << name;
 
     const auto path = FileUtils::fileInDir(name, SettingsManager::getPath(u"notes"_s));
-    Files::File::createDirAsync(path).then(
-        this, [this, name, root](Files::FileResult *) { buildBooks({name}, qobject_cast<TreeItem *>(root)); });
+    Files::File::createDirAsync(path).then(this,
+                                           [this, name, root](const Files::FileResult *) { buildBooks({name}, root); });
 }
 
 /**
@@ -248,7 +248,7 @@ void NotesSaveLoad::createPage(const QString &name)
 /**
  * Save the page as a PDF
  */
-void NotesSaveLoad::exportPage(NoteBookPage *page, QTextDocument *document)
+void NotesSaveLoad::exportPage(NoteBookPage *page, const QTextDocument *document)
 {
     if (!document) return;
 
@@ -289,18 +289,18 @@ void NotesSaveLoad::buildBooks(const QStringList &folders, TreeItem *root)
 {
     qCDebug(gmNotesSaveLoad()) << "Building books:" << folders;
 
-    bool replace = false;
+    bool replaceRoot = false;
 
     if (!root)
     {
-        replace = true;
+        replaceRoot = true;
         root = new TreeItem(u"/"_s, 0, true, this);
         root->isOpen(true);
     }
 
-    for (const auto &folder : folders)
+    foreach (const auto &folder, folders)
     {
-        auto *book = new NoteBook(folder, root);
+        const auto *book = new NoteBook(folder, root);
 
         connect(book, &NoteBook::loadChapters, this, &NotesSaveLoad::loadChapters);
         connect(book, &NoteBook::loadPages, this, &NotesSaveLoad::loadPages);
@@ -310,9 +310,7 @@ void NotesSaveLoad::buildBooks(const QStringList &folders, TreeItem *root)
         connect(book, &NoteBook::deleteChapter, this, &NotesSaveLoad::deleteChapter);
     }
 
-    if (replace) emit booksLoaded(root);
-    else
-        root->onChildItemAdded();
+    if (replaceRoot) emit booksLoaded(root);
 }
 
 /**
@@ -324,12 +322,11 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook *book) co
 
     qCDebug(gmNotesSaveLoad()) << "Building chapters in book" << book->name() << folders;
 
-    for (const auto &folder : folders)
+    foreach (const auto &folder, folders)
     {
         bool exists = false;
-        const auto chapters = book->chapters();
 
-        for (const auto *chapter : chapters)
+        foreach (const auto *chapter, book->chapters())
         {
             if (chapter->name() == folder)
             {
@@ -340,7 +337,7 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook *book) co
 
         if (!exists)
         {
-            auto *chapter = new NoteBookChapter(folder, book);
+            const auto *chapter = new NoteBookChapter(folder, book);
             connect(chapter, &NoteBookChapter::loadPages, this, &NotesSaveLoad::loadPages);
             connect(chapter, &NoteBookChapter::createPage, this, &NotesSaveLoad::createPage);
             connect(chapter, &NoteBookChapter::renameChapter, this, &NotesSaveLoad::renameChapter);
@@ -365,9 +362,8 @@ void NotesSaveLoad::buildPages(const QStringList &files, NoteBookChapter *chapte
     for (const auto &file : files)
     {
         bool exists = false;
-        const auto _pages = chapter->pages();
 
-        for (const auto *page : _pages)
+        foreach (const auto *page, chapter->pages())
         {
             if (page->name() == file)
             {
@@ -378,7 +374,7 @@ void NotesSaveLoad::buildPages(const QStringList &files, NoteBookChapter *chapte
 
         if (!exists)
         {
-            auto page = buildPage(file, chapter, false);
+            auto *page = buildPage(file, chapter, false);
             if (page) pages.append(page);
         }
     }
@@ -418,7 +414,7 @@ auto NotesSaveLoad::buildPage(const QString &name, NoteBookChapter *chapter, boo
  * be saved at.
  * (Basically rename the file to *.pdf inside the notes path)
  */
-auto NotesSaveLoad::getPdfPath(NoteBookPage *page) -> QString
+auto NotesSaveLoad::getPdfPath(const NoteBookPage *page) -> QString
 {
     auto fileName = page->path();
 

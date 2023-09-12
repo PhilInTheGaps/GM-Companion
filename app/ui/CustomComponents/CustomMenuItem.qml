@@ -1,10 +1,10 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 MenuItem {
     id: root
 
-    property string textColor: palette.text
+    property color textColor: palette.text
 
     contentItem: Text {
         leftPadding: root.indicator ? root.indicator.width : 0

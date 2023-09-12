@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.Control {
     id: control
@@ -13,6 +12,6 @@ T.Control {
                         (contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding)
 
     background: Rectangle {
-        color: Colors.window
+        color: palette.window
     }
 }

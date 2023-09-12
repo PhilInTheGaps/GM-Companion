@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import QtQuick.Controls
+import common
 import "../../common"
 
 Column {
@@ -31,17 +31,17 @@ Column {
 
                 property bool loaded: false
 
-                model: settings_manager.getLanguageNames()
-                width: settings_page.width / 6
+                model: SettingsManager.getLanguageNames()
+                width: general_column.width / 6
 
                 onCurrentTextChanged: {
                     if (loaded) {
-                        settings_manager.setLanguage(currentText)
+                        SettingsManager.setLanguage(currentText)
                     }
                 }
 
                 Component.onCompleted: {
-                    currentIndex = settings_manager.getLanguageIndex()
+                    currentIndex = SettingsManager.getLanguageIndex()
                     loaded = true
                 }
             }
@@ -60,15 +60,15 @@ Column {
         // Show Tool Names
         CheckBox {
             text: qsTr("Show tool names in menu")
-            checked: settings_manager.showToolNames
-            onClicked: settings_manager.showToolNames = checked
+            checked: SettingsManager.showToolNames
+            onClicked: SettingsManager.showToolNames = checked
         }
 
         // Classic Icons
         CheckBox {
             text: qsTr("Classic menu icons")
-            checked: settings_manager.classicIcons
-            onClicked: settings_manager.classicIcons = checked
+            checked: SettingsManager.classicIcons
+            onClicked: SettingsManager.classicIcons = checked
         }
     }
 
@@ -85,8 +85,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Automated crash reports")
-                checked: settings_manager.crashReports
-                onClicked: settings_manager.crashReports = checked
+                checked: SettingsManager.crashReports
+                onClicked: SettingsManager.crashReports = checked
             }
 
             HelpAnnotation {
@@ -99,8 +99,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Session tracking")
-                checked: settings_manager.sessionTracking
-                onClicked: settings_manager.sessionTracking = checked
+                checked: SettingsManager.sessionTracking
+                onClicked: SettingsManager.sessionTracking = checked
             }
 
             HelpAnnotation {
@@ -112,11 +112,11 @@ Column {
 
     // Updates
     Connections {
-        target: update_manager
+        target: UpdateManager
 
         function onUpdateAvailable() {
             update_text.text = qsTr(
-                        "Found new Version: ") + update_manager.newestVersion
+                        "Found new Version: ") + UpdateManager.newestVersion
             update_text.visible = true
             open_downloads_button.visible = true
             update_busy_indicator.visible = false
@@ -140,8 +140,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Automatically check for updates")
-                checked: settings_manager.checkForUpdates
-                onClicked: settings_manager.checkForUpdates = checked
+                checked: SettingsManager.checkForUpdates
+                onClicked: SettingsManager.checkForUpdates = checked
             }
 
             HelpAnnotation {
@@ -160,7 +160,7 @@ Column {
                 onClicked: {
                     update_text.visible = false
                     update_busy_indicator.visible = true
-                    update_manager.checkForUpdates()
+                    UpdateManager.checkForUpdates()
                 }
             }
 

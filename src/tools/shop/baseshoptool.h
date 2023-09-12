@@ -5,12 +5,15 @@
 #include "results/filedataresult.h"
 #include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QtQml/qqmlregistration.h>
 
 class BaseShopTool : public AbstractTool
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
-    AUTO_PROPERTY(QList<ShopProject *>, projects)
+    AUTO_LIST_PROPERTY(ShopProject, projects)
     AUTO_PROPERTY_VAL2(ShopProject *, currentProject, nullptr)
 
 public:

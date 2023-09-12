@@ -6,12 +6,16 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QMap>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class AddonElementManager : public AbstractTool
 {
     Q_OBJECT
-    READ_PROPERTY(QList<Addon *>, addons)
-    READ_PROPERTY(QList<AudioProject *>, projects)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    READ_LIST_PROPERTY(Addon, addons)
+    READ_LIST_PROPERTY(AudioProject, projects)
     AUTO_PROPERTY_VAL2(int, currentIndex, -1)
 
 public:
@@ -21,10 +25,10 @@ public slots:
     void loadData() override;
 
 private slots:
-    void onInstalledAddonsChanged(const QList<Addon *> &addons);
+    void onInstalledAddonsChanged();
     void onCurrentIndexChanged(int index);
     void onCurrentScenarioChanged(AudioScenario *scenario) const;
-    void onProjectsChanged(QList<AudioProject *> projects) const;
+    void onProjectsChanged() const;
 
 private:
     void loadAddonProjects(const Addon &addon);
@@ -35,3 +39,5 @@ private:
 
     QMap<QString, QList<AudioProject *>> m_projects;
 };
+
+Q_DECLARE_METATYPE(AddonElementManager *)

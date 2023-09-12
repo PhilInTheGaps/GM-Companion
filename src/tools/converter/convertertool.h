@@ -3,9 +3,11 @@
 #include "project/converterproject.h"
 #include "src/common/abstracttool.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QJSEngine>
 #include <QList>
 #include <QObject>
-#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+#include <QtQml/qqmlregistration.h>
 #include <gsl/gsl>
 
 class ConverterEditor;
@@ -14,15 +16,22 @@ class Addon;
 class ConverterTool : public AbstractTool
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     friend ConverterEditor;
 
 public:
-    explicit ConverterTool(const QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    ConverterTool() = delete;
+    explicit ConverterTool(QObject *parent = nullptr);
+    static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> ConverterTool *;
 
     Q_INVOKABLE static QString convert(ConverterUnit *fromUnit, const QString &fromValue, ConverterUnit *toUnit);
 
-    READ_PROPERTY(QList<ConverterProject *>, projects)
+    Q_PROPERTY(ConverterEditor *editor READ editor CONSTANT)
+    [[nodiscard]] auto editor() -> ConverterEditor *;
+
+    READ_LIST_PROPERTY(ConverterProject, projects)
     AUTO_PROPERTY_VAL2(ConverterProject *, currentProject, nullptr)
     AUTO_PROPERTY_VAL2(ConverterCategory *, currentCategory, nullptr)
     AUTO_PROPERTY_VAL2(ConverterUnit *, fromUnit, nullptr)
@@ -32,7 +41,7 @@ public slots:
     void loadData() override;
 
 private slots:
-    void onProjectsChanged(const QList<ConverterProject *> &projects);
+    void onProjectsChanged();
     void onCurrentProjectChanged(ConverterProject *project);
     void onCurrentCategoryChanged(ConverterCategory *category);
     void onEditorSavedChanged(bool isSaved);

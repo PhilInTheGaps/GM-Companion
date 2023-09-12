@@ -1,8 +1,7 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
 
 T.PageIndicator {
     id: control
@@ -18,13 +17,16 @@ T.PageIndicator {
     spacing: 6
 
     delegate: Rectangle {
+        required property int index
+
         implicitWidth: 8
         implicitHeight: 8
 
         radius: width / 2
-        color: Colors.pageIndicator
+        color: StyleColors.pageIndicator
 
-        opacity: index === currentIndex ? 0.95 : pressed ? 0.7 : 0.45
+        // qmllint disable unqualified
+        opacity: index === control.currentIndex ? 0.95 : pressed ? 0.7 : 0.45
 
         Behavior on opacity {
             OpacityAnimator {

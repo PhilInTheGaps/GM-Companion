@@ -1,5 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import src
 
 Dialog {
     id: root
@@ -28,7 +29,7 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onAccepted: {
-        shop_tool.editor.createThing(text_field.text, combo_box.currentIndex)
+        ShopTool.editor.createThing(text_field.text, combo_box.currentIndex)
         text_field.clear()
     }
 }

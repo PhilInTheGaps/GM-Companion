@@ -1,6 +1,6 @@
-import QtQuick 2.6
-import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import QtQuick
+import CustomComponents
+import src
 
 Column {
     spacing: 10
@@ -10,7 +10,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool ? audio_tool.metaData.type : ""
+        text: AudioTool.metaData.type
         font.bold: true
     }
 
@@ -19,7 +19,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool ? audio_tool.metaData.title : ""
+        text: AudioTool.metaData.title
     }
 
     CustomScrollLabel {
@@ -27,7 +27,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool ? audio_tool.metaData.artist : ""
+        text: AudioTool.metaData.artist
     }
 
     CustomScrollLabel {
@@ -35,6 +35,6 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool ? audio_tool.metaData.album : ""
+        text: AudioTool.metaData.album
     }
 }

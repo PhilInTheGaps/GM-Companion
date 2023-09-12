@@ -2,8 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import "./colors.js" as Colors
-import "./sizes.js" as Sizes
 
 T.TextField {
     id: control
@@ -20,9 +18,9 @@ T.TextField {
     padding: 6
     leftPadding: padding + 4
 
-    color: enabled ? Colors.text : Colors.textDisabled
-    selectionColor: Colors.highlight
-    selectedTextColor: Colors.highlightedText
+    color: enabled ? palette.text : StyleColors.textDisabled
+    selectionColor: palette.highlight
+    selectedTextColor: palette.highlightedText
     verticalAlignment: TextInput.AlignVCenter
 
     PlaceholderText {
@@ -34,7 +32,7 @@ T.TextField {
 
         text: control.placeholderText
         font: control.font
-        color: enabled ? Colors.text : Colors.textDisabled
+        color: enabled ? palette.text : StyleColors.textDisabled
         opacity: 0.7
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText
@@ -45,9 +43,9 @@ T.TextField {
 
     background: Rectangle {
         implicitWidth: 200
-        implicitHeight: Sizes.textFieldHeight
+        implicitHeight: StyleSizes.textFieldHeight
         border.width: control.activeFocus ? 2 : 1
-        color: Colors.window
-        border.color: control.activeFocus ? Colors.borderFocus : (control.enabled ? Colors.border : Colors.dark)
+        color: palette.window
+        border.color: control.activeFocus ? StyleColors.borderFocus : (control.enabled ? StyleColors.border : palette.dark)
     }
 }

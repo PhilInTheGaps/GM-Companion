@@ -13,14 +13,11 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
-AudioTool::AudioTool(QQmlApplicationEngine *engine, QNetworkAccessManager &networkManager, QObject *parent)
-    : AbstractTool(parent), editor(engine), musicPlayer(metaDataReader), radioPlayer(networkManager, metaDataReader)
+AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
+    : AbstractTool(parent), m_editor(engine), musicPlayer(metaDataReader),
+      radioPlayer(*engine->networkAccessManager(), metaDataReader)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
-
-    // QML Engine
-    engine->rootContext()->setContextProperty(u"audio_tool"_s, this);
-    engine->rootContext()->setContextProperty(u"audio_editor"_s, &editor);
 
     // Spotify
     connect(Spotify::instance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
@@ -57,6 +54,12 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QNetworkAccessManager &netwo
     connect(&mprisManager, &MprisManager::changeVolume, this, [this](double volume) { setMusicVolume(volume); });
 }
 
+auto AudioTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AudioTool *
+{
+    Q_UNUSED(jsEngine)
+    return new AudioTool(qmlEngine, qmlEngine);
+}
+
 void AudioTool::loadData()
 {
     if (isDataLoaded()) return;
@@ -73,25 +76,15 @@ void AudioTool::updateProjectList()
         this, [this](const std::vector<AudioProject *> &projects) { onProjectsChanged(projects); });
 }
 
-auto AudioTool::currentProjectName() const -> QString
-{
-    if (m_currentProject)
-    {
-        return m_currentProject->name();
-    }
-
-    return u""_s;
-}
-
 /**
     Change the project, notify UI
     @param projects List with pointers to audio projects
  */
 void AudioTool::onProjectsChanged(const std::vector<AudioProject *> &projects)
 {
-    m_projects = Utils::toList<AudioProject *>(projects);
+    a_projects = Utils::toList<AudioProject *>(projects);
 
-    foreach (auto *project, m_projects)
+    foreach (auto *project, a_projects)
     {
         project->setParent(this);
     }
@@ -102,9 +95,9 @@ void AudioTool::onProjectsChanged(const std::vector<AudioProject *> &projects)
 
 void AudioTool::onCurrentScenarioChanged() const
 {
-    if (m_currentProject && m_currentProject->currentCategory())
+    if (currentProject() && currentProject()->currentCategory())
     {
-        AudioThumbnailGenerator::generateThumbnails(m_currentProject->currentCategory()->currentScenario());
+        AudioThumbnailGenerator::generateThumbnails(currentProject()->currentCategory()->currentScenario());
     }
 }
 
@@ -114,31 +107,31 @@ void AudioTool::onCurrentScenarioChanged() const
  */
 void AudioTool::setCurrentProject(int index)
 {
-    if (m_projects.isEmpty()) return;
+    if (a_projects.isEmpty()) return;
 
-    qCDebug(gmAudioTool) << "Setting current project:" << index << m_projects.at(index)->name();
+    qCDebug(gmAudioTool) << "Setting current project:" << index << a_projects.at(index)->name();
 
-    if (m_currentProject)
+    if (currentProject())
     {
-        disconnect(m_currentProject, &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
+        disconnect(currentProject(), &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
     }
 
-    m_currentProject = m_projects.at(index);
+    a_currentProject = a_projects.at(index);
     onCurrentScenarioChanged();
 
-    if (m_currentProject)
+    if (currentProject())
     {
-        connect(m_currentProject, &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
+        connect(currentProject(), &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
     }
 
-    emit currentProjectChanged();
+    emit currentProjectChanged(a_currentProject);
 }
 
 auto AudioTool::getCurrentProjectIndex() -> int
 {
-    if (!m_currentProject) return 0;
+    if (!currentProject()) return 0;
 
-    return m_projects.indexOf(m_currentProject);
+    return a_projects.indexOf(currentProject());
 }
 
 /**
@@ -318,6 +311,17 @@ auto AudioTool::playlist() const -> QList<AudioFile *>
     }
 }
 
+auto AudioTool::playlistQml() -> QQmlListProperty<AudioFile>
+{
+    switch (m_musicElementType)
+    {
+    case AudioElement::Type::Music:
+        return musicPlayer.playlistQml();
+    default:
+        return {};
+    }
+}
+
 /**
  * @brief Get index of current song in playlist
  * @return Index as integer
@@ -360,8 +364,8 @@ void AudioTool::findElement(const QString &term) const
 {
     AudioScenario::setFilterString(term);
 
-    if (m_currentProject && m_currentProject->currentCategory())
+    if (currentProject() && currentProject()->currentCategory())
     {
-        m_currentProject->currentCategory()->refreshElements();
+        currentProject()->currentCategory()->refreshElements();
     }
 }

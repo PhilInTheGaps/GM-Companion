@@ -1,8 +1,9 @@
 #include "addonrepositorymanager.h"
+#include "addonmanager.h"
 #include "settings/settingsmanager.h"
 #include "updates/updatemanager.h"
-#include "utils/stringutils.h"
 #include "utils/networkutils.h"
+#include "utils/stringutils.h"
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -28,6 +29,20 @@ AddonRepositoryManager::AddonRepositoryManager(QObject *parent) : QObject{parent
     loadAdditionalRepositories();
 }
 
+/// Method for singleton access in QML
+auto AddonRepositoryManager::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AddonRepositoryManager *
+{
+    Q_UNUSED(jsEngine)
+
+    if (qmlEngine->thread() != AddonManager::instance()->thread())
+    {
+        AddonManager::instance()->moveToThread(qmlEngine->thread());
+    }
+
+    QJSEngine::setObjectOwnership(&AddonManager::instance()->repositoryManager(), QJSEngine::CppOwnership);
+    return &AddonManager::instance()->repositoryManager();
+}
+
 auto AddonRepositoryManager::addRepository(const QString &url) -> bool
 {
     if (url.isEmpty()) return false;
@@ -38,7 +53,7 @@ auto AddonRepositoryManager::addRepository(const QString &url) -> bool
     }
 
     a_repositories << new AddonRepository(this, url, false);
-    emit repositoriesChanged(a_repositories);
+    emit repositoriesChanged();
 
     SettingsManager::instance()->set(REPOSITORY_SETTING, getRepositoryUrls(true));
     return true;
@@ -51,7 +66,7 @@ auto AddonRepositoryManager::removeRepository(int repositoryIndex) -> bool
         return false;
 
     auto *repo = a_repositories.takeAt(repositoryIndex);
-    emit repositoriesChanged(a_repositories);
+    emit repositoriesChanged();
 
     repo->deleteLater();
 
@@ -96,7 +111,7 @@ void AddonRepositoryManager::loadLocalRepositories()
         a_repositories << new AddonRepository(this, dir.filePath(entry), true);
     }
 
-    emit repositoriesChanged(a_repositories);
+    emit repositoriesChanged();
 }
 
 void AddonRepositoryManager::loadDefaultRemoteRepositories()
@@ -106,7 +121,7 @@ void AddonRepositoryManager::loadDefaultRemoteRepositories()
         a_repositories << new AddonRepository(this, url, true);
     }
 
-    emit repositoriesChanged(a_repositories);
+    emit repositoriesChanged();
 }
 
 void AddonRepositoryManager::loadAdditionalRepositories()
@@ -118,7 +133,7 @@ void AddonRepositoryManager::loadAdditionalRepositories()
         a_repositories << new AddonRepository(this, url, false);
     }
 
-    emit repositoriesChanged(a_repositories);
+    emit repositoriesChanged();
 }
 
 auto AddonRepositoryManager::getRepositoryUrls(bool onlyCustom) const -> QStringList

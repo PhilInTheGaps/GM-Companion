@@ -26,7 +26,7 @@ private:
     QString backupPath;
     QString userPath;
 
-    ShopTool tool = ShopTool(nullptr, nullptr);
+    ShopTool tool = ShopTool(nullptr);
     ShopEditor *editor = nullptr;
 };
 

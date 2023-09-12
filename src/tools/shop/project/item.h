@@ -6,10 +6,14 @@
 #include <QAbstractListModel>
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class Item : public BaseProjectItem
 {
     Q_OBJECT
+    QML_NAMED_ELEMENT(ShopItem)
+    QML_UNCREATABLE("")
+
     AUTO_PROPERTY(QString, price)
     AUTO_PROPERTY(QString, description)
     AUTO_PROPERTY(QString, category)
@@ -29,6 +33,9 @@ public:
 class ItemModel : public CustomObjectListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
 public:
     using CustomObjectListModel::CustomObjectListModel;
 
