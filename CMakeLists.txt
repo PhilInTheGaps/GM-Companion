@@ -60,8 +60,12 @@ include(AddHttpStatusCodes)
 include(AddMarkdownLib)
 include(AddO2)
 
+# Disable Unity Builds for sentry
+set(UNITY_BUILD_TEMP ${CMAKE_UNITY_BUILD})
+set(CMAKE_UNITY_BUILD OFF)
 set(SENTRY_ENABLE_INSTALL ON)
 add_subdirectory(thirdparty/sentry-native)
+set(CMAKE_UNITY_BUILD ${UNITY_BUILD_TEMP})
 
 add_subdirectory(thirdparty/qml-icon-fonts)
 
