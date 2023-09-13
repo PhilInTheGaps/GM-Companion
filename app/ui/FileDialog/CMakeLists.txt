@@ -15,6 +15,8 @@ qt_add_qml_module(gm-companion-ui-filedialog
         fileobject.h
 )
 
+target_precompile_headers(gm-companion-ui-filedialog REUSE_FROM common)
+
 target_include_directories(gm-companion-ui-filedialog PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(gm-companion-ui-filedialog

@@ -73,6 +73,64 @@ qt_add_qml_module(common
     SOURCES ${SOURCES}
 )
 
+target_precompile_headers(common PRIVATE
+    <QtGlobal>
+    <QObject>
+    <QCoreApplication>
+    <QString>
+    <QStringList>
+    <QByteArray>
+    <QBuffer>
+    <QTextStream>
+    <QDir>
+    <QFile>
+    <QFileInfo>
+    <QVariant>
+    <QHash>
+    <QMap>
+    <QQueue>
+    <QList>
+    <QAbstractListModel>
+    <QSettings>
+    <QTemporaryFile>
+    <QTemporaryDir>
+    <QLoggingCategory>
+    <QJsonDocument>
+    <QJsonObject>
+    <QJsonArray>
+    <QFuture>
+    <QPromise>
+    <QPointer>
+    <QSharedPointer>
+    <QQmlEngine>
+    <QQmlContext>
+    <QJSEngine>
+    <QtQml>
+    <QtQml/qqmlregistration.h>
+    <QNetworkAccessManager>
+    <QNetworkRequest>
+    <QNetworkReply>
+    <QHttpMultiPart>
+    <QUrl>
+    <QUrlQuery>
+    <QRegularExpression>
+    <QPixmap>
+    <QImage>
+    <QTime>
+    <QDateTime>
+    <QTimer>
+    <QRandomGenerator>
+    <QProcess>
+    <QThread>
+    <utility>
+    <memory>
+    <vector>
+    <iostream>
+    <algorithm>
+    <stdexcept>
+    <chrono>
+)
+
 target_include_directories(common
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}

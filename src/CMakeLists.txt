@@ -81,6 +81,8 @@ set(SRC_AUDIO
     tools/audio/thumbnails/loaders/webimageloader.h
     tools/audio/thumbnails/loaders/webimageloader.cpp)
 
+set_source_files_properties(${SRC_AUDIO} PROPERTIES UNITY_GROUP "audio")
+
 set(SRC_MAPS
     tools/maps/mapmarker.h
     tools/maps/mapmarker.cpp
@@ -89,7 +91,13 @@ set(SRC_MAPS
     tools/maps/map.h
     tools/maps/map.cpp)
 
-set(SRC_DICE tools/dicetool.h tools/dicetool.cpp)
+set_source_files_properties(${SRC_MAPS} PROPERTIES UNITY_GROUP "maps")
+
+set(SRC_DICE
+    tools/dicetool.h
+    tools/dicetool.cpp)
+
+set_source_files_properties(${SRC_DICE} PROPERTIES UNITY_GROUP "dice")
 
 set(SRC_NOTES
     tools/notes/notestool.h
@@ -106,6 +114,8 @@ set(SRC_NOTES
     tools/notes/notebookpage.cpp
     tools/notes/notessaveload.h
     tools/notes/notessaveload.cpp)
+
+set_source_files_properties(${SRC_NOTES} PROPERTIES UNITY_GROUP "notes")
 
 set(SRC_ADDONS
     addons/addon.h
@@ -124,6 +134,8 @@ set(SRC_ADDONS
     addons/addon_reader/folderaddonreader.h
     addons/addon_reader/folderaddonreader.cpp)
 
+set_source_files_properties(${SRC_ADDONS} PROPERTIES UNITY_GROUP "addons")
+
 set(SRC_GENERATORS
     tools/generators/names/namegenerator.h
     tools/generators/names/namegenerator.cpp
@@ -133,6 +145,8 @@ set(SRC_GENERATORS
     tools/generators/names/listnamegenerator.cpp
     tools/generators/names/namegeneratorfactory.h
     tools/generators/names/namegeneratorfactory.cpp)
+
+set_source_files_properties(${SRC_GENERATORS} PROPERTIES UNITY_GROUP "generators")
 
 set(SRC_COMBAT
     tools/combat_tracker/effect.h
@@ -145,6 +159,8 @@ set(SRC_COMBAT
     tools/combat_tracker/combattrackerstate.cpp
     tools/combat_tracker/combatant.h
     tools/combat_tracker/combatant.cpp)
+
+set_source_files_properties(${SRC_COMBAT} PROPERTIES UNITY_GROUP "combat")
 
 set(SRC_SHOP
     tools/shop/baseshoptool.h
@@ -166,6 +182,8 @@ set(SRC_SHOP
     tools/shop/project/itemgroup.h
     tools/shop/project/itemgroup.cpp)
 
+set_source_files_properties(${SRC_SHOP} PROPERTIES UNITY_GROUP "shops")
+
 set(SRC_CHARACTERS
     tools/characters/charactertool.h
     tools/characters/charactertool.cpp
@@ -174,6 +192,8 @@ set(SRC_CHARACTERS
     tools/characters/viewers/characterviewer.h
     tools/characters/viewers/characterimageviewer.h
     tools/characters/viewers/characterimageviewer.cpp)
+
+set_source_files_properties(${SRC_CHARACTERS} PROPERTIES UNITY_GROUP "characters")
 
 set(SRC_CONVERTER
     tools/converter/convertertool.h
@@ -189,12 +209,16 @@ set(SRC_CONVERTER
     tools/converter/project/converterprojectupgrader.h
     tools/converter/project/converterprojectupgrader.cpp)
 
+set_source_files_properties(${SRC_CONVERTER} PROPERTIES UNITY_GROUP "converter")
+
 set(SRC_MESSAGES
     messages/message.h
     messages/messagemanager.h
     messages/messagemanager.cpp
     messages/messagedispatcher.h
     messages/messagedispatcher.cpp)
+
+set_source_files_properties(${SRC_MESSAGES} PROPERTIES UNITY_GROUP "messages")
 
 set(SOURCES
     ${SRC_AUDIO}
@@ -224,6 +248,11 @@ qt_add_resources(gm-companion-lib "libresources"
         resources/notes/style.css
         resources/names/generic.json)
 
+target_precompile_headers(gm-companion-lib REUSE_FROM common)
+
+set_target_properties(gm-companion-lib PROPERTIES
+    UNITY_BUILD_MODE GROUP)
+
 target_include_directories(gm-companion-lib
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -250,29 +279,30 @@ target_include_directories(gm-companion-lib
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/shop/project)
 
 target_link_libraries(gm-companion-lib PUBLIC
-  common
-  commonplugin
-  services
-  servicesplugin
-  filesystem
-  filesystemplugin
-  propertyhelper
-  Qt6::Core
-  Qt6::Gui
-  Qt6::Quick
-  Qt6::Qml
-  Qt6::Multimedia
-  Qt6::Network
-  Qt6::DBus
-  Qt6::Concurrent
-  Qt6::Core5Compat
-  QuaZip::QuaZip
-  ${TAG_LIBRARY}
-  ${POPPLER_QT6_LIBRARY})
+    common
+    commonplugin
+    services
+    servicesplugin
+    filesystem
+    filesystemplugin
+    propertyhelper
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Quick
+    Qt6::Qml
+    Qt6::Multimedia
+    Qt6::Network
+    Qt6::DBus
+    Qt6::Concurrent
+    Qt6::Core5Compat
+    QuaZip::QuaZip
+    ${TAG_LIBRARY}
+    ${POPPLER_QT6_LIBRARY}
+)
 
 install(
-  TARGETS gm-companion-lib
-  EXPORT gm-companion-lib
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    TARGETS gm-companion-lib
+    EXPORT gm-companion-lib
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

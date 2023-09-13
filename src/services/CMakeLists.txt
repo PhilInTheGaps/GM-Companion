@@ -90,6 +90,8 @@ qt_add_resources(services "services-resources"
         resources/services/auth-success.html
         resources/services/nextcloud/getFileList.xml)
 
+target_precompile_headers(services REUSE_FROM common)
+
 target_include_directories(services
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}

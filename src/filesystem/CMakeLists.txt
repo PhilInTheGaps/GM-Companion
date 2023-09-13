@@ -38,6 +38,8 @@ qt_add_qml_module(filesystem
         multigethelper.h
 )
 
+target_precompile_headers(filesystem REUSE_FROM common)
+
 target_include_directories(filesystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(filesystem

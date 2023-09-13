@@ -40,6 +40,8 @@ if (BUILD_TRANSLATIONS)
   )
 endif()
 
+target_precompile_headers(gm-companion REUSE_FROM common)
+
 target_include_directories(gm-companion PRIVATE
   ${CMAKE_SOURCE_DIR}/src
 )

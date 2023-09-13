@@ -65,7 +65,7 @@ jobs:
       - name: Make
         run: |
           cd build
-          cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo -DIS_RUNNING_IN_CI=ON
+          cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo -DIS_RUNNING_IN_CI=ON -DCMAKE_UNITY_BUILD=ON
           cmake --build . --config RelWithDebInfo --parallel 2
 
       - name: Tests
@@ -186,7 +186,7 @@ jobs:
       - name: CMake
         run: |
           cd build
-          cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON
+          cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DCMAKE_UNITY_BUILD=ON
       
       - name: Linter (QML)
         run: |
