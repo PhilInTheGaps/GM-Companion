@@ -76,6 +76,10 @@ if (ENABLE_CODE_COVERAGE)
   append_coverage_compiler_flags()
 endif()
 
+if (WIN32)
+  add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
+endif()
+
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(app)
