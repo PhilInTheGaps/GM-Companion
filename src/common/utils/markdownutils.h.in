@@ -2,7 +2,7 @@
 
 #define MARKDOWN_CMARK_GFM 0
 #define MARKDOWN_DISCOUNT 1
-#cmakedefine MARKDOWN_LIBRARY @MARKDOWN_LIBRARY_NAME @
+#cmakedefine MARKDOWN_LIBRARY @MARKDOWN_LIBRARY_NAME@
 
 #if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
 #include <cmark-gfm-core-extensions.h>
