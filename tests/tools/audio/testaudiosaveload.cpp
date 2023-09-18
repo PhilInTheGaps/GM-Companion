@@ -2,86 +2,86 @@
 #include "src/filesystem/fileaccesslocal.h"
 #include "src/tools/audio/audiosaveload.h"
 #include "src/tools/audio/project/audioproject.h"
+#include "tests/testhelper/abstracttest.h"
 #include "utils/fileutils.h"
 #include <QJsonDocument>
-#include <QObject>
 #include <QUuid>
 #include <QtTest>
 
-#include "tests/testhelper/abstracttest.h"
+using namespace Qt::Literals::StringLiterals;
 
-class TestAudioSaveLoad : public AbstractTest
+class AudioSaveLoadTest : public AbstractTest
 {
-    Q_OBJECT
 public:
-    using AbstractTest::AbstractTest;
+    explicit AudioSaveLoadTest()
+    {
+        fileAccess = std::make_unique<Files::FileAccessLocal>(nullptr);
+        Files::FileAccess::setInstance(fileAccess.get());
+    }
 
-private:
-    AudioProject *m_project = nullptr;
-    AudioProject *m_project1 = nullptr;
-    AudioProject *m_project2 = nullptr;
+protected:
+    std::unique_ptr<AudioProject> m_project = nullptr;
+    std::unique_ptr<AudioProject> m_project1 = nullptr;
+    std::unique_ptr<AudioProject> m_project2 = nullptr;
 
-    QByteArray projectAsJson() const;
+    [[nodiscard]] QByteArray projectAsJson() const;
     static void validateResult(QFuture<bool> &future, bool expected);
 
-private slots:
-    void initTestCase();
+    void initProjects();
     void saveProject();
     void findProjects();
-    void findMissingFiles();
-    void deleteProject();
+    void deleteProjects();
 };
 
-auto TestAudioSaveLoad::projectAsJson() const -> QByteArray
+auto AudioSaveLoadTest::projectAsJson() const -> QByteArray
 {
     return QJsonDocument(m_project->toJson()).toJson(QJsonDocument::Indented);
 }
 
-void TestAudioSaveLoad::validateResult(QFuture<bool> &future, bool expected)
+void AudioSaveLoadTest::validateResult(QFuture<bool> &future, bool expected)
 {
     QTRY_VERIFY2(future.isFinished() && future.result() == expected,
-                 QString("IsFinished: %1, Result: %2").arg(future.isFinished()).arg(future.result()).toUtf8());
+                 QStringLiteral("IsFinished: %1, Result: %2").arg(future.isFinished()).arg(future.result()).toUtf8());
 }
 
-void TestAudioSaveLoad::initTestCase()
+void AudioSaveLoadTest::initProjects()
 {
-    Files::FileAccess::setInstance(new Files::FileAccessLocal(this));
-
     // Read project file
     QFile projectFile(":/resources/audioproject/project.audio");
-    QVERIFY2(projectFile.open(QIODevice::ReadOnly), "Could not open test project file");
-    m_project = new AudioProject(QJsonDocument::fromJson(projectFile.readAll()).object(), this);
+    EXPECT_TRUE(projectFile.open(QIODevice::ReadOnly)) << "Could not open test project file";
+    m_project = std::make_unique<AudioProject>(QJsonDocument::fromJson(projectFile.readAll()).object(), nullptr);
     projectFile.close();
 
-    QVERIFY(m_project->isSaved());
+    EXPECT_TRUE(m_project->isSaved());
 
     // Verify that no saved projects exist
-    auto future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
+    QObject context;
+    auto future = AudioSaveLoad::findProjectsAsync(&context, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(list.empty(), "Project list is not empty, when it should be!");
+        EXPECT_TRUE(list.empty()) << "Project list is not empty, when it should be!";
     });
 
     // Create two empty projects
-    m_project1 = new AudioProject("Project_1", 4, {}, this);
+    m_project1 = std::make_unique<AudioProject>(u"Project_1"_s, 4, QList<AudioCategory *>(), nullptr);
     m_project1->isSaved(false);
 
-    m_project2 = new AudioProject("Project_2", 4, {}, this);
+    m_project2 = std::make_unique<AudioProject>(u"Project_2"_s, 4, QList<AudioCategory *>(), nullptr);
     m_project2->isSaved(false);
 }
 
-void TestAudioSaveLoad::saveProject()
+void AudioSaveLoadTest::saveProject()
 {
     m_project->isSaved(false);
-    QVERIFY(!m_project->originalName().isEmpty());
+    EXPECT_FALSE(m_project->originalName().isEmpty());
 
     // Save first time
-    auto future = AudioSaveLoad::saveProject(m_project, getFilePath());
+    auto future = AudioSaveLoad::saveProject(m_project.get(), getFilePath());
     validateResult(future, true);
     verifyFileContent(getFilePath("Project.audio"), projectAsJson());
 
     // Try to save again without making changes
-    future = AudioSaveLoad::saveProject(m_project, getFilePath());
+    future = AudioSaveLoad::saveProject(m_project.get(), getFilePath());
     validateResult(future, true);
     verifyFileContent(getFilePath("Project.audio"), projectAsJson());
 
@@ -90,7 +90,7 @@ void TestAudioSaveLoad::saveProject()
     m_project->wasRenamed(true);
     m_project->name(newName);
 
-    future = AudioSaveLoad::saveProject(m_project, getFilePath());
+    future = AudioSaveLoad::saveProject(m_project.get(), getFilePath());
     validateResult(future, true);
     verifyFileContent(getFilePath(newName + ".audio"), projectAsJson());
     verifyThatFileExists(getFilePath("Project.audio"), false);
@@ -101,109 +101,119 @@ void TestAudioSaveLoad::saveProject()
     validateResult(future, false);
 }
 
-void TestAudioSaveLoad::findProjects()
+void AudioSaveLoadTest::findProjects()
 {
-    auto future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
+    QObject context;
+    auto future = AudioSaveLoad::findProjectsAsync(&context, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.size(), 1);
+        EXPECT_FALSE(list.empty()) << "Project list is empty, when it should not be!";
+        EXPECT_EQ(list.size(), 1);
 
         auto *project = list[0];
-        QCOMPARE(project->name(), "Project_0");
+        EXPECT_EQ(project->name(), "Project_0");
     });
 
-    auto future1 = AudioSaveLoad::saveProject(m_project1, getFilePath());
+    auto future1 = AudioSaveLoad::saveProject(m_project1.get(), getFilePath());
     validateResult(future1, true);
-    auto future2 = AudioSaveLoad::saveProject(m_project2, getFilePath());
+    auto future2 = AudioSaveLoad::saveProject(m_project2.get(), getFilePath());
     validateResult(future2, true);
 
-    future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
+    future = AudioSaveLoad::findProjectsAsync(&context, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.size(), 3);
+        EXPECT_FALSE(list.empty()) << "Project list is empty, when it should not be!";
+        EXPECT_EQ(list.size(), 3);
 
         auto *project = list[0];
-        QCOMPARE(project->name(), "Project_0");
+        EXPECT_EQ(project->name(), "Project_0");
         auto *project1 = list[1];
-        QCOMPARE(project1->name(), "Project_1");
+        EXPECT_EQ(project1->name(), "Project_1");
         auto *project2 = list[2];
-        QCOMPARE(project2->name(), "Project_2");
+        EXPECT_EQ(project2->name(), "Project_2");
     });
 }
 
-void TestAudioSaveLoad::findMissingFiles()
+void AudioSaveLoadTest::deleteProjects()
 {
-    QList<AudioFile *> files;
-
-    for (int i = 0; i < 5; i++)
-    {
-        files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::File,
-                                   QString("Test File %1").arg(i), this));
-    }
-
-    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Web,
-                               QString("Test File (URL)"), this));
-    files.append(new AudioFile(QUuid::createUuid().toString(), AudioFile::Source::Spotify,
-                               QString("Test File (Spotify))"), this));
-    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Youtube,
-                               QString("Test File (Youtube)"), this));
-
-    auto future = AudioSaveLoad::findMissingFilesAsync(this, files, getFilePath());
+    auto future = AudioSaveLoad::deleteProject(m_project1.get(), getFilePath());
     validateResult(future, true);
 
-    for (auto *file : files)
-    {
-        QCOMPARE(file->missing(), file->source() == AudioFile::Source::File);
-    }
-
-    auto fileName = files[0]->url();
-    auto future1 = Files::File::saveAsync(getFilePath(fileName), "test-data", fileAccess);
-    testFuture(future1, "File::saveAsync", []() {});
-    verifyThatFileExists(getFilePath(fileName), true);
-
-    future = AudioSaveLoad::findMissingFilesAsync(this, files, getFilePath());
-    validateResult(future, true);
-
-    for (auto *file : files)
-    {
-        QCOMPARE(file->missing(), file->source() == AudioFile::Source::File && file->url() != fileName);
-    }
-}
-
-void TestAudioSaveLoad::deleteProject()
-{
-    auto future = AudioSaveLoad::deleteProject(m_project1, getFilePath());
-    validateResult(future, true);
-
-    auto future2 = AudioSaveLoad::findProjectsAsync(this, getFilePath());
+    QObject context;
+    auto future2 = AudioSaveLoad::findProjectsAsync(&context, getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
-        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.size(), 2);
+        EXPECT_FALSE(list.empty()) << "Project list is empty, when it should not be!";
+        EXPECT_EQ(list.size(), 2);
 
         auto *project = list[0];
-        QCOMPARE(project->name(), "Project_0");
+        EXPECT_EQ(project->name(), "Project_0");
         auto *project2 = list[1];
-        QCOMPARE(project2->name(), "Project_2");
+        EXPECT_EQ(project2->name(), "Project_2");
     });
 
-    future = AudioSaveLoad::deleteProject(m_project, getFilePath());
+    future = AudioSaveLoad::deleteProject(m_project.get(), getFilePath());
     validateResult(future, true);
 
-    future = AudioSaveLoad::deleteProject(m_project2, getFilePath());
+    future = AudioSaveLoad::deleteProject(m_project2.get(), getFilePath());
     validateResult(future, true);
 
     future = AudioSaveLoad::deleteProject(nullptr, getFilePath());
     validateResult(future, false);
 
-    future2 = AudioSaveLoad::findProjectsAsync(this, getFilePath());
+    future2 = AudioSaveLoad::findProjectsAsync(&context, getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
-        QVERIFY2(list.empty(), "Project list is not empty, when it should be!");
+        EXPECT_TRUE(list.empty()) << "Project list is not empty, when it should be!";
     });
 }
 
-QTEST_GUILESS_MAIN(TestAudioSaveLoad)
-#include "testaudiosaveload.moc"
+TEST_F(AudioSaveLoadTest, TestNormalBehavior)
+{
+    initProjects();
+    saveProject();
+    findProjects();
+    deleteProjects();
+}
+
+TEST_F(AudioSaveLoadTest, FindMissingFiles)
+{
+    QList<AudioFile *> files;
+    files.reserve(5);
+
+    for (int i = 0; i < 5; i++)
+    {
+        files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::File,
+                                   QStringLiteral("Test File %1").arg(i), nullptr));
+    }
+
+    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Web,
+                               QStringLiteral("Test File (URL)"), nullptr));
+    files.append(new AudioFile(QUuid::createUuid().toString(), AudioFile::Source::Spotify,
+                               QStringLiteral("Test File (Spotify))"), nullptr));
+    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Youtube,
+                               QStringLiteral("Test File (Youtube)"), nullptr));
+
+    QObject context;
+    auto future = AudioSaveLoad::findMissingFilesAsync(&context, files, getFilePath());
+    validateResult(future, true);
+
+    for (auto *file : files)
+    {
+        EXPECT_EQ(file->missing(), file->source() == AudioFile::Source::File);
+    }
+
+    auto fileName = files[0]->url();
+    auto future1 = Files::File::saveAsync(getFilePath(fileName), "test-data", fileAccess.get());
+    testFuture(future1, "File::saveAsync", []() {});
+    verifyThatFileExists(getFilePath(fileName), true);
+
+    future = AudioSaveLoad::findMissingFilesAsync(&context, files, getFilePath());
+    validateResult(future, true);
+
+    for (auto *file : files)
+    {
+        EXPECT_EQ(file->missing(), file->source() == AudioFile::Source::File && file->url() != fileName);
+        file->deleteLater();
+    }
+}

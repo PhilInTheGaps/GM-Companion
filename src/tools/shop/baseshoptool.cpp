@@ -1,5 +1,7 @@
 #include "baseshoptool.h"
 #include "file.h"
+#include "results/filedataresult.h"
+#include "results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include <QJsonDocument>
 #include <QLoggingCategory>

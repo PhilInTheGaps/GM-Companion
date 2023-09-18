@@ -1,34 +1,30 @@
-#include <QtTest>
-#include <QObject>
-
 #include "abstractaccesstest.h"
-#include "fileaccesslocal.h"
+#include "src/filesystem/fileaccesslocal.h"
+#include <gtest/gtest.h>
 
 using namespace Files;
 
-class TestLocalAccess : public AbstractAccessTest
+class LocalAccessTest : public AbstractAccessTest
 {
-    Q_OBJECT
+public:
+    LocalAccessTest()
+    {
+        fileAccess = std::make_unique<FileAccessLocal>(nullptr);
+        createTestFiles();
+    }
 
 protected:
-    void createTestDir() override;
-    void removeTestDir() override {} // Temp dir is deleted automatically
+    void createTestDir() override
+    {
+        // Temp file should have been created automatically
+        verifyThatFileExists(getFilePath());
+    }
 
 private slots:
     void initTestCase();
 };
 
-void TestLocalAccess::createTestDir()
+TEST_F(LocalAccessTest, TestFileAccess)
 {
-    // Temp file should have been created automatically
-    verifyThatFileExists(getFilePath());
+    runAllTests();
 }
-
-void TestLocalAccess::initTestCase()
-{
-    fileAccess = new FileAccessLocal(this);
-    createTestFiles();
-}
-
-QTEST_GUILESS_MAIN(TestLocalAccess)
-#include "testlocalaccess.moc"

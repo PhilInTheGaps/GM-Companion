@@ -1,84 +1,51 @@
-#include <QtTest>
-#include <QObject>
 #include "utils/stringutils.h"
+#include <gtest/gtest.h>
 
-class TestStringUtils : public QObject
+struct Rot13Test
 {
-    Q_OBJECT
-public:
-    TestStringUtils() = default;
-
-private slots:
-    void rot13_data();
-    void rot13();
-
-    void hasWildcardMatch_data();
-    void hasWildcardMatch();
-
-    void canConstructCompileTimeString();
+    const char *description;
+    QString input;
+    QString output;
 };
 
-void TestStringUtils::rot13_data()
+TEST(StringUtilsTest, Rot13)
 {
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("output");
+    std::vector<Rot13Test> tests = {{"alphabet lower", "abcdefghijklmnopqrstuvwxyz", "nopqrstuvwxyzabcdefghijklm"},
+                                    {"alphabet upper", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "NOPQRSTUVWXYZABCDEFGHIJKLM"},
+                                    {"random string 1", "DzFmnYqGVmsHcNnqDWqO", "QmSzaLdTIzfUpAadQJdB"},
+                                    {"random string 2", "bqiqxJFmqwrIkhFmFEvT", "odvdkWSzdjeVxuSzSRiG"},
+                                    {"random string 3", "qiFJglgZCVgiXLUcFmGF", "dvSWtytMPItvKYHpSzTS"}};
 
-    QTest::newRow("alphabet lower")
-            << "abcdefghijklmnopqrstuvwxyz"
-            << "nopqrstuvwxyzabcdefghijklm";
-
-    QTest::newRow("alphabet upper")
-            << "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            << "NOPQRSTUVWXYZABCDEFGHIJKLM";
-
-    QTest::newRow("random string 1")
-            << "DzFmnYqGVmsHcNnqDWqO"
-            << "QmSzaLdTIzfUpAadQJdB";
-
-    QTest::newRow("random string 2")
-            << "bqiqxJFmqwrIkhFmFEvT"
-            << "odvdkWSzdjeVxuSzSRiG";
-
-    QTest::newRow("random string 3")
-            << "qiFJglgZCVgiXLUcFmGF"
-            << "dvSWtytMPItvKYHpSzTS";
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(StringUtils::rot13(test.input), test.output) << test.description;
+    }
 }
 
-void TestStringUtils::rot13()
+struct WildcardTest
 {
-    QFETCH(QString, input);
-    QFETCH(QString, output);
+    const char *description;
+    QString string;
+    QString wildcard;
+    bool output;
+};
 
-    QCOMPARE(StringUtils::rot13(input), output);
-}
-
-void TestStringUtils::hasWildcardMatch_data()
+TEST(StringUtilsTest, HasWildcardMatch)
 {
-    QTest::addColumn<QString>("string");
-    QTest::addColumn<QString>("wildcard");
-    QTest::addColumn<bool>("output");
+    std::vector<WildcardTest> tests = {{"mp3 file match", "file.mp3", "*.mp3", true},
+                                       {"mp3 file no match", "file.mp3_", "*.mp3", false},
+                                       {"doc file match", "file.doc", "*.doc", true},
+                                       {"doc file no match", "file.not_a_doc", "*.doc", false}};
 
-    QTest::newRow("mp3 file match") << "file.mp3" << "*.mp3" << true;
-    QTest::newRow("mp3 file no match") << "file.mp3_" << "*.mp3" << false;
-    QTest::newRow("doc file match") << "file.doc" << "*.doc" << true;
-    QTest::newRow("doc file no match") << "file.not_a_doc" << "*.doc" << false;
-}
-
-void TestStringUtils::hasWildcardMatch()
-{
-    QFETCH(QString, string);
-    QFETCH(QString, wildcard);
-    QFETCH(bool, output);
-
-    QCOMPARE(StringUtils::hasWildcardMatch(string, wildcard), output);
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(StringUtils::hasWildcardMatch(test.string, test.wildcard), test.output) << test.description;
+    }
 }
 
 constexpr ConstQString constString = "Test String";
 
-void TestStringUtils::canConstructCompileTimeString()
+TEST(StringUtilsTest, CanConstructCompileTimeString)
 {
-    QCOMPARE(constString.data(), "Test String");
+    EXPECT_EQ(constString.data(), "Test String");
 }
-
-QTEST_APPLESS_MAIN(TestStringUtils)
-#include "teststringutils.moc"

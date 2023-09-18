@@ -1,48 +1,51 @@
 #pragma once
 
-#include "fileaccess.h"
-#include "src/addons/addon.h"
+#include "src/filesystem/fileaccess.h"
+#include "staticabstracttest.h"
+#include <QByteArray>
 #include <QFuture>
-#include <QObject>
+#include <QFutureWatcher>
+#include <QList>
+#include <QNetworkAccessManager>
+#include <QSignalSpy>
+#include <QString>
+#include <QStringList>
 #include <QTemporaryDir>
 #include <QTemporaryFile>
-#include <QtTest>
+#include <gtest/gtest.h>
+#include <memory>
 
-class AbstractTest : public QObject
+namespace Files
 {
-    Q_OBJECT
+class FileAccess;
+}
+
+class AbstractTest : public StaticAbstractTest
+{
 public:
-    explicit AbstractTest(QObject *parent = nullptr);
-    ~AbstractTest() override = default;
+    explicit AbstractTest();
 
 protected:
-    QNetworkAccessManager *networkManager = nullptr;
-    Files::FileAccess *fileAccess = nullptr;
+    std::unique_ptr<QNetworkAccessManager> networkManager = nullptr;
+    std::unique_ptr<Files::FileAccess> fileAccess = nullptr;
     QTemporaryDir tempDir;
 
     bool waitForAuthentication = false;
 
-    static constexpr int WAIT_TIME_IN_MS = 10000;
-    static constexpr int WAIT_TIME_IN_MS_CACHED = 10;
-    static constexpr int WAIT_TIME_IN_MS_WITH_AUTH = 120000;
-
     template <typename T, typename F>
-    void testFuture(const QFuture<T> &future, const QString &funcName, F &&testFunc, bool cached = false)
+    void testFuture(const QFuture<T> &future, const char *funcName, F &&testFunc, bool cached = false)
     {
         QFutureWatcher<T> watcher;
         QSignalSpy spy(&watcher, &QFutureWatcher<T>::finished);
 
         watcher.setFuture(future);
-        QVERIFY2(!future.isCanceled(),
-                 QStringLiteral("The QFuture object returned by %1 has been canceled.").arg(funcName).toUtf8());
+        EXPECT_FALSE(future.isCanceled()) << "The QFuture object returned by " << funcName << " has been canceled.";
 
         auto waitTime = cached                  ? WAIT_TIME_IN_MS_CACHED
                         : waitForAuthentication ? WAIT_TIME_IN_MS_WITH_AUTH
                                                 : WAIT_TIME_IN_MS;
         auto isReady = spy.wait(waitTime);
-        QVERIFY2(
-            isReady,
-            QStringLiteral("%1 took longer than %2 ms to respond.").arg(funcName, QString::number(waitTime)).toUtf8());
+        EXPECT_TRUE(isReady) << funcName << " took longer than " << waitTime << " ms to respond.";
 
         waitForAuthentication = false;
 
@@ -54,24 +57,8 @@ protected:
 
     [[nodiscard]] virtual auto getFilePath(const QString &filename = QLatin1String()) const -> QString;
 
-    static void expectWarning();
-
-    static void loadResources();
-    static void copyResourceToFile(const QString &resource, const QString &destination);
-    static auto copyResourceToTempFile(const QString &resource) -> QFile *;
-    static auto readResource(const QString &path) -> QByteArray;
-
-    auto backupUserFolder(const QString &userFolder) -> QString;
-    void restoreUserFolder(const QString &backupFolder, const QString &destination);
-
-    void enableTestAddons();
-    void disableTestAddons();
-    [[nodiscard]] auto testAddons() const -> QList<Addon *>;
+    [[nodiscard]] auto backupUserFolder(const QString &userFolder) -> QString;
 
 private:
     void checkOrCreateFileAccess();
-    void moveFolderRecursively(const QString &userFolder, const QString &backupFolder);
-
-    QList<Addon *> m_addons;
-    const QStringList m_testAddonIds = {"local.test.0", "local.test.1"};
 };

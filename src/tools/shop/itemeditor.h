@@ -2,12 +2,16 @@
 
 #include "abstracttool.h"
 #include "project/itemgroup.h"
-#include "results/filecheckresult.h"
-#include "results/filedataresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QStringList>
 #include <QtQml/qqmlregistration.h>
+
+namespace Files
+{
+class FileCheckResult;
+class FileDataResult;
+} // namespace Files
 
 class ItemEditor : public AbstractTool
 {

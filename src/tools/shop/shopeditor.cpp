@@ -1,5 +1,6 @@
 #include "shopeditor.h"
 #include "file.h"
+#include "results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"

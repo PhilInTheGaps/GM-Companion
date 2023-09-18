@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include <QObject>
 
@@ -41,5 +40,3 @@ public:
         return list;
     }
 };
-
-#endif // UTILS_H

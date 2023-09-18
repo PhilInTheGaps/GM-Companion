@@ -1,147 +1,142 @@
 #include "settings/settingsmanager.h"
 #include "src/tools/shop/shopeditor.h"
 #include "src/tools/shop/shoptool.h"
-#include "tests/testhelper/abstracttest.h"
+#include "tests/testhelper/staticabstracttest.h"
 #include "utils/fileutils.h"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
-class TestShopEditor : public AbstractTest
+class ShopEditorTest : public StaticAbstractTest
 {
-    Q_OBJECT
 public:
-    using AbstractTest::AbstractTest;
-
-private slots:
-    void initTestCase();
-    void verifyComponents();
-    void canEditShops();
-    void canEditShopItems();
-    void canEnableCategories();
-    void canSave();
-    void canEditItems();
-    void canSaveItems();
-    void cleanupTestCase();
-
-private:
-    QString origCloudMode;
-    QString backupPath;
-    QString userPath;
-
-    ShopTool tool = ShopTool(nullptr);
-    ShopEditor *editor = nullptr;
-};
-
-void TestShopEditor::initTestCase()
-{
-    origCloudMode = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local"));
-    SettingsManager::instance()->set(QStringLiteral("cloudMode"), QStringLiteral("local"));
-
-    userPath = SettingsManager::getPath(QStringLiteral("shops"));
-    backupPath = backupUserFolder(userPath);
-
-    copyResourceToFile(QStringLiteral(":/resources/shopproject/project.shop"),
-                       FileUtils::fileInDir(QStringLiteral("project.shop"), userPath));
-    copyResourceToFile(QStringLiteral(":/resources/shopproject/group.items"),
-                       FileUtils::fileInDir(QStringLiteral("group.items"), userPath));
-
-    // wait for tool to finish loading data
-    tool.loadData();
-    QSignalSpy spyTool(&tool, &ShopEditor::isLoadingChanged);
-    spyTool.wait();
-    QVERIFY(!tool.isLoading());
-    QVERIFY(tool.isDataLoaded());
-
-    // load editor data
-    editor = tool.editor();
-    QVERIFY(editor);
-
-    QVERIFY(!editor->isDataLoaded());
-    editor->loadData();
-
-    QSignalSpy spyEditor(editor, &ShopEditor::isLoadingChanged);
-    QVERIFY(spyEditor.wait());
-
-    if (!editor->currentItemGroup())
+    static void SetUpTestSuite()
     {
-        QSignalSpy spyEditor2(editor, &ShopEditor::itemGroupsChanged);
-        QVERIFY(spyEditor2.wait());
+        origCloudMode = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local"));
+        SettingsManager::instance()->set(QStringLiteral("cloudMode"), QStringLiteral("local"));
+
+        userPath = SettingsManager::getPath(QStringLiteral("shops"));
+        backupPath = backupUserFolder(userPath, tempDir);
+
+        copyResourceToFile(QStringLiteral(":/resources/shopproject/project.shop"),
+                           FileUtils::fileInDir(QStringLiteral("project.shop"), userPath));
+        copyResourceToFile(QStringLiteral(":/resources/shopproject/group.items"),
+                           FileUtils::fileInDir(QStringLiteral("group.items"), userPath));
+
+        // wait for tool to finish loading data
+        tool.loadData();
+        QSignalSpy spyTool(&tool, &ShopEditor::isLoadingChanged);
+        spyTool.wait();
+        EXPECT_FALSE(tool.isLoading());
+        EXPECT_TRUE(tool.isDataLoaded());
+
+        // load editor data
+        editor = tool.editor();
+        EXPECT_TRUE(editor);
+
+        EXPECT_FALSE(editor->isDataLoaded());
+        editor->loadData();
+
+        QSignalSpy spyEditor(editor, &ShopEditor::isLoadingChanged);
+        EXPECT_TRUE(spyEditor.wait());
+
+        if (!editor->currentItemGroup())
+        {
+            QSignalSpy spyEditor2(editor, &ShopEditor::itemGroupsChanged);
+            EXPECT_TRUE(spyEditor2.wait());
+        }
+
+        EXPECT_FALSE(editor->isLoading());
+        EXPECT_TRUE(editor->isDataLoaded());
     }
 
-    QVERIFY(!editor->isLoading());
-    QVERIFY(editor->isDataLoaded());
+    static void TearDownTestSuite()
+    {
+        SettingsManager::instance()->set(QStringLiteral("cloudMode"), origCloudMode);
+        restoreUserFolder(backupPath, userPath);
+    }
+
+protected:
+    inline static QString origCloudMode;
+    inline static QString backupPath;
+    inline static QString userPath;
+    inline static QTemporaryDir tempDir;
+
+    inline static ShopTool tool = ShopTool(nullptr);
+    inline static ShopEditor *editor = nullptr;
+};
+
+TEST_F(ShopEditorTest, VerifyComponents)
+{
+    EXPECT_TRUE(editor);
+    EXPECT_TRUE(editor->itemModelShop());
+    EXPECT_TRUE(editor->itemModelGroup());
 }
 
-void TestShopEditor::verifyComponents()
+TEST_F(ShopEditorTest, CanEditShops)
 {
-    QVERIFY(editor);
-    QVERIFY(editor->itemModelShop());
-    QVERIFY(editor->itemModelGroup());
-}
-
-void TestShopEditor::canEditShops()
-{
-    QVERIFY(editor);
-    QVERIFY(editor->currentProject());
-    QVERIFY(editor->currentProject()->currentCategory());
-    QVERIFY(editor->isSaved());
+    ASSERT_TRUE(editor);
+    EXPECT_TRUE(editor->currentProject());
+    EXPECT_TRUE(editor->currentProject()->currentCategory());
+    EXPECT_TRUE(editor->isSaved());
 
     // can not add invalid shop
-    QVERIFY(!editor->createThing(QLatin1String(), ShopEditor::Type::Shop));
-    QVERIFY(editor->isSaved());
+    EXPECT_FALSE(editor->createThing(QLatin1String(), ShopEditor::Type::Shop));
+    EXPECT_TRUE(editor->isSaved());
 
     // can create shop
     const auto shopCount = editor->currentProject()->currentCategory()->shops().count();
-    QVERIFY(editor->createThing(QStringLiteral("test-shop"), ShopEditor::Type::Shop));
-    QCOMPARE(editor->currentProject()->currentCategory()->shops().count(), shopCount + 1);
-    QCOMPARE(editor->currentProject()->currentCategory()->shops().constLast()->name(), QStringLiteral("test-shop"));
+    EXPECT_TRUE(editor->createThing(QStringLiteral("test-shop"), ShopEditor::Type::Shop));
+    EXPECT_EQ(editor->currentProject()->currentCategory()->shops().count(), shopCount + 1);
+    EXPECT_EQ(editor->currentProject()->currentCategory()->shops().constLast()->name(), QStringLiteral("test-shop"));
     auto *shop = editor->currentProject()->currentCategory()->shops().constLast();
     editor->currentProject()->currentCategory()->currentShop(shop);
-    QVERIFY(!editor->isSaved());
+    EXPECT_FALSE(editor->isSaved());
     editor->isSaved(true);
 
     // can not move shop to invalid positions
-    QVERIFY(!editor->moveShop(1));
-    QVERIFY(!editor->moveShop(-(shopCount + 1)));
-    QVERIFY(editor->isSaved());
+    EXPECT_FALSE(editor->moveShop(1));
+    EXPECT_FALSE(editor->moveShop(-(shopCount + 1)));
+    EXPECT_TRUE(editor->isSaved());
 
     // can move to valid position
-    QVERIFY(editor->moveShop(-1));
-    QCOMPARE(editor->currentProject()->currentCategory()->shops().at(shopCount - 1)->name(),
-             QStringLiteral("test-shop"));
-    QVERIFY(!editor->isSaved());
+    EXPECT_TRUE(editor->moveShop(-1));
+    EXPECT_EQ(editor->currentProject()->currentCategory()->shops().at(shopCount - 1)->name(),
+              QStringLiteral("test-shop"));
+    EXPECT_FALSE(editor->isSaved());
     editor->isSaved(true);
 
     // can delete shop
-    QVERIFY(editor->deleteShop());
-    QVERIFY(!editor->isSaved());
+    EXPECT_TRUE(editor->deleteShop());
+    EXPECT_FALSE(editor->isSaved());
     editor->isSaved(true);
 
     // should change to the next valid shop
-    QVERIFY(editor->currentProject()->currentCategory()->currentShop());
+    EXPECT_TRUE(editor->currentProject()->currentCategory()->currentShop());
 
     // can not delete invalid shop
     editor->currentProject()->currentCategory()->currentShop(nullptr);
-    QVERIFY(!editor->deleteShop());
-    QVERIFY(editor->isSaved());
+    EXPECT_FALSE(editor->deleteShop());
+    EXPECT_TRUE(editor->isSaved());
 }
 
-void TestShopEditor::canEditShopItems()
+TEST_F(ShopEditorTest, CanEditShopItems)
 {
-    QVERIFY(editor);
+    ASSERT_TRUE(editor);
 
     editor->createThing(QStringLiteral("project"), ShopEditor::Type::Project);
     auto *project = editor->projects().constLast();
-    QCOMPARE(project->name(), QStringLiteral("project"));
+    EXPECT_EQ(project->name(), QStringLiteral("project"));
 
     editor->currentProject(project);
     editor->createThing(QStringLiteral("category"), ShopEditor::Type::Category);
-    QVERIFY(project->currentCategory());
-    QCOMPARE(project->currentCategory()->name(), QStringLiteral("category"));
+    EXPECT_TRUE(project->currentCategory());
+    EXPECT_EQ(project->currentCategory()->name(), QStringLiteral("category"));
 
     editor->createThing(QStringLiteral("shop"), ShopEditor::Type::Shop);
     auto *shop = project->currentCategory()->currentShop();
 
-    QVERIFY(!editor->addItem(-1));
-    QVERIFY(shop->items().isEmpty());
+    EXPECT_FALSE(editor->addItem(-1));
+    EXPECT_TRUE(shop->items().isEmpty());
 
     auto item0 = Item("item0", "0", "desc", "cat0", nullptr);
     auto item1 = Item("item1", "0", "desc", "cat1", nullptr);
@@ -151,155 +146,156 @@ void TestShopEditor::canEditShopItems()
     editor->currentItemGroup(&group);
 
     editor->setItemCategoryEnabled(QStringLiteral("cat0"), false);
-    QVERIFY(editor->disabledItemCategories().contains(QStringLiteral("cat0")));
-    QVERIFY(editor->addItem(0));
-    QCOMPARE(shop->items().count(), 1);
-    QCOMPARE(shop->items().at(0)->name(), QStringLiteral("item1"));
+    EXPECT_TRUE(editor->disabledItemCategories().contains(QStringLiteral("cat0")));
+    EXPECT_TRUE(editor->addItem(0));
+    EXPECT_EQ(shop->items().count(), 1);
+    EXPECT_EQ(shop->items().at(0)->name(), QStringLiteral("item1"));
 
     editor->enableAllItemCategories();
     editor->setItemCategoryEnabled(QStringLiteral("cat1"), false);
-    QVERIFY(editor->addItem(0));
-    QCOMPARE(shop->items().count(), 2);
-    QCOMPARE(shop->items().at(1)->name(), QStringLiteral("item0"));
+    EXPECT_TRUE(editor->addItem(0));
+    EXPECT_EQ(shop->items().count(), 2);
+    EXPECT_EQ(shop->items().at(1)->name(), QStringLiteral("item0"));
 
-    QVERIFY(editor->addItem(1));
-    QCOMPARE(shop->items().count(), 3);
-    QCOMPARE(shop->items().at(2)->name(), QStringLiteral("item2"));
+    EXPECT_TRUE(editor->addItem(1));
+    EXPECT_EQ(shop->items().count(), 3);
+    EXPECT_EQ(shop->items().at(2)->name(), QStringLiteral("item2"));
 
-    QVERIFY(!editor->deleteItem(-1));
-    QVERIFY(!editor->deleteItem(3));
+    EXPECT_FALSE(editor->deleteItem(-1));
+    EXPECT_FALSE(editor->deleteItem(3));
 
     editor->setItemCategoryEnabled(QStringLiteral("cat1"), false);
-    QCOMPARE(editor->itemModelGroup()->rowCount(), 2);
+    EXPECT_EQ(editor->itemModelGroup()->rowCount(), 2);
     editor->setItemCategoryEnabled(QStringLiteral("cat0"), false);
-    QCOMPARE(editor->itemModelGroup()->rowCount(), 0);
+    EXPECT_EQ(editor->itemModelGroup()->rowCount(), 0);
     editor->enableAllItemCategories();
-    QCOMPARE(editor->itemModelGroup()->rowCount(), 3);
+    EXPECT_EQ(editor->itemModelGroup()->rowCount(), 3);
 
-    QVERIFY(editor->deleteItem(2));
-    QVERIFY(editor->deleteItem(1));
-    QVERIFY(editor->deleteItem(0));
+    EXPECT_TRUE(editor->deleteItem(2));
+    EXPECT_TRUE(editor->deleteItem(1));
+    EXPECT_TRUE(editor->deleteItem(0));
 
-    QVERIFY(editor->deleteShop());
+    EXPECT_TRUE(editor->deleteShop());
 
-    QVERIFY(!editor->deleteCategory(nullptr));
-    QVERIFY(editor->deleteCategory(project->currentCategory()));
+    EXPECT_FALSE(editor->deleteCategory(nullptr));
+    EXPECT_TRUE(editor->deleteCategory(project->currentCategory()));
 
-    QVERIFY(!editor->deleteProject(nullptr));
-    QVERIFY(editor->deleteProject(project));
+    EXPECT_FALSE(editor->deleteProject(nullptr));
+    EXPECT_TRUE(editor->deleteProject(project));
 
     editor->currentItemGroup(nullptr);
     editor->isSaved(true);
 }
 
-void TestShopEditor::canEnableCategories()
+TEST_F(ShopEditorTest, CanEnableCategories)
 {
-    QVERIFY(editor);
+    ASSERT_TRUE(editor);
 
     editor->setItemCategoryEnabled(QStringLiteral("cat0"), false);
     editor->setItemCategoryEnabled(QStringLiteral("cat1"), false);
     editor->setItemCategoryEnabled(QStringLiteral("cat2"), false);
 
-    QVERIFY(!editor->isItemCategoryEnabled(QStringLiteral("cat0")));
-    QVERIFY(!editor->isItemCategoryEnabled(QStringLiteral("cat1")));
-    QVERIFY(!editor->isItemCategoryEnabled(QStringLiteral("cat2")));
+    EXPECT_FALSE(editor->isItemCategoryEnabled(QStringLiteral("cat0")));
+    EXPECT_FALSE(editor->isItemCategoryEnabled(QStringLiteral("cat1")));
+    EXPECT_FALSE(editor->isItemCategoryEnabled(QStringLiteral("cat2")));
 
     editor->setItemCategoryEnabled(QStringLiteral("cat0"));
-    QVERIFY(editor->isItemCategoryEnabled(QStringLiteral("cat0")));
+    EXPECT_TRUE(editor->isItemCategoryEnabled(QStringLiteral("cat0")));
 
     editor->enableAllItemCategories();
-    QVERIFY(editor->isItemCategoryEnabled(QStringLiteral("cat0")));
-    QVERIFY(editor->isItemCategoryEnabled(QStringLiteral("cat1")));
-    QVERIFY(editor->isItemCategoryEnabled(QStringLiteral("cat2")));
+    EXPECT_TRUE(editor->isItemCategoryEnabled(QStringLiteral("cat0")));
+    EXPECT_TRUE(editor->isItemCategoryEnabled(QStringLiteral("cat1")));
+    EXPECT_TRUE(editor->isItemCategoryEnabled(QStringLiteral("cat2")));
 }
 
-void TestShopEditor::canSave()
+TEST_F(ShopEditorTest, CanSave)
 {
-    QVERIFY(editor);
+    ASSERT_TRUE(editor);
 
     editor->createThing(QStringLiteral("new-project"), ShopEditor::Type::Project);
-    QVERIFY(!editor->isSaved());
+    EXPECT_FALSE(editor->isSaved());
 
     QSignalSpy spy(editor, &ShopEditor::isSavedChanged);
     editor->save();
-    QVERIFY(spy.wait());
+    EXPECT_TRUE(spy.wait());
 
-    QVERIFY(editor->isSaved());
-    QCOMPARE(tool.projects().count(), editor->projects().count());
+    EXPECT_TRUE(editor->isSaved());
+    EXPECT_EQ(tool.projects().count(), editor->projects().count());
 }
 
-void TestShopEditor::canEditItems()
+TEST_F(ShopEditorTest, CanEditItems)
 {
     auto *itemEditor = editor->itemEditor();
-    QVERIFY(!itemEditor->isLoading());
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->isLoading());
+    EXPECT_TRUE(itemEditor->isSaved());
 
     auto categoryCount = itemEditor->categories().count();
-    QVERIFY(itemEditor->addCategory(QStringLiteral("cat0")));
-    QCOMPARE(itemEditor->categories().count(), categoryCount + 1);
-    QVERIFY(!itemEditor->isSaved());
+    EXPECT_TRUE(itemEditor->addCategory(QStringLiteral("cat0")));
+    EXPECT_EQ(itemEditor->categories().count(), categoryCount + 1);
+    EXPECT_FALSE(itemEditor->isSaved());
     itemEditor->isSaved(true);
     categoryCount++;
 
-    QVERIFY(!itemEditor->addCategory(QStringLiteral("cat0")));
-    QCOMPARE(itemEditor->categories().count(), categoryCount);
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->addCategory(QStringLiteral("cat0")));
+    EXPECT_EQ(itemEditor->categories().count(), categoryCount);
+    EXPECT_TRUE(itemEditor->isSaved());
 
-    QVERIFY(!itemEditor->addItem("", "", "cat0", ""));
-    QVERIFY(!itemEditor->addItem("item0", "", "", ""));
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->addItem("", "", "cat0", ""));
+    EXPECT_FALSE(itemEditor->addItem("item0", "", "", ""));
+    EXPECT_TRUE(itemEditor->isSaved());
 
     int itemCount = itemEditor->itemModel()->rowCount();
-    QVERIFY(itemEditor->addItem("item0", "", "cat0", ""));
-    QCOMPARE(itemEditor->itemModel()->rowCount(), ++itemCount);
-    QVERIFY(!itemEditor->isSaved());
+    EXPECT_TRUE(itemEditor->addItem("item0", "", "cat0", ""));
+    EXPECT_EQ(itemEditor->itemModel()->rowCount(), ++itemCount);
+    EXPECT_FALSE(itemEditor->isSaved());
     itemEditor->isSaved(true);
 
-    QVERIFY(itemEditor->addItem("item1", "", "cat1", ""));
-    QVERIFY(itemEditor->addItem("item2", "price2", "cat0", "desc2"));
+    EXPECT_TRUE(itemEditor->addItem("item1", "", "cat1", ""));
+    EXPECT_TRUE(itemEditor->addItem("item2", "price2", "cat0", "desc2"));
     itemCount += 2;
-    QVERIFY(!itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->isSaved());
     itemEditor->isSaved(true);
 
-    QCOMPARE(qobject_cast<Item *>(itemEditor->itemModel()->get(itemCount - 2))->name(), QStringLiteral("item2"));
+    EXPECT_EQ(qobject_cast<Item *>(itemEditor->itemModel()->get(itemCount - 2))->name(), QStringLiteral("item2"));
 
     const auto index = itemEditor->itemModel()->index(itemCount - 2);
-    QCOMPARE(itemEditor->itemModel()->data(index, Qt::DisplayRole), QStringLiteral("item2"));
-    QCOMPARE(itemEditor->itemModel()->data(index, Qt::ToolTipRole), QVariant());
-    QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Name)), QStringLiteral("item2"));
-    QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Price)), QStringLiteral("price2"));
-    QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Description)),
-             QStringLiteral("desc2"));
-    QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Category)),
-             QStringLiteral("cat0"));
+    EXPECT_EQ(itemEditor->itemModel()->data(index, Qt::DisplayRole), QStringLiteral("item2"));
+    EXPECT_EQ(itemEditor->itemModel()->data(index, Qt::ToolTipRole), QVariant());
+    EXPECT_EQ(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Name)), QStringLiteral("item2"));
+    EXPECT_EQ(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Price)),
+              QStringLiteral("price2"));
+    EXPECT_EQ(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Description)),
+              QStringLiteral("desc2"));
+    EXPECT_EQ(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Category)),
+              QStringLiteral("cat0"));
 
-    QVERIFY(!itemEditor->deleteItem(-1));
-    QVERIFY(!itemEditor->deleteItem(itemCount));
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->deleteItem(-1));
+    EXPECT_FALSE(itemEditor->deleteItem(itemCount));
+    EXPECT_TRUE(itemEditor->isSaved());
 
-    QVERIFY(itemEditor->deleteItem(--itemCount));
-    QCOMPARE(itemEditor->itemModel()->rowCount(), itemCount);
-    QVERIFY(!itemEditor->isSaved());
+    EXPECT_TRUE(itemEditor->deleteItem(--itemCount));
+    EXPECT_EQ(itemEditor->itemModel()->rowCount(), itemCount);
+    EXPECT_FALSE(itemEditor->isSaved());
     itemEditor->isSaved(true);
 }
 
-void TestShopEditor::canSaveItems()
+TEST_F(ShopEditorTest, CanSaveItems)
 {
     auto *itemEditor = editor->itemEditor();
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_TRUE(itemEditor->isSaved());
 
-    QVERIFY(itemEditor->addCategory(QStringLiteral("save_cat")));
-    QVERIFY(
+    EXPECT_TRUE(itemEditor->addCategory(QStringLiteral("save_cat")));
+    EXPECT_TRUE(
         itemEditor->addItem(QStringLiteral("save_item"), QLatin1String(), QStringLiteral("save_cat"), QLatin1String()));
-    QVERIFY(!itemEditor->isSaved());
+    EXPECT_FALSE(itemEditor->isSaved());
 
     QSignalSpy spy(itemEditor, &ItemEditor::isSavedChanged);
-    QVERIFY(spy.isValid());
+    EXPECT_TRUE(spy.isValid());
 
     itemEditor->save();
 
-    QVERIFY(spy.wait());
-    QVERIFY(itemEditor->isSaved());
+    EXPECT_TRUE(spy.wait());
+    EXPECT_TRUE(itemEditor->isSaved());
 
     // have items been copied to shop editor?
     bool containsItem = false;
@@ -316,27 +312,17 @@ void TestShopEditor::canSaveItems()
         }
     }
 
-    QVERIFY(containsItem);
+    EXPECT_TRUE(containsItem);
 
     // editor should be able load CustomItems.items now
     ItemEditor secondEditor;
-    QVERIFY(!secondEditor.isDataLoaded());
+    EXPECT_FALSE(secondEditor.isDataLoaded());
     secondEditor.loadData();
 
     QSignalSpy spy2(&secondEditor, &ShopEditor::isLoadingChanged);
     spy2.wait();
 
-    QVERIFY(!secondEditor.isLoading());
-    QVERIFY(secondEditor.isDataLoaded());
-    QVERIFY(secondEditor.categories().contains(QStringLiteral("save_cat")));
+    EXPECT_FALSE(secondEditor.isLoading());
+    EXPECT_TRUE(secondEditor.isDataLoaded());
+    EXPECT_TRUE(secondEditor.categories().contains(QStringLiteral("save_cat")));
 }
-
-void TestShopEditor::cleanupTestCase()
-{
-    SettingsManager::instance()->set(QStringLiteral("cloudMode"), origCloudMode);
-
-    restoreUserFolder(backupPath, userPath);
-}
-
-QTEST_GUILESS_MAIN(TestShopEditor)
-#include "testshopeditor.moc"

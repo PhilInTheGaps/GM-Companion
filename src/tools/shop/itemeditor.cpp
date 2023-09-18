@@ -1,4 +1,6 @@
 #include "itemeditor.h"
+#include "results/filecheckresult.h"
+#include "results/filedataresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"

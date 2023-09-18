@@ -1,26 +1,12 @@
 #include "models/treeitem.h"
-#include "qtestcase.h"
-#include <QObject>
-#include <QtTest>
-
-class TestTreeItem : public QObject
-{
-    Q_OBJECT
-public:
-    using QObject::QObject;
-
-private slots:
-    void canChangeProperties();
-    void canAddAndModifyChildren();
-    void canCheckItemAndChildren();
-};
+#include <gtest/gtest.h>
 
 class CheckItem : public TreeItem
 {
     Q_OBJECT
 public:
-    explicit CheckItem(QString name, int depth, bool canToggle, QObject *parent)
-        : TreeItem(std::move(name), depth, canToggle, parent)
+    explicit CheckItem(const QString &name, int depth, bool canToggle, QObject *parent)
+        : TreeItem(name, depth, canToggle, parent)
     {
     }
 
@@ -30,84 +16,83 @@ public:
     }
 };
 
-void TestTreeItem::canChangeProperties()
+TEST(TreeItemTest, CanChangeProperties)
 {
     TreeItem item(QStringLiteral("item"), 0, true);
-    QCOMPARE(item.name(), QStringLiteral("item"));
-    QCOMPARE(item.depth(), 0);
-    QVERIFY(!item.isOpen());
+    EXPECT_EQ(item.name(), QStringLiteral("item"));
+    EXPECT_EQ(item.depth(), 0);
+    EXPECT_FALSE(item.isOpen());
 
     item.rename(QStringLiteral("root"));
-    QCOMPARE(item.name(), QStringLiteral("root"));
-    QCOMPARE(item.path(), QStringLiteral("root"));
+    EXPECT_EQ(item.name(), QStringLiteral("root"));
+    EXPECT_EQ(item.path(), QStringLiteral("root"));
 
     item.isOpen(false);
     item.toggle();
-    QVERIFY(item.isOpen());
+    EXPECT_TRUE(item.isOpen());
 }
 
-void TestTreeItem::canAddAndModifyChildren()
+TEST(TreeItemTest, CanAddAndModifyChildren)
 {
     TreeItem root(QStringLiteral("root"), 0, true);
-    QVERIFY(root.childItems().isEmpty());
+    EXPECT_TRUE(root.childItems().isEmpty());
 
     TreeItem child0(QStringLiteral("child0"), 1, true, &root);
-    QCOMPARE(child0.path(), QStringLiteral("root/child0"));
+    EXPECT_EQ(child0.path(), QStringLiteral("root/child0"));
 
     root.isOpen(false);
-    QCOMPARE(root.childItems().length(), 0);
+    EXPECT_EQ(root.childItems().length(), 0);
 
     root.isOpen(true);
-    QCOMPARE(root.childItems().length(), 1);
+    EXPECT_EQ(root.childItems().length(), 1);
 
     TreeItem child1(QStringLiteral("child1"), 1, true, &root);
-    QCOMPARE(child1.path(), QStringLiteral("root/child1"));
-    QCOMPARE(root.childItems().length(), 2);
-    QCOMPARE(qobject_cast<TreeItem *>(root.childItems().at(1))->name(), QStringLiteral("child1"));
+    EXPECT_EQ(child1.path(), QStringLiteral("root/child1"));
+    EXPECT_EQ(root.childItems().length(), 2);
+    EXPECT_EQ(root.childItems().at(1)->name(), QStringLiteral("child1"));
 
     child1.priority(0);
-    QCOMPARE(qobject_cast<TreeItem *>(root.childItems().at(0))->name(), QStringLiteral("child1"));
+    EXPECT_EQ(root.childItems().at(0)->name(), QStringLiteral("child1"));
 }
 
-void TestTreeItem::canCheckItemAndChildren()
+TEST(TreeItemTest, CanCheckItemAndChildren)
 {
-    CheckItem root(QStringLiteral("root"), 0, true, this);
-    QVERIFY(root.isCheckable());
+    CheckItem root(QStringLiteral("root"), 0, true, nullptr);
+    EXPECT_TRUE(root.isCheckable());
 
     root.setIsChecked(TreeItem::CheckedState::Checked);
-    QCOMPARE(root.isChecked(), TreeItem::CheckedState::Checked);
+    EXPECT_EQ(root.isChecked(), TreeItem::CheckedState::Checked);
 
     root.setIsChecked(TreeItem::CheckedState::Unchecked);
-    QCOMPARE(root.isChecked(), TreeItem::CheckedState::Unchecked);
+    EXPECT_EQ(root.isChecked(), TreeItem::CheckedState::Unchecked);
 
     CheckItem child0(QStringLiteral("child0"), 1, true, &root);
     child0.setIsChecked(TreeItem::CheckedState::Unchecked);
     CheckItem child1(QStringLiteral("child1"), 1, true, &root);
     child1.setIsChecked(TreeItem::CheckedState::Unchecked);
     root.isOpen(true);
-    QCOMPARE(root.childItems().length(), 2);
+    EXPECT_EQ(root.childItems().length(), 2);
 
     // one child checked sets root to partially checked
     child0.setIsChecked(TreeItem::CheckedState::Checked);
-    QCOMPARE(child0.isChecked(), TreeItem::CheckedState::Checked);
-    QCOMPARE(root.isChecked(), TreeItem::CheckedState::PartiallyChecked);
+    EXPECT_EQ(child0.isChecked(), TreeItem::CheckedState::Checked);
+    EXPECT_EQ(root.isChecked(), TreeItem::CheckedState::PartiallyChecked);
 
     // children unchecked sets root to unchecked
     child0.setIsChecked(TreeItem::CheckedState::Unchecked);
-    QCOMPARE(root.isChecked(), TreeItem::CheckedState::Unchecked);
+    EXPECT_EQ(root.isChecked(), TreeItem::CheckedState::Unchecked);
 
     // children checked sets root to checked
     child0.setIsChecked(TreeItem::CheckedState::Checked);
     child1.setIsChecked(TreeItem::CheckedState::Checked);
-    QCOMPARE(root.isChecked(), TreeItem::CheckedState::Checked);
+    EXPECT_EQ(root.isChecked(), TreeItem::CheckedState::Checked);
 
     // checking root sets children to checked
     child0.setIsChecked(TreeItem::CheckedState::Unchecked);
     child1.setIsChecked(TreeItem::CheckedState::Unchecked);
     root.setIsChecked(TreeItem::CheckedState::Checked);
-    QCOMPARE(child0.isChecked(), TreeItem::CheckedState::Checked);
-    QCOMPARE(child1.isChecked(), TreeItem::CheckedState::Checked);
+    EXPECT_EQ(child0.isChecked(), TreeItem::CheckedState::Checked);
+    EXPECT_EQ(child1.isChecked(), TreeItem::CheckedState::Checked);
 }
 
-QTEST_APPLESS_MAIN(TestTreeItem)
 #include "testtreeitem.moc"

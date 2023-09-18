@@ -1,6 +1,5 @@
 #pragma once
 
-#include "fileobject.h"
 #include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QFuture>
@@ -9,6 +8,8 @@
 
 namespace Files
 {
+
+class FileObject;
 
 class FileDialogBackend : public QObject
 {

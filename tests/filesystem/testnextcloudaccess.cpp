@@ -1,84 +1,82 @@
+#include "abstractaccesstest.h"
+#include "mocknextcloud.h"
+#include "settings/settingsmanager.h"
+#include "src/filesystem/fileaccessnextcloud.h"
+#include "src/services/nextcloud/nextcloud.h"
 #include <QDesktopServices>
 #include <QObject>
 #include <QUuid>
-#include <QtTest>
 
-#include "abstractaccesstest.h"
-#include "fileaccessnextcloud.h"
-#include "mocknextcloud.h"
-#include "settings/settingsmanager.h"
-
+#ifndef QT_GUI_LIB
 #define QT_GUI_LIB
+#endif
 
 using namespace Files;
 
-constexpr auto MOCK_SERVICE = "NextCloud_Test";
-constexpr auto MOCK_DOMAIN = "nextcloud.mock";
-
-class TestNextcloudAccess : public AbstractAccessTest
+class NextcloudAccessTest : public AbstractAccessTest
 {
-    Q_OBJECT
+public:
+    NextcloudAccessTest()
+    {
+        networkManager = std::make_unique<MockNextCloud>(MOCK_DOMAIN, nullptr);
+        QDesktopServices::setUrlHandler(QStringLiteral("http"), networkManager.get(), "simulateBrowser");
+        QDesktopServices::setUrlHandler(QStringLiteral("https"), networkManager.get(), "simulateBrowser");
+
+        mock = networkManager.get();
+        nc = new NextCloud(MOCK_SERVICE, *mock, nullptr);
+        nc->disconnectService();
+        EXPECT_FALSE(nc->connected());
+
+        // empty server url, connecting should fail
+        SettingsManager::setServerUrl(QLatin1String(), MOCK_SERVICE);
+        nc->connectService();
+        EXPECT_FALSE(nc->connected());
+
+        // actual url, should connect during first usage
+        SettingsManager::setServerUrl(QStringLiteral("https://%1").arg(MOCK_DOMAIN), MOCK_SERVICE);
+
+        fileAccess = std::make_unique<FileAccessNextcloud>(*nc, nullptr);
+        testPath = QStringLiteral("gm-companion-test_") + QUuid::createUuid().toString();
+
+        waitForAuthentication = true;
+
+        createTestDir();
+        createTestFiles();
+    }
+
+    ~NextcloudAccessTest() override
+    {
+        removeTestDir();
+        nc->disconnectService();
+
+        SettingsManager::instance()->forceSync();
+
+        nc->deleteLater();
+    }
 
 protected:
-    void createTestFile(const QString &path, const QByteArray &data) override;
+    void createTestFile(const QString &path, const QByteArray &data) override
+    {
+        saveFileAndVerify(getFilePath(path), data);
+    }
 
-    [[nodiscard]] auto getFilePath(const QString &filename = QLatin1String("")) const -> QString override;
+    [[nodiscard]] auto getFilePath(const QString &filename = QLatin1String("")) const -> QString override
+    {
+        if (filename.isEmpty()) return testPath;
 
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
+        return testPath + "/" + filename;
+    }
 
 private:
     NextCloud *nc = nullptr;
+    QNetworkAccessManager *mock = nullptr;
     QString testPath;
+
+    static constexpr auto MOCK_SERVICE = "NextCloud_Test";
+    static constexpr auto MOCK_DOMAIN = "nextcloud.mock";
 };
 
-void TestNextcloudAccess::createTestFile(const QString &path, const QByteArray &data)
+TEST_F(NextcloudAccessTest, TestFileAccess)
 {
-    saveFileAndVerify(getFilePath(path), data);
+    runAllTests();
 }
-
-auto TestNextcloudAccess::getFilePath(const QString &filename) const -> QString
-{
-    if (filename.isEmpty()) return testPath;
-
-    return testPath + "/" + filename;
-}
-
-void TestNextcloudAccess::initTestCase()
-{
-    networkManager = new MockNextCloud(MOCK_DOMAIN, this);
-    QDesktopServices::setUrlHandler(QStringLiteral("http"), networkManager, "simulateBrowser");
-    QDesktopServices::setUrlHandler(QStringLiteral("https"), networkManager, "simulateBrowser");
-
-    nc = new NextCloud(MOCK_SERVICE, *networkManager, this);
-    nc->disconnectService();
-    QVERIFY(!nc->connected());
-
-    // empty server url, connecting should fail
-    SettingsManager::setServerUrl(QLatin1String(), MOCK_SERVICE);
-    nc->connectService();
-    QVERIFY(!nc->connected());
-
-    // actual url, should connect during first usage
-    SettingsManager::setServerUrl(QStringLiteral("https://%1").arg(MOCK_DOMAIN), MOCK_SERVICE);
-
-    fileAccess = new FileAccessNextcloud(*nc, this);
-    testPath = QStringLiteral("gm-companion-test_") + QUuid::createUuid().toString();
-
-    waitForAuthentication = true;
-
-    createTestDir();
-    createTestFiles();
-}
-
-void TestNextcloudAccess::cleanupTestCase()
-{
-    removeTestDir();
-    nc->disconnectService();
-
-    SettingsManager::instance()->forceSync();
-}
-
-QTEST_GUILESS_MAIN(TestNextcloudAccess)
-#include "testnextcloudaccess.moc"

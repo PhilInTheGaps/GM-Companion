@@ -1,7 +1,4 @@
-#ifndef UPDATEMANAGER_H
-#define UPDATEMANAGER_H
-
-#include "version.h"
+#pragma once
 #include <QFuture>
 #include <QJSEngine>
 #include <QNetworkAccessManager>
@@ -50,5 +47,3 @@ signals:
     void updateAvailable();
     void noUpdateAvailable();
 };
-
-#endif // UPDATEMANAGER_H

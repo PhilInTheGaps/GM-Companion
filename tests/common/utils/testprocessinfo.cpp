@@ -1,22 +1,8 @@
-#include <QtTest>
-#include <QObject>
 #include "utils/processinfo.h"
+#include <gtest/gtest.h>
 
-class TestProcessInfo : public QObject
+TEST(ProcessInfoTest, IsProcessRunning)
 {
-    Q_OBJECT
-public:
-    TestProcessInfo() = default;
-
-private slots:
-    void isProcessRunning();
-};
-
-void TestProcessInfo::isProcessRunning()
-{
-    QVERIFY(ProcessInfo::isProcessRunning("test_processinfo"));
-    QVERIFY(!ProcessInfo::isProcessRunning("this_is_not_running"));
+    EXPECT_TRUE(ProcessInfo::isProcessRunning("test_common"));
+    EXPECT_FALSE(ProcessInfo::isProcessRunning("this_is_not_running"));
 }
-
-QTEST_APPLESS_MAIN(TestProcessInfo)
-#include "testprocessinfo.moc"

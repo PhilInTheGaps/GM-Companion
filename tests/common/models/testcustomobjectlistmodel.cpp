@@ -1,7 +1,6 @@
 #include "models/customobjectlistmodel.h"
 #include <QList>
-#include <QObject>
-#include <QtTest>
+#include <gtest/gtest.h>
 
 class TestModel : public CustomObjectListModel
 {
@@ -20,49 +19,41 @@ public:
     }
 };
 
-class TestCustomObjectList : public QObject
+class CustomObjectListTest : public ::testing::Test
 {
-    Q_OBJECT
-public:
-    using QObject::QObject;
+protected:
+    static auto createObject(const QString &name) -> QObject *;
+    static void testModel(TestModel &model);
+    static void addItems(TestModel &model);
+    static void removeItems(TestModel &model);
+    static void replaceItems(TestModel &model);
 
-private:
-    TestModel owningModel = TestModel(true, nullptr);
-    TestModel nonOwningModel = TestModel(false, nullptr);
-
-    auto createObject(const QString &name) -> QObject *;
-
-    void testModel(TestModel &model);
-    void addItems(TestModel &model);
-    void removeItems(TestModel &model);
-    void replaceItems(TestModel &model);
-
-private slots:
-    void testOwningModel();
-    void testNonOwningModel();
+    inline static QObject root = QObject(nullptr);
+    inline static TestModel owningModel = TestModel(true, nullptr);
+    inline static TestModel nonOwningModel = TestModel(false, nullptr);
 };
 
-auto TestCustomObjectList::createObject(const QString &name) -> QObject *
+auto CustomObjectListTest::createObject(const QString &name) -> QObject *
 {
-    auto *object = new QObject(this);
+    auto *object = new QObject(&root);
     object->setObjectName(name);
     return object;
 }
 
-void TestCustomObjectList::testModel(TestModel &model)
+void CustomObjectListTest::testModel(TestModel &model)
 {
-    QCOMPARE(model.rowCount(), 0);
-    QCOMPARE(model.headerData(0, Qt::Horizontal), QVariant());
+    EXPECT_EQ(model.rowCount(), 0);
+    EXPECT_EQ(model.headerData(0, Qt::Horizontal), QVariant());
 
-    QVERIFY(!model.removeRow(0));
-    QVERIFY(!model.removeRow(-1));
+    EXPECT_FALSE(model.removeRow(0));
+    EXPECT_FALSE(model.removeRow(-1));
 
     addItems(model);
     removeItems(model);
     replaceItems(model);
 }
 
-void TestCustomObjectList::addItems(TestModel &model)
+void CustomObjectListTest::addItems(TestModel &model)
 {
     auto *item0 = createObject(QStringLiteral("item0"));
     auto *item1 = createObject(QStringLiteral("item1"));
@@ -72,46 +63,46 @@ void TestCustomObjectList::addItems(TestModel &model)
 
     model.append(item0);
     model.append(item1);
-    QCOMPARE(model.rowCount(), 2);
-    QCOMPARE(model.get(1)->objectName(), QStringLiteral("item1"));
+    EXPECT_EQ(model.rowCount(), 2);
+    EXPECT_EQ(model.get(1)->objectName(), QStringLiteral("item1"));
 
-    QVERIFY(model.insert(1, item2));
-    QCOMPARE(model.rowCount(), 3);
-    QCOMPARE(model.get(1)->objectName(), QStringLiteral("item2"));
+    EXPECT_TRUE(model.insert(1, item2));
+    EXPECT_EQ(model.rowCount(), 3);
+    EXPECT_EQ(model.get(1)->objectName(), QStringLiteral("item2"));
 
     model.prepend(item3);
-    QCOMPARE(model.rowCount(), 4);
-    QCOMPARE(model.get(0)->objectName(), QStringLiteral("item3"));
+    EXPECT_EQ(model.rowCount(), 4);
+    EXPECT_EQ(model.get(0)->objectName(), QStringLiteral("item3"));
 
-    QVERIFY2(model.insert(4, item4), "Could not insert at the end");
-    QCOMPARE(model.rowCount(), 5);
-    QCOMPARE(model.get(4)->objectName(), QStringLiteral("item4"));
+    EXPECT_TRUE(model.insert(4, item4)) << "Could not insert at the end";
+    EXPECT_EQ(model.rowCount(), 5);
+    EXPECT_EQ(model.get(4)->objectName(), QStringLiteral("item4"));
 
-    QCOMPARE(model.rowCount(), model.getAll().count());
+    EXPECT_EQ(model.rowCount(), model.getAll().count());
 }
 
-void TestCustomObjectList::removeItems(TestModel &model)
+void CustomObjectListTest::removeItems(TestModel &model)
 {
-    QVERIFY(!model.removeRows(0, 100));
+    EXPECT_FALSE(model.removeRows(0, 100));
 
-    QVERIFY(model.removeRows(2, 3));
-    QCOMPARE(model.rowCount(), 2);
+    EXPECT_TRUE(model.removeRows(2, 3));
+    EXPECT_EQ(model.rowCount(), 2);
 
-    QVERIFY(model.removeRow(0));
-    QCOMPARE(model.rowCount(), 1);
+    EXPECT_TRUE(model.removeRow(0));
+    EXPECT_EQ(model.rowCount(), 1);
 
-    QVERIFY(model.removeRow(0));
-    QCOMPARE(model.rowCount(), 0);
+    EXPECT_TRUE(model.removeRow(0));
+    EXPECT_EQ(model.rowCount(), 0);
 
-    QVERIFY(!model.removeRow(0));
+    EXPECT_FALSE(model.removeRow(0));
 }
 
-void TestCustomObjectList::replaceItems(TestModel &model)
+void CustomObjectListTest::replaceItems(TestModel &model)
 {
     auto *item0 = createObject(QStringLiteral("item0"));
     model.append(item0);
     model.clear();
-    QCOMPARE(model.rowCount(), 0);
+    EXPECT_EQ(model.rowCount(), 0);
 
     auto *item1 = createObject(QStringLiteral("item1"));
     model.append(item1);
@@ -121,20 +112,19 @@ void TestCustomObjectList::replaceItems(TestModel &model)
     QList<QObject *> list = {item2, item3};
 
     model.replaceAll(list);
-    QCOMPARE(model.rowCount(), 2);
-    QCOMPARE(model.get(0)->objectName(), QStringLiteral("item2"));
-    QCOMPARE(model.get(1)->objectName(), QStringLiteral("item3"));
+    EXPECT_EQ(model.rowCount(), 2);
+    EXPECT_EQ(model.get(0)->objectName(), QStringLiteral("item2"));
+    EXPECT_EQ(model.get(1)->objectName(), QStringLiteral("item3"));
 }
 
-void TestCustomObjectList::testOwningModel()
+TEST_F(CustomObjectListTest, TestOwningModel)
 {
     testModel(owningModel);
 }
 
-void TestCustomObjectList::testNonOwningModel()
+TEST_F(CustomObjectListTest, TestNonOwningModel)
 {
     testModel(nonOwningModel);
 }
 
-QTEST_GUILESS_MAIN(TestCustomObjectList)
 #include "testcustomobjectlistmodel.moc"

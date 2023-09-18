@@ -1,7 +1,7 @@
 #pragma once
 
-#include "abstractmocknetworkmanager.h"
-#include "mockfs.h"
+#include "tests/testhelper/abstractmocknetworkmanager.h"
+#include "tests/testhelper/mockfs.h"
 
 class MockNextCloud : public AbstractMockNetworkManager
 {

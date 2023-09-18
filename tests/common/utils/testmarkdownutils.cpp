@@ -1,23 +1,9 @@
-#include <QtTest>
-#include <QObject>
 #include "utils/markdownutils.h"
+#include <gtest/gtest.h>
 
-class TestMarkdownUtils : public QObject
-{
-    Q_OBJECT
-public:
-    TestMarkdownUtils() = default;
-
-private slots:
-    void markdownToHtml();
-};
-
-void TestMarkdownUtils::markdownToHtml()
+TEST(MarkdownUtilsTest, MarkdownToHtml)
 {
     auto markdown = QStringLiteral("# Test 1\n\nThis is a test.");
 
-    QVERIFY(MarkdownUtils::markdownToHtml(markdown).contains("<h1>Test 1</h1>"));
+    EXPECT_TRUE(MarkdownUtils::markdownToHtml(markdown).contains("<h1>Test 1</h1>"));
 }
-
-QTEST_APPLESS_MAIN(TestMarkdownUtils)
-#include "testmarkdownutils.moc"

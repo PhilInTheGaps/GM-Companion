@@ -1,5 +1,6 @@
 #include "updatemanager.h"
 #include "utils/stringutils.h"
+#include "version.h"
 #include <QLoggingCategory>
 #include <QXmlStreamReader>
 

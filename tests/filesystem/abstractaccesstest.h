@@ -1,13 +1,11 @@
 #pragma once
 
-#include <QObject>
-
-#include "abstracttest.h"
+#include "tests/testhelper/abstracttest.h"
+#include <QByteArray>
+#include <QString>
 
 class AbstractAccessTest : public AbstractTest
 {
-    Q_OBJECT
-
 protected:
     virtual void createTestDir();
     virtual void removeTestDir();
@@ -22,12 +20,9 @@ protected:
     void saveFileAndVerify(const QString &path, const QByteArray &data);
     void copyFileAndVerify(const QString &path, const QString &copy);
 
-private slots:
+private:
     void getDataAsync();
-
-    void saveAsync_data();
     void saveAsync();
-
     void moveAsync();
     void deleteAsync();
     void copyAsync();

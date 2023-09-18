@@ -1,4 +1,5 @@
 #include "abstractmocknetworkmanager.h"
+#include <QDebug>
 
 AbstractMockNetworkManager::AbstractMockNetworkManager(const QStringList &hosts, QObject *parent)
     : QNetworkAccessManager{parent}, m_hosts(hosts)

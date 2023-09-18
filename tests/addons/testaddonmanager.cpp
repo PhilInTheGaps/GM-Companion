@@ -1,131 +1,124 @@
 #include "src/addons/addonmanager.h"
-#include <QtTest>
-
 #include "tests/testhelper/abstracttest.h"
 
-class TestAddonManager : public AbstractTest
+class AddonManagerTest : public AbstractTest
 {
-    Q_OBJECT
-
-private slots:
-    void canInstallAddons();
-    void canLoadAddons();
-    void canEnableAndDisableAddons();
-    void canUninstallAddons();
-    void canUpdateAddons();
-    void cleanupTestCase();
-};
-
-void TestAddonManager::canInstallAddons()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    if (manager->repositoryManager().isLoading())
+protected:
+    void TearDown() override
     {
-        QSignalSpy spy(&manager->repositoryManager(), &AddonRepositoryManager::isLoadingChanged);
-        QVERIFY(spy.wait());
-    }
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
 
-    // can not install null addon
-    QVERIFY(manager->installAsync(nullptr).isCanceled());
+        auto *addon = manager->addons()[0];
 
-    auto *addon = manager->addons()[0];
-    QVERIFY(!addon->isInstalled());
-
-    testFuture(manager->installAsync(addon), QStringLiteral("AddonManager::installAsync"),
-               [addon]() { QVERIFY(addon->isInstalled()); });
-}
-
-void TestAddonManager::canLoadAddons()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    QVERIFY(!manager->addons().isEmpty());
-}
-
-void TestAddonManager::canEnableAndDisableAddons()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    auto addons = manager->addons();
-
-    expectWarning();
-    QVERIFY(!manager->setAddonEnabled(nullptr, true));
-
-    for (int i = 0; i < 2; i++)
-    {
-        QVERIFY(addons[i]);
-        QVERIFY(addons[i]->isInstalled());
-        QVERIFY(manager->setAddonEnabled(addons[i], true));
-        QVERIFY(addons[i]->enabled());
-
-        QVERIFY(manager->setAddonEnabled(addons[i], false));
-        QVERIFY(!addons[i]->enabled());
-    }
-}
-
-void TestAddonManager::canUninstallAddons()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    // can not uninstall null addon
-    QVERIFY(!manager->uninstall(nullptr));
-
-    // can not uninstall a local addon
-    const auto addons = manager->addons();
-    for (auto *addon : addons)
-    {
-        if (addon->isLocal())
+        if (addon->isInstalled())
         {
-            QVERIFY(!manager->uninstall(addon));
-            break;
+            manager->uninstall(addon);
+        }
+    };
+
+    void installAddons()
+    {
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
+
+        if (manager->repositoryManager().isLoading())
+        {
+            QSignalSpy spy(&manager->repositoryManager(), &AddonRepositoryManager::isLoadingChanged);
+            EXPECT_TRUE(spy.wait());
+        }
+
+        // can not install null addon
+        EXPECT_TRUE(manager->installAsync(nullptr).isCanceled());
+
+        auto *addon = manager->addons()[0];
+        EXPECT_FALSE(addon->isInstalled());
+
+        testFuture(manager->installAsync(addon), "AddonManager::installAsync",
+                   [addon]() { EXPECT_TRUE(addon->isInstalled()); });
+    }
+
+    void checkAddonsAreLoaded()
+    {
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
+
+        EXPECT_FALSE(manager->addons().isEmpty());
+    }
+
+    void enableAndDisableAddons()
+    {
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
+
+        auto addons = manager->addons();
+
+        expectWarning();
+        EXPECT_FALSE(manager->setAddonEnabled(nullptr, true));
+
+        for (int i = 0; i < 2; i++)
+        {
+            EXPECT_TRUE(addons[i]);
+            EXPECT_TRUE(addons[i]->isInstalled());
+            EXPECT_TRUE(manager->setAddonEnabled(addons[i], true));
+            EXPECT_TRUE(addons[i]->enabled());
+
+            EXPECT_TRUE(manager->setAddonEnabled(addons[i], false));
+            EXPECT_FALSE(addons[i]->enabled());
         }
     }
 
-    // can uninstall remote addon
-    QVERIFY(manager->uninstall(manager->addons()[0]));
-}
-
-void TestAddonManager::canUpdateAddons()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    // can not update null addon
-    QVERIFY(manager->updateAsync(nullptr).isCanceled());
-
-    // can not update addon that is not installed
-    auto *addon = manager->addons()[0];
-    QVERIFY(!addon->isInstalled());
-    QVERIFY(manager->updateAsync(addon).isCanceled());
-
-    // can update a valid, installed addon
-    testFuture(manager->installAsync(addon), QStringLiteral("AddonManager::installAsync"), [this, manager, addon]() {
-        QVERIFY(addon->isInstalled());
-        addon->version(QStringLiteral("0"));
-        testFuture(manager->updateAsync(addon), QStringLiteral("AddonManager::updateAsync"),
-                   [addon]() { QCOMPARE(addon->version(), addon->newVersion()); });
-    });
-}
-
-void TestAddonManager::cleanupTestCase()
-{
-    auto manager = AddonManager::instance();
-    QVERIFY(manager);
-
-    auto *addon = manager->addons()[0];
-
-    if (addon->isInstalled())
+    void uninstallAddons()
     {
-        manager->uninstall(addon);
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
+
+        // can not uninstall null addon
+        EXPECT_FALSE(manager->uninstall(nullptr));
+
+        // can not uninstall a local addon
+        const auto addons = manager->addons();
+        for (auto *addon : addons)
+        {
+            if (addon->isLocal())
+            {
+                EXPECT_FALSE(manager->uninstall(addon));
+                break;
+            }
+        }
+
+        // can uninstall remote addon
+        EXPECT_TRUE(manager->uninstall(manager->addons()[0]));
     }
 
-    manager->addons()[1]->enabled(true);
-}
+    void updateAddons()
+    {
+        auto manager = AddonManager::instance();
+        ASSERT_TRUE(manager);
 
-QTEST_GUILESS_MAIN(TestAddonManager)
-#include "testaddonmanager.moc"
+        // can not update null addon
+        EXPECT_TRUE(manager->updateAsync(nullptr).isCanceled());
+
+        // can not update addon that is not installed
+        auto *addon = manager->addons()[0];
+        EXPECT_FALSE(addon->isInstalled());
+        EXPECT_TRUE(manager->updateAsync(addon).isCanceled());
+
+        // can update a valid, installed addon
+        testFuture(manager->installAsync(addon), "AddonManager::installAsync", [this, manager, addon]() {
+            EXPECT_TRUE(addon->isInstalled());
+            addon->version(QStringLiteral("0"));
+            testFuture(manager->updateAsync(addon), "AddonManager::updateAsync",
+                       [addon]() { EXPECT_EQ(addon->version(), addon->newVersion()); });
+        });
+    }
+};
+
+TEST_F(AddonManagerTest, CanManageAddons)
+{
+    installAddons();
+    checkAddonsAreLoaded();
+    enableAndDisableAddons();
+    uninstallAddons();
+    updateAddons();
+}

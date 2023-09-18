@@ -1,48 +1,39 @@
 #include "src/tools/audio/editor/addonelementmanager.h"
 #include "tests/testhelper/abstracttest.h"
-#include <QObject>
-#include <QtTest>
 
-class TestAudioAddons : public AbstractTest
+class AudioAddonsTest : public AbstractTest
 {
-    Q_OBJECT
+public:
+    explicit AudioAddonsTest()
+    {
+        m_testAddons = enableTestAddons();
+    }
 
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
+    ~AudioAddonsTest()
+    {
+        disableTestAddons(m_testAddons);
+    }
 
-    void canFindAddonsWithAudioContent();
+private:
+    QList<Addon *> m_testAddons;
 };
 
-void TestAudioAddons::initTestCase()
-{
-    enableTestAddons();
-}
-
-void TestAudioAddons::cleanupTestCase()
-{
-    disableTestAddons();
-}
-
-void TestAudioAddons::canFindAddonsWithAudioContent()
+TEST_F(AudioAddonsTest, CanFindAddonsWithAudioContent)
 {
     AddonElementManager manager;
-    QCOMPARE(manager.addons().length(), 0);
+    EXPECT_EQ(manager.addons().length(), 0);
 
     manager.loadData();
 
     if (manager.isLoading())
     {
         QSignalSpy spy(&manager, &AddonElementManager::isLoadingChanged);
-        QVERIFY(spy.wait());
+        EXPECT_TRUE(spy.wait());
     }
 
-    QCOMPARE(manager.addons().length(), 2);
+    EXPECT_EQ(manager.addons().length(), 2);
 
     manager.currentIndex(0);
     const auto projects = manager.projects();
-    QCOMPARE(projects.length(), 1);
+    EXPECT_EQ(projects.length(), 1);
 }
-
-QTEST_GUILESS_MAIN(TestAudioAddons)
-#include "testaudioaddons.moc"

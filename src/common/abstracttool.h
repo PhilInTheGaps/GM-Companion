@@ -1,5 +1,4 @@
-#ifndef ABSTRACTTOOL_H
-#define ABSTRACTTOOL_H
+#pragma once
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
@@ -23,5 +22,3 @@ protected:
 private:
     bool m_isDataLoaded = false;
 };
-
-#endif // ABSTRACTTOOL_H

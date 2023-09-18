@@ -1,5 +1,6 @@
 #pragma once
 
+#include "convertereditor.h"
 #include "project/converterproject.h"
 #include "src/common/abstracttool.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
@@ -8,9 +9,7 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQml/qqmlregistration.h>
-#include <gsl/gsl>
 
-class ConverterEditor;
 class Addon;
 
 class ConverterTool : public AbstractTool
@@ -50,8 +49,8 @@ private slots:
 private:
     [[nodiscard]] auto loadLocalProjects() -> QList<ConverterProject *>;
     [[nodiscard]] static auto loadLocalProjects(const QStringList &paths, QObject *parent) -> QList<ConverterProject *>;
-    [[nodiscard]] static auto loadLocalProject(const QString &path, QObject *parent) -> gsl::owner<ConverterProject *>;
-    [[nodiscard]] static auto loadProject(const QByteArray &data, QObject *parent) -> gsl::owner<ConverterProject *>;
+    [[nodiscard]] static auto loadLocalProject(const QString &path, QObject *parent) -> ConverterProject *;
+    [[nodiscard]] static auto loadProject(const QByteArray &data, QObject *parent) -> ConverterProject *;
 
     void loadAddonProjects();
     void loadAddonProjects(const Addon &addon);
@@ -60,5 +59,5 @@ private:
 
     [[nodiscard]] static auto textToNumber(QStringView text, bool *ok = nullptr) -> double;
 
-    gsl::owner<ConverterEditor *> m_editor = nullptr;
+    ConverterEditor m_editor = ConverterEditor(nullptr);
 };

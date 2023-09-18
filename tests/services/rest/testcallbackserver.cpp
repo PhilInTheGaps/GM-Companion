@@ -1,40 +1,31 @@
-#include "../../src/services/rest/callbackserver.h"
-#include "abstracttest.h"
+#include "src/services/rest/callbackserver.h"
+#include "tests/testhelper/abstracttest.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QObject>
 #include <QUrl>
-#include <QtTest>
+#include <gtest/gtest.h>
 
-class TestCallbackServer : public AbstractTest
+class CallbackServerTest : public AbstractTest
 {
-    Q_OBJECT
-public:
-    TestCallbackServer() = default;
+protected:
+    void SetUp() override
+    {
+        EXPECT_FALSE(m_server.isRunning());
 
-private:
-    CallbackServer m_server;
+        m_server.start(PORT, 0);
 
+        EXPECT_TRUE(m_server.isRunning());
+        EXPECT_EQ(m_server.getUrl(), QStringLiteral("http://localhost:%1").arg(PORT));
+    }
+
+    CallbackServer m_server = CallbackServer(nullptr);
     static constexpr quint16 PORT = 9999;
-
-private slots:
-    void initTestCase();
-    void handleConnections();
 };
 
-void TestCallbackServer::initTestCase()
+TEST_F(CallbackServerTest, CanHandleConnections)
 {
-    QVERIFY(!m_server.isRunning());
-
-    m_server.start(PORT, 0);
-
-    QVERIFY(m_server.isRunning());
-    QCOMPARE(m_server.getUrl(), QStringLiteral("http://localhost:%1").arg(PORT));
-}
-
-void TestCallbackServer::handleConnections()
-{
-    QVERIFY(m_server.isRunning());
+    ASSERT_TRUE(m_server.isRunning());
     QNetworkAccessManager manager;
 
     // Send request with query parameters
@@ -44,9 +35,9 @@ void TestCallbackServer::handleConnections()
     spy.wait();
 
     const auto params = m_server.getParameters();
-    QCOMPARE(params[QStringLiteral("1")], QStringLiteral("a"));
-    QCOMPARE(params[QStringLiteral("2")], QStringLiteral("b"));
-    QVERIFY(!m_server.isRunning());
+    EXPECT_EQ(params[QStringLiteral("1")], QStringLiteral("a"));
+    EXPECT_EQ(params[QStringLiteral("2")], QStringLiteral("b"));
+    EXPECT_FALSE(m_server.isRunning());
     reply->deleteLater();
 
     // Send requests without parameters
@@ -57,11 +48,8 @@ void TestCallbackServer::handleConnections()
     auto *reply3 = manager.get(QNetworkRequest(QUrl(m_server.getUrl())));
 
     spy.wait();
-    QVERIFY(m_server.getParameters().isEmpty());
+    EXPECT_TRUE(m_server.getParameters().isEmpty());
 
     reply2->deleteLater();
     reply3->deleteLater();
 }
-
-QTEST_GUILESS_MAIN(TestCallbackServer)
-#include "testcallbackserver.moc"

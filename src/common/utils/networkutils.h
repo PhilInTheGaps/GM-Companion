@@ -1,5 +1,4 @@
-#ifndef NETWORKUTILS_H
-#define NETWORKUTILS_H
+#pragma once
 
 #include <QMap>
 #include <QNetworkRequest>
@@ -19,5 +18,3 @@ public:
 
     [[nodiscard]] static auto isHttpUrl(QStringView url) -> bool;
 };
-
-#endif // NETWORKUTILS_H

@@ -1,47 +1,35 @@
 #include "src/tools/audio/playlist/audioplaylist.h"
 #include "tests/testhelper/abstracttest.h"
-#include <QObject>
-#include <QtTest>
 
-class TestAudioPlaylist : public AbstractTest
+class AudioPlaylistTest : public AbstractTest
 {
-    Q_OBJECT
-public:
-    using AbstractTest::AbstractTest;
-
-private:
-    void parsePlaylist(const QString &url, AudioPlaylist::Type expectedType);
-
-private slots:
-    void parsePlaylists();
+protected:
+    static void parsePlaylist(const QString &url, AudioPlaylist::Type expectedType);
 };
 
-void TestAudioPlaylist::parsePlaylists()
+void AudioPlaylistTest::parsePlaylist(const QString &url, AudioPlaylist::Type expectedType)
+{
+    QFile projectFile(url);
+    EXPECT_TRUE(projectFile.open(QIODevice::ReadOnly)) << "Could not open test playlist file";
+    auto data = projectFile.readAll();
+    projectFile.close();
+
+    EXPECT_FALSE(data.isEmpty()) << "Playlist file does not contain data";
+    const AudioPlaylist playlist(data, nullptr);
+
+    EXPECT_EQ(playlist.type(), expectedType);
+    EXPECT_EQ(playlist.length(), 3);
+    EXPECT_FALSE(playlist.isEmpty());
+
+    foreach (const auto *file, playlist.files())
+    {
+        EXPECT_TRUE(file);
+        EXPECT_FALSE(file->url().isEmpty());
+    }
+}
+
+TEST_F(AudioPlaylistTest, ParsePlaylists)
 {
     parsePlaylist(u":/resources/audioplaylist/test.m3u"_s, AudioPlaylist::Type::m3u);
     parsePlaylist(u":/resources/audioplaylist/test.pls"_s, AudioPlaylist::Type::pls);
 }
-
-void TestAudioPlaylist::parsePlaylist(const QString &url, AudioPlaylist::Type expectedType)
-{
-    QFile projectFile(url);
-    QVERIFY2(projectFile.open(QIODevice::ReadOnly), "Could not open test playlist file");
-    auto data = projectFile.readAll();
-    projectFile.close();
-
-    QVERIFY2(!data.isEmpty(), "Playlist file does not contain data");
-    const AudioPlaylist playlist(data, this);
-
-    QCOMPARE(playlist.type(), expectedType);
-    QCOMPARE(playlist.length(), 3);
-    QVERIFY(!playlist.isEmpty());
-
-    foreach (const auto *file, playlist.files())
-    {
-        QVERIFY(file);
-        QVERIFY(!file->url().isEmpty());
-    }
-}
-
-QTEST_APPLESS_MAIN(TestAudioPlaylist)
-#include "testaudioplaylist.moc"

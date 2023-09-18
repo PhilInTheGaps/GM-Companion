@@ -85,7 +85,10 @@ if (WIN32)
 endif()
 
 add_subdirectory(src)
-add_subdirectory(tests)
 add_subdirectory(app)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+add_subdirectory(thirdparty/googletest)
+add_subdirectory(tests)
 
 feature_summary(WHAT ALL)

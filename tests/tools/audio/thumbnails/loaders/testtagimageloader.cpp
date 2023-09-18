@@ -1,42 +1,27 @@
-#include <QtTest>
-#include <QObject>
-#include "src/tools/audio/thumbnails/loaders/tagimageloader.h"
 #include "src/common/utils/fileutils.h"
+#include "src/tools/audio/thumbnails/loaders/tagimageloader.h"
 #include "tests/testhelper/abstracttest.h"
+#include <gtest/gtest.h>
 
-class TestTagImageLoader : public AbstractTest
+class TagImageLoaderTest : public AbstractTest
 {
-    Q_OBJECT
-
-private slots:
-    void loadFromFile_data();
-    void loadFromFile();
 };
 
-void TestTagImageLoader::loadFromFile_data()
+TEST_F(TagImageLoaderTest, LoadFromFile)
 {
-    QTest::addColumn<QString>("file");
+    const QStringList files = {"test.mp3", "test.ogg", "test.wav"};
 
-    QTest::newRow("MP3") << "test.mp3";
-    QTest::newRow("OGG") << "test.ogg";
-    QTest::newRow("WAV") << "test.wav";
+    for (const auto &file : files)
+    {
+        const auto resource = FileUtils::fileInDir(file, ":/resources/audiofiles");
+        auto *tempFile = copyResourceToTempFile(resource);
+
+        const auto future = TagImageLoader::loadFromFile(tempFile->fileName(), true);
+        testFuture(future, "loadFromFile", [future, tempFile]() {
+            tempFile->remove();
+            tempFile->deleteLater();
+            const auto pixmap = future.result();
+            EXPECT_FALSE(pixmap.isNull());
+        });
+    }
 }
-
-void TestTagImageLoader::loadFromFile()
-{
-    QFETCH(QString, file);
-
-    const auto resource = FileUtils::fileInDir(file, ":/resources/audiofiles");
-    auto *tempFile = copyResourceToTempFile(resource);
-
-    const auto future = TagImageLoader::loadFromFile(tempFile->fileName(), true);
-    testFuture(future, "loadFromFile", [future, tempFile]() {
-        tempFile->remove();
-        tempFile->deleteLater();
-        const auto pixmap = future.result();
-        QVERIFY(!pixmap.isNull());
-    });
-}
-
-QTEST_MAIN(TestTagImageLoader)
-#include "testtagimageloader.moc"

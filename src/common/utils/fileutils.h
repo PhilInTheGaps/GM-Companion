@@ -1,5 +1,4 @@
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#pragma once
 
 #include <QHash>
 #include <QString>
@@ -66,5 +65,3 @@ private:
 
     };
 };
-
-#endif // FILEUTILS_H

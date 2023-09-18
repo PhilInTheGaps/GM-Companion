@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.19)
 
 set(SOURCES
+    staticabstracttest.h
+    staticabstracttest.cpp
     abstracttest.h
     abstracttest.cpp
     abstractmocknetworkmanager.h
@@ -42,5 +44,6 @@ qt_add_resources(testhelper "test-resources-addons"
         resources/addon_repositories/testrepo.json
         resources/addons_remote/demo-addon-1.zip)
 
+target_precompile_headers(testhelper REUSE_FROM common)
 target_include_directories(testhelper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(testhelper PUBLIC gm-companion-lib Qt6::Gui Qt6::Quick Qt6::Test)
+target_link_libraries(testhelper PUBLIC gm-companion-lib filesystem Qt6::Gui Qt6::Quick Qt6::Test gtest)

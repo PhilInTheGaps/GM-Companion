@@ -1,88 +1,72 @@
 #include "src/addons/addon_reader/addonreader.h"
-#include <QtTest>
-
 #include "tests/testhelper/abstracttest.h"
 
-class TestAddonReader : public AbstractTest
+class AddonReaderTest : public AbstractTest
 {
-    Q_OBJECT
+protected:
+    QList<Addon *> testAddons;
 
-private slots:
-    void initTestCase();
-    void canFindAllFiles();
-    void canReadFiles();
-    void canCheckFiles();
-    void canLoadFeatures();
-    void cleanupTestCase();
+    void SetUp() override
+    {
+        testAddons = enableTestAddons();
+    }
+
+    void TearDown() override
+    {
+        disableTestAddons(testAddons);
+    }
 };
 
-void TestAddonReader::initTestCase()
+TEST_F(AddonReaderTest, CanFindAllFiles)
 {
-    enableTestAddons();
-}
-
-void TestAddonReader::canFindAllFiles()
-{
-    const auto addons = testAddons();
-    for (auto *addon : addons)
+    foreach (auto *addon, testAddons)
     {
         AddonReader reader(*addon);
 
-        QVERIFY(!reader.findAllFiles(QStringLiteral("/"), {}).isEmpty());
-        QCOMPARE(reader.findAllFiles(QStringLiteral("/"), {QStringLiteral("*.json")}).length(), 1);
-        QCOMPARE(reader.findAllFiles(QStringLiteral("/names"), {QStringLiteral("*.json")}).length(), 1);
+        EXPECT_FALSE(reader.findAllFiles(QStringLiteral("/"), {}).isEmpty());
+        EXPECT_EQ(reader.findAllFiles(QStringLiteral("/"), {QStringLiteral("*.json")}).length(), 1);
+        EXPECT_EQ(reader.findAllFiles(QStringLiteral("/names"), {QStringLiteral("*.json")}).length(), 1);
 
-        QVERIFY(reader.findAllFiles(QStringLiteral("/this/path/does/not/exist"), {}).isEmpty());
+        EXPECT_TRUE(reader.findAllFiles(QStringLiteral("/this/path/does/not/exist"), {}).isEmpty());
     }
 }
 
-void TestAddonReader::canReadFiles()
+TEST_F(AddonReaderTest, CanReadFiles)
 {
-    const auto addons = testAddons();
-    for (auto *addon : addons)
+    foreach (auto *addon, testAddons)
     {
         AddonReader reader(*addon);
 
-        QVERIFY(!reader.readFile(QStringLiteral("addon.json")).isEmpty());
-        QVERIFY(!reader.readFile(QStringLiteral("/names/test.json")).isEmpty());
+        EXPECT_FALSE(reader.readFile(QStringLiteral("addon.json")).isEmpty());
+        EXPECT_FALSE(reader.readFile(QStringLiteral("/names/test.json")).isEmpty());
 
         expectWarning();
-        QVERIFY(reader.readFile(QStringLiteral("/this/file/is/missing.json")).isEmpty());
+        EXPECT_TRUE(reader.readFile(QStringLiteral("/this/file/is/missing.json")).isEmpty());
     }
 }
 
-void TestAddonReader::canCheckFiles()
+TEST_F(AddonReaderTest, CanCheckFiles)
 {
-    const auto addons = testAddons();
-    for (auto *addon : addons)
+    foreach (auto *addon, testAddons)
     {
         AddonReader reader(*addon);
 
-        QVERIFY(reader.checkFile(QStringLiteral("addon.json")));
-        QVERIFY(reader.checkFile(QStringLiteral("/names")));
-        QVERIFY(reader.checkFile(QStringLiteral("/names/test.json")));
-        QVERIFY(!reader.checkFile(QStringLiteral("this-file-does-not-exist")));
-        QVERIFY(!reader.checkFile(QStringLiteral("/this/path/does/not/exist")));
+        EXPECT_TRUE(reader.checkFile(QStringLiteral("addon.json")));
+        EXPECT_TRUE(reader.checkFile(QStringLiteral("/names")));
+        EXPECT_TRUE(reader.checkFile(QStringLiteral("/names/test.json")));
+        EXPECT_FALSE(reader.checkFile(QStringLiteral("this-file-does-not-exist")));
+        EXPECT_FALSE(reader.checkFile(QStringLiteral("/this/path/does/not/exist")));
     }
 }
 
-void TestAddonReader::canLoadFeatures()
+TEST_F(AddonReaderTest, CanLoadFeatures)
 {
-    const auto addons = testAddons();
-    for (auto *addon : addons)
+    foreach (auto *addon, testAddons)
     {
         AddonReader reader(*addon);
         const auto features = reader.getFeatures();
-        QVERIFY(features.testFlag(AddonReader::Feature::Names));
-        QVERIFY(features.testFlag(AddonReader::Feature::Audio));
-        QVERIFY(features.testFlag(AddonReader::Feature::Units));
+        EXPECT_TRUE(features.testFlag(AddonReader::Feature::Names));
+        EXPECT_TRUE(features.testFlag(AddonReader::Feature::Audio));
+        EXPECT_TRUE(features.testFlag(AddonReader::Feature::Units));
     }
 }
-
-void TestAddonReader::cleanupTestCase()
-{
-    disableTestAddons();
-}
-
-QTEST_GUILESS_MAIN(TestAddonReader)
-#include "testaddonreader.moc"

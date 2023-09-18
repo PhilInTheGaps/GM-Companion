@@ -1,5 +1,4 @@
 #include "convertertool.h"
-#include "convertereditor.h"
 #include "project/converterprojectupgrader.h"
 #include "settings/settingsmanager.h"
 #include "src/addons/addon_reader/addonreader.h"
@@ -19,7 +18,7 @@ ConverterTool::ConverterTool(QObject *parent) : AbstractTool(parent), m_editor(n
     connect(this, &ConverterTool::projectsChanged, this, &ConverterTool::onProjectsChanged);
     connect(this, &ConverterTool::currentProjectChanged, this, &ConverterTool::onCurrentProjectChanged);
     connect(this, &ConverterTool::currentCategoryChanged, this, &ConverterTool::onCurrentCategoryChanged);
-    connect(m_editor, &ConverterEditor::isSavedChanged, this, &ConverterTool::onEditorSavedChanged);
+    connect(&m_editor, &ConverterEditor::isSavedChanged, this, &ConverterTool::onEditorSavedChanged);
     connect(AddonManager::instance(), &AddonManager::isLoadingChanged, this,
             &ConverterTool::onAddonManagerLoadingChanged);
 }
@@ -47,7 +46,7 @@ void ConverterTool::loadData()
 
     emit projectsChanged();
 
-    m_editor->loadData();
+    m_editor.loadData();
 }
 
 void ConverterTool::onProjectsChanged()
@@ -133,7 +132,7 @@ auto ConverterTool::loadLocalProjects(const QStringList &paths, QObject *parent)
     return projects;
 }
 
-auto ConverterTool::loadLocalProject(const QString &path, QObject *parent) -> gsl::owner<ConverterProject *>
+auto ConverterTool::loadLocalProject(const QString &path, QObject *parent) -> ConverterProject *
 {
     QFile file(path);
 
@@ -149,7 +148,7 @@ auto ConverterTool::loadLocalProject(const QString &path, QObject *parent) -> gs
     return nullptr;
 }
 
-auto ConverterTool::loadProject(const QByteArray &data, QObject *parent) -> gsl::owner<ConverterProject *>
+auto ConverterTool::loadProject(const QByteArray &data, QObject *parent) -> ConverterProject *
 {
     ConverterProjectUpgrader upgrader;
     upgrader.parse(data);
@@ -206,7 +205,7 @@ auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, C
 
 auto ConverterTool::editor() -> ConverterEditor *
 {
-    return m_editor;
+    return &m_editor;
 }
 
 auto ConverterTool::textToNumber(QStringView text, bool *ok) -> double

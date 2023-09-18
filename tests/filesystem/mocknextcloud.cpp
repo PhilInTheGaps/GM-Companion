@@ -1,8 +1,7 @@
 #include "mocknextcloud.h"
-#include "mocknetworkreply.h"
 #include "oputils.h"
+#include "tests/testhelper/mocknetworkreply.h"
 #include "utils/fileutils.h"
-
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>

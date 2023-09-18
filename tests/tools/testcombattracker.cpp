@@ -1,95 +1,121 @@
-#include <QtTest>
-#include <QObject>
-#include "../../src/tools/combat_tracker/combattracker.h"
+#include "src/tools/combat_tracker/combattracker.h"
+#include <gtest/gtest.h>
 
-class TestCombatTracker : public CombatTracker
+class CombatTrackerTest;
+
+class AccessibleCombatTracker : public CombatTracker
 {
-    Q_OBJECT
+    friend CombatTrackerTest;
 
 public:
-    TestCombatTracker(QObject *parent = nullptr) : CombatTracker(nullptr, parent) {}
-
-private slots:
-    void testNormalUse();
-    void testSaveLoad();
-
-private:
-    void createTestData();
+    using CombatTracker::CombatTracker;
 };
 
-void TestCombatTracker::createTestData()
+class CombatTrackerTest : public ::testing::Test
 {
-    QVERIFY(!add(QString(), 1, 2, 3, QStringLiteral("Test")));
-    QVERIFY(add(QStringLiteral("Frank"), 1, 0, 1, "Test 1", true));
-    QVERIFY(add(QStringLiteral("Paul"), 1, 0, 2, "Test 2", true));
-    QVERIFY(add(QStringLiteral("Jazz"), 2, 0, 2, "Test 3", true));
-    QVERIFY(add(QStringLiteral("Orc 1"), 3, 0, 1, "Test 4", true));
-    QVERIFY(add(QStringLiteral("Orc 2"), 2, 0, 4, "Test 5", true));
+protected:
+    static void createTestData(AccessibleCombatTracker &combatTracker);
+    [[nodiscard]] static auto getCombatant(int index, AccessibleCombatTracker &combatTracker) -> Combatant *
+    {
+        return combatTracker.getCombatant(index);
+    }
 
-    QCOMPARE(currentIndex(), 0);
-    QVERIFY(!getCombatant(-1));
-    QVERIFY(getCombatant(0));
-    QCOMPARE(getCombatant(0)->name(), QStringLiteral("Orc 1"));
-    QCOMPARE(getCombatant(1)->name(), QStringLiteral("Orc 2"));
-    QCOMPARE(getCombatant(2)->name(), QStringLiteral("Jazz"));
-    QCOMPARE(getCombatant(3)->name(), QStringLiteral("Paul"));
-    QCOMPARE(getCombatant(4)->name(), QStringLiteral("Frank"));
+    [[nodiscard]] static auto combatants(AccessibleCombatTracker &combatTracker) -> QList<Combatant *>
+    {
+        return combatTracker.combatants();
+    }
+
+    static void saveToDisk(AccessibleCombatTracker &combatTracker)
+    {
+        combatTracker.saveToDisk();
+    }
+
+    static void resetDelayForAll(AccessibleCombatTracker &combatTracker)
+    {
+        combatTracker.resetDelayForAll();
+    }
+
+    static void setIsDataLoaded(bool isLoaded, AccessibleCombatTracker &combatTracker)
+    {
+        combatTracker.setIsDataLoaded(isLoaded);
+    }
+};
+
+void CombatTrackerTest::createTestData(AccessibleCombatTracker &combatTracker)
+{
+    EXPECT_FALSE(combatTracker.add(QString(), 1, 2, 3, QStringLiteral("Test")));
+    EXPECT_TRUE(combatTracker.add(QStringLiteral("Frank"), 1, 0, 1, "Test 1", true));
+    EXPECT_TRUE(combatTracker.add(QStringLiteral("Paul"), 1, 0, 2, "Test 2", true));
+    EXPECT_TRUE(combatTracker.add(QStringLiteral("Jazz"), 2, 0, 2, "Test 3", true));
+    EXPECT_TRUE(combatTracker.add(QStringLiteral("Orc 1"), 3, 0, 1, "Test 4", true));
+    EXPECT_TRUE(combatTracker.add(QStringLiteral("Orc 2"), 2, 0, 4, "Test 5", true));
+
+    EXPECT_EQ(combatTracker.currentIndex(), 0);
+    EXPECT_FALSE(combatTracker.getCombatant(-1));
+    EXPECT_TRUE(combatTracker.getCombatant(0));
+    EXPECT_EQ(combatTracker.getCombatant(0)->name(), QStringLiteral("Orc 1"));
+    EXPECT_EQ(combatTracker.getCombatant(1)->name(), QStringLiteral("Orc 2"));
+    EXPECT_EQ(combatTracker.getCombatant(2)->name(), QStringLiteral("Jazz"));
+    EXPECT_EQ(combatTracker.getCombatant(3)->name(), QStringLiteral("Paul"));
+    EXPECT_EQ(combatTracker.getCombatant(4)->name(), QStringLiteral("Frank"));
 }
 
-void TestCombatTracker::testNormalUse()
+TEST_F(CombatTrackerTest, TestNormalUse)
 {
-    clear();
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    combatTracker.clear();
 
     // No combatant added, so we should not be able to modify one
-    QVERIFY(!setIni(0, 5));
-    QVERIFY(!setHealth(0, -5));
-    QVERIFY(!setPriority(0, 3));
-    QVERIFY(!setNotes(0, QStringLiteral("This is a test")));
-    QVERIFY(!delayTurn(0));
+    EXPECT_FALSE(combatTracker.setIni(0, 5));
+    EXPECT_FALSE(combatTracker.setHealth(0, -5));
+    EXPECT_FALSE(combatTracker.setPriority(0, 3));
+    EXPECT_FALSE(combatTracker.setNotes(0, QStringLiteral("This is a test")));
+    EXPECT_FALSE(combatTracker.delayTurn(0));
 
     // Add some combatants
-    createTestData();
+    createTestData(combatTracker);
 
     // Check rounds and current index
-    next();
-    QCOMPARE(currentIndex(), 1);
-    QCOMPARE(currentRound(), 1);
-    next();
-    next();
-    next();
-    next();
-    QCOMPARE(currentIndex(), 0);
-    QCOMPARE(currentRound(), 2);
-    reset();
-    QCOMPARE(currentIndex(), 0);
-    QCOMPARE(currentRound(), 1);
+    combatTracker.next();
+    EXPECT_EQ(combatTracker.currentIndex(), 1);
+    EXPECT_EQ(combatTracker.currentRound(), 1);
+    combatTracker.next();
+    combatTracker.next();
+    combatTracker.next();
+    combatTracker.next();
+    EXPECT_EQ(combatTracker.currentIndex(), 0);
+    EXPECT_EQ(combatTracker.currentRound(), 2);
+    combatTracker.reset();
+    EXPECT_EQ(combatTracker.currentIndex(), 0);
+    EXPECT_EQ(combatTracker.currentRound(), 1);
 
     // Delay
-    auto *combatant = getCombatant(0);
-    QVERIFY(combatant);
-    delayTurn(0);
-    QCOMPARE(getCombatant(0)->name(), QStringLiteral("Orc 2"));
+    auto *combatant = getCombatant(0, combatTracker);
+    EXPECT_TRUE(combatant);
+    combatTracker.delayTurn(0);
+    EXPECT_EQ(getCombatant(0, combatTracker)->name(), QStringLiteral("Orc 2"));
 
     // Modify combatant
-    setIni(2, 20); // should move to position 0
-    setHealth(0, 25);
-    setPriority(0, 10);
-    setNotes(0, QStringLiteral("Modified"));
-    QCOMPARE(getCombatant(0)->ini(), 20);
-    QCOMPARE(getCombatant(0)->health(), 25);
-    QCOMPARE(getCombatant(0)->priority(), 10);
-    QCOMPARE(getCombatant(0)->notes(), QStringLiteral("Modified"));
+    combatTracker.setIni(2, 20); // should move to position 0
+    combatTracker.setHealth(0, 25);
+    combatTracker.setPriority(0, 10);
+    combatTracker.setNotes(0, QStringLiteral("Modified"));
+    EXPECT_EQ(getCombatant(0, combatTracker)->ini(), 20);
+    EXPECT_EQ(getCombatant(0, combatTracker)->health(), 25);
+    EXPECT_EQ(getCombatant(0, combatTracker)->priority(), 10);
+    EXPECT_EQ(getCombatant(0, combatTracker)->notes(), QStringLiteral("Modified"));
 }
 
-void TestCombatTracker::testSaveLoad()
+TEST_F(CombatTrackerTest, TestSaveLoad)
 {
-    clear();
-    createTestData();
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    combatTracker.clear();
+    createTestData(combatTracker);
 
-    const auto index = currentIndex();
-    const auto round = currentRound();
+    const auto index = combatTracker.currentIndex();
+    const auto round = combatTracker.currentRound();
 
-    const auto *combatant = getCombatant(0);
+    const auto *combatant = getCombatant(0, combatTracker);
     const auto name = combatant->name();
     const auto notes = combatant->notes();
     const auto ini = combatant->ini();
@@ -97,27 +123,24 @@ void TestCombatTracker::testSaveLoad()
     const auto priority = combatant->priority();
     const auto delay = combatant->delay();
 
-    saveToDisk();
-    clear(false);
+    saveToDisk(combatTracker);
+    combatTracker.clear(false);
 
-    QCOMPARE(currentIndex(), 0);
-    QCOMPARE(currentRound(), 1);
-    QCOMPARE(combatants().length(), 0);
+    EXPECT_EQ(combatTracker.currentIndex(), 0);
+    EXPECT_EQ(combatTracker.currentRound(), 1);
+    EXPECT_EQ(combatants(combatTracker).length(), 0);
 
-    setIsDataLoaded(false);
-    loadData();
+    setIsDataLoaded(false, combatTracker);
+    combatTracker.loadData();
 
-    QCOMPARE(currentIndex(), index);
-    QCOMPARE(currentRound(), round);
+    EXPECT_EQ(combatTracker.currentIndex(), index);
+    EXPECT_EQ(combatTracker.currentRound(), round);
 
-    const auto *loadedCombatant = getCombatant(0);
-    QCOMPARE(loadedCombatant->name(), name);
-    QCOMPARE(loadedCombatant->notes(), notes);
-    QCOMPARE(loadedCombatant->ini(), ini);
-    QCOMPARE(loadedCombatant->health(), health);
-    QCOMPARE(loadedCombatant->priority(), priority);
-    QCOMPARE(loadedCombatant->delay(), delay);
+    const auto *loadedCombatant = getCombatant(0, combatTracker);
+    EXPECT_EQ(loadedCombatant->name(), name);
+    EXPECT_EQ(loadedCombatant->notes(), notes);
+    EXPECT_EQ(loadedCombatant->ini(), ini);
+    EXPECT_EQ(loadedCombatant->health(), health);
+    EXPECT_EQ(loadedCombatant->priority(), priority);
+    EXPECT_EQ(loadedCombatant->delay(), delay);
 }
-
-QTEST_APPLESS_MAIN(TestCombatTracker)
-#include "testcombattracker.moc"

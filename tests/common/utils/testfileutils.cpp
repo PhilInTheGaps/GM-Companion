@@ -1,236 +1,140 @@
 #include "utils/fileutils.h"
-#include <QObject>
-#include <QtTest>
+#include <gtest/gtest.h>
 
-class TestFileUtils : public QObject
+struct DirFoldersTest
 {
-    Q_OBJECT
-public:
-    using QObject::QObject;
-
-private slots:
-    void dirFromFolders_data();
-    void dirFromFolders();
-
-    void dirFromPath_data();
-    void dirFromPath();
-
-    void foldersFromDir_data();
-    void foldersFromDir();
-
-    void suffix_data();
-    void suffix();
-
-    void fileName_data();
-    void fileName();
-
-    void incrementFileName_data();
-    void incrementFileName();
-
-    void fileInDir_data();
-    void fileInDir();
+    const char *description;
+    QStringList folders;
+    QString dir;
 };
 
-void TestFileUtils::dirFromFolders_data()
+TEST(FileUtilsTest, DirFromFolders)
 {
-    QTest::addColumn<QStringList>("folders");
-    QTest::addColumn<QString>("dir");
+    std::vector<DirFoldersTest> tests = {
+        {"relative path", {"folder1", "folder2", "folder3"}, "folder1/folder2/folder3"},
+        {"absolute path", {"", "folder1", "folder2", "folder3"}, "/folder1/folder2/folder3"},
+        {"absolute windows path", {"c:", "folder1", "folder2", "folder3"}, "c:/folder1/folder2/folder3"}};
 
-    QTest::newRow("relative path") << QStringList({"folder1", "folder2", "folder3"}) << "folder1/folder2/folder3";
-    QTest::newRow("absolute path") << QStringList({"", "folder1", "folder2", "folder3"}) << "/folder1/folder2/folder3";
-    QTest::newRow("absolute windows path")
-        << QStringList({"c:", "folder1", "folder2", "folder3"}) << "c:/folder1/folder2/folder3";
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::dirFromFolders(test.folders), test.dir) << test.description;
+    }
 }
 
-void TestFileUtils::dirFromFolders()
+struct StringIOTest
 {
-    QFETCH(QStringList, folders);
-    QFETCH(QString, dir);
+    const char *description;
+    QString input;
+    QString output;
+};
 
-    QCOMPARE(FileUtils::dirFromFolders(folders), dir);
+TEST(FileUtilsTest, DirFromPath)
+{
+    std::vector<StringIOTest> tests = {{"relative path", "some/strange/file.mp3", "some/strange"},
+                                       {"absolute path", "/some/strange/file.mp3", "/some/strange"},
+                                       {"short path", "some/file.mp3", "some"},
+                                       {"root path", "/file.mp3", "/"},
+                                       {"relative short path", "file.mp3", ""}};
+
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::dirFromPath(test.input), test.output) << test.description;
+    }
 }
 
-void TestFileUtils::dirFromPath_data()
+TEST(FileUtilsTest, FoldersFromDir)
 {
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("output");
+    std::vector<DirFoldersTest> tests = {
+        {"relative path", {"folder1", "folder2", "folder3"}, "folder1/folder2/folder3"},
+        {"absolute path", {"", "folder1", "folder2", "folder3"}, "/folder1/folder2/folder3"},
+        {"absolute windows path", {"c:", "folder1", "folder2", "folder3"}, "c:/folder1/folder2/folder3"}};
 
-    QTest::newRow("relative path") << "some/strange/file.mp3"
-                                   << "some/strange";
-    QTest::newRow("absolute path") << "/some/strange/file.mp3"
-                                   << "/some/strange";
-    QTest::newRow("short path") << "some/file.mp3"
-                                << "some";
-    QTest::newRow("root path") << "/file.mp3"
-                               << "/";
-    QTest::newRow("relative short path") << "file.mp3"
-                                         << "";
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::foldersFromDir(test.dir), test.folders) << test.description;
+    }
 }
 
-void TestFileUtils::dirFromPath()
+TEST(FileUtilsTest, Suffix)
 {
-    QFETCH(QString, input);
-    QFETCH(QString, output);
+    std::vector<StringIOTest> tests = {{"file path", "some/strange/file.mp3", "mp3"},
+                                       {"only file name", "file.doc", "doc"},
+                                       {"empty", "", ""},
+                                       {"multiple dots", "some/path/file.jpeg.json", "json"}};
 
-    QCOMPARE(FileUtils::dirFromPath(input), output);
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::suffix(test.input), test.output) << test.description;
+    }
 }
 
-void TestFileUtils::foldersFromDir_data()
+TEST(FileUtilsTest, FileName)
 {
-    QTest::addColumn<QString>("dir");
-    QTest::addColumn<QStringList>("folders");
+    std::vector<StringIOTest> tests = {{"file path", "some/strange/file.mp3", "file.mp3"},
+                                       {"only file name", "file.doc", "file.doc"},
+                                       {"empty", "", ""},
+                                       {"multiple dots", "some/path/file.jpeg.json", "file.jpeg.json"},
+                                       {"folder with /", "some/path/", "path"}};
 
-    QTest::newRow("relative path") << "folder1/folder2/folder3" << QStringList({"folder1", "folder2", "folder3"});
-    QTest::newRow("absolute path") << "/folder1/folder2/folder3" << QStringList({"", "folder1", "folder2", "folder3"});
-    QTest::newRow("absolute windows path")
-        << "c:/folder1/folder2/folder3" << QStringList({"c:", "folder1", "folder2", "folder3"});
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::fileName(test.input), test.output) << test.description;
+        EXPECT_EQ(FileUtils::fileName(QStringView(test.input)), test.output) << test.description;
+    }
 }
 
-void TestFileUtils::foldersFromDir()
+struct IncFileNameTest
 {
-    QFETCH(QString, dir);
-    QFETCH(QStringList, folders);
+    const char *description;
+    QString input;
+    QString output;
+    QString suffix;
+};
 
-    QCOMPARE(FileUtils::foldersFromDir(dir), folders);
+TEST(FileUtilsTest, IncrementFileName)
+{
+    std::vector<IncFileNameTest> tests = {
+        {"file path without number", "some/file", "some/file_0", ".mp3"},
+        {"file path with number", "some/file_3", "some/file_4", ".mp3"},
+        {"multiple undescores", "some/cool_file_2_1", "some/cool_file_2_2", ".mp3"},
+        {"ends with undescore", "file_", "file_0", ".mp3"},
+        {"empty", "", "", ""},
+        {"long path", "some/very/strange/file_0", "some/very/strange/file_1", ".mp3"}};
+
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::incrementName(test.input), test.output) << test.description;
+        EXPECT_EQ(FileUtils::incrementFileName(test.input + test.suffix), test.output + test.suffix)
+            << test.description;
+    }
 }
 
-void TestFileUtils::suffix_data()
+struct FileInDirTest
 {
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("output");
+    const char *description;
+    QString dir;
+    QString filename;
+    QString output;
+};
 
-    QTest::newRow("file path") << "some/strange/file.mp3"
-                               << "mp3";
-    QTest::newRow("only file name") << "file.doc"
-                                    << "doc";
-    QTest::newRow("empty") << ""
-                           << "";
-    QTest::newRow("multiple dots") << "some/path/file.jpeg.json"
-                                   << "json";
-}
-
-void TestFileUtils::suffix()
+TEST(FileUtilsTest, FileInDir)
 {
-    QFETCH(QString, input);
-    QFETCH(QString, output);
+    std::vector<FileInDirTest> tests = {
+        {"with seperator", "some/path/", "test", "some/path/test"},
+        {"with double seperator", "some/path/", "/test", "some/path/test"},
+        {"with double seperator and starting seperator", "/some/path/", "/test", "/some/path/test"},
+        {"with seperator and leading seperator in file", "some/path", "/test", "some/path/test"},
+        {"with seperator and trailing seperator in file", "some/path/", "test/", "some/path/test/"},
+        {"with double seperator and trailing seperator in file", "some/path/", "/test/", "some/path/test/"},
+        {"without seperator", "some/path", "test", "some/path/test"},
+        {"empty", "", "", ""},
+        {"empty dir", "", "test", "test"},
+        {"top level", "/", "home", "/home"},
+        {"DOS seperator", "some\\path\\", "test", "some\\path\\test"},
+        {"DOS seperator missing", "some\\path", "test", "some\\path\\test"}};
 
-    QCOMPARE(FileUtils::suffix(input), output);
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(FileUtils::fileInDir(test.filename, test.dir), test.output) << test.description;
+    }
 }
-
-void TestFileUtils::fileName_data()
-{
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("output");
-
-    QTest::newRow("file path") << "some/strange/file.mp3"
-                               << "file.mp3";
-    QTest::newRow("only file name") << "file.doc"
-                                    << "file.doc";
-    QTest::newRow("empty") << ""
-                           << "";
-    QTest::newRow("multiple dots") << "some/path/file.jpeg.json"
-                                   << "file.jpeg.json";
-    QTest::newRow("folder with /") << "some/path/"
-                                   << "path";
-}
-
-void TestFileUtils::fileName()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    QCOMPARE(FileUtils::fileName(input), output);
-    QCOMPARE(FileUtils::fileName(QStringView(input)), output);
-}
-
-void TestFileUtils::incrementFileName_data()
-{
-    QTest::addColumn<QString>("input");
-    QTest::addColumn<QString>("output");
-    QTest::addColumn<QString>("suffix");
-
-    QTest::newRow("file path without number") << "some/file"
-                                              << "some/file_0"
-                                              << ".mp3";
-    QTest::newRow("file path with number") << "some/file_3"
-                                           << "some/file_4"
-                                           << ".mp3";
-    QTest::newRow("multiple undescores") << "some/cool_file_2_1"
-                                         << "some/cool_file_2_2"
-                                         << ".mp3";
-    QTest::newRow("ends with undescore") << "file_"
-                                         << "file_0"
-                                         << ".mp3";
-    QTest::newRow("empty") << ""
-                           << ""
-                           << "";
-    QTest::newRow("long path") << "some/very/strange/file_0"
-                               << "some/very/strange/file_1"
-                               << ".mp3";
-}
-
-void TestFileUtils::incrementFileName()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-    QFETCH(QString, suffix);
-
-    QCOMPARE(FileUtils::incrementName(input), output);
-    QCOMPARE(FileUtils::incrementFileName(input + suffix), output + suffix);
-}
-
-void TestFileUtils::fileInDir_data()
-{
-    QTest::addColumn<QString>("dir");
-    QTest::addColumn<QString>("filename");
-    QTest::addColumn<QString>("output");
-
-    QTest::newRow("with seperator") << "some/path/"
-                                    << "test"
-                                    << "some/path/test";
-    QTest::newRow("with double seperator") << "some/path/"
-                                           << "/test"
-                                           << "some/path/test";
-    QTest::newRow("with double seperator and starting seperator") << "/some/path/"
-                                                                  << "/test"
-                                                                  << "/some/path/test";
-    QTest::newRow("with seperator and leading seperator in file") << "some/path"
-                                                                  << "/test"
-                                                                  << "some/path/test";
-    QTest::newRow("with seperator and trailing seperator in file") << "some/path/"
-                                                                   << "test/"
-                                                                   << "some/path/test/";
-    QTest::newRow("with double seperator and trailing seperator in file") << "some/path/"
-                                                                          << "/test/"
-                                                                          << "some/path/test/";
-    QTest::newRow("without seperator") << "some/path"
-                                       << "test"
-                                       << "some/path/test";
-    QTest::newRow("empty") << ""
-                           << ""
-                           << "";
-    QTest::newRow("empty dir") << ""
-                               << "test"
-                               << "test";
-    QTest::newRow("top level") << "/"
-                               << "home"
-                               << "/home";
-    QTest::newRow("DOS seperator") << "some\\path\\"
-                                   << "test"
-                                   << "some\\path\\test";
-    QTest::newRow("DOS seperator missing") << "some\\path"
-                                           << "test"
-                                           << "some\\path\\test";
-}
-
-void TestFileUtils::fileInDir()
-{
-    QFETCH(QString, dir);
-    QFETCH(QString, filename);
-    QFETCH(QString, output);
-
-    QCOMPARE(FileUtils::fileInDir(filename, dir), output);
-}
-
-QTEST_APPLESS_MAIN(TestFileUtils)
-#include "testfileutils.moc"

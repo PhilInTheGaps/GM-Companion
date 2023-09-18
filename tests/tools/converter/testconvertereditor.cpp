@@ -2,219 +2,201 @@
 #include "src/tools/converter/convertereditor.h"
 #include "tests/testhelper/abstracttest.h"
 #include <QDir>
-#include <QtTest>
+#include <gtest/gtest.h>
 
-class TestConverterEditor : public AbstractTest
+class ConverterEditorTest : public AbstractTest
 {
-    Q_OBJECT
-
-private slots:
-    void canCreateNewProject();
-    void canRenameProject();
-    void canDeleteProject();
-
-    void canCreateCategory();
-    void canRenameCategory();
-    void canDeleteCategory();
-
-    void canCreateUnit();
-    void canRenameUnit();
-    void canChangeUnitValue();
-    void canDeleteUnit();
-
-    void canSaveProjects();
-    void canSaveAndCreateDestinationDir();
 };
 
-void TestConverterEditor::canCreateNewProject()
+TEST_F(ConverterEditorTest, CanCreateNewProject)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.projects().isEmpty());
-    QVERIFY(editor.isSaved());
+    EXPECT_TRUE(editor.projects().isEmpty());
+    EXPECT_TRUE(editor.isSaved());
 
-    QVERIFY(!editor.createProject(QLatin1String()));
+    EXPECT_FALSE(editor.createProject(QLatin1String()));
 
-    QVERIFY(editor.createProject(QStringLiteral("Test Project")));
-    QCOMPARE(editor.projects().length(), 1);
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test Project")));
+    EXPECT_EQ(editor.projects().length(), 1);
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canRenameProject()
+TEST_F(ConverterEditorTest, CanRenameProject)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Test")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test")));
     editor.isSaved(true);
 
     const auto projects = editor.projects();
-    QVERIFY(editor.renameProject(projects.first(), QStringLiteral("Renamed")));
-    QCOMPARE(projects.first()->name(), QStringLiteral("Renamed"));
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.renameProject(projects.first(), QStringLiteral("Renamed")));
+    EXPECT_EQ(projects.first()->name(), QStringLiteral("Renamed"));
+    EXPECT_FALSE(editor.isSaved());
 
-    QVERIFY(!editor.renameProject(nullptr, QStringLiteral("Renamed")));
+    EXPECT_FALSE(editor.renameProject(nullptr, QStringLiteral("Renamed")));
 }
 
-void TestConverterEditor::canDeleteProject()
+TEST_F(ConverterEditorTest, CanDeleteProject)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Test")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test")));
     auto projects = editor.projects();
 
-    QVERIFY(!editor.deleteProject(nullptr));
-    QCOMPARE(editor.projects().length(), 1);
+    EXPECT_FALSE(editor.deleteProject(nullptr));
+    EXPECT_EQ(editor.projects().length(), 1);
 
-    QVERIFY(editor.deleteProject(projects.first()));
-    QVERIFY(editor.projects().isEmpty());
-    QVERIFY(!editor.currentProject());
+    EXPECT_TRUE(editor.deleteProject(projects.first()));
+    EXPECT_TRUE(editor.projects().isEmpty());
+    EXPECT_FALSE(editor.currentProject());
 
-    QVERIFY(editor.createProject(QStringLiteral("Test1")));
-    QVERIFY(editor.createProject(QStringLiteral("Test2")));
-    QCOMPARE(editor.projects().length(), 2);
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test1")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test2")));
+    EXPECT_EQ(editor.projects().length(), 2);
     projects = editor.projects();
 
-    QVERIFY(editor.deleteProject(projects.takeFirst()));
-    QCOMPARE(editor.projects().length(), 1);
-    QVERIFY(editor.deleteProject(projects.takeFirst()));
-    QVERIFY(editor.projects().isEmpty());
+    EXPECT_TRUE(editor.deleteProject(projects.takeFirst()));
+    EXPECT_EQ(editor.projects().length(), 1);
+    EXPECT_TRUE(editor.deleteProject(projects.takeFirst()));
+    EXPECT_TRUE(editor.projects().isEmpty());
 }
 
-void TestConverterEditor::canCreateCategory()
+TEST_F(ConverterEditorTest, CanCreateCategory)
 {
     ConverterEditor editor(nullptr);
 
     // needs project first
-    QVERIFY(!editor.createCategory(QStringLiteral("Category")));
+    EXPECT_FALSE(editor.createCategory(QStringLiteral("Category")));
 
-    QVERIFY(editor.createProject(QStringLiteral("Test")));
-    QVERIFY(editor.currentProject()->categories().isEmpty());
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test")));
+    EXPECT_TRUE(editor.currentProject()->categories().isEmpty());
 
     // neds a name
-    QVERIFY(!editor.createCategory(QLatin1String()));
-    QVERIFY(editor.currentProject()->categories().isEmpty());
+    EXPECT_FALSE(editor.createCategory(QLatin1String()));
+    EXPECT_TRUE(editor.currentProject()->categories().isEmpty());
 
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
-    QCOMPARE(editor.currentCategory()->name(), QStringLiteral("Category"));
-    QCOMPARE(editor.currentProject()->categories().length(), 1);
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_EQ(editor.currentCategory()->name(), QStringLiteral("Category"));
+    EXPECT_EQ(editor.currentProject()->categories().length(), 1);
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canRenameCategory()
+TEST_F(ConverterEditorTest, CanRenameCategory)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Test")));
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
 
-    QVERIFY(!editor.renameCategory(nullptr, QStringLiteral("Renamed")));
+    EXPECT_FALSE(editor.renameCategory(nullptr, QStringLiteral("Renamed")));
 
-    QVERIFY(editor.renameCategory(editor.currentCategory(), QStringLiteral("Renamed")));
-    QCOMPARE(editor.currentCategory()->name(), QStringLiteral("Renamed"));
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.renameCategory(editor.currentCategory(), QStringLiteral("Renamed")));
+    EXPECT_EQ(editor.currentCategory()->name(), QStringLiteral("Renamed"));
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canDeleteCategory()
+TEST_F(ConverterEditorTest, CanDeleteCategory)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Test")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Test")));
 
-    QVERIFY(!editor.deleteCategory(nullptr));
+    EXPECT_FALSE(editor.deleteCategory(nullptr));
 
-    QVERIFY(editor.createCategory(QStringLiteral("Cat1")));
-    QVERIFY(editor.deleteCategory(editor.currentCategory()));
-    QVERIFY(editor.currentProject()->categories().isEmpty());
-    QVERIFY(!editor.currentCategory());
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Cat1")));
+    EXPECT_TRUE(editor.deleteCategory(editor.currentCategory()));
+    EXPECT_TRUE(editor.currentProject()->categories().isEmpty());
+    EXPECT_FALSE(editor.currentCategory());
+    EXPECT_FALSE(editor.isSaved());
 
-    QVERIFY(editor.createCategory(QStringLiteral("Cat1")));
-    QVERIFY(editor.createCategory(QStringLiteral("Cat2")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Cat1")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Cat2")));
     auto categories = editor.currentProject()->categories();
 
-    QVERIFY(editor.deleteCategory(categories.takeFirst()));
-    QCOMPARE(editor.currentProject()->categories().length(), 1);
-    QVERIFY(editor.currentCategory());
+    EXPECT_TRUE(editor.deleteCategory(categories.takeFirst()));
+    EXPECT_EQ(editor.currentProject()->categories().length(), 1);
+    EXPECT_TRUE(editor.currentCategory());
 
-    QVERIFY(editor.deleteCategory(editor.currentCategory()));
-    QVERIFY(!editor.currentCategory());
+    EXPECT_TRUE(editor.deleteCategory(editor.currentCategory()));
+    EXPECT_FALSE(editor.currentCategory());
 }
 
-void TestConverterEditor::canCreateUnit()
+TEST_F(ConverterEditorTest, CanCreateUnit)
 {
     ConverterEditor editor(nullptr);
 
-    QVERIFY(!editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
-    QVERIFY(editor.createProject(QStringLiteral("Project")));
+    EXPECT_FALSE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Project")));
 
-    QVERIFY(!editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_FALSE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
 
-    QVERIFY(!editor.createUnit(QLatin1String(), QStringLiteral("1")));
-    QVERIFY(!editor.createUnit(QStringLiteral("Unit"), QLatin1String()));
-    QVERIFY(!editor.createUnit(QStringLiteral("Unit"), QStringLiteral("NOT A NUMBER")));
+    EXPECT_FALSE(editor.createUnit(QLatin1String(), QStringLiteral("1")));
+    EXPECT_FALSE(editor.createUnit(QStringLiteral("Unit"), QLatin1String()));
+    EXPECT_FALSE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("NOT A NUMBER")));
 
-    QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
-    QCOMPARE(editor.currentCategory()->units().length(), 1);
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_EQ(editor.currentCategory()->units().length(), 1);
 
-    QVERIFY(editor.createUnit(QStringLiteral("Unit2"), QStringLiteral("2")));
-    QCOMPARE(editor.currentCategory()->units().length(), 2);
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit2"), QStringLiteral("2")));
+    EXPECT_EQ(editor.currentCategory()->units().length(), 2);
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canRenameUnit()
+TEST_F(ConverterEditorTest, CanRenameUnit)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Project")));
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
-    QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Project")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
 
-    QVERIFY(!editor.renameUnit(nullptr, QStringLiteral("Renamed")));
+    EXPECT_FALSE(editor.renameUnit(nullptr, QStringLiteral("Renamed")));
 
     auto units = editor.currentCategory()->units();
-    QVERIFY(editor.renameUnit(units.first(), QStringLiteral("Renamed")));
-    QCOMPARE(units.first()->name(), QStringLiteral("Renamed"));
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.renameUnit(units.first(), QStringLiteral("Renamed")));
+    EXPECT_EQ(units.first()->name(), QStringLiteral("Renamed"));
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canChangeUnitValue()
+TEST_F(ConverterEditorTest, CanChangeUnitValue)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Project")));
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
-    QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Project")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
 
-    QVERIFY(!editor.changeUnitValue(nullptr, QStringLiteral("2")));
+    EXPECT_FALSE(editor.changeUnitValue(nullptr, QStringLiteral("2")));
 
     auto units = editor.currentCategory()->units();
-    QVERIFY(editor.changeUnitValue(units.first(), QStringLiteral("2")));
-    QCOMPARE(units.first()->value(), 2);
-    QVERIFY(!editor.isSaved());
+    EXPECT_TRUE(editor.changeUnitValue(units.first(), QStringLiteral("2")));
+    EXPECT_EQ(units.first()->value(), 2);
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canDeleteUnit()
+TEST_F(ConverterEditorTest, CanDeleteUnit)
 {
     ConverterEditor editor(nullptr);
-    QVERIFY(editor.createProject(QStringLiteral("Project")));
-    QVERIFY(editor.createCategory(QStringLiteral("Category")));
+    EXPECT_TRUE(editor.createProject(QStringLiteral("Project")));
+    EXPECT_TRUE(editor.createCategory(QStringLiteral("Category")));
 
-    QVERIFY(!editor.deleteUnit(nullptr));
+    EXPECT_FALSE(editor.deleteUnit(nullptr));
 
-    QVERIFY(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit"), QStringLiteral("1")));
     auto units = editor.currentCategory()->units();
-    QCOMPARE(units.length(), 1);
-    QVERIFY(editor.deleteUnit(units.first()));
-    QVERIFY(editor.currentCategory()->units().isEmpty());
+    EXPECT_EQ(units.length(), 1);
+    EXPECT_TRUE(editor.deleteUnit(units.first()));
+    EXPECT_TRUE(editor.currentCategory()->units().isEmpty());
 
-    QVERIFY(editor.createUnit(QStringLiteral("Unit1"), QStringLiteral("1")));
-    QVERIFY(editor.createUnit(QStringLiteral("Unit2"), QStringLiteral("2")));
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit1"), QStringLiteral("1")));
+    EXPECT_TRUE(editor.createUnit(QStringLiteral("Unit2"), QStringLiteral("2")));
     units = editor.currentCategory()->units();
-    QCOMPARE(units.length(), 2);
+    EXPECT_EQ(units.length(), 2);
 
-    QVERIFY(editor.deleteUnit(units.first()));
+    EXPECT_TRUE(editor.deleteUnit(units.first()));
     units = editor.currentCategory()->units();
-    QCOMPARE(units.length(), 1);
-    QVERIFY(editor.deleteUnit(units.first()));
-    QVERIFY(editor.currentCategory()->units().isEmpty());
-    QVERIFY(!editor.isSaved());
+    EXPECT_EQ(units.length(), 1);
+    EXPECT_TRUE(editor.deleteUnit(units.first()));
+    EXPECT_TRUE(editor.currentCategory()->units().isEmpty());
+    EXPECT_FALSE(editor.isSaved());
 }
 
-void TestConverterEditor::canSaveProjects()
+TEST_F(ConverterEditorTest, CanSaveProjects)
 {
     const auto unitDir = FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath());
     const auto backupDir = backupUserFolder(unitDir);
@@ -222,20 +204,20 @@ void TestConverterEditor::canSaveProjects()
     QDir d(unitDir);
     if (!d.exists()) d.mkpath(unitDir);
 
-    QVERIFY(d.exists());
-    QVERIFY(d.entryList(QDir::Files).isEmpty());
+    EXPECT_TRUE(d.exists());
+    EXPECT_TRUE(d.entryList(QDir::Files).isEmpty());
 
     // create old v1 project that should get backed up
     QFile f(FileUtils::fileInDir(QStringLiteral("old.ini"), unitDir));
-    QVERIFY(!f.exists());
-    QVERIFY(f.open(QIODevice::WriteOnly));
+    EXPECT_FALSE(f.exists());
+    EXPECT_TRUE(f.open(QIODevice::WriteOnly));
     f.write("version=0");
     f.close();
 
     // create v2 project that should get removed
     QFile f1(FileUtils::fileInDir(QStringLiteral("old.json"), unitDir));
-    QVERIFY(!f1.exists());
-    QVERIFY(f1.open(QIODevice::WriteOnly));
+    EXPECT_FALSE(f1.exists());
+    EXPECT_TRUE(f1.open(QIODevice::WriteOnly));
     f1.write(R"({"name": "Test", "version": 2, "categories": []})");
     f1.close();
 
@@ -259,19 +241,19 @@ void TestConverterEditor::canSaveProjects()
     editor.createUnit(QStringLiteral("U6"), QStringLiteral("7.0"));
     editor.createUnit(QStringLiteral("U7"), QStringLiteral("8.0"));
 
-    QVERIFY(!editor.isSaved());
+    EXPECT_FALSE(editor.isSaved());
     editor.save();
-    QVERIFY(editor.isSaved());
+    EXPECT_TRUE(editor.isSaved());
 
-    QCOMPARE(d.entryList(QDir::Files).length(), 2);
-    QVERIFY(d.exists(QStringLiteral("v1")));
+    EXPECT_EQ(d.entryList(QDir::Files).length(), 2);
+    EXPECT_TRUE(d.exists(QStringLiteral("v1")));
     d.cd(QStringLiteral("v1"));
-    QCOMPARE(d.entryList(QDir::Files).length(), 1);
+    EXPECT_EQ(d.entryList(QDir::Files).length(), 1);
 
     restoreUserFolder(backupDir, unitDir);
 }
 
-void TestConverterEditor::canSaveAndCreateDestinationDir()
+TEST_F(ConverterEditorTest, CanSaveAndCreateDestinationDir)
 {
     const auto unitDir = FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath());
     const auto backupDir = backupUserFolder(unitDir);
@@ -282,11 +264,8 @@ void TestConverterEditor::canSaveAndCreateDestinationDir()
     ConverterEditor editor(nullptr);
     editor.createProject(QStringLiteral("Test"));
     editor.save();
-    QVERIFY(editor.isSaved());
-    QCOMPARE(d.entryList(QDir::Files).length(), 1);
+    EXPECT_TRUE(editor.isSaved());
+    EXPECT_EQ(d.entryList(QDir::Files).length(), 1);
 
     restoreUserFolder(backupDir, unitDir);
 }
-
-QTEST_APPLESS_MAIN(TestConverterEditor)
-#include "testconvertereditor.moc"

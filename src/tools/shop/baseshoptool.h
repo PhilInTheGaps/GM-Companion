@@ -2,10 +2,14 @@
 
 #include "abstracttool.h"
 #include "project/shopproject.h"
-#include "results/filedataresult.h"
-#include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QtQml/qqmlregistration.h>
+
+namespace Files
+{
+class FileListResult;
+class FileDataResult;
+} // namespace Files
 
 class BaseShopTool : public AbstractTool
 {

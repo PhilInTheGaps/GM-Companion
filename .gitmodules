@@ -14,3 +14,6 @@
 [submodule "thirdparty/qml-icon-fonts"]
 	path = thirdparty/qml-icon-fonts
 	url = https://github.com/PhilInTheGaps/qml-icon-fonts
+[submodule "thirdparty/googletest"]
+	path = thirdparty/googletest
+	url = https://github.com/google/googletest

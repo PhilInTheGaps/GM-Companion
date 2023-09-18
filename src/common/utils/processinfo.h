@@ -1,5 +1,4 @@
-#ifndef PROCESSINFO_H
-#define PROCESSINFO_H
+#pragma once
 
 #include <QString>
 #include <string>
@@ -19,5 +18,3 @@ private:
     static auto isProcessRunningWin(const QString &name) -> bool;
 #endif
 };
-
-#endif // PROCESSINFO_H

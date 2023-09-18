@@ -1,58 +1,38 @@
 #include "utils/networkutils.h"
-#include <QObject>
-#include <QtTest>
+#include <gtest/gtest.h>
 
-class TestNetworkUtils : public QObject
+struct AuthHeaderTest
 {
-    Q_OBJECT
-public:
-    TestNetworkUtils() = default;
-
-private slots:
-    void basicAuthHeader_data();
-    void basicAuthHeader();
-    void isHttpUrl_data();
-    void isHttpUrl();
+    QString username;
+    QString password;
+    QByteArray header;
 };
 
-void TestNetworkUtils::basicAuthHeader_data()
+TEST(NetworkUtilsTest, BasicAuthHeader)
 {
-    QTest::addColumn<QString>("username");
-    QTest::addColumn<QString>("password");
-    QTest::addColumn<QString>("header");
+    std::vector<AuthHeaderTest> tests = {{"rophil", "hunter2", "Basic cm9waGlsOmh1bnRlcjI="}};
 
-    QTest::newRow("default") << "rophil"
-                             << "hunter2"
-                             << "Basic cm9waGlsOmh1bnRlcjI=";
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(NetworkUtils::basicAuthHeader(test.username, test.password), test.header);
+    }
 }
 
-void TestNetworkUtils::basicAuthHeader()
+struct HttpUrlTest
 {
-    QFETCH(QString, username);
-    QFETCH(QString, password);
-    QFETCH(QString, header);
+    QString url;
+    bool isHttp;
+};
 
-    QCOMPARE(QString(NetworkUtils::basicAuthHeader(username, password)), header);
-}
-
-void TestNetworkUtils::isHttpUrl_data()
+TEST(NetworkUtilsTest, IsHttpUrl)
 {
-    QTest::addColumn<QString>("url");
-    QTest::addColumn<bool>("isHttp");
+    std::vector<HttpUrlTest> tests = {{"http://example.com", true},
+                                      {"https://example.com", true},
+                                      {"ftp://example.com", false},
+                                      {"file://test.mp3", false}};
 
-    QTest::newRow("http") << "http://example.com" << true;
-    QTest::newRow("https") << "https://example.com" << true;
-    QTest::newRow("ftp") << "ftp://example.com" << false;
-    QTest::newRow("file") << "file://test.mp3" << false;
+    for (const auto &test : tests)
+    {
+        EXPECT_EQ(NetworkUtils::isHttpUrl(test.url), test.isHttp);
+    }
 }
-
-void TestNetworkUtils::isHttpUrl()
-{
-    QFETCH(QString, url);
-    QFETCH(bool, isHttp);
-
-    QCOMPARE(NetworkUtils::isHttpUrl(url), isHttp);
-}
-
-QTEST_APPLESS_MAIN(TestNetworkUtils)
-#include "testnetworkutils.moc"

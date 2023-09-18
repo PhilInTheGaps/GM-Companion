@@ -1,32 +1,48 @@
 cmake_minimum_required(VERSION 3.19)
 
-set(BASE_FILES
-  abstractaccesstest.h
-  abstractaccesstest.cpp
+set_source_files_properties(testnextcloudaccess.cpp PROPERTIES
+    SKIP_UNITY_BUILD_INCLUSION TRUE
 )
 
-# Local System
-qt_add_executable(test_localaccess ${BASE_FILES} testlocalaccess.cpp)
-target_link_libraries(test_localaccess PRIVATE testhelper filesystem Qt6::Core Qt6::Test)
-set_target_properties(test_localaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
-add_test(NAME test_localaccess COMMAND test_localaccess)
+set(SOURCES
+    main.cpp
+    abstractaccesstest.h
+    abstractaccesstest.cpp
+    mocknextcloud.h
+    mocknextcloud.cpp
+    oputils.h
+    oputils.cpp
+    testlocalaccess.cpp
+    testfiledialog.cpp
+    testnextcloudaccess.cpp
+)
 
-# File Dialog
-qt_add_executable(test_filedialog testfiledialog.cpp)
-target_link_libraries(test_filedialog PRIVATE testhelper filesystem gm-companion-ui-filedialog gm-companion-ui-filedialogplugin Qt6::Core Qt6::Test)
-set_target_properties(test_filedialog PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
-add_test(NAME test_filedialog COMMAND test_filedialog)
+#if (ENABLE_EXTRA_TESTS)
+    set_source_files_properties(testgoogledriveaccess.cpp PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION TRUE
+    )
 
-# Nextcloud
-qt_add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp mocknextcloud.cpp mocknextcloud.h oputils.h oputils.cpp)
-target_link_libraries(test_nextcloudaccess PRIVATE testhelper filesystem Qt6::Core Qt6::Network Qt6::Test)
-set_target_properties(test_nextcloudaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
-add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
+    list(APPEND SOURCES
+        testgoogledriveaccess.cpp
+    )
+#endif()
 
-if (ENABLE_EXTRA_TESTS)
-    # GoogleDrive
-    qt_add_executable(test_googledriveaccess ${BASE_FILES} testgoogledriveaccess.cpp)
-    target_link_libraries(test_googledriveaccess PRIVATE testhelper filesystem Qt6::Core Qt6::Network Qt6::Test)
-    set_target_properties(test_googledriveaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
-    add_test(NAME test_googledriveaccess COMMAND test_googledriveaccess)
-endif()
+qt_add_executable(test_filesystem ${SOURCES})
+
+target_link_libraries(test_filesystem PUBLIC
+    testhelper
+    filesystem
+    filesystemplugin
+    gm-companion-ui-filedialog
+    gm-companion-ui-filedialogplugin
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Network
+    Qt6::Test
+    gtest
+)
+
+target_precompile_headers(test_filesystem REUSE_FROM common)
+
+set_target_properties(test_filesystem PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+gtest_discover_tests(test_filesystem)

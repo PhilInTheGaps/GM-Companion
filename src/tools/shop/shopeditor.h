@@ -3,10 +3,14 @@
 #include "baseshoptool.h"
 #include "itemeditor.h"
 #include "project/shopproject.h"
-#include "results/filelistresult.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QSortFilterProxyModel>
 #include <QtQml/qqmlregistration.h>
+
+namespace Files
+{
+class FileListResult;
+}
 
 class ShopEditor : public BaseShopTool
 {
