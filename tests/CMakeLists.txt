@@ -7,8 +7,6 @@ add_definitions(-DGTEST_LANGUAGE_CXX14)
 
 find_package(Threads REQUIRED)
 
-set(TEST_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
-
 add_subdirectory(testhelper)
 add_subdirectory(common)
 add_subdirectory(filesystem)
@@ -66,5 +64,4 @@ target_link_libraries(test_src PUBLIC
 
 target_precompile_headers(test_src REUSE_FROM common)
 
-set_target_properties(test_src PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 gtest_discover_tests(test_src)

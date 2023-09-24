@@ -17,7 +17,7 @@ set(SOURCES
     testnextcloudaccess.cpp
 )
 
-#if (ENABLE_EXTRA_TESTS)
+if (ENABLE_EXTRA_TESTS)
     set_source_files_properties(testgoogledriveaccess.cpp PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION TRUE
     )
@@ -25,7 +25,7 @@ set(SOURCES
     list(APPEND SOURCES
         testgoogledriveaccess.cpp
     )
-#endif()
+endif()
 
 qt_add_executable(test_filesystem ${SOURCES})
 
@@ -44,5 +44,4 @@ target_link_libraries(test_filesystem PUBLIC
 
 target_precompile_headers(test_filesystem REUSE_FROM common)
 
-set_target_properties(test_filesystem PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 gtest_discover_tests(test_filesystem)

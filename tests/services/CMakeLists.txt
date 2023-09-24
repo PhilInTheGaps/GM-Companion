@@ -20,5 +20,4 @@ target_link_libraries(test_services PRIVATE
 
 target_precompile_headers(test_services REUSE_FROM common)
 
-set_target_properties(test_services PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 gtest_discover_tests(test_services)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.19)
 
 # check if submodules are updated
 if(NOT EXISTS ${EXTERNAL_LIB_DIR}/o2/CMakeLists.txt)

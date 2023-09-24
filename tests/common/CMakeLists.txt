@@ -35,5 +35,4 @@ target_link_libraries(test_common PRIVATE
 
 target_precompile_headers(test_common REUSE_FROM common)
 
-set_target_properties(test_common PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 gtest_discover_tests(test_common)

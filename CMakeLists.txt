@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.26)
 
 project(gm-companion LANGUAGES CXX)
 
@@ -27,6 +27,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 # set external lib dir
 set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/thirdparty)
 
+# put all executables into one directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+
 find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Qml Multimedia Network DBus Concurrent Core5Compat LinguistTools Test REQUIRED)
 find_package(QuaZip-Qt6 REQUIRED)
 find_package(QtKeychain REQUIRED)
@@ -50,24 +53,7 @@ cmake_print_variables(IS_RUNNING_IN_CI)
 
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
-enable_testing(true)
-
-include(AddPoppler)
-include(AddTagLib)
-include(AddGSL)
-include(AddPropertyHelper)
-include(AddHttpStatusCodes)
-include(AddMarkdownLib)
-include(AddO2)
-
-# Disable Unity Builds for sentry
-set(UNITY_BUILD_TEMP ${CMAKE_UNITY_BUILD})
-set(CMAKE_UNITY_BUILD OFF)
-set(SENTRY_ENABLE_INSTALL ON)
-add_subdirectory(thirdparty/sentry-native)
-set(CMAKE_UNITY_BUILD ${UNITY_BUILD_TEMP})
-
-add_subdirectory(thirdparty/qml-icon-fonts)
+enable_testing()
 
 # Code Coverage
 if (ENABLE_CODE_COVERAGE)
@@ -80,15 +66,39 @@ if (ENABLE_CODE_COVERAGE)
   append_coverage_compiler_flags()
 endif()
 
+include(AddPoppler)
+include(AddTagLib)
+include(AddGSL)
+include(AddPropertyHelper)
+include(AddHttpStatusCodes)
+include(AddMarkdownLib)
+include(AddO2)
+
+# Disable Unity Builds for sentry and gtest
+set(UNITY_BUILD_TEMP ${CMAKE_UNITY_BUILD})
+set(CMAKE_UNITY_BUILD OFF)
+
+set(SENTRY_ENABLE_INSTALL ON)
+add_subdirectory(thirdparty/sentry-native)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+add_subdirectory(thirdparty/googletest)
+
+# Re-enable Unity Builds
+set(CMAKE_UNITY_BUILD ${UNITY_BUILD_TEMP})
+
+add_subdirectory(thirdparty/qml-icon-fonts)
+
 if (WIN32)
   add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
+
+  # copy dlls to bin directory
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CGET_PREFIX}/bin ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CGET_PREFIX}/lib ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
 endif()
 
 add_subdirectory(src)
 add_subdirectory(app)
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-add_subdirectory(thirdparty/googletest)
 add_subdirectory(tests)
 
 feature_summary(WHAT ALL)
