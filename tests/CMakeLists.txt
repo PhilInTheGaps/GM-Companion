@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.19)
 
 project(tests)
 
+include(CTest)
+include(Catch)
 include(GoogleTest)
 add_definitions(-DGTEST_LANGUAGE_CXX14)
 

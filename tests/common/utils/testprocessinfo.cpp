@@ -1,8 +1,8 @@
 #include "utils/processinfo.h"
-#include <gtest/gtest.h>
+#include <catch2/catch_test_macros.hpp>
 
-TEST(ProcessInfoTest, IsProcessRunning)
+TEST_CASE("ProcessInfoTest::IsProcessRunning")
 {
-    EXPECT_TRUE(ProcessInfo::isProcessRunning("test_common"));
-    EXPECT_FALSE(ProcessInfo::isProcessRunning("this_is_not_running"));
+    CHECK(ProcessInfo::isProcessRunning("test_common_catch"));
+    CHECK_FALSE(ProcessInfo::isProcessRunning("this_is_not_running"));
 }

@@ -65,6 +65,13 @@ set(UNITY_BUILD_TEMP ${CMAKE_UNITY_BUILD})
 set(CMAKE_UNITY_BUILD OFF)
 set(SENTRY_ENABLE_INSTALL ON)
 add_subdirectory(thirdparty/sentry-native)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+add_subdirectory(thirdparty/googletest)
+
+add_subdirectory(thirdparty/catch2)
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+
 set(CMAKE_UNITY_BUILD ${UNITY_BUILD_TEMP})
 
 add_subdirectory(thirdparty/qml-icon-fonts)
@@ -86,9 +93,6 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(app)
-
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-add_subdirectory(thirdparty/googletest)
 add_subdirectory(tests)
 
 feature_summary(WHAT ALL)

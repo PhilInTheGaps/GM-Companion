@@ -195,6 +195,8 @@ jobs:
 
       - name: Make
         run: |
+          export QT_QPA_PLATFORM="offscreen"
+
           cd build
           cmake --build . -j2
 
@@ -325,6 +327,7 @@ jobs:
 
       - name: Run build-wrapper
         run: |
+          export QT_QPA_PLATFORM="offscreen"
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DENABLE_CODE_COVERAGE=ON
           build-wrapper-linux-x86-64 --out-dir bw-output cmake --build . -j2

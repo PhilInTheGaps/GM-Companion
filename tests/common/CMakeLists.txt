@@ -18,7 +18,6 @@ qt_add_executable(test_common
     utils/testfileutils.cpp
     utils/testnetworkutils.cpp
     utils/testmarkdownutils.cpp
-    utils/testprocessinfo.cpp
 )
 
 target_link_libraries(test_common PRIVATE
@@ -33,7 +32,27 @@ target_link_libraries(test_common PRIVATE
     gtest
 )
 
+qt_add_executable(test_common_catch
+    main_catch.cpp
+    utils/testprocessinfo.cpp
+)
+
+target_link_libraries(test_common_catch PRIVATE
+    common
+    ${MARKDOWN_LIBRARY}
+    ${QTKEYCHAIN_LIBRARY}
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Network
+    Qt6::Test
+    Catch2::Catch2
+)
+
 target_precompile_headers(test_common REUSE_FROM common)
 
 set_target_properties(test_common PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 gtest_discover_tests(test_common)
+
+target_precompile_headers(test_common_catch REUSE_FROM common)
+set_target_properties(test_common_catch PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+catch_discover_tests(test_common_catch)
