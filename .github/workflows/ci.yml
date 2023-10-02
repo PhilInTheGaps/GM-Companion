@@ -215,7 +215,7 @@ jobs:
       - name: Install rust and build librespot
         uses: moonrepo/setup-rust@v1
         with:
-          bins: librespot@v0.4.2
+          bins: librespot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
