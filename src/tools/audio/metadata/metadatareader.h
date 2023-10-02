@@ -1,5 +1,4 @@
-#ifndef METADATAREADER_H
-#define METADATAREADER_H
+#pragma once
 
 #include "audiometadata.h"
 #include <QMediaMetaData>
@@ -14,7 +13,7 @@ class MetaDataReader : public QObject
 public:
     explicit MetaDataReader(QObject *parent = nullptr);
 
-    AudioMetaData *metaData() const
+    [[nodiscard]] auto metaData() const -> AudioMetaData *
     {
         return m_metaData;
     }
@@ -36,5 +35,3 @@ public slots:
     void updateDuration(qint64 duration);
     void clearMetaData();
 };
-
-#endif // METADATAREADER_H

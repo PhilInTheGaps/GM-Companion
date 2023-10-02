@@ -8,31 +8,30 @@ namespace Files
 
 class FileAccessLocal : public FileAccess
 {
-    Q_OBJECT
 public:
-    explicit FileAccessLocal(QObject *parent) : FileAccess(parent)
-    {
-    }
+    FileAccessLocal() = default;
 
-    QFuture<FileDataResult *> getDataAsync(const QString &path, bool allowCache) override;
-    QFuture<std::vector<FileDataResult *>> getDataAsync(const QStringList &paths, bool allowCache) override;
-    QFuture<FileResult *> saveAsync(const QString &path, const QByteArray &data) override;
-    QFuture<FileResult *> moveAsync(const QString &oldPath, const QString &newPath) override;
-    QFuture<FileResult *> deleteAsync(const QString &path) override;
-    QFuture<FileResult *> copyAsync(const QString &path, const QString &copy) override;
-    QFuture<FileListResult *> listAsync(const QString &path, bool files, bool folders) override;
-    QFuture<FileResult *> createDirAsync(const QString &path) override;
-    QFuture<FileCheckResult *> checkAsync(const QString &path, bool allowCache) override;
-    QFuture<FileMultiCheckResult *> checkAsync(const QStringList &paths, bool allowCache) override;
+    auto getDataAsync(const QString &path, bool allowCache) -> QFuture<std::shared_ptr<FileDataResult>> override;
+    auto getDataAsync(const QStringList &paths, bool allowCache)
+        -> QFuture<std::vector<std::shared_ptr<FileDataResult>>> override;
+    auto saveAsync(const QString &path, const QByteArray &data) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto deleteAsync(const QString &path) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto copyAsync(const QString &path, const QString &copy) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto listAsync(const QString &path, bool files, bool folders) -> QFuture<std::shared_ptr<FileListResult>> override;
+    auto createDirAsync(const QString &path) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto checkAsync(const QString &path, bool allowCache) -> QFuture<std::shared_ptr<FileCheckResult>> override;
+    auto checkAsync(const QStringList &paths, bool allowCache)
+        -> QFuture<std::shared_ptr<FileMultiCheckResult>> override;
 
 private:
-    static FileDataResult *getData(const QString &path, bool allowCache);
-    static FileResult *createDir(const QDir &dir);
-    static FileResult *save(const QString &path, const QByteArray &data);
-    static FileResult *move(const QString &oldPath, const QString &newPath);
-    static FileResult *copy(const QString &path, const QString &copy);
-    static QFlags<QDir::Filter> getDirFilter(bool files, bool folders);
-    static FileCheckResult *check(const QString &path, bool allowCache);
+    static auto getData(const QString &path, bool allowCache) -> std::shared_ptr<FileDataResult>;
+    static auto createDir(const QDir &dir) -> std::shared_ptr<FileResult>;
+    static auto save(const QString &path, const QByteArray &data) -> std::shared_ptr<FileResult>;
+    static auto move(const QString &oldPath, const QString &newPath) -> std::shared_ptr<FileResult>;
+    static auto copy(const QString &path, const QString &copy) -> std::shared_ptr<FileResult>;
+    static auto getDirFilter(bool files, bool folders) -> QFlags<QDir::Filter>;
+    static auto check(const QString &path, bool allowCache) -> std::shared_ptr<FileCheckResult>;
 };
 
 } // namespace Files

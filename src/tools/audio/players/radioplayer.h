@@ -3,12 +3,16 @@
 #include "../metadata/metadatareader.h"
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "filesystem/file.h"
 #include <QAudioOutput>
 #include <QBuffer>
 #include <QMediaPlayer>
 #include <QNetworkAccessManager>
 #include <QTemporaryDir>
+
+namespace Files
+{
+class FileDataResult;
+}
 
 class RadioPlayer : public AudioPlayer
 {
@@ -54,7 +58,7 @@ signals:
 
 private slots:
     void onMetaDataChanged();
-    void onFileReceived(Files::FileDataResult *result);
+    void onFileReceived(std::shared_ptr<Files::FileDataResult> result);
     void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
     void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);

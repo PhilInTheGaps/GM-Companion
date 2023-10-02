@@ -3,25 +3,29 @@
 #include "fileresult.h"
 #include <QByteArray>
 
-namespace Files {
+namespace Files
+{
 
 class FileDataResult : public FileResult
 {
-    Q_OBJECT
-
 public:
-    explicit FileDataResult(const QString& errorMessage, QObject *parent = nullptr)
-        : FileResult(errorMessage, parent) {}
+    explicit FileDataResult(const QString &errorMessage) : FileResult(errorMessage)
+    {
+    }
 
-    explicit FileDataResult(const QByteArray& data, QObject *parent = nullptr)
-        : FileResult(true, QByteArray(), parent), m_data(data) {}
+    explicit FileDataResult(const QByteArray &data) : FileResult(true, QByteArray()), m_data(data)
+    {
+    }
 
-    static FileDataResult* fromNetworkReply(RestNetworkReply *reply, QObject *parent);
+    static auto fromNetworkReply(RestNetworkReply *reply) -> std::shared_ptr<FileDataResult>;
 
-    QByteArray data() const { return m_data; }
+    [[nodiscard]] auto data() const -> const QByteArray &
+    {
+        return m_data;
+    }
 
 private:
     const QByteArray m_data;
 };
 
-}
+} // namespace Files

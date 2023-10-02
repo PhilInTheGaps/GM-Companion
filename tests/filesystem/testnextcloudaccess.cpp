@@ -35,7 +35,7 @@ public:
         // actual url, should connect during first usage
         SettingsManager::setServerUrl(QStringLiteral("https://%1").arg(MOCK_DOMAIN), MOCK_SERVICE);
 
-        fileAccess = std::make_unique<FileAccessNextcloud>(*nc, nullptr);
+        fileAccess = std::make_shared<FileAccessNextcloud>(*nc);
         testPath = QStringLiteral("gm-companion-test_") + QUuid::createUuid().toString();
 
         waitForAuthentication = true;

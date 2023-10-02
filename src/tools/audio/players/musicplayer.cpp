@@ -1,4 +1,6 @@
 #include "musicplayer.h"
+#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
 #include "settings/settingsmanager.h"
@@ -302,7 +304,7 @@ void MusicPlayer::loadLocalFile(AudioFile *file)
     m_fileName = file->url();
 
     const auto path = FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"music"_s));
-    const auto callback = [this](Files::FileDataResult *result) { onFileReceived(result); };
+    const auto callback = [this](std::shared_ptr<Files::FileDataResult> result) { onFileReceived(result); };
 
     Files::File::getDataAsync(path).then(m_fileRequestContext, callback);
 }
@@ -452,7 +454,7 @@ void MusicPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QS
     }
 }
 
-void MusicPlayer::onFileReceived(Files::FileDataResult *result)
+void MusicPlayer::onFileReceived(std::shared_ptr<Files::FileDataResult> result)
 {
     if (!result) return;
 
@@ -475,7 +477,6 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
     {
         qCWarning(gmAudioMusic()) << "File is empty, skipping ...";
         next();
-        result->deleteLater();
         return;
     }
 
@@ -491,7 +492,6 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
             {
                 qCWarning(gmAudioMusic()) << "Error: Could not open temporary file even after incrementing the filename"
                                           << file.fileName() << file.errorString();
-                result->deleteLater();
                 return;
             }
         }
@@ -499,7 +499,6 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
         {
             qCWarning(gmAudioMusic()) << "Error: Could not open temporary file:" << file.fileName()
                                       << file.errorString();
-            result->deleteLater();
             return;
         }
     }
@@ -523,7 +522,6 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
     qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
 
     emit metaDataChanged(result->data());
-    result->deleteLater();
 }
 
 void MusicPlayer::onSpotifySongEnded()

@@ -60,7 +60,7 @@ private:
 private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
-    void onFileReceived(Files::FileDataResult *result);
+    void onFileReceived(std::shared_ptr<Files::FileDataResult> result);
 
 signals:
     void playerStopped(SoundPlayer *player);

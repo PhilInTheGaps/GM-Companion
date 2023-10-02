@@ -1,14 +1,16 @@
 #include "filecheckresult.h"
 #include "rest/restnetworkreply.h"
+#include <QScopedPointer>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
-auto FileCheckResult::fromNetworkReply(RestNetworkReply *reply, const QString &path, QObject *parent)
-    -> FileCheckResult *
+auto FileCheckResult::fromNetworkReply(RestNetworkReply *_reply, const QString &path)
+    -> std::unique_ptr<FileCheckResult>
 {
     bool success = true;
     QString errorMessage;
+    QScopedPointer reply(_reply);
 
     if (!reply)
     {
@@ -23,14 +25,12 @@ auto FileCheckResult::fromNetworkReply(RestNetworkReply *reply, const QString &p
             success = false;
             errorMessage = reply->errorText();
         }
-
-        reply->deleteLater();
     }
 
     if (success)
     {
-        return new FileCheckResult(path, success, parent);
+        return std::make_unique<FileCheckResult>(path, success);
     }
 
-    return new FileCheckResult(path, errorMessage, parent);
+    return std::make_unique<FileCheckResult>(path, errorMessage);
 }

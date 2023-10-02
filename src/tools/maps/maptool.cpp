@@ -1,5 +1,6 @@
 #include "maptool.h"
 #include "filesystem/file.h"
+#include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/utils.h"
 #include <QImage>
@@ -103,9 +104,7 @@ void MapTool::addMarker()
 {
     if (m_currentMap)
     {
-        auto data =
-            QByteArray::fromBase64(m_currentMap->imageData().replace("data:image/jpg;base64,"_L1, ""_L1).toLatin1());
-        auto image = QImage::fromData(data);
+        auto image = StringUtils::imageFromString(m_currentMap->imageData().toString().toUtf8());
         auto x = image.width() / 2.0;
         auto y = image.height() / 2.0;
 
@@ -180,9 +179,8 @@ void MapTool::findCategories()
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
     const auto dir = SettingsManager::getPath(u"maps"_s);
-    Files::File::listAsync(dir, false, true).then(this, [this](Files::FileListResult *result) {
+    Files::File::listAsync(dir, false, true).then(this, [this](std::shared_ptr<Files::FileListResult> result) {
         receivedCategories(result->folders());
-        result->deleteLater();
     });
 }
 

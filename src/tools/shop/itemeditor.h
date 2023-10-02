@@ -50,7 +50,6 @@ private:
 
     static auto defaultGroupName() -> QString;
 
-private slots:
-    void onFileCheckReceived(Files::FileCheckResult *result);
-    void onDataReceived(Files::FileDataResult *result);
+    void onFileCheckReceived(std::shared_ptr<Files::FileCheckResult> result);
+    void onDataReceived(std::shared_ptr<Files::FileDataResult> result);
 };

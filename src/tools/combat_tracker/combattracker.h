@@ -24,7 +24,7 @@ public:
     static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *;
 
     Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
-    [[nodiscard]] int currentRound() const
+    [[nodiscard]] auto currentRound() const -> int
     {
         return m_state.currentRound();
     }
@@ -48,14 +48,14 @@ public:
     Q_INVOKABLE void reset();
     Q_INVOKABLE bool remove(int index);
 
-    bool setIni(Combatant *combatant, int ini);
+    auto setIni(Combatant *combatant, int ini) -> bool;
     Q_INVOKABLE bool setIni(int index, int ini);
     Q_INVOKABLE bool modifyIni(int index, int steps = 1);
 
     Q_INVOKABLE bool setHealth(int index, int health);
     Q_INVOKABLE bool modifyHealth(int index, int steps = 1);
 
-    bool setPriority(Combatant *combatant, int priority);
+    auto setPriority(Combatant *combatant, int priority) -> bool;
     Q_INVOKABLE bool setPriority(int index, int priority);
     Q_INVOKABLE bool modifyPriority(int index, int steps = 1);
 

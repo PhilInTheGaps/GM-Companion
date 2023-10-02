@@ -9,47 +9,47 @@ namespace Files
 
 class FileMultiCheckResult : public FileResult
 {
-    Q_OBJECT
 public:
-    FileMultiCheckResult(const std::vector<FileCheckResult *> &results, QObject *parent = nullptr)
-        : FileResult(true, parent), m_results(results)
+    explicit FileMultiCheckResult(std::vector<std::shared_ptr<FileCheckResult>> results)
+        : FileResult(true), m_results(std::move(results))
     {
     }
 
-    FileMultiCheckResult(bool success, const QString &errorMessage, QObject *parent = nullptr)
-        : FileResult(success, errorMessage, parent)
+    explicit FileMultiCheckResult(bool success, const QString &errorMessage) : FileResult(success, errorMessage)
     {
     }
 
-    FileMultiCheckResult(bool success, QObject *parent = nullptr) : FileResult(success, parent)
+    explicit FileMultiCheckResult(bool success) : FileResult(success)
     {
     }
 
-    void add(FileCheckResult *result)
+    void add(const std::shared_ptr<FileCheckResult> &result)
     {
-        result->setParent(this), m_results.push_back(result);
+        m_results.push_back(result);
     }
-    std::vector<FileCheckResult *> results() const
+
+    [[nodiscard]] auto results() const -> const std::vector<std::shared_ptr<FileCheckResult>> &
     {
         return m_results;
     }
 
-    QStringList existing() const
+    [[nodiscard]] auto existing() const -> QStringList
     {
         return find(true);
     }
-    QStringList missing() const
+
+    [[nodiscard]] auto missing() const -> QStringList
     {
         return find(false);
     }
 
 private:
-    std::vector<FileCheckResult *> m_results;
+    std::vector<std::shared_ptr<FileCheckResult>> m_results;
 
-    QStringList find(bool existing) const
+    [[nodiscard]] auto find(bool existing) const -> QStringList
     {
         QStringList files;
-        for (const auto *result : m_results)
+        for (const auto &result : m_results)
         {
             if (result->exists() == existing)
             {

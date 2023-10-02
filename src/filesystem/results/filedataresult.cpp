@@ -1,19 +1,21 @@
 #include "filedataresult.h"
 #include "rest/restnetworkreply.h"
+#include <QScopedPointer>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
-auto FileDataResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) -> FileDataResult *
+auto FileDataResult::fromNetworkReply(RestNetworkReply *_reply) -> std::shared_ptr<FileDataResult>
 {
     bool success = true;
     QString errorMessage;
+    QScopedPointer reply(_reply);
 
     if (!reply)
     {
         success = false;
         errorMessage = u"RestNetworkReply is null! (this is probably caused by a prior error)"_s;
-        return new FileDataResult(errorMessage, parent);
+        return std::make_shared<FileDataResult>(errorMessage);
     }
 
     if (reply->error() != QNetworkReply::NoError)
@@ -23,12 +25,11 @@ auto FileDataResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) 
     }
 
     const auto data = reply->data();
-    reply->deleteLater();
 
     if (success)
     {
-        return new FileDataResult(data, parent);
+        return std::make_shared<FileDataResult>(data);
     }
 
-    return new FileDataResult(errorMessage, parent);
+    return std::make_shared<FileDataResult>(errorMessage);
 }

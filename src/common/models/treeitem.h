@@ -38,7 +38,7 @@ public:
     READ_PROPERTY(int, depth)
 
 public:
-    explicit TreeItem(const QString &name, int depth, bool canToggle = true, QObject *parent = nullptr);
+    explicit TreeItem(const QString &name, int depth, bool canToggle, QObject *parent);
 
     /// Whether a checkbox should be displayed.
     [[nodiscard]] virtual auto isCheckable() const -> bool;

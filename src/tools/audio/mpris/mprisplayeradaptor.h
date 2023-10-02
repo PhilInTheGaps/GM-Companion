@@ -1,5 +1,4 @@
-#ifndef MPRISPLAYERADAPTOR_H
-#define MPRISPLAYERADAPTOR_H
+#pragma once
 
 #include <QDBusAbstractAdaptor>
 #include <QDBusArgument>
@@ -28,17 +27,15 @@ class MprisPlayerAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(bool CanControl READ canControl CONSTANT)
 
 public:
-    MprisPlayerAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj)
-    {
-    }
+    explicit MprisPlayerAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent){};
 
-    QString playbackStatus() const
+    [[nodiscard]] auto playbackStatus() const -> QString
     {
         return m_PlaybackStatus;
     }
     void setPlaybackStatus(int status);
 
-    QString loopStatus() const
+    [[nodiscard]] auto loopStatus() const -> QString
     {
         return m_LoopStatus;
     }
@@ -46,7 +43,7 @@ public:
     { /* Not Implemented */
     }
 
-    double rate() const
+    [[nodiscard]] auto rate() -> double
     {
         return 1.0;
     }
@@ -54,7 +51,7 @@ public:
     { /* Not Implemented */
     }
 
-    bool shuffle() const
+    [[nodiscard]] auto shuffle() const -> bool
     {
         return m_Shuffle;
     }
@@ -62,13 +59,13 @@ public:
     { /* Not Implemented */
     }
 
-    QMap<QString, QVariant> metadata() const
+    [[nodiscard]] auto metadata() const -> QMap<QString, QVariant>
     {
         return m_Metadata;
     }
     void setMetadata(const QMap<QString, QVariant> &data);
 
-    double volume() const
+    [[nodiscard]] auto volume() const -> double
     {
         return m_Volume;
     }
@@ -76,40 +73,40 @@ public:
     {
     } // emit changeVolume(volume);
 
-    qlonglong position() const
+    [[nodiscard]] auto position() const -> qlonglong
     {
         return m_Position;
     }
-    double minimumRate() const
+    [[nodiscard]] auto minimumRate() const -> double
     {
         return 1.0;
     }
-    double maximumRate() const
+    [[nodiscard]] auto maximumRate() const -> double
     {
         return 1.0;
     }
 
-    bool canGoNext() const
+    [[nodiscard]] auto canGoNext() const -> bool
     {
         return true;
     }
-    bool canGoPrevious() const
+    [[nodiscard]] auto canGoPrevious() const -> bool
     {
         return true;
     }
-    bool canPlay() const
+    [[nodiscard]] auto canPlay() const -> bool
     {
         return true;
     }
-    bool canPause() const
+    [[nodiscard]] auto canPause() const -> bool
     {
         return true;
     }
-    bool canSeek() const
+    [[nodiscard]] auto canSeek() const -> bool
     {
         return false;
     }
-    bool canControl() const
+    [[nodiscard]] auto canControl() const -> bool
     {
         return true;
     }
@@ -167,5 +164,3 @@ public slots:
     Q_NOREPLY void SetPosition(const QDBusObjectPath &, qlonglong) const;
     Q_NOREPLY void OpenUri(const QString &) const;
 };
-
-#endif // MPRISPLAYERADAPTOR_H

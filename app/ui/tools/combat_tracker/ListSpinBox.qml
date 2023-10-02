@@ -33,7 +33,7 @@ Item {
         padding: 0
 
         onClosed: {
-            edit_mode = false
+            root.edit_mode = false
         }
 
         onAccepted: {

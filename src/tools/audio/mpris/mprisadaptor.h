@@ -1,5 +1,4 @@
-#ifndef MPRISADAPTOR_H
-#define MPRISADAPTOR_H
+#pragma once
 
 #include <QDBusAbstractAdaptor>
 #include <QObject>
@@ -17,9 +16,7 @@ class MprisAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes CONSTANT)
 
 public:
-    MprisAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent)
-    {
-    }
+    explicit MprisAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent){};
 
     [[nodiscard]] bool canQuit() const
     {
@@ -54,5 +51,3 @@ public slots:
     Q_NOREPLY void Raise() const;
     Q_NOREPLY void Quit() const;
 };
-
-#endif // MPRISADAPTOR_H

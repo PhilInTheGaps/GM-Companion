@@ -58,7 +58,7 @@ public:
 
     Q_INVOKABLE void enableAllItemCategories(bool enable = true);
     Q_INVOKABLE void setItemCategoryEnabled(const QString &category, bool enable = true);
-    Q_INVOKABLE bool isItemCategoryEnabled(const QString &category) const;
+    [[nodiscard]] Q_INVOKABLE bool isItemCategoryEnabled(const QString &category) const;
 
 public slots:
     void loadData() override;
@@ -86,8 +86,9 @@ private:
     [[nodiscard]] auto isCurrentShopValid() const -> bool;
     [[nodiscard]] auto currentShop() const -> ItemShop *;
 
+    void onItemFilesFound(std::shared_ptr<Files::FileListResult> result);
+
 private slots:
-    void onItemFilesFound(Files::FileListResult *result);
     void itemEditorSaved(ItemGroup *group);
     void onProjectWasEdited();
     void onCurrentProjectChanged(ShopProject *currentProject);

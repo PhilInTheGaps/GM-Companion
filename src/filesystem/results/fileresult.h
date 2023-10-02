@@ -1,33 +1,43 @@
 #pragma once
 
 #include <QObject>
+#include <memory>
 
 class RestNetworkReply;
 
-namespace Files {
-
-class FileResult : public QObject
+namespace Files
 {
-    Q_OBJECT
 
+class FileResult
+{
 public:
-    explicit FileResult(bool success, QObject *parent = nullptr)
-        : QObject(parent), m_success(success), m_errorMessage(QLatin1String()) {}
+    explicit FileResult(bool success) : FileResult(success, QLatin1String())
+    {
+    }
 
-    explicit FileResult(bool success, const QString& errorMessage, QObject *parent = nullptr)
-        : QObject(parent), m_success(success), m_errorMessage(errorMessage) {}
+    explicit FileResult(bool success, const QString &errorMessage) : m_success(success), m_errorMessage(errorMessage)
+    {
+    }
 
-    explicit FileResult(const QString& errorMessage, QObject *parent = nullptr)
-        : FileResult(false, errorMessage, parent) {}
+    explicit FileResult(const QString &errorMessage) : FileResult(false, errorMessage)
+    {
+    }
 
-    static FileResult* fromNetworkReply(RestNetworkReply *reply, QObject *parent);
+    static auto fromNetworkReply(RestNetworkReply *reply) -> std::shared_ptr<FileResult>;
 
-    bool success() const { return m_success; }
-    QString errorMessage() const { return m_errorMessage; }
+    [[nodiscard]] auto success() const -> bool
+    {
+        return m_success;
+    }
+
+    [[nodiscard]] auto errorMessage() const -> QString
+    {
+        return m_errorMessage;
+    }
 
 protected:
     const bool m_success;
     const QString m_errorMessage;
 };
 
-}
+} // namespace Files

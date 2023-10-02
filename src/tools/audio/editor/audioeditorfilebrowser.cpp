@@ -1,5 +1,6 @@
 #include "audioeditorfilebrowser.h"
 #include "filesystem/file.h"
+#include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
@@ -30,14 +31,11 @@ void AudioEditorFileBrowser::addFiles(const QStringList &path, int index, bool f
 
     const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
     Files::File::listAsync(dir, !folders, folders)
-        .then(this, [this, path, folders, index](Files::FileListResult *result) {
+        .then(this, [this, path, folders, index](std::shared_ptr<Files::FileListResult> result) {
             if (!result) return;
 
-            qCDebug(gmAudioEditorFileBrowser()) << "Received file list:" << result;
             addFilesToModel(folders ? result->folders() : result->files(), path, folders ? 3 : static_cast<int>(type()),
                             index);
-
-            result->deleteLater();
         });
 }
 

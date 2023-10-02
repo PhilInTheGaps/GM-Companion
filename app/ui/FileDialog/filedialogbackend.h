@@ -48,14 +48,14 @@ private:
     QStringList m_currentDir;
     QStringList m_forwardFolders;
 
-    QFuture<FileListResult *> m_currentFuture;
+    QFuture<std::shared_ptr<FileListResult>> m_currentFuture;
 
     void updateFileList();
     void clearFileList();
     void stopCurrentRequest();
     void clearForward();
 
-    void onFileListReceived(FileListResult *result);
+    void onFileListReceived(std::shared_ptr<FileListResult> result);
 
 private slots:
     void onCurrentDirChanged(const QString &dir);

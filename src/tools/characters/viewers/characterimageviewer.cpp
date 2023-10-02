@@ -132,8 +132,7 @@ void CharacterImageViewer::setPDFPage(int index)
 
         if (page)
         {
-            m_image = StringUtils::stringFromImage(
-                QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
+            m_image = StringUtils::stringFromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION));
         }
     }
 

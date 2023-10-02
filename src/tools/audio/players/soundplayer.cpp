@@ -156,7 +156,8 @@ void SoundPlayer::loadMedia(const AudioFile *file)
 
         m_fileName = file->url();
         Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"sounds"_s)))
-            .then(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
+            .then(m_fileRequestContext,
+                  [this](std::shared_ptr<Files::FileDataResult> result) { onFileReceived(result); });
         break;
     }
 
@@ -286,7 +287,7 @@ void SoundPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QS
     }
 }
 
-void SoundPlayer::onFileReceived(Files::FileDataResult *result)
+void SoundPlayer::onFileReceived(std::shared_ptr<Files::FileDataResult> result)
 {
     if (!result) return;
 
@@ -295,7 +296,6 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     if (result->data().isEmpty())
     {
         next();
-        result->deleteLater();
         return;
     }
 
@@ -312,7 +312,6 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
                 qCWarning(gmAudioSounds())
                     << "Error: Could not open temporary file even after incrementing the filename" << file.fileName()
                     << file.errorString();
-                result->deleteLater();
                 return;
             }
         }
@@ -320,7 +319,6 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
         {
             qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName()
                                        << file.errorString();
-            result->deleteLater();
             return;
         }
     }
@@ -340,5 +338,4 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     m_audioOutput.setMuted(false);
 
     m_mediaPlayer.play();
-    result->deleteLater();
 }

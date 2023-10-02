@@ -4,15 +4,17 @@ NoteBook::NoteBook(const QString &name, QObject *parent) : NoteBookChapter(name,
 {
 }
 
-auto NoteBook::chapters() -> QList<NoteBookChapter *>
+auto NoteBook::chapters() const -> QList<NoteBookChapter *>
 {
-    if (!m_wereChaptersLoaded)
+    QList<NoteBookChapter *> chapters;
+
+    foreach (auto *child, childItems())
     {
-        m_wereChaptersLoaded = true;
-        emit loadChapters();
+        auto *chapter = qobject_cast<NoteBookChapter *>(child);
+        if (chapter) chapters.append(chapter);
     }
 
-    return m_chapters;
+    return chapters;
 }
 
 void NoteBook::onChaptersLoaded()

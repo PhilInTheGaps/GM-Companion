@@ -6,33 +6,35 @@ namespace Files
 {
 
 /// Helper class for chaining multiple GET requests in a row.
-template <typename ResultType> class MultiGetHelper : public QObject
+template <typename ResultType> class MultiGetHelper
 {
 public:
-    explicit MultiGetHelper(const QStringList &paths, QObject *parent) : QObject(parent), m_paths(paths)
+    explicit MultiGetHelper(const QStringList &paths) : m_paths(paths)
     {
     }
 
-    bool isDone() const
+    [[nodiscard]] auto isDone() const -> bool
     {
         return index >= m_paths.length();
     }
-    QString getNextPath()
+
+    [[nodiscard]] auto getNextPath() -> QString
     {
-        return m_paths[index++];
+        return m_paths.at(index++);
     }
 
-    void addResult(ResultType *result)
+    void addResult(std::shared_ptr<ResultType> result)
     {
         m_results.push_back(result);
     }
-    std::vector<ResultType *> getResults() const
+
+    [[nodiscard]] auto getResults() const -> std::vector<std::shared_ptr<ResultType>>
     {
         return m_results;
     }
 
 private:
-    std::vector<ResultType *> m_results;
+    std::vector<std::shared_ptr<ResultType>> m_results;
     QStringList m_paths;
     int index = 0;
 };

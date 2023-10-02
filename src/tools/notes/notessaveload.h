@@ -10,7 +10,7 @@ class NotesSaveLoad : public QObject
 public:
     using QObject::QObject;
 
-    static void exportPage(NoteBookPage *page, const QTextDocument *document);
+    static void exportPage(NoteBookPage &page, const QTextDocument &document);
 
 public slots:
     void loadBooks();
@@ -22,24 +22,24 @@ signals:
 
 private:
     void buildBooks(const QStringList &folders, TreeItem *root);
-    void buildChapters(const QStringList &folders, NoteBook *book) const;
-    void buildPages(const QStringList &files, NoteBookChapter *chapter);
-    auto buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal = true) -> NoteBookPage *;
+    void buildChapters(const QStringList &folders, NoteBook &book) const;
+    void buildPages(const QStringList &files, NoteBookChapter &chapter);
+    auto buildPage(const QString &name, NoteBookChapter &chapter, bool emitSignal = true) -> NoteBookPage *;
 
-    static auto getPdfPath(const NoteBookPage *page) -> QString;
+    static auto getPdfPath(const NoteBookPage &page) -> QString;
 
 private slots:
     void loadChapters();
     void loadPages();
     void loadPageContent();
-    void savePage() const;
+    void savePage();
 
     void createChapter(const QString &name);
     void createPage(const QString &name);
 
-    void renameChapter(const QString &oldPath) const;
-    void renamePage(const QString &oldPath) const;
+    void renameChapter(const QString &oldPath);
+    void renamePage(const QString &oldPath);
 
-    void deleteChapter() const;
-    void deletePage() const;
+    void deleteChapter();
+    void deletePage();
 };

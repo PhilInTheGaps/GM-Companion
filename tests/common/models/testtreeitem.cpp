@@ -1,6 +1,8 @@
 #include "models/treeitem.h"
 #include <gtest/gtest.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 class CheckItem : public TreeItem
 {
     Q_OBJECT
@@ -16,9 +18,19 @@ public:
     }
 };
 
+TEST(TreeItemTest, VerifyHierarchy)
+{
+    QObject root;
+    auto *item0 = new TreeItem(u"item0"_s, 0, true, &root);
+    auto *item1 = new TreeItem(u"item1"_s, 0, true, item0);
+
+    EXPECT_TRUE(root.children().contains(item0));
+    EXPECT_TRUE(item0->children().contains(item1));
+}
+
 TEST(TreeItemTest, CanChangeProperties)
 {
-    TreeItem item(QStringLiteral("item"), 0, true);
+    TreeItem item(QStringLiteral("item"), 0, true, nullptr);
     EXPECT_EQ(item.name(), QStringLiteral("item"));
     EXPECT_EQ(item.depth(), 0);
     EXPECT_FALSE(item.isOpen());
@@ -34,7 +46,7 @@ TEST(TreeItemTest, CanChangeProperties)
 
 TEST(TreeItemTest, CanAddAndModifyChildren)
 {
-    TreeItem root(QStringLiteral("root"), 0, true);
+    TreeItem root(QStringLiteral("root"), 0, true, nullptr);
     EXPECT_TRUE(root.childItems().isEmpty());
 
     TreeItem child0(QStringLiteral("child0"), 1, true, &root);

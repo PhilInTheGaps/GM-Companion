@@ -17,16 +17,15 @@ void AbstractTest::verifyFileContent(const QString &path, const QByteArray &cont
 
     qDebug() << "Verifying content of file" << path << "(cached:" << cached << ")";
 
-    const auto future = File::getDataAsync(path, cached, fileAccess.get());
+    const auto future = File::getDataAsync(path, cached, fileAccess);
     testFuture(
         future, "File::getDataAsync",
         [future, content]() {
             EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
 
-            auto *result = future.result();
+            const auto &result = future.result();
             EXPECT_TRUE(result->success()) << "File::getDataAsync did not return a valid result.";
             EXPECT_EQ(result->data(), content);
-            result->deleteLater();
         },
         cached);
 }
@@ -37,13 +36,12 @@ void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
 
     qDebug() << "Verifying that file" << path << (shouldExist ? "exists" : "does not exist") << "...";
 
-    auto future = File::checkAsync(path, false, fileAccess.get());
+    auto future = File::checkAsync(path, false, fileAccess);
     testFuture(future, "File::checkAsync", [future, path, shouldExist]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(shouldExist == future.result()->exists())
-            << "Apparently the file " << path.constData() << " does" << (shouldExist ? " not" : "")
+        EXPECT_EQ(shouldExist, future.result()->exists())
+            << "Apparently the file " << path.toStdString() << " does" << (shouldExist ? " not" : "")
             << "exist when it should" << (shouldExist ? "" : " not");
-        future.result()->deleteLater();
     });
 }
 
@@ -56,7 +54,7 @@ void AbstractTest::checkOrCreateFileAccess()
 {
     if (!fileAccess)
     {
-        fileAccess = std::make_unique<FileAccessLocal>(nullptr);
+        fileAccess = std::make_shared<FileAccessLocal>();
     }
 
     EXPECT_TRUE(fileAccess);

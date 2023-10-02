@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDateTime>
+#include <QDebug>
 #include <QString>
 #include <vector>
 
@@ -45,10 +46,14 @@ public:
     auto copyFileOrFolder(const QString &source, const QString &destination) -> bool;
     auto deleteFileOrFolder(const QString &path) -> bool;
 
+    void printTree(int depth = 0) const;
+
 private:
     QString m_name;
     QDateTime m_lastModified;
 
     std::vector<MockDir> m_dirs;
     std::vector<MockFile> m_files;
+
+    static auto calcIndent(int depth) -> QString;
 };

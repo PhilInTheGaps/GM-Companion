@@ -14,6 +14,7 @@ set(SOURCES
     oputils.cpp
     testlocalaccess.cpp
     testfiledialog.cpp
+    testfilecache.cpp
     testnextcloudaccess.cpp
 )
 

@@ -6,20 +6,18 @@ using namespace Qt::Literals::StringLiterals;
 
 constexpr int ROT13_PLACES = 13;
 
-/**
- * @brief Convert QPixmap to base64 encoded QString
- */
-auto StringUtils::stringFromImage(const QPixmap &image) -> QString
+auto StringUtils::imageFromString(const QByteArray &string) -> QImage
 {
-    QByteArray bArray;
-    QBuffer buffer(&bArray);
+    auto data = QByteArray::fromBase64(removeFirst(string, JPG_BASE64_PREFIX.length()));
+    return QImage::fromData(data);
+}
 
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "JPEG");
-
-    auto imageString = u"data:image/jpg;base64,"_s;
-    imageString.append(QString::fromLatin1(bArray.toBase64().data()));
-    return imageString;
+auto StringUtils::pixmapFromString(const QByteArray &string) -> QPixmap
+{
+    auto data = QByteArray::fromBase64(removeFirst(string, JPG_BASE64_PREFIX.length()));
+    QPixmap pixmap;
+    pixmap.loadFromData(data);
+    return pixmap;
 }
 
 /**

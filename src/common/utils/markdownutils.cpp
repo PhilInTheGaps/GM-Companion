@@ -52,32 +52,37 @@ void MarkdownUtils::addMarkdownExtension(cmark_parser *parser, const QString &ex
 #elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
 auto MarkdownUtils::markdownToHtmlDiscount(const QString &markdown) -> QString
 {
-    auto markdownStd = markdown.toStdString();
-    auto flags = MKD_AUTOLINK;
+    auto utf8 = markdown.toUtf8();
 
 #ifdef MKD_NOLINKS
     // Discount v2
-    auto *doc = gfm_string(markdownStd.c_str(), markdownStd.size(), flags);
+    auto flags = MKD_AUTOLINK;
+    auto *mmiot = mkd_string(utf8, utf8.size(), flags);
 
-    if (doc == nullptr) return u""_s;
+    if (mmiot == nullptr) return u""_s;
 
-    mkd_compile(doc, flags);
+    mkd_compile(mmiot, flags);
 #else
     // Discount v3
-    auto *doc = gfm_string(markdownStd.c_str(), markdownStd.size(), &flags);
+    auto *flags = mkd_flags();
+    mkd_set_flag_num(flags, MKD_AUTOLINK);
+    auto *mmiot = mkd_string(utf8, utf8.size(), flags);
 
-    if (doc == nullptr) return u""_s;
+    if (mmiot == nullptr) return u""_s;
 
-    mkd_compile(doc, &flags);
+    mkd_compile(mmiot, flags);
 #endif
 
-    char *cstr_buff = nullptr;
-    const int size = mkd_document(doc, &cstr_buff);
+    char *cBuff = nullptr;
+    const int size = mkd_document(mmiot, &cBuff);
 
-    std::string html;
-    html.assign(cstr_buff, size);
-    mkd_cleanup(doc);
+    QByteArray html(cBuff, size); // copy raw data
+    mkd_cleanup(mmiot);
 
-    return QString::fromStdString(html);
+#ifndef MKD_NOLINKS
+    mkd_free_flags(flags);
+#endif
+
+    return QString(html);
 }
 #endif

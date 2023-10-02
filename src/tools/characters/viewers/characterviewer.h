@@ -18,7 +18,7 @@ public:
         m_currentCharacter = character;
     }
 
-    virtual int pageIndex() const
+    [[nodiscard]] virtual auto pageIndex() const -> int
     {
         return 0;
     }

@@ -1,4 +1,6 @@
 #include "utils/stringutils.h"
+#include <QImage>
+#include <QPixmap>
 #include <gtest/gtest.h>
 
 struct Rot13Test
@@ -47,5 +49,19 @@ constexpr ConstQString constString = "Test String";
 
 TEST(StringUtilsTest, CanConstructCompileTimeString)
 {
-    EXPECT_EQ(constString.data(), "Test String");
+    EXPECT_EQ(constString.toString().toStdString(), "Test String");
+}
+
+TEST(StringUtilsTest, CanConvertJpgToStringAndBack)
+{
+    QImage image(64, 64, QImage::Format_RGB32);
+    image.fill(QColor::fromRgba(0xA0B0C0));
+
+    auto data = StringUtils::stringFromImage(image);
+    auto image2 = StringUtils::imageFromString(data);
+    EXPECT_EQ(image2.pixelColor(0, 0), image.pixelColor(0, 0));
+
+    auto pixmap = StringUtils::pixmapFromString(data);
+    auto image3 = pixmap.toImage();
+    EXPECT_EQ(image3.pixelColor(0, 0), image.pixelColor(0, 0));
 }

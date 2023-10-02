@@ -1,26 +1,19 @@
 #pragma once
 
-#include <QObject>
+#include <QByteArray>
 #include <QTemporaryFile>
 #include <QTime>
 
-class FileCache;
-
-class FileCacheEntry : public QObject
+class FileCacheEntry
 {
-    Q_OBJECT
 public:
-    explicit FileCacheEntry(const QByteArray &data, FileCache *parent);
+    explicit FileCacheEntry(const QByteArray &data);
 
-    bool tryGetData(QByteArray& data);
-    bool update(const QByteArray& data);
-
-    bool isFresh() const;
+    auto tryGetData(QByteArray &data) -> bool;
+    auto update(const QByteArray &data) -> bool;
+    [[nodiscard]] auto isFresh(int expirationTimeMs) const -> bool;
 
 private:
     QTime m_lastModified;
     QTemporaryFile m_tempFile;
-
-    static constexpr int EXPIRATION_TIME_MS = 30000;
 };
-

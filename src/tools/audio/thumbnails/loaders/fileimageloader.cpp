@@ -1,6 +1,7 @@
 #include "fileimageloader.h"
 #include "../audiothumbnailcache.h"
 #include "file.h"
+#include "filesystem/results/filedataresult.h"
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
 
@@ -14,20 +15,19 @@ auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
 
     auto future = File::getDataAsync(path);
 
-    const auto callback = [path](FileDataResult *result) {
+    const auto callback = [path](std::shared_ptr<FileDataResult> result) {
         return QtConcurrent::run(loadFromFileResult, path, result);
     };
 
     return future.then(callback).unwrap();
 }
 
-auto FileImageLoader::loadFromFileResult(const QString &path, FileDataResult *result) -> QPixmap
+auto FileImageLoader::loadFromFileResult(const QString &path, std::shared_ptr<FileDataResult> result) -> QPixmap
 {
     QPixmap image;
     image.loadFromData(result->data());
 
     AudioThumbnailCache::instance()->insertImage(path, image);
 
-    result->deleteLater();
     return image;
 }

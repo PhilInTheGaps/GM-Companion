@@ -26,7 +26,7 @@ public:
 
         waitForAuthentication = true;
 
-        fileAccess = std::make_unique<FileAccessGoogleDrive>(*gd, nullptr);
+        fileAccess = std::make_unique<FileAccessGoogleDrive>(*gd);
         testPath = u"gm-companion-test_"_s + QUuid::createUuid().toString();
         createTestDir();
         createTestFiles();

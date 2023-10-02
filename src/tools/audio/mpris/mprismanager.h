@@ -1,11 +1,9 @@
-#ifndef MPRISMANAGER_H
-#define MPRISMANAGER_H
-
-#include <QObject>
+#pragma once
 
 #include "../metadata/metadatareader.h"
 #include "mprisadaptor.h"
 #include "mprisplayeradaptor.h"
+#include <QObject>
 
 class MprisManager : public QObject
 {
@@ -32,5 +30,3 @@ signals:
     void previous();
     void changeVolume(double volume);
 };
-
-#endif // MPRISMANAGER_H

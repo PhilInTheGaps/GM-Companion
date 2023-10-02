@@ -1,10 +1,13 @@
 #include "src/tools/combat_tracker/combattracker.h"
 #include <gtest/gtest.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 class CombatTrackerTest;
 
 class AccessibleCombatTracker : public CombatTracker
 {
+    Q_OBJECT
     friend CombatTrackerTest;
 
 public:
@@ -43,33 +46,32 @@ protected:
 
 void CombatTrackerTest::createTestData(AccessibleCombatTracker &combatTracker)
 {
-    EXPECT_FALSE(combatTracker.add(QString(), 1, 2, 3, QStringLiteral("Test")));
-    EXPECT_TRUE(combatTracker.add(QStringLiteral("Frank"), 1, 0, 1, "Test 1", true));
-    EXPECT_TRUE(combatTracker.add(QStringLiteral("Paul"), 1, 0, 2, "Test 2", true));
-    EXPECT_TRUE(combatTracker.add(QStringLiteral("Jazz"), 2, 0, 2, "Test 3", true));
-    EXPECT_TRUE(combatTracker.add(QStringLiteral("Orc 1"), 3, 0, 1, "Test 4", true));
-    EXPECT_TRUE(combatTracker.add(QStringLiteral("Orc 2"), 2, 0, 4, "Test 5", true));
+    EXPECT_FALSE(combatTracker.add(u""_s, 1, 2, 3, u"Test"_s));
+    EXPECT_TRUE(combatTracker.add(u"Frank"_s, 1, 0, 1, u"Test 1"_s, true));
+    EXPECT_TRUE(combatTracker.add(u"Paul"_s, 1, 0, 2, u"Test 2"_s, true));
+    EXPECT_TRUE(combatTracker.add(u"Jazz"_s, 2, 0, 2, u"Test 3"_s, true));
+    EXPECT_TRUE(combatTracker.add(u"Orc 1"_s, 3, 0, 1, u"Test 4"_s, true));
+    EXPECT_TRUE(combatTracker.add(u"Orc 2"_s, 2, 0, 4, u"Test 5"_s, true));
 
     EXPECT_EQ(combatTracker.currentIndex(), 0);
     EXPECT_FALSE(combatTracker.getCombatant(-1));
     EXPECT_TRUE(combatTracker.getCombatant(0));
-    EXPECT_EQ(combatTracker.getCombatant(0)->name(), QStringLiteral("Orc 1"));
-    EXPECT_EQ(combatTracker.getCombatant(1)->name(), QStringLiteral("Orc 2"));
-    EXPECT_EQ(combatTracker.getCombatant(2)->name(), QStringLiteral("Jazz"));
-    EXPECT_EQ(combatTracker.getCombatant(3)->name(), QStringLiteral("Paul"));
-    EXPECT_EQ(combatTracker.getCombatant(4)->name(), QStringLiteral("Frank"));
+    EXPECT_EQ(combatTracker.getCombatant(0)->name(), u"Orc 1"_s);
+    EXPECT_EQ(combatTracker.getCombatant(1)->name(), u"Orc 2"_s);
+    EXPECT_EQ(combatTracker.getCombatant(2)->name(), u"Jazz"_s);
+    EXPECT_EQ(combatTracker.getCombatant(3)->name(), u"Paul"_s);
+    EXPECT_EQ(combatTracker.getCombatant(4)->name(), u"Frank"_s);
 }
 
 TEST_F(CombatTrackerTest, TestNormalUse)
 {
     AccessibleCombatTracker combatTracker(nullptr, nullptr);
-    combatTracker.clear();
 
     // No combatant added, so we should not be able to modify one
     EXPECT_FALSE(combatTracker.setIni(0, 5));
     EXPECT_FALSE(combatTracker.setHealth(0, -5));
     EXPECT_FALSE(combatTracker.setPriority(0, 3));
-    EXPECT_FALSE(combatTracker.setNotes(0, QStringLiteral("This is a test")));
+    EXPECT_FALSE(combatTracker.setNotes(0, u"This is a test"_s));
     EXPECT_FALSE(combatTracker.delayTurn(0));
 
     // Add some combatants
@@ -93,23 +95,100 @@ TEST_F(CombatTrackerTest, TestNormalUse)
     auto *combatant = getCombatant(0, combatTracker);
     EXPECT_TRUE(combatant);
     combatTracker.delayTurn(0);
-    EXPECT_EQ(getCombatant(0, combatTracker)->name(), QStringLiteral("Orc 2"));
+    EXPECT_EQ(getCombatant(0, combatTracker)->name(), u"Orc 2"_s);
 
     // Modify combatant
     combatTracker.setIni(2, 20); // should move to position 0
     combatTracker.setHealth(0, 25);
     combatTracker.setPriority(0, 10);
-    combatTracker.setNotes(0, QStringLiteral("Modified"));
+    combatTracker.setNotes(0, u"Modified"_s);
     EXPECT_EQ(getCombatant(0, combatTracker)->ini(), 20);
     EXPECT_EQ(getCombatant(0, combatTracker)->health(), 25);
     EXPECT_EQ(getCombatant(0, combatTracker)->priority(), 10);
-    EXPECT_EQ(getCombatant(0, combatTracker)->notes(), QStringLiteral("Modified"));
+    EXPECT_EQ(getCombatant(0, combatTracker)->notes(), u"Modified"_s);
+
+    // Modify using steps
+    combatTracker.modifyIni(0, 1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->ini(), 21);
+    combatTracker.modifyIni(0, -1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->ini(), 20);
+
+    combatTracker.modifyHealth(0, 1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->health(), 26);
+    combatTracker.modifyHealth(0, -1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->health(), 25);
+
+    combatTracker.modifyPriority(0, 1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->priority(), 11);
+    combatTracker.modifyPriority(0, -1);
+    EXPECT_EQ(getCombatant(0, combatTracker)->priority(), 10);
+}
+
+TEST_F(CombatTrackerTest, CanRemoveCombatants)
+{
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+
+    EXPECT_FALSE(combatTracker.remove(-1));
+    EXPECT_FALSE(combatTracker.remove(0));
+    EXPECT_FALSE(combatTracker.remove(1));
+
+    createTestData(combatTracker);
+
+    EXPECT_FALSE(combatTracker.remove(-1));
+    EXPECT_FALSE(combatTracker.remove(5));
+
+    EXPECT_TRUE(combatTracker.remove(1)); // second
+    EXPECT_TRUE(combatTracker.remove(3)); // last
+    EXPECT_FALSE(combatTracker.remove(3));
+    EXPECT_TRUE(combatTracker.remove(2)); // last
+    EXPECT_TRUE(combatTracker.remove(0)); // first
+    EXPECT_TRUE(combatTracker.remove(0)); // first
+
+    EXPECT_FALSE(combatTracker.remove(0));
+}
+
+TEST_F(CombatTrackerTest, CanRemoveLastAndActiveCombatant)
+{
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    createTestData(combatTracker);
+
+    combatTracker.reset();
+    combatTracker.next();
+    combatTracker.next();
+    combatTracker.next();
+    combatTracker.next();
+
+    EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 5);
+    EXPECT_EQ(combatTracker.currentIndex(), 4);
+
+    // removing the last entry should select the new last entry
+    EXPECT_TRUE(combatTracker.remove(4));
+    EXPECT_EQ(combatTracker.currentIndex(), 3);
+    EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 4);
+}
+
+TEST_F(CombatTrackerTest, CanRemoveSecondLastAndActiveCombatant)
+{
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    createTestData(combatTracker);
+
+    combatTracker.reset();
+    combatTracker.next();
+    combatTracker.next();
+    combatTracker.next();
+
+    EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 5);
+    EXPECT_EQ(combatTracker.currentIndex(), 3);
+
+    // removing the second to last entry should select the last entry
+    EXPECT_TRUE(combatTracker.remove(3));
+    EXPECT_EQ(combatTracker.currentIndex(), 3);
+    EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 4);
 }
 
 TEST_F(CombatTrackerTest, TestSaveLoad)
 {
     AccessibleCombatTracker combatTracker(nullptr, nullptr);
-    combatTracker.clear();
     createTestData(combatTracker);
 
     const auto index = combatTracker.currentIndex();
@@ -144,3 +223,13 @@ TEST_F(CombatTrackerTest, TestSaveLoad)
     EXPECT_EQ(loadedCombatant->priority(), priority);
     EXPECT_EQ(loadedCombatant->delay(), delay);
 }
+
+TEST_F(CombatTrackerTest, CanAccessModel)
+{
+    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    createTestData(combatTracker);
+
+    EXPECT_TRUE(combatTracker.model());
+}
+
+#include "testcombattracker.moc"

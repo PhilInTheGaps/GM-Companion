@@ -7,8 +7,8 @@
 
 namespace Files
 {
-class FileListResult;
 class FileDataResult;
+class FileListResult;
 } // namespace Files
 
 class BaseShopTool : public AbstractTool
@@ -26,10 +26,9 @@ public:
 public slots:
     void loadData() override;
 
-protected slots:
-    void onShopFilesFound(Files::FileListResult *result);
-    void onShopFileDataReceived(const std::vector<Files::FileDataResult *> &results);
-
 protected:
+    void onShopFilesFound(std::shared_ptr<Files::FileListResult> result);
+    void onShopFileDataReceived(const std::vector<std::shared_ptr<Files::FileDataResult>> &results);
+
     void setFirstProjectAsCurrent();
 };

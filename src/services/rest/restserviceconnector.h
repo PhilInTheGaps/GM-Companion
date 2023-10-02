@@ -21,13 +21,13 @@ public:
 
     virtual void grantAccess() = 0;
     virtual void disconnectService() = 0;
-    [[nodiscard]] virtual bool isAccessGranted() const = 0;
+    [[nodiscard]] virtual auto isAccessGranted() const -> bool = 0;
 
-    virtual QFuture<RestNetworkReply *> get(const QNetworkRequest &request) = 0;
-    virtual QFuture<RestNetworkReply *> put(QNetworkRequest request, const QByteArray &data) = 0;
-    virtual QFuture<RestNetworkReply *> post(QNetworkRequest request, const QByteArray &data) = 0;
-    virtual QFuture<RestNetworkReply *> customRequest(const QNetworkRequest &req, const QByteArray &verb,
-                                                      const QByteArray &data) = 0;
+    virtual auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *> = 0;
+    virtual auto put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> = 0;
+    virtual auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> = 0;
+    virtual auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data)
+        -> QFuture<RestNetworkReply *> = 0;
 
 protected:
     QNetworkAccessManager &m_networkManager;

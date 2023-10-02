@@ -20,17 +20,17 @@ public:
 
     void grantAccess() override;
     void disconnectService() override;
-    [[nodiscard]] bool isAccessGranted() const override
+    [[nodiscard]] auto isAccessGranted() const -> bool override
     {
         return m_isAccessGranted;
     }
 
-    QFuture<RestNetworkReply *> get(const QUrl &url);
-    QFuture<RestNetworkReply *> get(const QNetworkRequest &request) override;
-    QFuture<RestNetworkReply *> put(QNetworkRequest request, const QByteArray &data = "") override;
-    QFuture<RestNetworkReply *> post(QNetworkRequest request, const QByteArray &data = "") override;
-    QFuture<RestNetworkReply *> customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                              const QByteArray &data) override;
+    auto get(const QUrl &url) -> QFuture<RestNetworkReply *>;
+    auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *> override;
+    auto put(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestNetworkReply *> override;
+    auto post(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestNetworkReply *> override;
+    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
+        -> QFuture<RestNetworkReply *> override;
 
 private:
     O0SettingsStore m_settingsStore = O0SettingsStore(QStringLiteral("gm-companion"));

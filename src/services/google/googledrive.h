@@ -30,19 +30,19 @@ public:
         m_connector->grantAccess();
     }
 
-    auto isGranted() const -> bool
+    [[nodiscard]] auto isGranted() const -> bool
     {
         return m_connector->isAccessGranted();
     }
 
-    QFuture<RestNetworkReply *> get(const QUrl &url);
-    QFuture<RestNetworkReply *> get(const QNetworkRequest &request);
-    QFuture<RestNetworkReply *> put(const QUrl &url, const QByteArray &data = "");
-    QFuture<RestNetworkReply *> put(const QNetworkRequest &request, const QByteArray &data);
-    QFuture<RestNetworkReply *> post(const QUrl &url, const QByteArray &data);
-    QFuture<RestNetworkReply *> post(const QNetworkRequest &request, const QByteArray &data);
-    QFuture<RestNetworkReply *> customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                              const QByteArray &data);
+    auto get(const QUrl &url) -> QFuture<RestNetworkReply *>;
+    auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>;
+    auto put(const QUrl &url, const QByteArray &data = "") -> QFuture<RestNetworkReply *>;
+    auto put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestNetworkReply *>;
+    auto post(const QUrl &url, const QByteArray &data) -> QFuture<RestNetworkReply *>;
+    auto post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestNetworkReply *>;
+    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
+        -> QFuture<RestNetworkReply *>;
 
 public slots:
     void connectService() override;

@@ -66,12 +66,12 @@ public:
     Q_INVOKABLE void renameProject(const QString &name);
     Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
-    AudioProject *currentProject() const
+    [[nodiscard]] auto currentProject() const -> AudioProject *
     {
         return m_currentProject;
     }
     void setCurrentProject(AudioProject *project);
-    int projectIndex() const;
+    [[nodiscard]] auto projectIndex() const -> int;
 
     // Categories
     Q_INVOKABLE void setCurrentCategory(int index);
@@ -120,17 +120,17 @@ public:
     }
 
     // Elements
-    AudioElement *currentElement() const
+    [[nodiscard]] auto currentElement() const -> AudioElement *
     {
         return m_currentElement;
     }
 
     Q_INVOKABLE void loadElement(QObject *element);
-    Q_INVOKABLE QString resourcesPath() const
+    [[nodiscard]] Q_INVOKABLE QString resourcesPath() const
     {
         return SettingsManager::getPath(QStringLiteral("resources"));
     }
-    Q_INVOKABLE QString basePath() const;
+    [[nodiscard]] Q_INVOKABLE QString basePath() const;
 
     Q_INVOKABLE void setFileIndex(int index)
     {
@@ -159,16 +159,16 @@ private:
     AudioProject *m_currentProject = nullptr;
     QPointer<AudioElement> m_currentElement;
 
-    bool loadFirstElement(AudioScenario *scenario = nullptr);
+    auto loadFirstElement(AudioScenario *scenario = nullptr) -> bool;
     void clearCurrentElement();
     int m_fileIndex{};
 
     void madeChanges();
-    bool addAudioFile(AudioFile *audioFile);
+    auto addAudioFile(AudioFile *audioFile) -> bool;
 
     // Helper functions
-    [[nodiscard]] bool categoryExists() const;
-    [[nodiscard]] bool scenarioExists() const;
+    [[nodiscard]] auto categoryExists() const -> bool;
+    [[nodiscard]] auto scenarioExists() const -> bool;
 
 private slots:
     void addFiles(const QStringList &files);

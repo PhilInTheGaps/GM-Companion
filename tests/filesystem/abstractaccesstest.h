@@ -6,6 +6,9 @@
 
 class AbstractAccessTest : public AbstractTest
 {
+public:
+    AbstractAccessTest();
+
 protected:
     virtual void createTestDir();
     virtual void removeTestDir();

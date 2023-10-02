@@ -27,7 +27,7 @@ public:
 
 protected:
     std::unique_ptr<QNetworkAccessManager> networkManager = nullptr;
-    std::unique_ptr<Files::FileAccess> fileAccess = nullptr;
+    std::shared_ptr<Files::FileAccess> fileAccess = nullptr;
     QTemporaryDir tempDir;
 
     bool waitForAuthentication = false;
@@ -37,6 +37,7 @@ protected:
     {
         QFutureWatcher<T> watcher;
         QSignalSpy spy(&watcher, &QFutureWatcher<T>::finished);
+        ASSERT_TRUE(spy.isValid());
 
         watcher.setFuture(future);
         EXPECT_FALSE(future.isCanceled()) << "The QFuture object returned by " << funcName << " has been canceled.";

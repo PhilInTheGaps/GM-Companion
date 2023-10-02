@@ -4,27 +4,36 @@
 
 class RestNetworkReply;
 
-namespace Files {
+namespace Files
+{
 
 class FileCheckResult : public FileResult
 {
-    Q_OBJECT
-
 public:
-    explicit FileCheckResult(const QString& path, const QString& errorMessage, QObject *parent = nullptr)
-        : FileResult(errorMessage, parent), m_path(path), m_exists(false) {}
+    explicit FileCheckResult(const QString &path, const QString &errorMessage)
+        : FileResult(errorMessage), m_path(path), m_exists(false)
+    {
+    }
 
-    explicit FileCheckResult(const QString& path, bool exists, QObject *parent = nullptr)
-        : FileResult(true, QByteArray(), parent), m_path(path), m_exists(exists) {}
+    explicit FileCheckResult(const QString &path, bool exists)
+        : FileResult(true, QByteArray()), m_path(path), m_exists(exists)
+    {
+    }
 
-    static FileCheckResult* fromNetworkReply(RestNetworkReply *reply, const QString &path, QObject *parent);
+    static auto fromNetworkReply(RestNetworkReply *reply, const QString &path) -> std::unique_ptr<FileCheckResult>;
 
-    QString path() const { return m_path; }
-    bool exists() const { return m_exists; }
+    [[nodiscard]] auto path() const -> const QString &
+    {
+        return m_path;
+    }
+    [[nodiscard]] auto exists() const -> bool
+    {
+        return m_exists;
+    }
 
 private:
     const QString m_path;
     const bool m_exists;
 };
 
-}
+} // namespace Files

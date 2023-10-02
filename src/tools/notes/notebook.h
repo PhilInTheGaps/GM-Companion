@@ -13,7 +13,7 @@ class NoteBook : public NoteBookChapter
 public:
     explicit NoteBook(const QString &name, QObject *parent = nullptr);
 
-    auto chapters() -> QList<NoteBookChapter *>;
+    [[nodiscard]] auto chapters() const -> QList<NoteBookChapter *>;
 
     [[nodiscard]] auto creatables() const -> QStringList override
     {
@@ -30,7 +30,6 @@ signals:
 
 private:
     bool m_wereChaptersLoaded = false;
-    QList<NoteBookChapter *> m_chapters;
 
 private slots:
     void onIsOpenChanged() override;

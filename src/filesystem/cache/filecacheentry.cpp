@@ -1,13 +1,11 @@
 #include "filecacheentry.h"
-#include "filecache.h"
 
-FileCacheEntry::FileCacheEntry(const QByteArray &data, FileCache *parent)
-    : QObject(parent)
+FileCacheEntry::FileCacheEntry(const QByteArray &data)
 {
     update(data);
 }
 
-auto FileCacheEntry::tryGetData(QByteArray& data) -> bool
+auto FileCacheEntry::tryGetData(QByteArray &data) -> bool
 {
     if (m_tempFile.open())
     {
@@ -33,9 +31,8 @@ auto FileCacheEntry::update(const QByteArray &data) -> bool
     return false;
 }
 
-auto FileCacheEntry::isFresh() const -> bool
+auto FileCacheEntry::isFresh(int expirationTimeMs) const -> bool
 {
     const auto now = QTime::currentTime();
-    return now >= m_lastModified && m_lastModified.msecsTo(now) < EXPIRATION_TIME_MS;
+    return now >= m_lastModified && m_lastModified.msecsTo(now) < expirationTimeMs;
 }
-

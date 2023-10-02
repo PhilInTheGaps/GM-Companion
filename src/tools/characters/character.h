@@ -28,15 +28,15 @@ class Character : public QObject
 public:
     explicit Character(const QString &name, QObject *parent);
 
-    int type() const;
+    [[nodiscard]] auto type() const -> int;
 
-    QList<CharacterFile *> files() const
+    [[nodiscard]] auto files() const -> QList<CharacterFile *>
     {
         return m_files;
     }
     void setFiles(QList<CharacterFile *> files)
     {
-        m_files = files;
+        m_files = std::move(files);
     }
     void addFile(CharacterFile *file)
     {

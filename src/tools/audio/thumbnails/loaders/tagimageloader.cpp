@@ -3,6 +3,7 @@
 #include "common/settings/settingsmanager.h"
 #include "common/utils/fileutils.h"
 #include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
 #include <QLoggingCategory>
 #include <QTemporaryFile>
 #include <QUuid>
@@ -61,7 +62,7 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
     auto future = Files::File::getDataAsync(path);
 
     return future
-        .then([path](Files::FileDataResult *result) {
+        .then([path](std::shared_ptr<Files::FileDataResult> result) {
             auto fileName = FileUtils::fileName(path);
 
 #ifdef Q_OS_WIN
@@ -75,8 +76,6 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
 #endif
             tempFile.write(result->data());
             tempFile.close();
-
-            result->deleteLater();
 
             return loadFromLocalFile(tempFile.fileName());
         })

@@ -42,6 +42,11 @@ set(SOURCES
     tools/shop/testshopproject.cpp
     tools/shop/testshoptool.cpp
     tools/shop/testshopeditor.cpp
+    tools/notes/testhtmlgenerator.cpp
+    tools/notes/testnotebook.cpp
+    tools/notes/testnotebookchapter.cpp
+    tools/notes/testnotebookpage.cpp
+    tools/notes/testnotestool.cpp
     tools/testcombattracker.cpp
     tools/testnamegenerator.cpp
     ${AUDIO_THUMBNAILS}

@@ -9,7 +9,7 @@ class LocalAccessTest : public AbstractAccessTest
 public:
     LocalAccessTest()
     {
-        fileAccess = std::make_unique<FileAccessLocal>(nullptr);
+        fileAccess = std::make_shared<FileAccessLocal>();
         createTestFiles();
     }
 

@@ -8,8 +8,7 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmNotesTool, "gm.notes.tool")
 
-NotesTool::NotesTool(QObject *parent)
-    : AbstractTool(parent), m_saveLoad(this), m_htmlGenerator(this), m_markdownHighlighter(this)
+NotesTool::NotesTool(QObject *parent) : AbstractTool(parent), m_saveLoad(this), m_markdownHighlighter(this)
 {
     connect(this, &NotesTool::loadBooks, &m_saveLoad, &NotesSaveLoad::loadBooks);
     connect(&m_saveLoad, &NotesSaveLoad::booksLoaded, this, &NotesTool::onNoteBooksLoaded);
@@ -105,7 +104,10 @@ void NotesTool::exportPdf()
 {
     if (editMode() || !m_currentPage || !m_qmlTextDoc) return;
 
-    m_saveLoad.exportPage(m_currentPage, m_qmlTextDoc->textDocument());
+    auto *textDoc = m_qmlTextDoc->textDocument();
+    if (!textDoc) return;
+
+    m_saveLoad.exportPage(*m_currentPage, *textDoc);
 }
 
 /**
@@ -133,8 +135,6 @@ void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages)
     {
         connect(page, &NoteBookPage::selected, this, &NotesTool::onPageClicked);
         connect(page, &NoteBookPage::closePage, this, &NotesTool::onClosePage);
-        connect(page, &NoteBookPage::generateHtml, &m_htmlGenerator, &HtmlGenerator::startGenerating);
-        connect(&m_htmlGenerator, &HtmlGenerator::generated, page, &NoteBookPage::onHtmlGenerated);
     }
 }
 
@@ -211,7 +211,7 @@ void NotesTool::onClosePage()
             if (a_openedPages.isEmpty())
             {
                 m_currentPage = nullptr;
-                m_qmlTextDoc->textDocument()->clear();
+                if (m_qmlTextDoc) m_qmlTextDoc->textDocument()->clear();
                 break;
             }
 
@@ -259,7 +259,7 @@ void NotesTool::onPageHtmlLoaded()
 
 void NotesTool::onDocumentEdited()
 {
-    if (!m_currentPage) return;
+    if (!m_currentPage || !m_qmlTextDoc) return;
 
     auto *doc = m_qmlTextDoc->textDocument();
 

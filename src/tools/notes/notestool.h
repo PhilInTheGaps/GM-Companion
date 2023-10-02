@@ -1,7 +1,6 @@
 #pragma once
 
 #include "common/abstracttool.h"
-#include "htmlgenerator.h"
 #include "markdownhighlighter.h"
 #include "notessaveload.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
@@ -63,7 +62,6 @@ private:
     NotesSaveLoad m_saveLoad;
     NoteBookPage *m_currentPage = nullptr;
     QQuickTextDocument *m_qmlTextDoc = nullptr;
-    HtmlGenerator m_htmlGenerator;
     MarkdownHighlighter m_markdownHighlighter;
 
     bool m_editMode = false;

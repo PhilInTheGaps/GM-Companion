@@ -2,7 +2,6 @@
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "filesystem/file.h"
 #include "spotifyplayer.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAudioOutput>
@@ -14,6 +13,11 @@
 #ifdef Q_OS_WIN
 #include <QTemporaryDir>
 #endif
+
+namespace Files
+{
+class FileDataResult;
+}
 
 class MusicPlayer : public AudioPlayer
 {
@@ -81,7 +85,7 @@ private slots:
     void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
     void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
-    void onFileReceived(Files::FileDataResult *result);
+    void onFileReceived(std::shared_ptr<Files::FileDataResult> result);
     void onSpotifySongEnded();
 
 signals:

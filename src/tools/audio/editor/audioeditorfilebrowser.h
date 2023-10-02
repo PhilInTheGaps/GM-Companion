@@ -27,7 +27,7 @@ public:
     {
     }
 
-    int depth() const
+    [[nodiscard]] auto depth() const -> int
     {
         return path().count();
     }
@@ -42,25 +42,25 @@ class AudioEditorFileBrowserModel : public QAbstractListModel
 public:
     using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex &) const override
+    [[nodiscard]] auto rowCount(const QModelIndex &) const -> int override
     {
         return m_items.size();
     }
-    QVariant data(const QModelIndex &index, int role) const override;
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
-    QList<QObject *> elements() const
+    [[nodiscard]] auto elements() const -> QList<QObject *>
     {
         return m_items;
     }
     void setElements(const QList<AudioEditorFile *> &elements);
 
     void clear();
-    bool isEmpty() const
+    [[nodiscard]] auto isEmpty() const -> bool
     {
         return m_items.isEmpty();
     }
 
-    Q_INVOKABLE QString name() const
+    [[nodiscard]] Q_INVOKABLE QString name() const
     {
         return m_name;
     }
@@ -77,7 +77,7 @@ signals:
     void isEmptyChanged();
 
 protected:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 
 private:
     QList<QObject *> m_items = {};

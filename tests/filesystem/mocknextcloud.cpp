@@ -2,9 +2,13 @@
 #include "oputils.h"
 #include "tests/testhelper/mocknetworkreply.h"
 #include "utils/fileutils.h"
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(mockNC, "testing.mock.nextcloud")
+
+using namespace Qt::Literals::StringLiterals;
 
 class MockData
 {
@@ -23,10 +27,11 @@ auto MockNextCloud::sendMockReply(Operation op, const QNetworkRequest &req, cons
 {
     const auto url = req.url();
 
-    qDebug() << OpUtils::qtOpToVerb(op) << url.scheme() << url.host() << url.path();
+    qCDebug(mockNC) << OpUtils::qtOpToVerb(op) << url.scheme() << url.host() << url.path();
 
     if (op == Operation::PostOperation && url.path() == QStringLiteral("/index.php/login/v2"))
     {
+        emit replySent();
         return MockData::loginV2(baseUrl(url), this);
     }
 
@@ -37,12 +42,14 @@ auto MockNextCloud::sendMockReply(Operation op, const QNetworkRequest &req, cons
             if (m_shouldAuthPollReturnSuccess)
             {
                 m_shouldAuthPollReturnSuccess = false;
+                emit replySent();
                 return MockData::loginPoll(baseUrl(url), this);
             }
 
             m_shouldAuthPollReturnSuccess = true;
         }
 
+        emit replySent();
         return MockNetworkReply::notFound(this);
     }
 
@@ -50,9 +57,11 @@ auto MockNextCloud::sendMockReply(Operation op, const QNetworkRequest &req, cons
     {
         auto filePath = url.path();
         filePath = filePath.replace(QStringLiteral("/remote.php/dav/files"), QLatin1String());
+        emit replySent();
         return sendDavReply(op, req, filePath, data);
     }
 
+    emit replySent();
     return MockNetworkReply::notFound(this);
 }
 
@@ -60,7 +69,7 @@ auto MockNextCloud::sendDavReply(Operation op, const QNetworkRequest &req, const
     -> QNetworkReply *
 {
     const auto davOp = OpUtils::qtOpToDavOp(op, req);
-    qDebug() << "DAV:" << OpUtils::davOpToVerb(davOp) << path << data;
+    qCDebug(mockNC) << "DAV:" << OpUtils::davOpToVerb(davOp) << path << data;
 
     switch (davOp)
     {
@@ -70,6 +79,10 @@ auto MockNextCloud::sendDavReply(Operation op, const QNetworkRequest &req, const
         return MockNetworkReply::successGeneric(file.data, this);
     }
     case OpUtils::DavOperation::Put:
+        if (!m_mockDir.getDir(FileUtils::dirFromPath(path)))
+        {
+            return MockNetworkReply::notFound(this);
+        }
         m_mockDir.createOrUpdateFile(path, data);
         return MockNetworkReply::successEmpty(this);
     case OpUtils::DavOperation::Mkcol:
@@ -77,12 +90,33 @@ auto MockNextCloud::sendDavReply(Operation op, const QNetworkRequest &req, const
     case OpUtils::DavOperation::Delete:
         return m_mockDir.deleteFileOrFolder(path) ? MockNetworkReply::successEmpty(this)
                                                   : MockNetworkReply::notFound(this);
-    case OpUtils::DavOperation::Move:
-        return m_mockDir.moveFileOrFolder(path, destinationFromHeader(req)) ? MockNetworkReply::successEmpty(this)
-                                                                            : MockNetworkReply::notFound(this);
-    case OpUtils::DavOperation::Copy:
-        return m_mockDir.copyFileOrFolder(path, destinationFromHeader(req)) ? MockNetworkReply::successEmpty(this)
-                                                                            : MockNetworkReply::notFound(this);
+    case OpUtils::DavOperation::Move: {
+        auto destination = destinationFromHeader(req);
+        auto destPath = FileUtils::dirFromPath(destination);
+        if (!m_mockDir.getDir(destPath))
+        {
+            qCDebug(mockNC) << "The destination dir" << destPath << "does not exist, sending 409";
+            return MockNetworkReply::conflictError(u"Destination dir %1 does not exist"_s.arg(destPath).toUtf8(), this);
+        }
+
+        auto res = m_mockDir.moveFileOrFolder(path, destination) ? MockNetworkReply::successEmpty(this)
+                                                                 : MockNetworkReply::notFound(this);
+
+        m_mockDir.printTree();
+        return res;
+    }
+    case OpUtils::DavOperation::Copy: {
+        auto destPath = FileUtils::dirFromPath(destinationFromHeader(req));
+        if (!m_mockDir.getDir(destPath))
+        {
+            return MockNetworkReply::conflictError(u"Destination dir %1 does not exist"_s.arg(destPath).toUtf8(), this);
+        }
+
+        auto res = m_mockDir.copyFileOrFolder(path, destinationFromHeader(req)) ? MockNetworkReply::successEmpty(this)
+                                                                                : MockNetworkReply::notFound(this);
+        m_mockDir.printTree();
+        return res;
+    }
     case OpUtils::DavOperation::PropFind:
         return sendPropFindReply(path);
     default:

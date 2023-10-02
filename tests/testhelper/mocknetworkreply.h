@@ -32,6 +32,7 @@ public:
     [[nodiscard]] static auto successXml(const QByteArray &data, QObject *parent) -> MockNetworkReply *;
     [[nodiscard]] static auto notFound(QObject *parent) -> MockNetworkReply *;
     [[nodiscard]] static auto badRequest(QObject *parent) -> MockNetworkReply *;
+    [[nodiscard]] static auto conflictError(const QByteArray &data, QObject *parent) -> MockNetworkReply *;
 
 protected:
     auto readData(char *data, qint64 maxSize) -> qint64 override;

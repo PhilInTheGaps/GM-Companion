@@ -1,5 +1,4 @@
-#ifndef AUDIOSAVELOAD_H
-#define AUDIOSAVELOAD_H
+#pragma once
 
 #include <QFuture>
 #include <QList>
@@ -20,28 +19,28 @@ class AudioSaveLoad
 public:
     AudioSaveLoad() = delete;
 
-    static QFuture<std::vector<AudioProject *>> findProjectsAsync(QObject *context, const QString &folder = u""_s);
+    static auto findProjectsAsync(QObject *context, const QString &folder = u""_s)
+        -> QFuture<std::vector<AudioProject *>>;
 
-    static AudioProject *loadProject(const QByteArray &data, QObject *parent);
+    static auto loadProject(const QByteArray &data, QObject *parent) -> AudioProject *;
 
-    static QFuture<bool> findMissingFilesAsync(QObject *context, const QList<AudioFile *> &audioFiles,
-                                               const QString &basePath);
+    static auto findMissingFilesAsync(QObject *context, const QList<AudioFile *> &audioFiles, const QString &basePath)
+        -> QFuture<bool>;
 
-    static QFuture<bool> saveProject(AudioProject *project, const QString &folder = u""_s);
+    static auto saveProject(AudioProject *project, const QString &folder = u""_s) -> QFuture<bool>;
 
-    static QFuture<bool> deleteProject(AudioProject *project, const QString &folder = u""_s);
+    static auto deleteProject(AudioProject *project, const QString &folder = u""_s) -> QFuture<bool>;
 
 private:
     static constexpr const auto PROJECT_FILE_SUFFIX = ".audio";
 
-    static QFuture<std::vector<AudioProject *>> loadProjects(QObject *context, Files::FileListResult *files);
-    static QStringList getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath);
+    static auto loadProjects(QObject *context, std::shared_ptr<Files::FileListResult> files)
+        -> QFuture<std::vector<AudioProject *>>;
+    static auto getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath) -> QStringList;
 
-    static QFuture<bool> saveProject(AudioProject *project, const QString &filePath, const QByteArray &data);
-    static QFuture<bool> saveRenamedProject(AudioProject *project, const QString &filePath, const QByteArray &data,
-                                            const QString &folder);
+    static auto saveProject(AudioProject *project, const QString &filePath, const QByteArray &data) -> QFuture<bool>;
+    static auto saveRenamedProject(AudioProject *project, const QString &filePath, const QByteArray &data,
+                                   const QString &folder) -> QFuture<bool>;
 
-    static QString getProjectFolder(const QString &preferredFolder);
+    static auto getProjectFolder(const QString &preferredFolder) -> QString;
 };
-
-#endif // AUDIOSAVELOAD_H

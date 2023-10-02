@@ -1,4 +1,5 @@
 #include "updates/updatemanager.h"
+#include "updates/version.h"
 #include <QFutureWatcher>
 #include <QObject>
 #include <QSignalSpy>
@@ -99,4 +100,24 @@ TEST(UpdateManagerTest, CanFetchNewestVersion)
 {
     UpdateManagerTester tester;
     tester.canFetchNewestVersion();
+}
+
+TEST(UpdateManagerTest, CanCheckForUpdates)
+{
+    UpdateManager manager;
+    QSignalSpy spyUpdate(&manager, &UpdateManager::updateAvailable);
+    QSignalSpy spyNoUpdate(&manager, &UpdateManager::noUpdateAvailable);
+
+    // there should not be a newer version than the one running this test
+    manager.checkForUpdates();
+
+    EXPECT_TRUE(spyNoUpdate.wait());
+    EXPECT_FALSE(spyUpdate.wait(50));
+
+    EXPECT_FALSE(manager.getNewestVersion().isEmpty());
+}
+
+TEST(UpdateManagerTest, CanGetCurrentVersion)
+{
+    EXPECT_EQ(UpdateManager::getCurrentVersion(), CURRENT_VERSION);
 }

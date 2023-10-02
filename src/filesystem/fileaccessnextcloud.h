@@ -11,40 +11,41 @@ namespace Files
 
 class FileAccessNextcloud : public FileAccess
 {
-    Q_OBJECT
-
 public:
-    explicit FileAccessNextcloud(NextCloud &nextcloud, QObject *parent);
+    explicit FileAccessNextcloud(NextCloud &nextcloud);
 
-    QFuture<FileDataResult *> getDataAsync(const QString &path, bool allowCache) override;
-    QFuture<std::vector<FileDataResult *>> getDataAsync(const QStringList &paths, bool allowCache) override;
-    QFuture<FileResult *> saveAsync(const QString &path, const QByteArray &data) override;
-    QFuture<FileResult *> moveAsync(const QString &oldPath, const QString &newPath) override;
-    QFuture<FileResult *> deleteAsync(const QString &path) override;
-    QFuture<FileResult *> copyAsync(const QString &path, const QString &copy) override;
-    QFuture<FileListResult *> listAsync(const QString &path, bool files, bool folders) override;
-    QFuture<FileResult *> createDirAsync(const QString &path) override;
-    QFuture<FileCheckResult *> checkAsync(const QString &path, bool allowCache) override;
-    QFuture<FileMultiCheckResult *> checkAsync(const QStringList &paths, bool allowCache) override;
+    auto getDataAsync(const QString &path, bool allowCache) -> QFuture<std::shared_ptr<FileDataResult>> override;
+    auto getDataAsync(const QStringList &paths, bool allowCache)
+        -> QFuture<std::vector<std::shared_ptr<FileDataResult>>> override;
+    auto saveAsync(const QString &path, const QByteArray &data) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto deleteAsync(const QString &path) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto copyAsync(const QString &path, const QString &copy) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto listAsync(const QString &path, bool files, bool folders) -> QFuture<std::shared_ptr<FileListResult>> override;
+    auto createDirAsync(const QString &path) -> QFuture<std::shared_ptr<FileResult>> override;
+    auto checkAsync(const QString &path, bool allowCache) -> QFuture<std::shared_ptr<FileCheckResult>> override;
+    auto checkAsync(const QStringList &paths, bool allowCache)
+        -> QFuture<std::shared_ptr<FileMultiCheckResult>> override;
 
 private:
     NextCloud &m_nc;
     FileCache m_cache;
 
-    static QByteArray encodePath(const QString &data);
-    static inline bool replyHasError(QNetworkReply *reply);
-    static QString makeAndPrintError(const QString &errorMessage, const QNetworkReply *reply);
-    static QString replyErrorToString(const QNetworkReply *reply);
-    static QList<std::pair<QByteArray, QByteArray>> makeMoveHeaders(const QString &newPath);
+    static auto encodePath(const QString &data) -> QByteArray;
+    static auto replyHasError(QNetworkReply *reply) -> bool;
+    static auto makeAndPrintError(const QString &errorMessage, const QNetworkReply *reply) -> QString;
+    static auto replyErrorToString(const QNetworkReply *reply) -> QString;
+    static auto makeMoveHeaders(const QString &newPath) -> QList<std::pair<QByteArray, QByteArray>>;
 
-    template <typename T> static T deleteReplyAndReturn(const T &value, QNetworkReply *reply);
+    template <typename T> static auto deleteReplyAndReturn(T value, QNetworkReply *reply) -> T;
 
     template <typename T1, typename T2>
-    QFuture<FileResult *> createDirThenContinue(
-        const QString &dir, const T1 &arg1, const T2 &arg2,
-        const std::function<QFuture<FileResult *>(const T1 &, const T2 &)> &func);
+    auto createDirThenContinue(const QString &dir, const T1 &arg1, const T2 &arg2,
+                               const std::function<QFuture<std::shared_ptr<FileResult>>(const T1 &, const T2 &)> &func)
+        -> QFuture<std::shared_ptr<FileResult>>;
 
-    FileListResult *parseListResponse(const QByteArray &data, const QString &path, bool files, bool folders);
+    auto parseListResponse(const QByteArray &data, const QString &path, bool files, bool folders)
+        -> std::shared_ptr<FileListResult>;
 };
 
 } // namespace Files

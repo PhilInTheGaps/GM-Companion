@@ -34,29 +34,29 @@ public:
     }
 
     Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    [[nodiscard]] QStringList categories() const;
+    [[nodiscard]] auto categories() const -> QStringList;
 
     Q_PROPERTY(int currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
-    [[nodiscard]] int currentCategory() const
+    [[nodiscard]] auto currentCategory() const -> int
     {
         return m_currentCategoryIndex;
     }
 
     Q_PROPERTY(Map *currentMap READ currentMap NOTIFY mapIndexChanged)
-    [[nodiscard]] Map *currentMap() const
+    [[nodiscard]] auto currentMap() const -> Map *
     {
         return m_currentMap;
     }
 
     Q_PROPERTY(int mapIndex READ mapIndex WRITE setMapIndex NOTIFY mapIndexChanged)
-    [[nodiscard]] int mapIndex() const
+    [[nodiscard]] auto mapIndex() const -> int
     {
         return m_mapIndex;
     }
     void setMapIndex(int index);
 
     Q_PROPERTY(MapMarker *currentMarker READ currentMarker NOTIFY markerIndexChanged)
-    MapMarker *currentMarker() const;
+    [[nodiscard]] auto currentMarker() const -> MapMarker *;
 
 public slots:
     void setCurrentCategory(int index);

@@ -1,6 +1,8 @@
 #include "mockfs.h"
 #include "utils/fileutils.h"
-#include <QDebug>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(mockfs, "testing.mock.fs")
 
 MockDir::MockDir(const QString &name) : m_name(name), m_lastModified(QDateTime::currentDateTime())
 {
@@ -139,36 +141,16 @@ auto MockDir::getFile(const QString &path) -> MockFile
 
 auto MockDir::moveFileOrFolder(const QString &source, const QString &destination) -> bool
 {
-    qDebug() << "Move" << source << "to" << destination;
+    qCDebug(mockfs()) << "Move" << source << "to" << destination;
 
-    if (source.isEmpty() || destination.isEmpty()) return false;
+    if (!copyFileOrFolder(source, destination)) return false;
 
-    const auto sourceFile = getFile(source);
-    if (!sourceFile.name.isEmpty())
-    {
-        if (!getFile(destination).name.isEmpty()) return false;
-
-        deleteFileOrFolder(source);
-        createOrUpdateFile(destination, sourceFile.data);
-        return true;
-    }
-
-    auto *sourceDir = getDir(source);
-    if (!sourceDir) return false;
-
-    auto destinationParentPath = FileUtils::dirFromPath(destination);
-    mkdir(destinationParentPath);
-    auto *destinationDir = getDir(destinationParentPath);
-    if (!destinationDir) return false;
-
-    destinationDir->add(*sourceDir);
-    deleteFileOrFolder(source);
-    return true;
+    return deleteFileOrFolder(source);
 }
 
 auto MockDir::copyFileOrFolder(const QString &source, const QString &destination) -> bool
 {
-    qDebug() << "Copy" << source << "to" << destination;
+    qCDebug(mockfs) << "Copy" << source << "to" << destination;
 
     if (source.isEmpty() || destination.isEmpty()) return false;
 
@@ -196,17 +178,14 @@ auto MockDir::copyFileOrFolder(const QString &source, const QString &destination
 
 auto MockDir::deleteFileOrFolder(const QString &path) -> bool
 {
-    qDebug() << "Delete" << path;
+    qCDebug(mockfs) << "Delete" << path;
 
     if (path.isEmpty()) return false;
 
     const auto fileName = FileUtils::fileName(path);
     const auto dirName = FileUtils::dirFromPath(path);
 
-    auto isFile = [fileName](const MockFile &file) {
-        qDebug() << file.name;
-        return file.name == fileName;
-    };
+    auto isFile = [fileName](const MockFile &file) { return file.name == fileName; };
     auto isDir = [fileName](const MockDir &dir) { return dir.name() == fileName; };
 
     if (dirName.isEmpty())
@@ -251,4 +230,30 @@ auto MockDir::getDir(const QString &path) -> MockDir *
     }
 
     return nullptr;
+}
+
+void MockDir::printTree(int depth) const
+{
+    for (const auto &file : m_files)
+    {
+        qCDebug(mockfs).noquote() << calcIndent(depth) << file.name << "(" << file.lastModified << ")";
+    }
+
+    for (const auto &dir : m_dirs)
+    {
+        qCDebug(mockfs).noquote() << calcIndent(depth) << dir.name() << "(" << dir.lastModified() << ")";
+        dir.printTree(depth + 1);
+    }
+}
+
+auto MockDir::calcIndent(int depth) -> QString
+{
+    static QString s("    ");
+
+    auto ret = QStringLiteral("");
+
+    while (depth-- > 0)
+        ret.append(s);
+
+    return ret;
 }

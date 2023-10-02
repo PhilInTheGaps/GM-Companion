@@ -20,6 +20,7 @@ auto FileListResult::foldersFull(const QString &wildcard) const -> QStringList
 auto FileListResult::getFullyQualified(const QStringList &list) const -> QStringList
 {
     QStringList results;
+    results.reserve(list.count());
 
     for (const auto &file : list)
     {

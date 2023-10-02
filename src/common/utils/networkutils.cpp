@@ -25,19 +25,6 @@ void NetworkUtils::makeJsonRequest(QNetworkRequest &request)
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 }
 
-auto NetworkUtils::queryToMap(const QUrlQuery &query) -> QMap<QString, QString>
-{
-    QMap<QString, QString> map;
-    const auto itemPairs = query.queryItems();
-
-    for (const auto &pair : itemPairs)
-    {
-        map.insert(pair.first, pair.second);
-    }
-
-    return map;
-}
-
 auto NetworkUtils::isHttpUrl(QStringView url) -> bool
 {
     return url.startsWith("http://"_L1) || url.startsWith("https://"_L1);

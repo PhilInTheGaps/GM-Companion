@@ -1,13 +1,15 @@
 #include "fileresult.h"
 #include "rest/restnetworkreply.h"
+#include <QScopedPointer>
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
-auto FileResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) -> FileResult *
+auto FileResult::fromNetworkReply(RestNetworkReply *_reply) -> std::shared_ptr<FileResult>
 {
     bool success = true;
     QString errorMessage;
+    QScopedPointer reply(_reply);
 
     if (!reply)
     {
@@ -22,9 +24,7 @@ auto FileResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) -> F
             success = false;
             errorMessage = reply->errorText();
         }
-
-        reply->deleteLater();
     }
 
-    return new FileResult(success, errorMessage, parent);
+    return std::make_shared<FileResult>(success, errorMessage);
 }

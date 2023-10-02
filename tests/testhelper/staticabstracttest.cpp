@@ -63,10 +63,10 @@ void StaticAbstractTest::copyResourceToFile(const QString &resource, const QStri
     const QDir qdir(dir);
     if (!qdir.exists())
     {
-        EXPECT_TRUE(qdir.mkpath(dir)) << "Could not create path: " << dir.constData();
+        EXPECT_TRUE(qdir.mkpath(dir)) << "Could not create path: " << dir.toStdString();
     }
 
-    EXPECT_TRUE(destinationFile.open(QIODevice::WriteOnly)) << "Could not open file " << destination.constData();
+    EXPECT_TRUE(destinationFile.open(QIODevice::WriteOnly)) << "Could not open file " << destination.toStdString();
     destinationFile.write(data);
     destinationFile.close();
 }

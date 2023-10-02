@@ -1,7 +1,6 @@
 #pragma once
 
 #include "fileresult.h"
-#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QStringList>
 
 using namespace Qt::Literals::StringLiterals;
@@ -12,30 +11,39 @@ namespace Files
 /// or an error message.
 class FileListResult : public FileResult
 {
-    Q_OBJECT
-
 public:
-    explicit FileListResult(const QString &path, const QString &errorMessage, QObject *parent = nullptr)
-        : FileResult(errorMessage, parent), a_path(path)
+    explicit FileListResult(const QString &path, const QString &errorMessage) : FileResult(errorMessage), m_path(path)
     {
     }
 
-    explicit FileListResult(const QString &path, const QStringList &folders, const QStringList &files,
-                            QObject *parent = nullptr)
-        : FileResult(true, QByteArray(), parent), a_folders(folders), a_files(files), a_path(path)
+    explicit FileListResult(const QString &path, const QStringList &folders, const QStringList &files)
+        : FileResult(true, QByteArray()), m_folders(folders), m_files(files), m_path(path)
     {
     }
 
-    QStringList filesFull(const QString &wildcard = u""_s) const;
-    QStringList foldersFull(const QString &wildcard = u""_s) const;
+    [[nodiscard]] auto filesFull(const QString &wildcard = u""_s) const -> QStringList;
+    [[nodiscard]] auto foldersFull(const QString &wildcard = u""_s) const -> QStringList;
 
-    READONLY_PROPERTY(QStringList, folders)
-    READONLY_PROPERTY(QStringList, files)
-    READONLY_PROPERTY(QString, path)
+    [[nodiscard]] auto folders() const -> const QStringList &
+    {
+        return m_folders;
+    }
+    [[nodiscard]] auto files() const -> const QStringList &
+    {
+        return m_files;
+    }
+    [[nodiscard]] auto path() const -> const QString &
+    {
+        return m_path;
+    }
 
 private:
-    QStringList getFullyQualified(const QStringList &list) const;
-    static QStringList getMatchingEntries(const QStringList &list, const QString &wildcard);
+    [[nodiscard]] auto getFullyQualified(const QStringList &list) const -> QStringList;
+    static auto getMatchingEntries(const QStringList &list, const QString &wildcard) -> QStringList;
+
+    QStringList m_folders;
+    QStringList m_files;
+    QString m_path;
 };
 
 } // namespace Files

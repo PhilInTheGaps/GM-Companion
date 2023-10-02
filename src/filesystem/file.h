@@ -5,49 +5,62 @@
 #include <QString>
 #include <QStringList>
 
-#include "fileaccess.h"
-
 class NextCloud;
 class GoogleDrive;
 
 namespace Files
 {
 
+class FileAccess;
+class FileResult;
+class FileDataResult;
+class FileListResult;
+class FileCheckResult;
+class FileMultiCheckResult;
+
 class File
 {
 public:
     static void init(NextCloud *nc, GoogleDrive *gd);
 
-    static QFuture<FileDataResult *> getDataAsync(const QString &path, bool allowCache = true,
-                                                  FileAccess *fileAccess = nullptr);
-    static QFuture<std::vector<FileDataResult *>> getDataAsync(const QStringList &paths, bool allowCache = true,
-                                                               FileAccess *fileAccess = nullptr);
+    static auto getDataAsync(const QString &path, bool allowCache = true,
+                             std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileDataResult>>;
 
-    static QFuture<FileResult *> saveAsync(const QString &path, const QByteArray &data,
-                                           FileAccess *fileAccess = nullptr);
+    static auto getDataAsync(const QStringList &paths, bool allowCache = true,
+                             std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::vector<std::shared_ptr<FileDataResult>>>;
 
-    static QFuture<FileResult *> moveAsync(const QString &oldPath, const QString &newPath,
-                                           FileAccess *fileAccess = nullptr);
+    static auto saveAsync(const QString &path, const QByteArray &data, std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileResult>>;
 
-    static QFuture<FileResult *> deleteAsync(const QString &path, FileAccess *fileAccess = nullptr);
+    static auto moveAsync(const QString &oldPath, const QString &newPath,
+                          std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<std::shared_ptr<FileResult>>;
 
-    static QFuture<FileResult *> copyAsync(const QString &path, const QString &copy, FileAccess *fileAccess = nullptr);
+    static auto deleteAsync(const QString &path, std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileResult>>;
 
-    static QFuture<FileListResult *> listAsync(const QString &path, bool files, bool folders,
-                                               FileAccess *fileAccess = nullptr);
+    static auto copyAsync(const QString &path, const QString &copy, std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileResult>>;
 
-    static QFuture<FileResult *> createDirAsync(const QString &path, FileAccess *fileAccess = nullptr);
+    static auto listAsync(const QString &path, bool files, bool folders,
+                          std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<std::shared_ptr<FileListResult>>;
 
-    static QFuture<FileCheckResult *> checkAsync(const QString &path, bool allowCache = true,
-                                                 FileAccess *fileAccess = nullptr);
+    static auto createDirAsync(const QString &path, std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileResult>>;
 
-    static QFuture<FileMultiCheckResult *> checkAsync(const QStringList &paths, bool allowCache = true,
-                                                      FileAccess *fileAccess = nullptr);
+    static auto checkAsync(const QString &path, bool allowCache = true,
+                           std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileCheckResult>>;
+
+    static auto checkAsync(const QStringList &paths, bool allowCache = true,
+                           std::shared_ptr<FileAccess> fileAccess = nullptr)
+        -> QFuture<std::shared_ptr<FileMultiCheckResult>>;
 
     static void updateFileAccess();
 
 private:
-    static auto getFileAccess(FileAccess *fileAccess) -> FileAccess *;
+    static auto getFileAccess(std::shared_ptr<FileAccess> fileAccess) -> std::shared_ptr<FileAccess>;
 
     static inline NextCloud *s_nc = nullptr;
     static inline GoogleDrive *s_gd = nullptr;

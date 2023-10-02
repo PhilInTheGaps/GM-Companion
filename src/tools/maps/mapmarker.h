@@ -62,15 +62,15 @@ class MapMarkerModel : public QAbstractListModel
 public:
     using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex &) const override
+    [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
         return m_items.size();
     }
-    int size() const
+    [[nodiscard]] auto size() const -> int
     {
         return m_items.size();
     }
-    QVariant data(const QModelIndex &index, int role) const override;
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
     void setElements(const QList<MapMarker *> &elements);
     void addElement(MapMarker *marker)
@@ -78,24 +78,24 @@ public:
         m_items.append(marker);
     }
     void clear();
-    bool isEmpty() const
+    [[nodiscard]] auto isEmpty() const -> bool
     {
         return m_items.isEmpty();
     }
     void removeAt(int index);
 
-    MapMarker *marker(int index)
+    auto marker(int index) -> MapMarker *
     {
-        return static_cast<MapMarker *>(m_items.at(index));
+        return qobject_cast<MapMarker *>(m_items.at(index));
     }
-    QList<MapMarker *> elements() const;
+    [[nodiscard]] auto elements() const -> QList<MapMarker *>;
 
 public slots:
     void insert(QObject *item);
     void remove(QObject *item);
 
 protected:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 
 private:
     QList<QObject *> m_items = {};

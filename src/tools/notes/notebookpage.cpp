@@ -1,4 +1,5 @@
 #include "notebookpage.h"
+#include "htmlgenerator.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -36,7 +37,7 @@ void NoteBookPage::setContent(const QString &content, bool edited)
 
     m_editCount = ++editCount;
 
-    emit generateHtml(content, m_editCount);
+    generateHtml();
 }
 
 void NoteBookPage::setIsSaved(bool isSaved)
@@ -54,12 +55,13 @@ void NoteBookPage::onContentLoaded(const QString &content)
     emit contentLoaded();
 }
 
-void NoteBookPage::onHtmlGenerated(const QString &html, int id)
+void NoteBookPage::generateHtml()
 {
-    if (id != m_editCount) return;
-
-    m_html = html;
-    emit htmlGenerated();
+    auto future = HtmlGenerator::generateFromMarkdownAsync(m_content);
+    future.then([this](const QString &html) {
+        m_html = html;
+        emit htmlGenerated();
+    });
 }
 
 void NoteBookPage::save()

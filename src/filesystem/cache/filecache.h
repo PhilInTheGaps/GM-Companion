@@ -1,24 +1,28 @@
 #pragma once
 
 #include "filecacheentry.h"
-#include <QMap>
-#include <QObject>
+#include <QByteArray>
+#include <QHash>
+#include <QString>
+#include <memory>
 
-class FileCache : public QObject
+class FileCache
 {
-    Q_OBJECT
 public:
-    using QObject::QObject;
+    explicit FileCache(int expirationTimeMs = DEFAULT_EXPIRATION_TIME_MS);
 
-    bool tryGetData(const QString &path, QByteArray &data);
-    bool createOrUpdateEntry(const QString &path, const QByteArray &data);
-    bool removeEntry(const QString &path);
-    bool moveEntry(const QString &oldPath, const QString &newPath);
-    bool copyEntry(const QString &path, const QString &copy);
-    bool checkEntry(const QString &path);
+    auto tryGetData(const QString &path, QByteArray &data) -> bool;
+    auto createOrUpdateEntry(const QString &path, const QByteArray &data) -> bool;
+    auto removeEntry(const QString &path) -> bool;
+    auto moveEntry(const QString &oldPath, const QString &newPath) -> bool;
+    auto copyEntry(const QString &path, const QString &copy) -> bool;
+    auto checkEntry(const QString &path) -> bool;
 
     void printEntries() const;
 
 private:
-    QMap<QString, FileCacheEntry *> m_entries;
+    QHash<QString, std::shared_ptr<FileCacheEntry>> m_entries;
+    int m_expirationTimeMs;
+
+    static constexpr int DEFAULT_EXPIRATION_TIME_MS = 30000;
 };

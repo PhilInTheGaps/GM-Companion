@@ -107,7 +107,7 @@ void ItemEditor::save()
 
     Files::File::saveAsync(savePath, data)
         .then(this,
-              [this](const QFuture<Files::FileResult *> &) {
+              [this](QFuture<std::shared_ptr<Files::FileResult>>) {
                   // Notify editor
                   isSaved(true);
                   emit showInfoBar(tr("Saved!"));
@@ -131,7 +131,7 @@ void ItemEditor::loadData()
     const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     Files::File::checkAsync(path)
-        .then(this, [this](Files::FileCheckResult *result) { onFileCheckReceived(result); })
+        .then(this, [this](std::shared_ptr<Files::FileCheckResult> result) { onFileCheckReceived(result); })
         .onCanceled(this, [this]() { isLoading(false); });
 }
 
@@ -148,7 +148,7 @@ auto ItemEditor::defaultGroupName() -> QString
     return tr("Custom");
 }
 
-void ItemEditor::onFileCheckReceived(Files::FileCheckResult *result)
+void ItemEditor::onFileCheckReceived(std::shared_ptr<Files::FileCheckResult> result)
 {
     if (!result)
     {
@@ -158,7 +158,6 @@ void ItemEditor::onFileCheckReceived(Files::FileCheckResult *result)
 
     const auto exists = result->exists();
     const auto path = result->path();
-    result->deleteLater();
 
     if (!exists)
     {
@@ -167,11 +166,11 @@ void ItemEditor::onFileCheckReceived(Files::FileCheckResult *result)
     }
 
     Files::File::getDataAsync(path)
-        .then(this, [this](Files::FileDataResult *result) { onDataReceived(result); })
+        .then(this, [this](std::shared_ptr<Files::FileDataResult> result) { onDataReceived(result); })
         .onCanceled(this, [this]() { isLoading(false); });
 }
 
-void ItemEditor::onDataReceived(Files::FileDataResult *result)
+void ItemEditor::onDataReceived(std::shared_ptr<Files::FileDataResult> result)
 {
     if (!result)
     {
@@ -185,8 +184,6 @@ void ItemEditor::onDataReceived(Files::FileDataResult *result)
 
     initItemModel(group);
     updateCategories(group);
-
-    result->deleteLater();
 
     setIsDataLoaded(true);
     isLoading(false);

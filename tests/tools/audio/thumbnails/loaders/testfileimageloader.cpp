@@ -1,4 +1,3 @@
-#include "src/filesystem/fileaccesslocal.h"
 #include "src/tools/audio/thumbnails/loaders/fileimageloader.h"
 #include "tests/testhelper/abstracttest.h"
 #include "utils/fileutils.h"
@@ -8,12 +7,6 @@
 
 class FileImageLoaderTest : public AbstractTest
 {
-public:
-    explicit FileImageLoaderTest() : AbstractTest()
-    {
-        fileAccess = std::make_unique<Files::FileAccessLocal>(nullptr);
-        Files::FileAccess::setInstance(fileAccess.get());
-    }
 };
 
 TEST_F(FileImageLoaderTest, LoadImageAsync)

@@ -57,15 +57,16 @@ protected:
     QMap<int, std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> m_activeRequests;
     QQueue<std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> m_requestQueue;
 
-    [[nodiscard]] int activeRequestCount() const
+    [[nodiscard]] auto activeRequestCount() const -> int
     {
         return m_activeRequests.count();
     };
-    int getQueueId();
+    auto getQueueId() -> int;
 
 private:
-    bool checkAndEnqueueRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> deferred);
-    O2Requestor *makeRequestor();
+    auto checkAndEnqueueRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> deferred)
+        -> bool;
+    auto makeRequestor() -> O2Requestor *;
 
     void sendRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
 

@@ -12,7 +12,7 @@ class NoteBookPage : public TreeItem
     QML_UNCREATABLE("")
 
 public:
-    explicit NoteBookPage(const QString &name, int depth, QObject *parent = nullptr);
+    explicit NoteBookPage(const QString &name, int depth, QObject *parent);
 
     [[nodiscard]] auto content() -> QString;
     void setContent(const QString &content, bool edited = true);
@@ -47,12 +47,10 @@ public:
 
 public slots:
     void onContentLoaded(const QString &content);
-    void onHtmlGenerated(const QString &html, int id);
 
 signals:
     void loadPageContent();
     void contentLoaded();
-    void generateHtml(const QString &raw, int id);
     void htmlGenerated();
     void isSavedChanged();
     void savePage();
@@ -61,6 +59,8 @@ signals:
     void deletePage();
 
 private:
+    void generateHtml();
+
     QString m_origContent;
     QString m_content;
     QString m_html;

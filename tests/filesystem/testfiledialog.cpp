@@ -2,7 +2,6 @@
 #include "app/ui/FileDialog/fileobject.h"
 #include "src/filesystem/file.h"
 #include "src/filesystem/fileaccess.h"
-#include "src/filesystem/fileaccesslocal.h"
 #include <QList>
 #include <QSignalSpy>
 #include <functional>
@@ -17,11 +16,7 @@ class FileDialogTest : public ::testing::Test
 public:
     FileDialogTest()
     {
-        fileAccess = std::make_unique<FileAccessLocal>(nullptr);
-        FileAccess::setInstance(fileAccess.get());
-
         createTestFiles();
-
         dialog = std::make_unique<FileDialogBackend>(nullptr);
     }
 
@@ -38,7 +33,6 @@ protected:
 private:
     QTemporaryDir tempDir;
     std::unique_ptr<FileDialogBackend> dialog = nullptr;
-    std::unique_ptr<FileAccessLocal> fileAccess = nullptr;
 
     static constexpr int WAIT_TIME_MS = 1000;
     const QStringList topLevelFiles = {"file1", "file2", "file3", "file4"};
@@ -101,7 +95,7 @@ void FileDialogTest::waitForSignals(QSignalSpy &spy, int count, const QString &d
     while (spy.count() < count)
     {
         EXPECT_TRUE(spy.wait(WAIT_TIME_MS))
-            << "Timeout at signal " << spy.count() << "/" << count << " (entering " << dir.constData();
+            << "Timeout at signal " << spy.count() << "/" << count << " (entering " << dir.toStdString();
     }
 }
 

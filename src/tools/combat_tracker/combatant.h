@@ -27,8 +27,8 @@ public:
     explicit Combatant(const QString &name, const QString &notes, int ini, int health, int priority, bool delay,
                        QObject *parent);
 
-    QJsonObject toJson() const;
-    static Combatant *fromJson(const QJsonObject &json, QObject *parent);
+    [[nodiscard]] auto toJson() const -> QJsonObject;
+    static auto fromJson(const QJsonObject &json, QObject *parent) -> Combatant *;
 
     inline operator QString() const
     {
@@ -46,11 +46,11 @@ class CombatantListModel : public QAbstractListModel
 public:
     using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex &) const override
+    [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
         return m_items.size();
     }
-    QVariant data(const QModelIndex &index, int role) const override;
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
     void setElements(const QList<Combatant *> &elements);
     void clear();
@@ -61,7 +61,7 @@ public:
     void remove(int index);
 
 protected:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 
 private:
     QList<QObject *> m_items = {};

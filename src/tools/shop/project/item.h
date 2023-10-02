@@ -50,5 +50,5 @@ public:
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
 protected:
-    [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 };

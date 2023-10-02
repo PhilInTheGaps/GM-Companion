@@ -3,6 +3,7 @@
 #include "exceptions/notimplementedexception.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
+#include "utils/networkutils.h"
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -69,7 +70,7 @@ void SpotifyConnectorServer::sendRequest(RequestContainer *container,
         break;
     case POST:
         qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url() << "Data:" << container->data();
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        NetworkUtils::makeJsonRequest(request);
         reply = m_networkManager.post(request, container->data());
         break;
     default:

@@ -1,5 +1,7 @@
 #include "radioplayer.h"
 #include "../playlist/audioplaylist.h"
+#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
@@ -62,7 +64,8 @@ void RadioPlayer::play(const AudioFile *audioFile)
 
         m_fileName = audioFile->url();
         Files::File::getDataAsync(FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath(u"radio"_s)))
-            .then(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
+            .then(m_fileRequestContext,
+                  [this](std::shared_ptr<Files::FileDataResult> result) { onFileReceived(result); });
         return;
     }
 
@@ -72,7 +75,7 @@ void RadioPlayer::play(const AudioFile *audioFile)
     {
         auto *reply = m_networkManager.get(QNetworkRequest(QUrl(audioFile->url())));
         QtFuture::connect(reply, &QNetworkReply::finished).then(this, [this, reply]() {
-            onFileReceived(new Files::FileDataResult(reply->readAll(), this));
+            onFileReceived(std::make_shared<Files::FileDataResult>(reply->readAll()));
             reply->deleteLater();
         });
         return;
@@ -188,7 +191,7 @@ void RadioPlayer::onMetaDataChanged()
     }
 }
 
-void RadioPlayer::onFileReceived(Files::FileDataResult *result)
+void RadioPlayer::onFileReceived(std::shared_ptr<Files::FileDataResult> result)
 {
     if (!result) return;
 
@@ -196,7 +199,6 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
 
     m_mediaPlayer.stop();
     const auto data = result->data();
-    result->deleteLater();
 
     if (data.isEmpty())
     {

@@ -16,20 +16,20 @@ class AudioFileModel : public QAbstractListModel
 public:
     using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex &) const override
+    [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
         return m_items.size();
     }
-    QVariant data(const QModelIndex &index, int role) const override;
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
-    QList<QObject *> elements() const
+    [[nodiscard]] auto elements() const -> QList<QObject *>
     {
         return m_items;
     }
     void setElements(const QList<AudioFile *> &elements);
 
     void clear();
-    auto isEmpty() const -> bool
+    [[nodiscard]] auto isEmpty() const -> bool
     {
         return m_items.isEmpty();
     }
@@ -38,14 +38,14 @@ public:
     void remove(QObject *item);
     void remove(int index);
     void append(QObject *item);
-    bool moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent,
-                 int destinationChild);
+    auto moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent,
+                 int destinationChild) -> bool;
 
 signals:
     void isEmptyChanged();
 
 protected:
-    QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 
 private:
     QList<QObject *> m_items = {};

@@ -15,7 +15,7 @@ class BaseProjectItem : public QObject
     AUTO_PROPERTY_VAL2(bool, wasRenamed, false)
 
 public:
-    explicit BaseProjectItem(const QString &name, QObject *parent = nullptr);
+    explicit BaseProjectItem(const QString &name, QObject *parent);
 
 signals:
     void wasEdited();

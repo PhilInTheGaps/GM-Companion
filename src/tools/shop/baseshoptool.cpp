@@ -1,7 +1,7 @@
 #include "baseshoptool.h"
-#include "file.h"
-#include "results/filedataresult.h"
-#include "results/filelistresult.h"
+#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
+#include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include <QJsonDocument>
 #include <QLoggingCategory>
@@ -21,10 +21,10 @@ void BaseShopTool::loadData()
     projects({});
 
     Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
-        .then(this, [this](Files::FileListResult *result) { onShopFilesFound(result); });
+        .then(this, [this](std::shared_ptr<Files::FileListResult> result) { onShopFilesFound(result); });
 }
 
-void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
+void BaseShopTool::onShopFilesFound(std::shared_ptr<Files::FileListResult> result)
 {
     if (!result)
     {
@@ -33,7 +33,6 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
     }
 
     const auto &files = result->filesFull(PROJECT_FILE_GLOB);
-    result->deleteLater();
 
     if (files.isEmpty())
     {
@@ -41,18 +40,19 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
         return;
     }
 
-    Files::File::getDataAsync(files).then(
-        this, [this](const std::vector<Files::FileDataResult *> &results) { onShopFileDataReceived(results); });
+    Files::File::getDataAsync(files).then(this,
+                                          [this](const std::vector<std::shared_ptr<Files::FileDataResult>> &results) {
+                                              onShopFileDataReceived(results);
+                                          });
 }
 
-void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResult *> &results)
+void BaseShopTool::onShopFileDataReceived(const std::vector<std::shared_ptr<Files::FileDataResult>> &results)
 {
     qCDebug(gmShopsBaseTool()) << "Loading" << results.size() << "projects ...";
 
-    foreach (auto *result, results)
+    foreach (const auto &result, results)
     {
         a_projects.append(new ShopProject(QJsonDocument::fromJson(result->data()).object(), this));
-        result->deleteLater();
     }
 
     emit projectsChanged(a_projects);

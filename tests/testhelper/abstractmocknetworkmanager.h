@@ -11,6 +11,9 @@ public:
 
     [[nodiscard]] auto hosts() const -> QStringList;
 
+signals:
+    void replySent();
+
 public slots:
     void simulateBrowser(const QUrl &url);
 

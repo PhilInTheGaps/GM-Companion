@@ -1,6 +1,7 @@
 #include "shopeditor.h"
-#include "file.h"
-#include "results/filelistresult.h"
+#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
+#include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
@@ -57,10 +58,10 @@ void ShopEditor::findItems()
     itemGroups({});
 
     Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
-        .then(this, [this](Files::FileListResult *result) { onItemFilesFound(result); });
+        .then(this, [this](std::shared_ptr<Files::FileListResult> result) { onItemFilesFound(result); });
 }
 
-void ShopEditor::onItemFilesFound(Files::FileListResult *result)
+void ShopEditor::onItemFilesFound(std::shared_ptr<Files::FileListResult> result)
 {
     if (!result)
     {
@@ -69,7 +70,6 @@ void ShopEditor::onItemFilesFound(Files::FileListResult *result)
     }
 
     const auto &files = result->filesFull(ITEM_FILE_GLOB);
-    result->deleteLater();
 
     if (files.isEmpty())
     {
@@ -77,20 +77,21 @@ void ShopEditor::onItemFilesFound(Files::FileListResult *result)
         return;
     }
 
-    Files::File::getDataAsync(files).then(this, [this](const std::vector<Files::FileDataResult *> &results) {
-        QList<ItemGroup *> groups = {};
+    Files::File::getDataAsync(files).then(
+        this, [this](const std::vector<std::shared_ptr<Files::FileDataResult>> &results) {
+            QList<ItemGroup *> groups = {};
+            groups.reserve(results.size());
 
-        foreach (auto *result, results)
-        {
-            if (!result) continue;
+            foreach (const auto &result, results)
+            {
+                if (!result) continue;
 
-            groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result->data()).object(), this));
-            result->deleteLater();
-        }
+                groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result->data()).object(), this));
+            }
 
-        itemGroups(groups);
-        currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
-    });
+            itemGroups(groups);
+            currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
+        });
 }
 
 /// Create a project, category or shop
@@ -195,7 +196,7 @@ void ShopEditor::save()
 
     const auto basePath = SettingsManager::getPath(u"shops"_s);
 
-    QList<QFuture<Files::FileResult *>> combinator;
+    QList<QFuture<std::shared_ptr<Files::FileResult>>> combinator;
 
     foreach (const auto *project, projects())
     {
@@ -205,7 +206,7 @@ void ShopEditor::save()
 
     QtFuture::whenAll(combinator.begin(), combinator.end())
         .then(this,
-              [this](const QList<QFuture<Files::FileResult *>> &) {
+              [this](const QList<QFuture<std::shared_ptr<Files::FileResult>>> &) {
                   isSaved(true);
                   emit showInfoBar(tr("Saved!"));
               })

@@ -5,6 +5,7 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
+#include <QUrl>
 #include <QtQml/qqmlregistration.h>
 
 class Map : public QObject
@@ -14,7 +15,7 @@ class Map : public QObject
 
     AUTO_PROPERTY(QString, name)
     AUTO_PROPERTY(QString, path)
-    AUTO_PROPERTY(QString, imageData)
+    AUTO_PROPERTY(QUrl, imageData)
 
 public:
     explicit Map(QObject *parent = nullptr);
@@ -58,12 +59,12 @@ class MapListModel : public QAbstractListModel
 public:
     using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex &) const override
+    [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
         return m_items.size();
     }
-    QVariant data(const QModelIndex &index, int role) const override;
-    int size() const
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
+    [[nodiscard]] auto size() const -> int
     {
         return m_items.size();
     }
@@ -71,12 +72,12 @@ public:
     void setElements(QList<Map *> elements);
     void clear();
 
-    QList<Map *> elements() const
+    [[nodiscard]] auto elements() const -> QList<Map *>
     {
         QList<Map *> list;
         list.reserve(m_items.size());
         foreach (auto i, m_items)
-            list.append(static_cast<Map *>(i));
+            list.append(qobject_cast<Map *>(i));
         return list;
     }
 
@@ -85,7 +86,7 @@ public slots:
     void remove(QObject *item);
 
 protected:
-    [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
+    [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;
 
 private:
     QList<QObject *> m_items = {};
