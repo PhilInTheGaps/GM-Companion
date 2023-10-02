@@ -19,12 +19,12 @@ jobs:
           modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
       - name: Install Dependencies with Chocolatey
-        uses: crazy-max/ghaction-chocolatey@v2
+        uses: crazy-max/ghaction-chocolatey@v3
         with:
           args: "install nasm curl"
 
       - name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
@@ -150,12 +150,6 @@ jobs:
           cache: "true"
           modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          default: true
-
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@1.3.0
         with:
@@ -218,22 +212,17 @@ jobs:
           sentry-cli upload-dif --org rophil --project gm-companion --include-sources AppDir/usr/bin/.debug/
           rm -rf AppDir/usr/bin/.debug
 
-      - name: Clone librespot repo
-        uses: actions/checkout@v3
+      - name: Install rust and build librespot
+        uses: moonrepo/setup-rust@v1
         with:
-          repository: librespot-org/librespot
-          path: build/librespot
-          ref: v0.4.2
-
-      - name: Build librespot
-        run: |
-          cd build/librespot
-          /home/runner/.cargo/bin/cargo build --release
+          bins: librespot@v0.4.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build AppImage
         run: |
           cd build
-          cp librespot/target/release/librespot AppDir/usr/bin/librespot
+          cp ~/.cargo/bin/librespot AppDir/usr/bin/librespot
           bash ../deploy/appimage/build-appimage.sh
           ls
 
