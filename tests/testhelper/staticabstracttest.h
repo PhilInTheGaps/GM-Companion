@@ -29,6 +29,8 @@ public:
 
     [[nodiscard]] static auto getFilePathInTempDir(const QString &filename, const QTemporaryDir &tempDir) -> QString;
 
+    static void waitForSpy(QSignalSpy &spy, int count);
+
 protected:
     static void expectWarning();
 

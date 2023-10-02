@@ -10,6 +10,7 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QSignalSpy>
+#include <QTest>
 #include <gtest/gtest.h>
 
 #ifndef QT_GUI_LIB
@@ -42,17 +43,17 @@ protected:
     {
         userDataPath = backupUserFolder(SettingsManager::getPath(u"notes"_s));
 
-        QDesktopServices::setUrlHandler(QStringLiteral("http"), &networkManager, "simulateBrowser");
-        QDesktopServices::setUrlHandler(QStringLiteral("https"), &networkManager, "simulateBrowser");
+        QDesktopServices::setUrlHandler(u"http"_s, &networkManager, "simulateBrowser");
+        QDesktopServices::setUrlHandler(u"https"_s, &networkManager, "simulateBrowser");
 
         QSignalSpy modelSpy(&tool, &NotesTool::notesModelChanged);
         tool.loadData();
-        EXPECT_TRUE(modelSpy.wait());
+        StaticAbstractTest::waitForSpy(modelSpy, 1);
 
         {
             QSignalSpy spy(tool.notesModel(), &TreeItem::childItemsChanged);
             tool.createBook(u"book"_s);
-            EXPECT_TRUE(spy.wait());
+            StaticAbstractTest::waitForSpy(spy, 1);
             EXPECT_EQ(tool.notesModel()->childItems().count(), 1);
 
             book = qobject_cast<NoteBook *>(tool.notesModel()->childItems().at(0));
@@ -62,9 +63,9 @@ protected:
         {
             QSignalSpy spy(book, &TreeItem::childItemsChanged);
             book->create(book->creatables().at(0), u"chapter"_s);
-            EXPECT_TRUE(spy.wait());
+            StaticAbstractTest::waitForSpy(spy, 1);
             book->toggle();
-            EXPECT_TRUE(spy.wait());
+            StaticAbstractTest::waitForSpy(spy, 2);
 
             chapter = qobject_cast<NoteBookChapter *>(book->childItems().at(0));
             ASSERT_TRUE(chapter);
@@ -73,16 +74,17 @@ protected:
         {
             QSignalSpy spy(chapter, &TreeItem::childItemsChanged);
 
-            chapter->toggle();
-            EXPECT_TRUE(spy.wait());
-
             chapter->create(chapter->creatables().at(0), u"page0.md"_s);
-            EXPECT_TRUE(spy.wait());
+            StaticAbstractTest::waitForSpy(spy, 1);
+            spy.clear();
 
             chapter->create(chapter->creatables().at(0), u"page1"_s);
-            EXPECT_TRUE(spy.wait());
+            StaticAbstractTest::waitForSpy(spy, 1);
+            spy.clear();
 
-            ASSERT_FALSE(chapter->childItems().isEmpty());
+            chapter->toggle();
+            StaticAbstractTest::waitForSpy(spy, 1);
+            ASSERT_EQ(chapter->childItems().length(), 2);
 
             page0 = qobject_cast<NoteBookPage *>(chapter->childItems().at(0));
             ASSERT_TRUE(page0);
@@ -95,10 +97,10 @@ protected:
         QSignalSpy htmlSpy1(page1, &NoteBookPage::htmlGenerated);
 
         page0->setContent(u"page 0"_s, false);
-        htmlSpy0.wait(50);
+        StaticAbstractTest::waitForSpy(htmlSpy0, 1);
 
         page1->setContent(u"page 1"_s, false);
-        htmlSpy1.wait(50);
+        StaticAbstractTest::waitForSpy(htmlSpy1, 1);
 
         // creating a text document from within the test crashes
         // so we can't test text doc interaction
@@ -111,6 +113,9 @@ protected:
 
     void TearDown() override
     {
+        QDesktopServices::unsetUrlHandler(u"http"_s);
+        QDesktopServices::unsetUrlHandler(u"https"_s);
+
         restoreUserFolder(userDataPath, SettingsManager::getPath(u"notes"_s));
     }
 
@@ -140,13 +145,26 @@ TEST_F(NotesToolTest, CanEncrypt)
     EXPECT_NE(unencrypted.toStdString(), tool.currentPage()->content().toStdString());
 }
 
+TEST_F(NotesToolTest, CanCreateNewPageWhenChapterIsOpened)
+{
+    auto countBefore = chapter->childItems().count();
+    ASSERT_TRUE(chapter->isOpen());
+
+    QSignalSpy spy(chapter, &TreeItem::childItemsChanged);
+
+    chapter->create(chapter->creatables().at(0), u"page2.md"_s);
+    StaticAbstractTest::waitForSpy(spy, 1);
+
+    ASSERT_GT(chapter->childItems().count(), countBefore);
+}
+
 TEST_F(NotesToolTest, CanCreateAdditionalChapters)
 {
     auto countBefore = book->childItems().count();
 
     QSignalSpy spy(book, &TreeItem::childItemsChanged);
     book->create(book->creatables().at(0), u"chapter2"_s);
-    EXPECT_TRUE(spy.wait());
+    StaticAbstractTest::waitForSpy(spy, 1);
 
     ASSERT_GT(book->childItems().count(), countBefore);
 }
@@ -166,11 +184,11 @@ TEST_F(NotesToolTest, CanSavePage)
 {
     QSignalSpy htmlSpy(page0, &NoteBookPage::htmlGenerated);
     page0->setContent(u"CanSavePage"_s);
-    htmlSpy.wait();
+    StaticAbstractTest::waitForSpy(htmlSpy, 1);
 
     QSignalSpy spy(page0, &NoteBookPage::isSavedChanged);
     page0->save();
-    spy.wait();
+    StaticAbstractTest::waitForSpy(spy, 1);
 
     EXPECT_TRUE(page0->isSaved());
 }
@@ -185,8 +203,7 @@ TEST_F(NotesToolTest, CanOpenLinks)
 {
     QSignalSpy spy(&networkManager, &MockNetworkManager::replySent);
     tool.linkClicked(u"https://notes.mock"_s);
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
 }
 
 TEST_F(NotesToolTest, CanCloseUnneededPages)
@@ -212,13 +229,11 @@ TEST_F(NotesToolTest, CanClosePages)
 
     QSignalSpy spy(&tool, &NotesTool::openedPagesChanged);
     page1->close();
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
     spy.clear();
 
     page0->close();
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
 
     EXPECT_TRUE(tool.openedPages().isEmpty());
 }
@@ -227,14 +242,15 @@ TEST_F(NotesToolTest, CanRenameBook)
 {
     QSignalSpy spy(chapter, &NoteBookChapter::renameChapter);
     chapter->rename(u"TestChapterRenamed"_s);
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
     EXPECT_TRUE(chapter->wasRenamed());
     EXPECT_EQ(chapter->name().toStdString(), "TestChapterRenamed");
     EXPECT_TRUE(chapter->path().endsWith("TestChapterRenamed"_L1));
 
+    QTest::qWait(50); // wait for filesystem
+
     auto path = FileUtils::fileInDir(chapter->path(), SettingsManager::getPath(u"notes"_s));
-    QFileInfo info(path);
+    const QFileInfo info(path);
     EXPECT_TRUE(info.exists());
     EXPECT_TRUE(info.isDir());
 }
@@ -243,14 +259,15 @@ TEST_F(NotesToolTest, CanRenamePage)
 {
     QSignalSpy spy(page0, &NoteBookPage::renamePage);
     page0->rename(u"TestPageRenamed.md"_s);
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
     EXPECT_TRUE(page0->wasRenamed());
     EXPECT_EQ(page0->name().toStdString(), "TestPageRenamed.md");
     EXPECT_TRUE(page0->path().endsWith("TestPageRenamed.md"_L1));
 
+    QTest::qWait(50); // wait for filesystem
+
     auto path = FileUtils::fileInDir(page0->path(), SettingsManager::getPath(u"notes"_s));
-    QFileInfo info(path);
+    const QFileInfo info(path);
     EXPECT_TRUE(info.exists());
     EXPECT_TRUE(info.isFile());
 }
@@ -261,11 +278,10 @@ TEST_F(NotesToolTest, CanDeleteChapter)
 
     QSignalSpy spy(chapter, &NoteBookPage::destroyed);
     chapter->remove();
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
     EXPECT_FALSE(chapter);
 
-    QFileInfo info(path);
+    const QFileInfo info(path);
     EXPECT_FALSE(info.exists());
 }
 
@@ -275,11 +291,10 @@ TEST_F(NotesToolTest, CanDeletePage)
 
     QSignalSpy spy(page0, &NoteBookPage::destroyed);
     page0->remove();
-    spy.wait(50);
-    EXPECT_EQ(spy.count(), 1);
+    StaticAbstractTest::waitForSpy(spy, 1);
     EXPECT_FALSE(page0);
 
-    QFileInfo info(path);
+    const QFileInfo info(path);
     EXPECT_FALSE(info.exists());
 }
 

@@ -144,9 +144,17 @@ void NotesSaveLoad::deleteChapter()
     for (auto *page : pages)
         page->close();
 
-    delete chapter;
-
-    Files::File::deleteAsync(path);
+    Files::File::deleteAsync(path).then(chapter, [chapter](std::shared_ptr<Files::FileResult> result) {
+        if (result->success())
+        {
+            delete chapter;
+        }
+        else
+        {
+            qCCritical(gmNotesSaveLoad())
+                << "Could not delete book/chapter" << chapter->path() << ":" << result->errorMessage();
+        }
+    });
 }
 
 /**
@@ -162,9 +170,17 @@ void NotesSaveLoad::deletePage()
     const auto path = FileUtils::fileInDir(page->path(), SettingsManager::getPath(u"notes"_s));
 
     page->close();
-    delete page;
 
-    Files::File::deleteAsync(path);
+    Files::File::deleteAsync(path).then(page, [page](std::shared_ptr<Files::FileResult> result) {
+        if (result->success())
+        {
+            delete page;
+        }
+        else
+        {
+            qCCritical(gmNotesSaveLoad()) << "Could not delete page" << page->path() << ":" << result->errorMessage();
+        }
+    });
 }
 
 /**

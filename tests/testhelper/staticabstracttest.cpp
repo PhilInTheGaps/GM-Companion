@@ -28,6 +28,24 @@ auto StaticAbstractTest::getFilePathInTempDir(const QString &filename, const QTe
     return filename.isEmpty() ? tempDir.path() : tempDir.filePath(filename);
 }
 
+void StaticAbstractTest::waitForSpy(QSignalSpy &spy, int count)
+{
+    ASSERT_TRUE(spy.isValid());
+
+    if (count < 0)
+    {
+        ASSERT_TRUE(spy.wait());
+        return;
+    }
+
+    while (spy.count() < count)
+    {
+        ASSERT_TRUE(spy.wait());
+    }
+
+    ASSERT_EQ(spy.count(), count);
+}
+
 auto StaticAbstractTest::copyResourceToTempFile(const QString &resource) -> QFile *
 {
     QFile resourceFile(resource);
