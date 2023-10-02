@@ -1,4 +1,5 @@
 #include "models/customobjectlistmodel.h"
+#include <QAbstractItemModelTester>
 #include <QList>
 #include <gtest/gtest.h>
 
@@ -122,9 +123,19 @@ TEST_F(CustomObjectListTest, TestOwningModel)
     testModel(owningModel);
 }
 
+TEST_F(CustomObjectListTest, TestOwningModelUsingAbstractItemModelTester)
+{
+    QAbstractItemModelTester tester(&owningModel, QAbstractItemModelTester::FailureReportingMode::QtTest);
+}
+
 TEST_F(CustomObjectListTest, TestNonOwningModel)
 {
     testModel(nonOwningModel);
+}
+
+TEST_F(CustomObjectListTest, TestNonOwningModelUsingAbstractItemModelTester)
+{
+    QAbstractItemModelTester tester(&nonOwningModel, QAbstractItemModelTester::FailureReportingMode::QtTest);
 }
 
 #include "testcustomobjectlistmodel.moc"
