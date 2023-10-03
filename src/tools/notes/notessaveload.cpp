@@ -345,6 +345,8 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook &book) co
 {
     qCDebug(gmNotesSaveLoad()) << "Building chapters in book" << book.name() << folders;
 
+    bool createdNewChapters = false;
+
     foreach (const auto &folder, folders)
     {
         bool exists = false;
@@ -360,6 +362,7 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook &book) co
 
         if (!exists)
         {
+            createdNewChapters = true;
             const auto *chapter = new NoteBookChapter(folder, &book);
             connect(chapter, &NoteBookChapter::loadPages, this, &NotesSaveLoad::loadPages);
             connect(chapter, &NoteBookChapter::createPage, this, &NotesSaveLoad::createPage);
@@ -368,7 +371,10 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook &book) co
         }
     }
 
-    book.onChaptersLoaded();
+    if (createdNewChapters)
+    {
+        book.onChaptersLoaded();
+    }
 }
 
 /**
@@ -400,8 +406,11 @@ void NotesSaveLoad::buildPages(const QStringList &files, NoteBookChapter &chapte
         }
     }
 
-    chapter.onPagesLoaded();
-    emit pagesLoaded(pages);
+    if (!pages.isEmpty())
+    {
+        chapter.onPagesLoaded();
+        emit pagesLoaded(pages);
+    }
 }
 
 /**

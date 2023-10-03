@@ -64,8 +64,10 @@ protected:
             QSignalSpy spy(book, &TreeItem::childItemsChanged);
             book->create(book->creatables().at(0), u"chapter"_s);
             StaticAbstractTest::waitForSpy(spy, 1);
+            spy.clear();
+
             book->toggle();
-            StaticAbstractTest::waitForSpy(spy, 2);
+            StaticAbstractTest::waitForSpy(spy, 1);
 
             chapter = qobject_cast<NoteBookChapter *>(book->childItems().at(0));
             ASSERT_TRUE(chapter);

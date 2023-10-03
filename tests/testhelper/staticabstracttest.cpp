@@ -40,7 +40,7 @@ void StaticAbstractTest::waitForSpy(QSignalSpy &spy, int count)
 
     while (spy.count() < count)
     {
-        ASSERT_TRUE(spy.wait());
+        ASSERT_TRUE(spy.wait()) << "current count: " << spy.count() << ", expected count: " << count;
     }
 
     ASSERT_EQ(spy.count(), count);
