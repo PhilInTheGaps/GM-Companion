@@ -110,6 +110,7 @@ protected:
 
         tool.setCurrentPage(page0);
         tool.setEditMode(true);
+
         page0->toggle();
     }
 
@@ -142,7 +143,15 @@ TEST_F(NotesToolTest, CanConstruct)
 
 TEST_F(NotesToolTest, CanEncrypt)
 {
+    QSignalSpy spy(tool.currentPage(), &NoteBookPage::contentLoaded);
     auto unencrypted = tool.currentPage()->content();
+
+    if (unencrypted.isEmpty())
+    {
+        StaticAbstractTest::waitForSpy(spy, 1);
+        unencrypted = tool.currentPage()->content();
+    }
+
     tool.encrypt();
     EXPECT_NE(unencrypted.toStdString(), tool.currentPage()->content().toStdString());
 }
