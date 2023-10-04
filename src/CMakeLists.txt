@@ -33,6 +33,8 @@ set(SRC_AUDIO
     tools/audio/players/musicplayer.cpp
     tools/audio/players/soundplayer.h
     tools/audio/players/soundplayer.cpp
+    tools/audio/players/soundplayercontroller.h
+    tools/audio/players/soundplayercontroller.cpp
     tools/audio/players/radioplayer.h
     tools/audio/players/radioplayer.cpp
     tools/audio/players/spotifyplayer.h

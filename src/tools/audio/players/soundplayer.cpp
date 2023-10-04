@@ -1,4 +1,5 @@
 #include "soundplayer.h"
+#include "../project/audioelement.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
@@ -10,120 +11,6 @@
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioSounds, "gm.audio.sounds")
-
-SoundPlayerController::SoundPlayerController(QObject *parent) : AudioPlayer(parent)
-{
-    connect(this, &SoundPlayerController::soundsChanged, this, &SoundPlayerController::onSoundsChanged);
-}
-
-/**
- * @brief Play a sound element
- * @param element SoundElement to be played
- */
-void SoundPlayerController::play(AudioElement *element)
-{
-    if (!element) return;
-
-    qCDebug(gmAudioSounds()) << "Playing sound list:" << element->name() << "...";
-
-    if (!isSoundPlaying(element))
-    {
-        auto *player = new SoundPlayer(element, m_volume, this);
-
-        connect(player, &SoundPlayer::playerStopped, this, &SoundPlayerController::onPlayerStopped);
-        connect(this, &SoundPlayerController::setPlayerVolume, player, &SoundPlayer::setVolume);
-        connect(this, &SoundPlayerController::stopAll, player, &SoundPlayer::stop);
-        connect(this, &SoundPlayerController::stopElement, player, &SoundPlayer::stopElement);
-
-        m_players.append(player);
-        player->play();
-
-        emit soundsChanged(elements());
-    }
-}
-
-void SoundPlayerController::stop(const QString &element)
-{
-    emit stopElement(element);
-}
-
-/**
- * @brief Check if a sound element is currently playing
- * @param element SoundElement to be checked
- * @return True if element is playing
- */
-auto SoundPlayerController::isSoundPlaying(AudioElement *element) const -> bool
-{
-    qCDebug(gmAudioSounds()) << "Checking if sound" << element->name() << "is playing ...";
-
-    foreach (const auto *player, m_players)
-    {
-        if (player && (player->element() == element))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void SoundPlayerController::updateActiveElements()
-{
-    a_activeElements.clear();
-    a_activeElements.reserve(m_players.size());
-
-    foreach (const auto *player, m_players)
-    {
-        if (player)
-        {
-            a_activeElements.append(player->element());
-        }
-    }
-
-    emit activeElementsChanged();
-}
-
-/**
- * @brief Set the volume for all active sound elements
- * @param volume Volume value
- */
-void SoundPlayerController::setVolume(int linear, int logarithmic)
-{
-    m_volume = logarithmic;
-    emit setPlayerVolume(linear, logarithmic);
-}
-
-/**
- * @brief Get all active sound elements
- */
-auto SoundPlayerController::elements() const -> QList<AudioElement *>
-{
-    QList<AudioElement *> elements;
-
-    foreach (const auto *player, m_players)
-    {
-        if (player) elements.append(player->element());
-    }
-
-    return elements;
-}
-
-/**
- * @brief A sound player stopped. Remove it from list and delete it.
- */
-void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
-{
-    m_players.removeOne(player);
-    player->deleteLater();
-
-    emit soundsChanged(elements());
-}
-
-void SoundPlayerController::onSoundsChanged(const QList<AudioElement *> &sounds)
-{
-    Q_UNUSED(sounds)
-    updateActiveElements();
-}
 
 SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) : AudioPlayer(parent), m_element(element)
 {
@@ -151,12 +38,11 @@ void SoundPlayer::loadMedia(const AudioFile *file)
     switch (file->source())
     {
     case AudioFile::Source::File: {
-        if (m_fileRequestContext) m_fileRequestContext->deleteLater();
-        m_fileRequestContext = new QObject(this);
+        m_fileRequestContext = std::make_unique<QObject>();
 
         m_fileName = file->url();
         Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"sounds"_s)))
-            .then(m_fileRequestContext,
+            .then(m_fileRequestContext.get(),
                   [this](std::shared_ptr<Files::FileDataResult> result) { onFileReceived(result); });
         break;
     }
@@ -169,11 +55,8 @@ void SoundPlayer::loadMedia(const AudioFile *file)
         break;
     }
 
-    case AudioFile::Source::Youtube: {
+    case AudioFile::Source::Youtube:
         // FIXME
-        break;
-    }
-
     default:
         qCWarning(gmAudioSounds()) << "Media type" << file->source() << "is currently not supported.";
     }
@@ -329,10 +212,15 @@ void SoundPlayer::onFileReceived(std::shared_ptr<Files::FileDataResult> result)
 
     m_mediaPlayer.setSource(QUrl::fromLocalFile(file.fileName()));
 #else
-    m_mediaBuffer.close();
-    m_mediaBuffer.setData(result->data());
-    m_mediaBuffer.open(QIODevice::ReadOnly);
-    m_mediaPlayer.setSourceDevice(&m_mediaBuffer);
+    if (m_mediaBuffer)
+    {
+        m_mediaBuffer->close();
+    }
+
+    m_mediaBuffer = std::make_unique<QBuffer>();
+    m_mediaBuffer->setData(result->data());
+    m_mediaBuffer->open(QIODevice::ReadOnly);
+    m_mediaPlayer.setSourceDevice(m_mediaBuffer.get());
 #endif
 
     m_audioOutput.setMuted(false);

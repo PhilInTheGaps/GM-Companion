@@ -6,7 +6,7 @@
 #include "mpris/mprismanager.h"
 #include "players/musicplayer.h"
 #include "players/radioplayer.h"
-#include "players/soundplayer.h"
+#include "players/soundplayercontroller.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJSEngine>
 #include <QQmlEngine>
