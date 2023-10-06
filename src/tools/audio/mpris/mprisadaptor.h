@@ -1,4 +1,5 @@
 #pragma once
+#ifndef NO_DBUS
 
 #include <QDBusAbstractAdaptor>
 #include <QObject>
@@ -18,31 +19,31 @@ class MprisAdaptor : public QDBusAbstractAdaptor
 public:
     explicit MprisAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent){};
 
-    [[nodiscard]] bool canQuit() const
+    [[nodiscard]] auto canQuit() const -> bool
     {
         return false;
     }
-    [[nodiscard]] bool canRaise() const
+    [[nodiscard]] auto canRaise() const -> bool
     {
         return false;
     }
-    [[nodiscard]] bool hasTrackList() const
+    [[nodiscard]] auto hasTrackList() const -> bool
     {
         return false;
     }
-    [[nodiscard]] QString identity() const
+    [[nodiscard]] auto identity() const -> QString
     {
         return QStringLiteral("GM-Companion");
     }
-    [[nodiscard]] QString desktopEntry() const
+    [[nodiscard]] auto desktopEntry() const -> QString
     {
         return QStringLiteral("gm-companion");
     }
-    [[nodiscard]] QStringList supportedUriSchemes() const
+    [[nodiscard]] auto supportedUriSchemes() const -> QStringList
     {
         return {};
     }
-    [[nodiscard]] QStringList supportedMimeTypes() const
+    [[nodiscard]] auto supportedMimeTypes() const -> QStringList
     {
         return {};
     }
@@ -51,3 +52,5 @@ public slots:
     Q_NOREPLY void Raise() const;
     Q_NOREPLY void Quit() const;
 };
+
+#endif

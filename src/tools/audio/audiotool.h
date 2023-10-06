@@ -3,7 +3,6 @@
 #include "common/abstracttool.h"
 #include "editor/audioeditor.h"
 #include "metadata/metadatareader.h"
-#include "mpris/mprismanager.h"
 #include "players/musicplayer.h"
 #include "players/radioplayer.h"
 #include "players/soundplayercontroller.h"
@@ -13,6 +12,10 @@
 #include <QStringList>
 #include <QtQml/qqmlregistration.h>
 
+#ifndef NO_DBUS
+#include "mpris/mprismanager.h"
+#endif
+
 class AudioTool : public AbstractTool
 {
     Q_OBJECT
@@ -21,10 +24,11 @@ class AudioTool : public AbstractTool
 
     READ_PROPERTY2(AudioProject *, currentProject, nullptr)
     READ_LIST_PROPERTY(AudioProject, projects)
+    AUTO_PROPERTY(QString, currentElementName)
 
     Q_PROPERTY(SoundPlayerController *soundController READ soundController CONSTANT)
 
-    Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
+    AUTO_PROPERTY_VAL2(AudioPlayer::State, playbackState, AudioPlayer::State::Initialized)
     Q_PROPERTY(qreal musicVolume READ musicVolume NOTIFY musicVolumeChanged)
     Q_PROPERTY(qreal soundVolume READ soundVolume NOTIFY soundVolumeChanged)
 
@@ -76,28 +80,22 @@ public:
     {
         soundPlayerController.stop(sound);
     }
-    [[nodiscard]] auto isPaused() const -> bool
-    {
-        return m_isPaused;
-    }
     void stop();
 
     Q_INVOKABLE void findElement(const QString &term) const;
 
     // Meta Data
-    [[nodiscard]] auto metaData() const -> AudioMetaData *
+    [[nodiscard]] auto metaData() -> AudioMetaData *
     {
         return metaDataReader.metaData();
     }
     [[nodiscard]] auto index() const -> int;
-    [[nodiscard]] auto playlist() const -> QList<AudioFile *>;
     [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
 
 public slots:
     void loadData() override;
 
 signals:
-    void isPausedChanged();
     void soundsChanged();
     void metaDataChanged();
     void currentIndexChanged();
@@ -109,8 +107,7 @@ signals:
 private slots:
     void onProjectsChanged(const std::vector<AudioProject *> &projects);
     void onCurrentScenarioChanged() const;
-    void onStartedPlaying();
-    void onMetaDataUpdated();
+    void onStateChanged(AudioPlayer::State state);
     void onSpotifyAuthorized()
     {
         emit spotifyAuthorized();
@@ -119,7 +116,10 @@ private slots:
 private:
     AudioEditor m_editor;
     MetaDataReader metaDataReader;
+
+#ifndef NO_DBUS
     MprisManager mprisManager;
+#endif
 
     // Players
     MusicPlayer musicPlayer;
@@ -127,7 +127,6 @@ private:
     RadioPlayer radioPlayer;
 
     AudioElement::Type m_musicElementType = AudioElement::Type::Music;
-    bool m_isPaused = true;
 
     // Volume
     static constexpr qreal DEFAULT_MUSIC_VOLUME = 0.25;

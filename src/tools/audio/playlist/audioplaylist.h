@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QList>
 #include <QObject>
+#include <QQmlListProperty>
 
 class AudioPlaylist
 {
@@ -15,19 +16,28 @@ public:
         pls
     };
 
-    AudioPlaylist(const QByteArray &data, QObject *parent = nullptr);
+    AudioPlaylist() = default;
+    explicit AudioPlaylist(Type type);
 
     [[nodiscard]] auto isEmpty() const -> bool;
     [[nodiscard]] auto length() const -> qsizetype;
-    [[nodiscard]] auto files() const -> QList<AudioFile *>;
     [[nodiscard]] auto type() const -> AudioPlaylist::Type;
+    [[nodiscard]] auto at(qsizetype i) const -> AudioFile *const &;
+    [[nodiscard]] auto constFirst() const -> AudioFile *const &;
+
+    [[nodiscard]] auto files() const -> QList<AudioFile *>;
+    [[nodiscard]] auto filesQml(QObject *parent) -> QQmlListProperty<AudioFile>;
+    void setFiles(const QList<AudioFile *> &files);
+    void append(AudioFile *file);
+    void insert(qsizetype index, AudioFile *file);
+
+    void replace(qsizetype index, const AudioPlaylist &other);
+    void replace(qsizetype index, const QList<AudioFile *> &files);
+
+    void shuffle();
+    void clear();
 
 private:
     QList<AudioFile *> m_files;
     Type m_type = Type::Undefined;
-
-    [[nodiscard]] static auto getType(const QByteArray &data) -> Type;
-
-    void parseM3u(const QByteArray &data, QObject *parent);
-    void parsePls(const QByteArray &data, QObject *parent);
 };

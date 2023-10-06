@@ -10,7 +10,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: AudioTool.metaData.type
+        text: AudioTool.currentElementName
         font.bold: true
     }
 
@@ -27,7 +27,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: AudioTool.metaData.artist
+        text: AudioTool.metaData.artist.join(", ")
     }
 
     CustomScrollLabel {

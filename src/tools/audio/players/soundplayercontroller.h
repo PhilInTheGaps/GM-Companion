@@ -2,6 +2,7 @@
 
 #include "audioplayer.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QNetworkAccessManager>
 
 class SoundPlayer;
 class AudioElement;
@@ -15,7 +16,7 @@ class SoundPlayerController : public AudioPlayer
     READ_LIST_PROPERTY(AudioElement, activeElements)
 
 public:
-    explicit SoundPlayerController(QObject *parent = nullptr);
+    explicit SoundPlayerController(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
 
     void play(AudioElement *elements);
     void stop(const QString &element);
@@ -40,15 +41,17 @@ public slots:
     }
 
 private:
+    QNetworkAccessManager &m_networkManager;
     QList<SoundPlayer *> m_players;
-    int m_volume = 0;
+    int m_linearVolume = 0;
+    int m_logarithmicVolume = 0;
 
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
     [[nodiscard]] auto isSoundPlaying(AudioElement *elements) const -> bool;
     void updateActiveElements();
 
 private slots:
-    void onPlayerStopped(SoundPlayer *player);
+    void onPlayerStateChanged(State state);
     void onSoundsChanged(const QList<AudioElement *> &sounds);
 
 signals:

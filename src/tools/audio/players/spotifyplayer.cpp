@@ -1,8 +1,5 @@
 #include "spotifyplayer.h"
 #include "services/spotify/spotify.h"
-#include <QDateTime>
-#include <QJsonArray>
-#include <QJsonDocument>
 #include <QLoggingCategory>
 
 Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
@@ -13,12 +10,10 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader &mDReader, QObject *parent)
     qCDebug(gmAudioSpotify()) << "Loading ...";
 
     // Timer for "current song" updates
-    m_songDurationTimer = new QTimer(this);
-    m_metaDataTimer = new QTimer(this);
-    m_metaDataTimer->setSingleShot(true);
+    m_metaDataTimer.setSingleShot(true);
 
-    connect(m_songDurationTimer, &QTimer::timeout, this, &SpotifyPlayer::onDurationTimerTimeout);
-    connect(m_metaDataTimer, &QTimer::timeout, this, &SpotifyPlayer::onMetaDataTimerTimeout);
+    connect(&m_songDurationTimer, &QTimer::timeout, this, &SpotifyPlayer::onDurationTimerTimeout);
+    connect(&m_metaDataTimer, &QTimer::timeout, this, &SpotifyPlayer::onMetaDataTimerTimeout);
 }
 
 /// The current song has ended, stop any spotify activity and notify music player
@@ -76,20 +71,21 @@ void SpotifyPlayer::play(const QString &uri)
 
         m_metaDataReader.clearMetaData();
         startMetaDataTimer();
+
+        state(AudioPlayer::State::Playing);
     };
 
     Spotify::instance()->player->play(uri).then(this, callback);
 
-    m_isPlaying = true;
-    emit startedPlaying();
+    state(AudioPlayer::State::Loading);
 }
 
 /**
- * @brief Conitinue playback
+ * @brief Continue playback
  */
 void SpotifyPlayer::play()
 {
-    if (!isSpotifyAvailable()) return;
+    if (!isSpotifyAvailable() || state() == AudioPlayer::State::Playing) return;
 
     qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
@@ -99,40 +95,42 @@ void SpotifyPlayer::play()
         startMetaDataTimer();
     });
 
-    m_isPlaying = true;
-    emit startedPlaying();
+    state(AudioPlayer::State::Playing);
 }
 
 void SpotifyPlayer::startDurationTimer(std::chrono::milliseconds interval)
 {
-    m_songDurationTimer->stop();
+    m_songDurationTimer.stop();
 
     qCDebug(gmAudioSpotify) << "Resuming timer with remaining time:" << interval.count() << "ms";
-    m_songDurationTimer->start(interval);
+    m_songDurationTimer.start(interval);
 }
 
 void SpotifyPlayer::startMetaDataTimer()
 {
-    m_metaDataTimer->start(std::chrono::seconds(1));
+    m_metaDataTimer.start(std::chrono::seconds(1));
 }
 
-/**
- * @brief Stop playback
- */
-void SpotifyPlayer::stop()
+void SpotifyPlayer::pause()
 {
-    qCDebug(gmAudioSpotify) << "Stopping playback ...";
+    if (state() != AudioPlayer::State::Playing) return;
 
-    if (!m_isPlaying) return;
+    qCDebug(gmAudioSpotify) << "Pausing playback ...";
 
-    m_songDurationTimer->stop();
-    m_metaDataTimer->stop();
+    m_songDurationTimer.stop();
+    m_metaDataTimer.stop();
 
     Spotify::instance()->player->pause().then(this, [](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 
-    m_isPlaying = false;
+    state(AudioPlayer::State::Paused);
+}
+
+void SpotifyPlayer::stop()
+{
+    pause();
+    state(AudioPlayer::State::Stopped);
 }
 
 /**
@@ -140,9 +138,9 @@ void SpotifyPlayer::stop()
  */
 void SpotifyPlayer::pausePlay()
 {
-    if (m_isPlaying)
+    if (state() == AudioPlayer::State::Playing)
     {
-        stop();
+        pause();
         return;
     }
 
@@ -203,11 +201,11 @@ void SpotifyPlayer::getCurrentSong()
             return;
         }
 
-        auto *metadata = new AudioMetaData(&m_metaDataReader);
-        metadata->title(track->track->name);
-        metadata->album(track->track->album->name);
-        metadata->artist(track->track->artistString());
-        metadata->cover(track->track->image()->url);
+        AudioMetaData metadata;
+        metadata.title(track->track->name);
+        metadata.album(track->track->album->name);
+        metadata.artist(track->track->artistNames());
+        metadata.cover(track->track->image()->url);
 
         using namespace std::chrono;
         auto duration = milliseconds(track->track->durationMs);

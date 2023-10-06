@@ -1,5 +1,7 @@
 #pragma once
+#ifndef NO_DBUS
 
+#include "../players/audioplayer.h"
 #include <QDBusAbstractAdaptor>
 #include <QDBusArgument>
 #include <QDBusObjectPath>
@@ -14,7 +16,7 @@ class MprisPlayerAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(QString LoopStatus READ loopStatus WRITE setLoopStatus)
     Q_PROPERTY(double Rate READ rate WRITE setRate)
     Q_PROPERTY(bool Shuffle READ shuffle WRITE setShuffle)
-    Q_PROPERTY(QMap<QString, QVariant> Metadata READ metadata NOTIFY metadataChanged)
+    Q_PROPERTY(QHash<QString, QVariant> Metadata READ metadata NOTIFY metadataChanged)
     Q_PROPERTY(double Volume READ volume WRITE setVolume)
     Q_PROPERTY(qlonglong Position READ position)
     Q_PROPERTY(double MinimumRate READ minimumRate)
@@ -33,7 +35,7 @@ public:
     {
         return m_PlaybackStatus;
     }
-    void setPlaybackStatus(int status);
+    void setPlaybackStatus(AudioPlayer::State status);
 
     [[nodiscard]] auto loopStatus() const -> QString
     {
@@ -59,11 +61,11 @@ public:
     { /* Not Implemented */
     }
 
-    [[nodiscard]] auto metadata() const -> QMap<QString, QVariant>
+    [[nodiscard]] auto metadata() const -> QHash<QString, QVariant>
     {
         return m_Metadata;
     }
-    void setMetadata(const QMap<QString, QVariant> &data);
+    void setMetadata(const QHash<QString, QVariant> &data);
 
     [[nodiscard]] auto volume() const -> double
     {
@@ -71,7 +73,7 @@ public:
     }
     void setVolume(double /*volume*/) const
     {
-    } // emit changeVolume(volume);
+    }
 
     [[nodiscard]] auto position() const -> qlonglong
     {
@@ -116,7 +118,7 @@ private:
     QString m_LoopStatus;
     double m_Volume = 0;
     bool m_Shuffle = false;
-    QMap<QString, QVariant> m_Metadata;
+    QHash<QString, QVariant> m_Metadata;
     qlonglong m_Position = 0;
     QTemporaryFile m_tempArtFile;
 
@@ -131,7 +133,7 @@ signals:
     void play();
 
     void playbackStatusChanged(QString);
-    void metadataChanged(QMap<QString, QVariant>);
+    void metadataChanged(QHash<QString, QVariant>);
 
 public slots:
     Q_NOREPLY void Next()
@@ -164,3 +166,5 @@ public slots:
     Q_NOREPLY void SetPosition(const QDBusObjectPath &, qlonglong) const;
     Q_NOREPLY void OpenUri(const QString &) const;
 };
+
+#endif

@@ -20,6 +20,7 @@ struct SpotifyTrack : public BaseSpotifyElement
     QSharedPointer<SpotifyAlbumInfo> album;
     QList<QSharedPointer<SpotifyArtist>> artists;
 
+    [[nodiscard]] auto artistNames() const -> QStringList;
     [[nodiscard]] auto artistString() const -> QString;
     [[nodiscard]] auto image() const -> QSharedPointer<SpotifyImage>;
 

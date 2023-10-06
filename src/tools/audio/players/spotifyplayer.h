@@ -1,18 +1,10 @@
-#ifndef SPOTIFYPLAYER_H
-#define SPOTIFYPLAYER_H
-
-#include <QBuffer>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QPointer>
-#include <QQueue>
-#include <QTimer>
-#include <chrono>
-#include <gsl/gsl>
+#pragma once
 
 #include "../metadata/metadatareader.h"
 #include "../project/audioelement.h"
 #include "audioplayer.h"
+#include <QTimer>
+#include <chrono>
 
 class SpotifyPlayer : public AudioPlayer
 {
@@ -24,10 +16,7 @@ public:
 public slots:
     void play(const QString &uri);
     void play() override;
-    void pause() override
-    {
-        stop();
-    }
+    void pause() override;
     void stop() override;
     void pausePlay();
     void next() override;
@@ -36,10 +25,9 @@ public slots:
 
 private:
     MetaDataReader &m_metaDataReader;
-    gsl::owner<QTimer *> m_songDurationTimer = nullptr;
-    gsl::owner<QTimer *> m_metaDataTimer = nullptr;
+    QTimer m_songDurationTimer;
+    QTimer m_metaDataTimer;
 
-    bool m_isPlaying = false;
     int m_volume = 0;
     QString m_currentUri;
 
@@ -55,9 +43,6 @@ private slots:
 
 signals:
     void songNamesChanged();
-    void startedPlaying();
     void songEnded();
     void receivedElementIcon(AudioElement *element);
 };
-
-#endif // SPOTIFYPLAYER_H

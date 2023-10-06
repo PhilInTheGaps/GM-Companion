@@ -1,23 +1,11 @@
 #include "audioplaylist.h"
-#include "utils/networkutils.h"
-#include <QRegularExpression>
-#include <QTextStream>
+#include "utils/utils.h"
+#include <QRandomGenerator>
 
 using namespace Qt::Literals::StringLiterals;
 
-AudioPlaylist::AudioPlaylist(const QByteArray &data, QObject *parent) : m_type(getType(data))
+AudioPlaylist::AudioPlaylist(Type type) : m_type(type)
 {
-    switch (m_type)
-    {
-    case Type::m3u:
-        parseM3u(data, parent);
-        break;
-    case Type::pls:
-        parsePls(data, parent);
-        break;
-    default:
-        break;
-    }
 }
 
 auto AudioPlaylist::isEmpty() const -> bool
@@ -35,57 +23,67 @@ auto AudioPlaylist::files() const -> QList<AudioFile *>
     return m_files;
 }
 
+auto AudioPlaylist::filesQml(QObject *parent) -> QQmlListProperty<AudioFile>
+{
+    return QQmlListProperty(parent, &m_files);
+}
+
 auto AudioPlaylist::type() const -> AudioPlaylist::Type
 {
     return m_type;
 }
 
-auto AudioPlaylist::getType(const QByteArray &data) -> AudioPlaylist::Type
+auto AudioPlaylist::at(qsizetype i) const -> AudioFile *const &
 {
-    QTextStream stream(data, QIODeviceBase::ReadOnly);
-    const auto line = stream.readLine();
-
-    if (line.isNull() || line.isEmpty()) return Type::Undefined;
-
-    if (line.trimmed() == "[playlist]"_L1) return Type::pls;
-
-    return Type::m3u;
+    return m_files.at(i);
 }
 
-void AudioPlaylist::parseM3u(const QByteArray &data, QObject *parent)
+auto AudioPlaylist::constFirst() const -> AudioFile *const &
 {
-    QTextStream stream(data, QIODeviceBase::ReadOnly);
+    return m_files.constFirst();
+}
 
-    QString line;
-    while (!(line = stream.readLine().trimmed()).isNull())
+void AudioPlaylist::setFiles(const QList<AudioFile *> &files)
+{
+    m_files = files;
+}
+
+void AudioPlaylist::append(AudioFile *file)
+{
+    if (!file) return;
+    m_files.append(file);
+}
+
+void AudioPlaylist::insert(qsizetype index, AudioFile *file)
+{
+    if (!file) return;
+    m_files.insert(index, file);
+}
+
+void AudioPlaylist::replace(qsizetype index, const AudioPlaylist &other)
+{
+    replace(index, other.m_files);
+}
+
+void AudioPlaylist::replace(qsizetype index, const QList<AudioFile *> &files)
+{
+    if (!Utils::isInBounds(m_files, index)) return;
+
+    m_files.removeAt(index);
+
+    foreach (auto *file, files)
     {
-        // header type line, ignore for now
-        if (line.startsWith("#"_L1)) continue;
-
-        const auto isFromWeb = NetworkUtils::isHttpUrl(line);
-
-        m_files << new AudioFile(line, isFromWeb ? AudioFile::Source::Web : AudioFile::Source::File, u""_s, parent);
+        m_files.insert(index, file);
+        index++;
     }
 }
 
-void AudioPlaylist::parsePls(const QByteArray &data, QObject *parent)
+void AudioPlaylist::shuffle()
 {
-    QTextStream stream(data, QIODeviceBase::ReadOnly);
+    std::shuffle(m_files.begin(), m_files.end(), *QRandomGenerator::system());
+}
 
-    QString line;
-    while (!(line = stream.readLine().trimmed()).isNull())
-    {
-        static QRegularExpression const regex(uR"([fF]ile(?<index>\d+)=(?<url>.+))"_s);
-        auto match = regex.match(line);
-
-        if (match.isValid() && match.hasMatch())
-        {
-            const auto index = match.captured("index"_L1).toInt() - 1;
-            const auto url = match.captured("url"_L1);
-            const auto isFromWeb = NetworkUtils::isHttpUrl(url);
-
-            m_files.insert(
-                index, new AudioFile(url, isFromWeb ? AudioFile::Source::Web : AudioFile::Source::File, u""_s, parent));
-        }
-    }
+void AudioPlaylist::clear()
+{
+    m_files.clear();
 }

@@ -36,6 +36,7 @@ set(SOURCES
     tools/audio/testaudiosaveload.cpp
     tools/audio/testaudioaddons.cpp
     tools/audio/testaudioplaylist.cpp
+    tools/audio/testresolvingaudioplaylist.cpp
     tools/converter/testconverterprojectupgrader.cpp
     tools/converter/testconvertertool.cpp
     tools/converter/testconvertereditor.cpp

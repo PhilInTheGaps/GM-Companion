@@ -1,98 +1,40 @@
 #pragma once
 
 #include "../project/audioelement.h"
-#include "audioplayer.h"
+#include "bufferedaudioplayer.h"
 #include "spotifyplayer.h"
-#include "thirdparty/propertyhelper/PropertyHelper.h"
-#include <QAudioOutput>
-#include <QMediaPlayer>
 #include <QPointer>
-#include <QQmlListProperty>
-#include <gsl/gsl>
-
-#ifdef Q_OS_WIN
-#include <QTemporaryDir>
-#endif
+#include <memory>
 
 namespace Files
 {
 class FileDataResult;
 }
 
-class MusicPlayer : public AudioPlayer
+class MusicPlayer : public BufferedAudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(MetaDataReader &metaDataReader, QObject *parent = nullptr);
-
-    void play(AudioElement *element);
-    void setIndex(int index);
-
-    [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
-
-    AUTO_PROPERTY_VAL2(int, playlistIndex, 0);
-    READ_PROPERTY(QList<AudioFile *>, playlist)
+    explicit MusicPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader,
+                         QObject *parent = nullptr);
 
 public slots:
+    void play(AudioElement *element) override;
     void play() override;
     void pause() override;
     void stop() override;
     void setVolume(int linear, int logarithmic) override;
-    void next() override;
     void again() override;
 
 private:
+    void handleUnsupportedMediaSource(const AudioFile &file) override;
+    void loadSpotifyFile(const AudioFile &file);
+    void loadYoutubeFile(const AudioFile &file) const;
+
     SpotifyPlayer m_spotifyPlayer;
-    QMediaPlayer m_mediaPlayer;
-    QAudioOutput m_audioOutput;
-    AudioElement *m_currentElement = nullptr;
-
-    /// Context object to easily stop file data requests by deleting the object
-    QObject *m_fileRequestContext = nullptr;
-    QObject *m_playlistLoadingContext = nullptr;
-
-    AudioFile::Source m_currentFileSource = AudioFile::Source::Unknown;
-
-    QBuffer m_mediaBuffer;
-    QString m_fileName;
-
-#ifdef Q_OS_WIN
-    QTemporaryDir m_tempDir;
-#endif
-
-    void loadMedia(AudioFile *file);
-    void loadLocalFile(AudioFile *file);
-    void loadWebFile(AudioFile *file);
-    void loadSpotifyFile(AudioFile *file);
-    void loadYoutubeFile(AudioFile *file) const;
-
-    auto loadPlaylist() -> QFuture<void>;
-    void clearPlaylist();
-    void loadTrackNamesAsync() const;
-    static void loadSpotifyTrackNamesAsync(const QList<AudioFile *> &tracks);
-
-    auto loadPlaylistRecursive(int index = 0) -> QFuture<void>;
-    auto loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) -> QFuture<void>;
-    void applyShuffleMode();
-    void startPlaying();
-
-    void connectPlaybackStateSignals() const;
-    void connectMetaDataSignals(MetaDataReader &metaDataReader) const;
-
-    void printPlaylist() const;
 
 private slots:
-    void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
-    void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
-    void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
-    void onFileReceived(std::shared_ptr<Files::FileDataResult> result);
     void onSpotifySongEnded();
-
-signals:
-    void startedPlaying();
-    void clearMetaData();
-    void metaDataChanged(QMediaPlayer *mediaPlayer);
-    void metaDataChanged(const QString &key, const QVariant &value);
-    void metaDataChanged(const QByteArray &data);
-    void currentIndexChanged();
+    void onSpotifyStateChanged(AudioPlayer::State state);
+    void onStateChanged(AudioPlayer::State state);
 };

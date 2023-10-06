@@ -1,5 +1,6 @@
 #pragma once
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
@@ -11,6 +12,18 @@ class AudioPlayer : public QObject
 
 public:
     using QObject::QObject;
+
+    enum class State
+    {
+        Initialized,
+        Playing,
+        Paused,
+        Stopped,
+        Loading
+    };
+    Q_ENUM(State)
+
+    AUTO_PROPERTY_VAL2(State, state, State::Initialized)
 
 public slots:
     virtual void play() = 0;

@@ -5,7 +5,8 @@
 
 Q_LOGGING_CATEGORY(gmAudioSoundController, "gm.audio.sounds.controller")
 
-SoundPlayerController::SoundPlayerController(QObject *parent) : AudioPlayer(parent)
+SoundPlayerController::SoundPlayerController(QNetworkAccessManager &networkManager, QObject *parent)
+    : AudioPlayer(parent), m_networkManager(networkManager)
 {
     connect(this, &SoundPlayerController::soundsChanged, this, &SoundPlayerController::onSoundsChanged);
 }
@@ -22,15 +23,16 @@ void SoundPlayerController::play(AudioElement *element)
 
     if (!isSoundPlaying(element))
     {
-        auto *player = new SoundPlayer(element, m_volume, this);
+        auto *player = new SoundPlayer(m_networkManager, this);
+        player->setVolume(m_linearVolume, m_logarithmicVolume);
 
-        connect(player, &SoundPlayer::playerStopped, this, &SoundPlayerController::onPlayerStopped);
+        connect(player, &SoundPlayer::stateChanged, this, &SoundPlayerController::onPlayerStateChanged);
         connect(this, &SoundPlayerController::setPlayerVolume, player, &SoundPlayer::setVolume);
         connect(this, &SoundPlayerController::stopAll, player, &SoundPlayer::stop);
         connect(this, &SoundPlayerController::stopElement, player, &SoundPlayer::stopElement);
 
         m_players.append(player);
-        player->play();
+        player->play(element);
 
         emit soundsChanged(elements());
     }
@@ -83,7 +85,8 @@ void SoundPlayerController::updateActiveElements()
  */
 void SoundPlayerController::setVolume(int linear, int logarithmic)
 {
-    m_volume = logarithmic;
+    m_linearVolume = linear;
+    m_logarithmicVolume = logarithmic;
     emit setPlayerVolume(linear, logarithmic);
 }
 
@@ -102,15 +105,19 @@ auto SoundPlayerController::elements() const -> QList<AudioElement *>
     return elements;
 }
 
-/**
- * @brief A sound player stopped. Remove it from list and delete it.
- */
-void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
+void SoundPlayerController::onPlayerStateChanged(State state)
 {
-    m_players.removeOne(player);
-    player->deleteLater();
+    // A sound player stopped. Remove it from list and delete it.
+    if (state == State::Stopped)
+    {
+        auto *player = qobject_cast<SoundPlayer *>(sender());
+        if (!player) return;
 
-    emit soundsChanged(elements());
+        m_players.removeOne(player);
+        player->deleteLater();
+
+        emit soundsChanged(elements());
+    }
 }
 
 void SoundPlayerController::onSoundsChanged(const QList<AudioElement *> &sounds)

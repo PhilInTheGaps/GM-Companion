@@ -24,7 +24,7 @@ public:
         return list;
     }
 
-    template <typename T> static auto isInBounds(const QList<T> &list, int index) -> bool
+    template <typename T> static auto isInBounds(const QList<T> &list, qsizetype index) -> bool
     {
         return index > -1 && index < list.length();
     }

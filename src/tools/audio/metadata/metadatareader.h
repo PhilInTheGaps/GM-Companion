@@ -1,37 +1,33 @@
 #pragma once
 
 #include "audiometadata.h"
+#include <QByteArray>
 #include <QMediaMetaData>
-#include <QMediaPlayer>
-#include <QObject>
-#include <QPixmap>
 #include <QTemporaryFile>
+#include <QVariant>
+#include <memory>
 
-class MetaDataReader : public QObject
+class MetaDataReader
 {
-    Q_OBJECT
 public:
-    explicit MetaDataReader(QObject *parent = nullptr);
+    MetaDataReader() = default;
 
-    [[nodiscard]] auto metaData() const -> AudioMetaData *
+    [[nodiscard]] auto metaData() -> AudioMetaData *
     {
-        return m_metaData;
+        return &m_metaData;
     }
-    void setMetaData(AudioMetaData *metaData);
+    void setMetaData(const AudioMetaData &metaData);
+
+    void setMetaData(const QString &key, const QVariant &value);
+    void setMetaData(QMediaMetaData::Key key, const QVariant &value);
+    void setMetaData(const QMediaMetaData &data);
+    void setDuration(qint64 duration);
+
+    void loadMetaData(const QString &path, const QByteArray &data);
+
+    void clearMetaData();
 
 private:
-    AudioMetaData *m_metaData = nullptr;
-    QTemporaryFile *m_coverFile = nullptr;
-
-signals:
-    void metaDataChanged();
-
-public slots:
-    void updateMetaData(QMediaPlayer *mediaPlayer);
-    void updateMetaData(const QMediaMetaData &metaData);
-    void updateMetaData(const QString &key, const QVariant &value);
-    void updateMetaData(QMediaMetaData::Key key, const QVariant &value);
-    void updateMetaData(const QByteArray &data);
-    void updateDuration(qint64 duration);
-    void clearMetaData();
+    AudioMetaData m_metaData;
+    std::unique_ptr<QTemporaryFile> m_coverFile = nullptr;
 };

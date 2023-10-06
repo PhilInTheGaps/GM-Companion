@@ -1,68 +1,71 @@
-#include "mprismanager.h"
-
 #ifndef NO_DBUS
+#include "mprismanager.h"
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusMetaType>
 #include <QDBusObjectPath>
 #include <QStringList>
 #include <utility>
-#endif
 
 using namespace Qt::Literals::StringLiterals;
 
-MprisManager::MprisManager(QObject *parent) : QObject(parent)
+MprisManager::MprisManager(QObject *parent)
+    : QObject(parent), m_mprisAdaptor(new MprisAdaptor(this)), m_mprisPlayerAdaptor(new MprisPlayerAdaptor(this))
 {
-#ifndef NO_DBUS
-    mprisAdaptor = new MprisAdaptor(this);
-    mprisPlayerAdaptor = new MprisPlayerAdaptor(this);
-
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::next, this, &MprisManager::next);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::changeVolume, this, &MprisManager::changeVolume);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::pause, this, &MprisManager::pause);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::previous, this, &MprisManager::previous);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::playPause, this, &MprisManager::playPause);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::stop, this, &MprisManager::stop);
-    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::play, this, &MprisManager::play);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::next, this, &MprisManager::next);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::changeVolume, this, &MprisManager::changeVolume);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::pause, this, &MprisManager::pause);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::previous, this, &MprisManager::previous);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::playPause, this, &MprisManager::playPause);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::stop, this, &MprisManager::stop);
+    connect(m_mprisPlayerAdaptor, &MprisPlayerAdaptor::play, this, &MprisManager::play);
 
     QDBusConnection::sessionBus().registerObject(u"/org/mpris/MediaPlayer2"_s, this);
     QDBusConnection::sessionBus().registerService(u"org.mpris.MediaPlayer2.gm_companion"_s);
-#endif
+
+    m_metaData[u"mpris:trackid"_s] =
+        QVariant::fromValue(QDBusObjectPath(u"/lol/rophil/gm_companion/audio/current_track"_s));
+    sendUpdatedMetadata();
 }
 
-void MprisManager::setPlaybackStatus(int status)
+void MprisManager::setPlaybackStatus(AudioPlayer::State status)
 {
-#ifndef NO_DBUS
-    mprisPlayerAdaptor->setPlaybackStatus(status);
-    sendMprisUpdateSignal(u"PlaybackStatus"_s, mprisPlayerAdaptor->playbackStatus());
-#endif
+    m_mprisPlayerAdaptor->setPlaybackStatus(status);
+    sendMprisUpdateSignal(u"PlaybackStatus"_s, m_mprisPlayerAdaptor->playbackStatus());
 }
 
 void MprisManager::setVolume(double volume)
 {
-#ifndef NO_DBUS
-    mprisPlayerAdaptor->setVolume(volume);
-#endif
+    m_mprisPlayerAdaptor->setVolume(volume);
 }
 
-void MprisManager::updateMetaData(AudioMetaData *metaData)
+void MprisManager::setMetaDataReader(MetaDataReader *reader)
 {
-#ifndef NO_DBUS
-    QMap<QString, QVariant> map;
-    map.insert(u"mpris:trackid"_s,
-               QVariant::fromValue(QDBusObjectPath(u"/lol/rophil/gm_companion/audio/current_track"_s)));
-    map.insert(u"mpris:length"_s, metaData->length());
-    map.insert(u"mpris:artUrl"_s, metaData->cover());
-    map.insert(u"xesam:album"_s, metaData->album().isEmpty() ? tr("Unknown Album") : metaData->album());
-    map.insert(u"xesam:albumArtist"_s,
-               metaData->artist().isEmpty() ? QStringList({tr("Unknown Artist")}) : QStringList({metaData->artist()}));
-    map.insert(u"xesam:artist"_s,
-               metaData->artist().isEmpty() ? QStringList({tr("Unknown Artist")}) : QStringList({metaData->artist()}));
-    map.insert(u"xesam:title"_s, metaData->title().isEmpty() ? tr("Unknown Title") : metaData->title());
+    connect(reader->metaData(), &AudioMetaData::titleChanged, this, [this](const QString &title) {
+        m_metaData[u"xesam:title"_s] = title;
+        sendUpdatedMetadata();
+    });
 
-    mprisPlayerAdaptor->setMetadata(map);
-    sendMprisUpdateSignal(u"Metadata"_s, map);
-#endif
+    connect(reader->metaData(), &AudioMetaData::artistChanged, this, [this](const QStringList &artist) {
+        m_metaData[u"xesam:artist"_s] = artist;
+        m_metaData[u"xesam:albumArtist"_s] = artist;
+        sendUpdatedMetadata();
+    });
+
+    connect(reader->metaData(), &AudioMetaData::albumChanged, this, [this](const QString &album) {
+        m_metaData[u"xesam:album"_s] = album;
+        sendUpdatedMetadata();
+    });
+
+    connect(reader->metaData(), &AudioMetaData::coverChanged, this, [this](const QString &cover) {
+        m_metaData[u"mpris:artUrl"_s] = cover;
+        sendUpdatedMetadata();
+    });
+
+    connect(reader->metaData(), &AudioMetaData::lengthChanged, this, [this](qint64 length) {
+        m_metaData[u"mpris:length"_s] = length;
+        sendUpdatedMetadata();
+    });
 }
 
 /**
@@ -72,7 +75,6 @@ void MprisManager::updateMetaData(AudioMetaData *metaData)
  */
 void MprisManager::sendMprisUpdateSignal(const QString &property, const QVariant &value) const
 {
-#ifndef NO_DBUS
     QDBusMessage signal = QDBusMessage::createSignal(u"/org/mpris/MediaPlayer2"_s, u"org.freedesktop.DBus.Properties"_s,
                                                      u"PropertiesChanged"_s);
 
@@ -86,5 +88,12 @@ void MprisManager::sendMprisUpdateSignal(const QString &property, const QVariant
     signal << invalidatedProps;
 
     QDBusConnection::sessionBus().send(signal);
-#endif
 }
+
+void MprisManager::sendUpdatedMetadata()
+{
+    m_mprisPlayerAdaptor->setMetadata(m_metaData);
+    sendMprisUpdateSignal(u"Metadata"_s, m_metaData);
+}
+
+#endif

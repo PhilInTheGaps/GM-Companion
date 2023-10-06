@@ -29,6 +29,8 @@ set(SRC_AUDIO
     tools/audio/editor/unsplash/unsplashparser.cpp
     tools/audio/players/audioplayer.h
     tools/audio/players/audioplayer.cpp
+    tools/audio/players/bufferedaudioplayer.h
+    tools/audio/players/bufferedaudioplayer.cpp
     tools/audio/players/musicplayer.h
     tools/audio/players/musicplayer.cpp
     tools/audio/players/soundplayer.h
@@ -41,6 +43,10 @@ set(SRC_AUDIO
     tools/audio/players/spotifyplayer.cpp
     tools/audio/playlist/audioplaylist.h
     tools/audio/playlist/audioplaylist.cpp
+    tools/audio/playlist/audioplaylistfactory.h
+    tools/audio/playlist/audioplaylistfactory.cpp
+    tools/audio/playlist/resolvingaudioplaylist.h
+    tools/audio/playlist/resolvingaudioplaylist.cpp
     tools/audio/project/audioproject.h
     tools/audio/project/audioproject.cpp
     tools/audio/project/audiocategory.h

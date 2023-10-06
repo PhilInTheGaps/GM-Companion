@@ -1,3 +1,4 @@
+#ifndef NO_DBUS
 #include "mprisplayeradaptor.h"
 #include <QLoggingCategory>
 
@@ -5,27 +6,27 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmMprisPlayer, "gm.mpris.player")
 
-void MprisPlayerAdaptor::setPlaybackStatus(int status)
+void MprisPlayerAdaptor::setPlaybackStatus(AudioPlayer::State status)
 {
     switch (status)
     {
-    case 0:
-        m_PlaybackStatus = u"Stopped"_s;
-        break;
-
-    case 1:
+    case AudioPlayer::State::Playing:
         m_PlaybackStatus = u"Playing"_s;
         break;
 
-    case 2:
+    case AudioPlayer::State::Paused:
         m_PlaybackStatus = u"Paused"_s;
+        break;
+
+    default:
+        m_PlaybackStatus = u"Stopped"_s;
         break;
     }
 
     emit playbackStatusChanged(m_PlaybackStatus);
 }
 
-void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant> &data)
+void MprisPlayerAdaptor::setMetadata(const QHash<QString, QVariant> &data)
 {
     qCDebug(gmMprisPlayer()) << "Updating mpris metadata ...";
 
@@ -47,3 +48,5 @@ void MprisPlayerAdaptor::OpenUri(const QString & /*Uri*/) const
 {
     // Not implemented
 }
+
+#endif

@@ -55,7 +55,7 @@ auto SpotifyTrack::fromJsonArray(const QByteArray &data) -> std::vector<QSharedP
     return SpotifyTrack::fromJsonArray(json["tracks"_L1].toArray());
 }
 
-auto SpotifyTrack::artistString() const -> QString
+auto SpotifyTrack::artistNames() const -> QStringList
 {
     QStringList names;
     names.reserve(artists.count());
@@ -64,8 +64,12 @@ auto SpotifyTrack::artistString() const -> QString
     {
         names << artist->name;
     }
+    return names;
+}
 
-    return names.join(u", "_s);
+auto SpotifyTrack::artistString() const -> QString
+{
+    return artistNames().join(u", "_s);
 }
 
 auto SpotifyTrack::image() const -> QSharedPointer<SpotifyImage>

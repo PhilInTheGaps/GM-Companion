@@ -14,7 +14,8 @@ using namespace Qt::Literals::StringLiterals;
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
 AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
-    : AbstractTool(parent), m_editor(engine), musicPlayer(metaDataReader),
+    : AbstractTool(parent), m_editor(engine), musicPlayer(*engine->networkAccessManager(), metaDataReader),
+      soundPlayerController(*engine->networkAccessManager()),
       radioPlayer(*engine->networkAccessManager(), metaDataReader)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
@@ -23,35 +24,30 @@ AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
     connect(Spotify::instance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
-    connect(&musicPlayer, &MusicPlayer::startedPlaying, this, &AudioTool::onStartedPlaying);
-    connect(&musicPlayer, &MusicPlayer::playlistChanged, this, [this](const QList<AudioFile *> &files) {
-        Q_UNUSED(files);
-        emit playlistChanged();
-    });
-    connect(&musicPlayer, &MusicPlayer::playlistChanged, this,
-            [](const QList<AudioFile *> &files) { qCDebug(gmAudioTool()) << "Playlist Changed!" << files.length(); });
-    connect(&musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
+    connect(&musicPlayer, &MusicPlayer::stateChanged, this, &AudioTool::onStateChanged);
+    connect(&musicPlayer, &MusicPlayer::playlistChanged, this, &AudioTool::playlistChanged);
+    connect(&musicPlayer, &MusicPlayer::playlistIndexChanged, this, &AudioTool::currentIndexChanged);
 
     // Radio Player
-    connect(&radioPlayer, &RadioPlayer::startedPlaying, this, &AudioTool::onStartedPlaying);
+    connect(&radioPlayer, &RadioPlayer::stateChanged, this, &AudioTool::onStateChanged);
 
-    // Meta Data
-    connect(&metaDataReader, &MetaDataReader::metaDataChanged, this, &AudioTool::onMetaDataUpdated);
-
+#ifndef NO_DBUS
+    mprisManager.setMetaDataReader(&metaDataReader);
     // Mpris
     connect(&mprisManager, &MprisManager::play, this, [this]() {
-        if (m_isPaused) playPause();
+        if (playbackState() != AudioPlayer::State::Playing) playPause();
     });
     connect(&mprisManager, &MprisManager::playPause, this, [this]() { playPause(); });
     connect(&mprisManager, &MprisManager::pause, this, [this]() {
-        if (!m_isPaused) playPause();
+        if (playbackState() == AudioPlayer::State::Playing) playPause();
     });
     connect(&mprisManager, &MprisManager::stop, this, [this]() {
-        if (!m_isPaused) playPause();
+        if (playbackState() == AudioPlayer::State::Playing) playPause();
     });
     connect(&mprisManager, &MprisManager::next, this, [this]() { next(); });
     connect(&mprisManager, &MprisManager::previous, this, [this]() { again(); });
     connect(&mprisManager, &MprisManager::changeVolume, this, [this](double volume) { setMusicVolume(volume); });
+#endif
 }
 
 auto AudioTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AudioTool *
@@ -145,36 +141,40 @@ void AudioTool::play(AudioElement *element)
         return;
     }
 
+    auto prepareMusic = [this](const AudioElement &element) {
+        metaDataReader.clearMetaData();
+        m_musicElementType = element.type();
+        setMusicVolume(m_musicVolume);
+        currentElementName(element.name());
+    };
+
     switch (element->type())
     {
     case AudioElement::Type::Music:
-        m_musicElementType = element->type();
+        prepareMusic(*element);
         radioPlayer.stop();
         musicPlayer.play(element);
-        setMusicVolume(m_musicVolume);
         break;
-
+    case AudioElement::Type::Radio:
+        prepareMusic(*element);
+        emit playlistChanged();
+        musicPlayer.stop();
+        radioPlayer.play(element);
+        break;
     case AudioElement::Type::Sound:
         soundPlayerController.play(element);
         setSoundVolume(m_soundVolume);
         break;
-
-    case AudioElement::Type::Radio:
-        m_musicElementType = element->type();
-        musicPlayer.stop();
-        radioPlayer.play(element);
-        setMusicVolume(m_musicVolume);
-        break;
     }
-
-    metaDataReader.updateMetaData(QMediaMetaData::MediaType, element->name());
 }
 
-void AudioTool::onStartedPlaying()
+void AudioTool::onStateChanged(AudioPlayer::State state)
 {
-    m_isPaused = false;
-    emit isPausedChanged();
-    mprisManager.setPlaybackStatus(1);
+    playbackState(state);
+
+#ifndef NO_DBUS
+    mprisManager.setPlaybackStatus(state);
+#endif
 }
 
 /**
@@ -197,21 +197,7 @@ void AudioTool::next()
  */
 void AudioTool::playPause()
 {
-    if (m_isPaused)
-    {
-        switch (m_musicElementType)
-        {
-        case AudioElement::Type::Music:
-            musicPlayer.play();
-            break;
-        case AudioElement::Type::Radio:
-            radioPlayer.play();
-            break;
-        default:
-            break;
-        }
-    }
-    else
+    if (playbackState() == AudioPlayer::State::Playing)
     {
         switch (m_musicElementType)
         {
@@ -225,9 +211,19 @@ void AudioTool::playPause()
             break;
         }
 
-        m_isPaused = true;
-        emit isPausedChanged();
-        mprisManager.setPlaybackStatus(2);
+        return;
+    }
+
+    switch (m_musicElementType)
+    {
+    case AudioElement::Type::Music:
+        musicPlayer.play();
+        break;
+    case AudioElement::Type::Radio:
+        radioPlayer.play();
+        break;
+    default:
+        break;
     }
 }
 
@@ -239,8 +235,7 @@ void AudioTool::stop()
     musicPlayer.stop();
     radioPlayer.stop();
     soundPlayerController.stop();
-    m_isPaused = true;
-    emit isPausedChanged();
+    playbackState(AudioPlayer::State::Stopped);
 }
 
 /**
@@ -273,7 +268,10 @@ void AudioTool::setMusicVolume(qreal volume)
 
     musicPlayer.setVolume(linearVolume, logarithmicVolume);
     radioPlayer.setVolume(linearVolume, logarithmicVolume);
+
+#ifndef NO_DBUS
     mprisManager.setVolume(logarithmicVolume);
+#endif
 }
 
 /**
@@ -300,17 +298,6 @@ auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
                   VOLUME_FACTOR);
 }
 
-auto AudioTool::playlist() const -> QList<AudioFile *>
-{
-    switch (m_musicElementType)
-    {
-    case AudioElement::Type::Music:
-        return musicPlayer.playlist();
-    default:
-        return {};
-    }
-}
-
 auto AudioTool::playlistQml() -> QQmlListProperty<AudioFile>
 {
     switch (m_musicElementType)
@@ -331,6 +318,7 @@ auto AudioTool::index() const -> int
     switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
+        qCDebug(gmAudioTool()) << musicPlayer.playlistIndex();
         return musicPlayer.playlistIndex();
     default:
         return 0;
@@ -351,13 +339,6 @@ void AudioTool::setMusicIndex(int index)
     default:
         return;
     }
-}
-
-void AudioTool::onMetaDataUpdated()
-{
-    mprisManager.updateMetaData(metaDataReader.metaData());
-    emit metaDataChanged();
-    emit currentIndexChanged();
 }
 
 void AudioTool::findElement(const QString &term) const

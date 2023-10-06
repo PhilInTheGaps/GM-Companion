@@ -1,3 +1,4 @@
+#ifndef NO_DBUS
 #include "mprisadaptor.h"
 
 void MprisAdaptor::Raise() const
@@ -9,3 +10,5 @@ void MprisAdaptor::Quit() const
 {
     // Not implemented
 }
+
+#endif
