@@ -1,17 +1,19 @@
 #pragma once
 
-#include <QObject>
 #include <QNetworkReply>
+#include <QObject>
 
+namespace Services
+{
 class GoogleDriveReply : public QObject
 {
     Q_OBJECT
 public:
-    explicit GoogleDriveReply(QNetworkReply::NetworkError error,
-                              const QByteArray &data,
-                              const QList<QNetworkReply::RawHeaderPair> &headers,
-                              QObject *parent)
-        : QObject(parent), m_error(error), m_data(data), m_headers(headers) {}
+    explicit GoogleDriveReply(QNetworkReply::NetworkError error, const QByteArray &data,
+                              const QList<QNetworkReply::RawHeaderPair> &headers, QObject *parent)
+        : QObject(parent), m_error(error), m_data(data), m_headers(headers)
+    {
+    }
 
     [[nodiscard]] auto error() const -> QNetworkReply::NetworkError
     {
@@ -31,3 +33,4 @@ private:
     QByteArray m_data;
     QList<QNetworkReply::RawHeaderPair> m_headers;
 };
+} // namespace Services

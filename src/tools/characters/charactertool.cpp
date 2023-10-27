@@ -104,7 +104,7 @@ void CharacterTool::loadData()
 
     const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
     Files::File::getDataAsync(filePath).then(
-        this, [this](std::shared_ptr<Files::FileDataResult> result) { loadInactiveCharacters(result->data()); });
+        this, [this](const Files::FileDataResult &result) { loadInactiveCharacters(result.data()); });
 }
 
 void CharacterTool::setCurrentCategory(int index)
@@ -146,7 +146,7 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
 
         const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
         Files::File::getDataAsync(filePath).then(
-            this, [this](std::shared_ptr<Files::FileDataResult> result) { convertSettingsFile(result->data()); });
+            this, [this](const Files::FileDataResult &result) { convertSettingsFile(result.data()); });
         return;
     }
 
@@ -209,9 +209,9 @@ void CharacterTool::loadCharacters()
     qCDebug(gmCharactersTool()) << "Loaded inactive character list, now loading character files and folders ...";
 
     const auto dir = SettingsManager::getPath(u"characters"_s);
-    Files::File::listAsync(dir, true, true).then(this, [this](std::shared_ptr<Files::FileListResult> result) {
-        receivedCharacterFiles(result->files());
-        receivedCharacterFolders(result->folders());
+    Files::File::listAsync(dir, true, true).then(this, [this](const Files::FileListResult &result) {
+        receivedCharacterFiles(result.files());
+        receivedCharacterFolders(result.folders());
     });
 }
 

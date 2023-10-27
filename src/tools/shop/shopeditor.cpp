@@ -58,40 +58,33 @@ void ShopEditor::findItems()
     itemGroups({});
 
     Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
-        .then(this, [this](std::shared_ptr<Files::FileListResult> result) { onItemFilesFound(result); });
+        .then(this, [this](Files::FileListResult result) { onItemFilesFound(std::move(result)); });
 }
 
-void ShopEditor::onItemFilesFound(std::shared_ptr<Files::FileListResult> result)
+void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
 {
-    if (!result)
+    const auto &files = result.filesFull(ITEM_FILE_GLOB);
+
+    if (!result.success() || files.isEmpty())
     {
         isLoading(false);
         return;
     }
 
-    const auto &files = result->filesFull(ITEM_FILE_GLOB);
+    Files::File::getDataAsync(files).then(this, [this](const std::vector<Files::FileDataResult> &results) {
+        QList<ItemGroup *> groups = {};
+        groups.reserve(results.size());
 
-    if (files.isEmpty())
-    {
-        isLoading(false);
-        return;
-    }
+        foreach (const auto &result, results)
+        {
+            if (!result.success()) continue;
 
-    Files::File::getDataAsync(files).then(
-        this, [this](const std::vector<std::shared_ptr<Files::FileDataResult>> &results) {
-            QList<ItemGroup *> groups = {};
-            groups.reserve(results.size());
+            groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result.data()).object(), this));
+        }
 
-            foreach (const auto &result, results)
-            {
-                if (!result) continue;
-
-                groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result->data()).object(), this));
-            }
-
-            itemGroups(groups);
-            currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
-        });
+        itemGroups(groups);
+        currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
+    });
 }
 
 /// Create a project, category or shop
@@ -196,17 +189,17 @@ void ShopEditor::save()
 
     const auto basePath = SettingsManager::getPath(u"shops"_s);
 
-    QList<QFuture<std::shared_ptr<Files::FileResult>>> combinator;
+    std::vector<QFuture<Files::FileResult>> combinator;
 
     foreach (const auto *project, projects())
     {
-        combinator << Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop"_L1, basePath),
-                                             QJsonDocument(project->toJson()).toJson());
+        combinator.push_back(Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop"_L1, basePath),
+                                                    QJsonDocument(project->toJson()).toJson()));
     }
 
     QtFuture::whenAll(combinator.begin(), combinator.end())
         .then(this,
-              [this](const QList<QFuture<std::shared_ptr<Files::FileResult>>> &) {
+              [this](const QList<QFuture<Files::FileResult>> &) {
                   isSaved(true);
                   emit showInfoBar(tr("Saved!"));
               })

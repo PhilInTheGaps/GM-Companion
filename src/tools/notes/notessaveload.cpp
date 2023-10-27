@@ -22,8 +22,8 @@ void NotesSaveLoad::loadBooks()
 
     const auto directory = SettingsManager::getPath(u"notes"_s);
 
-    Files::File::listAsync(directory, false, true).then(this, [this](std::shared_ptr<Files::FileListResult> result) {
-        buildBooks(result->folders(), nullptr);
+    Files::File::listAsync(directory, false, true).then(this, [this](Files::FileListResult &&result) {
+        buildBooks(result.folders(), nullptr);
     });
 }
 
@@ -39,9 +39,9 @@ void NotesSaveLoad::loadChapters()
 
     qCDebug(gmNotesSaveLoad()) << "Loading chapters in" << directory;
 
-    Files::File::listAsync(directory, false, true)
-        .then(this,
-              [this, book](std::shared_ptr<Files::FileListResult> result) { buildChapters(result->folders(), *book); });
+    Files::File::listAsync(directory, false, true).then(this, [this, book](Files::FileListResult &&result) {
+        buildChapters(result.folders(), *book);
+    });
 }
 
 /**
@@ -56,10 +56,9 @@ void NotesSaveLoad::loadPages()
 
     qCDebug(gmNotesSaveLoad()) << "Loading pages in" << directory;
 
-    Files::File::listAsync(directory, true, false)
-        .then(this, [this, chapter](std::shared_ptr<Files::FileListResult> result) {
-            buildPages(result->files(), *chapter);
-        });
+    Files::File::listAsync(directory, true, false).then(this, [this, chapter](Files::FileListResult &&result) {
+        buildPages(result.files(), *chapter);
+    });
 }
 
 /**
@@ -75,7 +74,7 @@ void NotesSaveLoad::loadPageContent()
     qCDebug(gmNotesSaveLoad()) << "Loading page content of" << fileName;
 
     Files::File::getDataAsync(fileName).then(
-        this, [page](std::shared_ptr<Files::FileDataResult> result) { page->onContentLoaded(result->data()); });
+        this, [page](Files::FileDataResult &&result) { page->onContentLoaded(result.data()); });
 }
 
 /**
@@ -90,8 +89,9 @@ void NotesSaveLoad::savePage()
 
     qCDebug(gmNotesSaveLoad()) << "Saving page content of" << fileName;
 
-    Files::File::saveAsync(fileName, page->content().toUtf8())
-        .then(this, [page](std::shared_ptr<Files::FileResult> result) { page->setIsSaved(result->success()); });
+    Files::File::saveAsync(fileName, page->content().toUtf8()).then(this, [page](Files::FileResult &&result) {
+        page->setIsSaved(result.success());
+    });
 }
 
 /**
@@ -144,15 +144,15 @@ void NotesSaveLoad::deleteChapter()
     for (auto *page : pages)
         page->close();
 
-    Files::File::deleteAsync(path).then(chapter, [chapter](std::shared_ptr<Files::FileResult> result) {
-        if (result->success())
+    Files::File::deleteAsync(path).then(chapter, [chapter](Files::FileResult &&result) {
+        if (result.success())
         {
             delete chapter;
         }
         else
         {
             qCCritical(gmNotesSaveLoad())
-                << "Could not delete book/chapter" << chapter->path() << ":" << result->errorMessage();
+                << "Could not delete book/chapter" << chapter->path() << ":" << result.errorMessage();
         }
     });
 }
@@ -171,14 +171,14 @@ void NotesSaveLoad::deletePage()
 
     page->close();
 
-    Files::File::deleteAsync(path).then(page, [page](std::shared_ptr<Files::FileResult> result) {
-        if (result->success())
+    Files::File::deleteAsync(path).then(page, [page](Files::FileResult &&result) {
+        if (result.success())
         {
             delete page;
         }
         else
         {
-            qCCritical(gmNotesSaveLoad()) << "Could not delete page" << page->path() << ":" << result->errorMessage();
+            qCCritical(gmNotesSaveLoad()) << "Could not delete page" << page->path() << ":" << result.errorMessage();
         }
     });
 }
@@ -193,8 +193,7 @@ void NotesSaveLoad::createBook(const QString &name, TreeItem *root)
     qCDebug(gmNotesSaveLoad()) << "Creating book" << name;
 
     const auto path = FileUtils::fileInDir(name, SettingsManager::getPath(u"notes"_s));
-    Files::File::createDirAsync(path).then(
-        this, [this, name, root](std::shared_ptr<Files::FileResult>) { buildBooks({name}, root); });
+    Files::File::createDirAsync(path).then(this, [this, name, root](Files::FileResult) { buildBooks({name}, root); });
 }
 
 /**
@@ -218,8 +217,8 @@ void NotesSaveLoad::createChapter(const QString &name)
 
     const auto localPath = FileUtils::fileInDir(name, book->path());
     const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath(u"notes"_s));
-    Files::File::createDirAsync(path).then(
-        this, [this, name, book](std::shared_ptr<Files::FileResult>) { buildChapters({name}, *book); });
+    Files::File::createDirAsync(path).then(this,
+                                           [this, name, book](Files::FileResult) { buildChapters({name}, *book); });
 }
 
 /**
@@ -252,19 +251,18 @@ void NotesSaveLoad::createPage(const QString &name)
     const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath(u"notes"_s));
     const auto data = "# " + name.toUtf8() + "\n";
 
-    Files::File::saveAsync(path, data)
-        .then(this, [this, correctName, chapter](std::shared_ptr<Files::FileResult> result) {
-            if (!result)
-            {
-                qCCritical(gmNotesSaveLoad()) << "Error: Could not save page, something went very wrong!";
-                return;
-            }
+    Files::File::saveAsync(path, data).then(this, [this, correctName, chapter](Files::FileResult &&result) {
+        if (!result.success())
+        {
+            qCCritical(gmNotesSaveLoad()) << "Error: Could not save page, something went very wrong!";
+            return;
+        }
 
-            if (!result->success() || !buildPage(correctName, *chapter))
-            {
-                qCWarning(gmNotesSaveLoad()) << "Error: Could not build page!";
-            }
-        });
+        if (!buildPage(correctName, *chapter))
+        {
+            qCWarning(gmNotesSaveLoad()) << "Error: Could not build page!";
+        }
+    });
 }
 
 /**

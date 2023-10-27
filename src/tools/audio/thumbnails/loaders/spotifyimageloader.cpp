@@ -10,7 +10,18 @@
 
 Q_LOGGING_CATEGORY(gmAudioSpotifyImageLoader, "gm.audio.thumbnails.loaders.spotify")
 
+using namespace Services;
 using namespace Qt::Literals::StringLiterals;
+
+// batch requests have a maximum amount of ids, depending on the type
+constexpr int CRITICAL_ALBUM_QUEUE_LENGTH = 20;
+constexpr int CRITICAL_ARTIST_QUEUE_LENGTH = 50;
+constexpr int CRITICAL_SHOW_QUEUE_LENGTH = 50;
+constexpr int CRITICAL_EPISODE_QUEUE_LENGTH = 50;
+constexpr int CRITICAL_TRACK_QUEUE_LENGTH = 50;
+
+constexpr int DEFAULT_TIMEOUT_MS = 200;
+constexpr int RANDOM_TIMEOUT_MS = 100;
 
 auto SpotifyImageLoader::loadImageAsync(AudioFile *audioFile) -> QFuture<QPixmap>
 {
@@ -36,14 +47,17 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
 
     if (m_pendingFutures.contains(id))
     {
-        return m_pendingFutures.value(id)->future();
+        auto result = QSharedPointer<QPromise<QPixmap>>::create();
+        result->start();
+        m_pendingFutures[id].append(result);
+        return result->future();
     }
 
     enqueueRequest(id, type);
 
     auto result = QSharedPointer<QPromise<QPixmap>>::create();
     result->start();
-    m_pendingFutures[id] = result;
+    m_pendingFutures[id].append(result);
 
     startTimer(type);
 
@@ -67,29 +81,26 @@ void SpotifyImageLoader::enqueueRequest(const QString &id, SpotifyUtils::Spotify
 
 auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QPixmap>
 {
-    const auto callback = [id](QSharedPointer<SpotifyPlaylist> playlist) {
-        if (playlist.isNull()) return QFuture<QPixmap>();
+    const auto callback = [id](const SpotifyPlaylist &playlist) {
+        const auto url = playlist.images.front().url;
+        auto future = Services::Spotify::instance()->get(url, false);
 
-        const auto url = playlist->images.first()->url;
-        auto future = Spotify::instance()->get(url);
-
-        const auto callback = [id, url](gsl::owner<RestNetworkReply *> reply) {
+        const auto callback = [id, url](const RestReply &reply) {
             QPixmap image;
 
-            if (image.loadFromData(reply->data()))
+            if (image.loadFromData(reply.data()))
             {
                 AudioThumbnailCache::instance()->insertImage(url, image);
                 AudioThumbnailCache::instance()->insertImage(id, image);
             }
 
-            reply->deleteLater();
             return image;
         };
 
         return future.then(Spotify::instance(), callback);
     };
 
-    auto future = Spotify::instance()->playlists->getPlaylist(id);
+    auto future = Spotify::instance()->playlists.getPlaylist(id);
     return future.then(Spotify::instance(), callback).unwrap();
 }
 
@@ -104,8 +115,8 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
 
     qCDebug(gmAudioSpotifyImageLoader()) << "Sending batch request:" << url;
 
-    auto future = Spotify::instance()->get(url);
-    future.then(Spotify::instance(), [type](RestNetworkReply *reply) { receivedRequest(reply, type); });
+    auto future = Spotify::instance()->get(url, true);
+    future.then(Spotify::instance(), [type](RestReply &&reply) { receivedRequest(std::move(reply), type); });
 
     // Start timer again if there still are ids in the queue
     if (!getQueue(type)->isEmpty())
@@ -114,18 +125,15 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
     }
 }
 
-void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::SpotifyType type)
+void SpotifyImageLoader::receivedRequest(RestReply &&reply, SpotifyUtils::SpotifyType type)
 {
-    if (reply->hasError())
+    if (reply.hasError())
     {
-        qCWarning(gmAudioSpotifyImageLoader()) << reply->errorText();
-        reply->deleteLater();
+        qCWarning(gmAudioSpotifyImageLoader()) << reply.errorText();
         return;
     }
 
-    const auto json = QJsonDocument::fromJson(reply->data()).object();
-    reply->deleteLater();
-
+    const auto json = QJsonDocument::fromJson(reply.data()).object();
     const auto entries = json[getResultArrayName(type)].toArray();
 
     for (const auto &value : entries)
@@ -147,29 +155,36 @@ void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::
         QPixmap image;
         if (AudioThumbnailCache::tryGet(url, &image))
         {
-            auto promise = m_pendingFutures.take(id);
-            promise->addResult(image);
-            promise->finish();
+            fulfillPromises(id, image);
             continue;
         }
 
         const auto request = QNetworkRequest(url);
         auto future = Spotify::instance()->get(request);
 
-        const auto callback = [id, url](RestNetworkReply *reply) {
+        const auto callback = [id, url](const RestReply &reply) {
             QPixmap image;
-            if (image.loadFromData(reply->data()))
+            if (image.loadFromData(reply.data()))
             {
                 AudioThumbnailCache::instance()->insertImage(url, image);
                 AudioThumbnailCache::instance()->insertImage(id, image);
             }
 
-            auto promise = m_pendingFutures.take(id);
-            promise->addResult(image);
-            promise->finish();
+            fulfillPromises(id, image);
         };
 
         future.then(Spotify::instance(), callback);
+    }
+}
+
+void SpotifyImageLoader::fulfillPromises(const QString &id, const QPixmap &image)
+{
+    auto promises = m_pendingFutures.take(id);
+
+    foreach (auto &promise, promises)
+    {
+        promise->addResult(image);
+        promise->finish();
     }
 }
 
@@ -264,7 +279,7 @@ auto SpotifyImageLoader::getQueue(SpotifyUtils::SpotifyType type) -> QQueue<QStr
         break;
     default:
         qCWarning(gmAudioSpotifyImageLoader())
-            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
+            << "The spotify type" << type << "has not been implemented yet for batch image requests";
         break;
     }
 
@@ -290,7 +305,7 @@ auto SpotifyImageLoader::getCriticalQueueLength(SpotifyUtils::SpotifyType type) 
         return 0;
     default:
         qCWarning(gmAudioSpotifyImageLoader())
-            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
+            << "The spotify type" << type << "has not been implemented yet for batch image requests";
         return 0;
     }
 }
@@ -314,7 +329,7 @@ auto SpotifyImageLoader::getTimer(SpotifyUtils::SpotifyType type) -> QTimer *
         break;
     default:
         qCWarning(gmAudioSpotifyImageLoader())
-            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
+            << "The spotify type" << type << "has not been implemented yet for batch image requests";
         break;
     }
 
@@ -339,7 +354,7 @@ auto SpotifyImageLoader::getEndpoint(SpotifyUtils::SpotifyType type) -> QString
         return u"https://api.spotify.com/v1/playlists/%1/images"_s;
     default:
         qCWarning(gmAudioSpotifyImageLoader())
-            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
+            << "The spotify type" << type << "has not been implemented yet for batch image requests";
         return u""_s;
     }
 }
@@ -362,7 +377,7 @@ auto SpotifyImageLoader::getResultArrayName(SpotifyUtils::SpotifyType type) -> Q
         return u"playlists"_s;
     default:
         qCWarning(gmAudioSpotifyImageLoader())
-            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
+            << "The spotify type" << type << "has not been implemented yet for batch image requests";
         return u""_s;
     }
 }

@@ -131,7 +131,7 @@ BaseAccountPage {
                     Layout.fillWidth: true
 
                     Component.onCompleted: text = SettingsManager.getServerUrl(
-                                               "Spotify")
+                                               "Spotify", true)
                 }
             }
 

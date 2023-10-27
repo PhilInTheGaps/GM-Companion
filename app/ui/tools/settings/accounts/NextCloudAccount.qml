@@ -40,7 +40,7 @@ BaseAccountPage {
                     Layout.fillWidth: true
                     placeholderText: "https://"
                     Component.onCompleted: text = SettingsManager.getServerUrl(
-                                               "NextCloud")
+                                               "NextCloud", false)
                 }
             }
 

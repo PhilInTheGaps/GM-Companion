@@ -79,7 +79,7 @@ public:
     Q_INVOKABLE static QStringList getLanguageNames();
     Q_INVOKABLE void setLanguage(const QString &language);
 
-    Q_INVOKABLE static QString getServerUrl(const QString &service);
+    Q_INVOKABLE static QString getServerUrl(const QString &service, bool hasDefault);
     Q_INVOKABLE static void setServerUrl(const QString &url, const QString &service);
 
     Q_INVOKABLE static void setPassword(const QString &username, const QString &password, const QString &service);

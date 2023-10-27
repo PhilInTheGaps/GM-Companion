@@ -4,6 +4,9 @@
 #include <QByteArray>
 #include <QString>
 
+namespace Services
+{
+
 class SpotifyNetworkError
 {
 public:
@@ -14,3 +17,5 @@ public:
     READ_PROPERTY(QString, message);
     READ_PROPERTY(QString, reason);
 };
+
+} // namespace Services

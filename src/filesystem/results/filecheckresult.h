@@ -2,7 +2,10 @@
 
 #include "fileresult.h"
 
-class RestNetworkReply;
+namespace Services
+{
+class RestReply;
+}
 
 namespace Files
 {
@@ -20,7 +23,7 @@ public:
     {
     }
 
-    static auto fromNetworkReply(RestNetworkReply *reply, const QString &path) -> std::unique_ptr<FileCheckResult>;
+    static auto fromRestReply(Services::RestReply &&reply, const QString &path) -> FileCheckResult;
 
     [[nodiscard]] auto path() const -> const QString &
     {
@@ -32,8 +35,8 @@ public:
     }
 
 private:
-    const QString m_path;
-    const bool m_exists;
+    QString m_path;
+    bool m_exists;
 };
 
 } // namespace Files

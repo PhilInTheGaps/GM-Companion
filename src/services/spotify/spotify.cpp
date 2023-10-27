@@ -1,5 +1,7 @@
 ﻿#include "spotify.h"
 #include "settings/settingsmanager.h"
+#include "spotifyconnectorlocal.h"
+#include "spotifyconnectorserver.h"
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -8,17 +10,16 @@
 #include <QNetworkRequest>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
-Spotify::Spotify(QObject *parent)
-    : Service(u"Spotify"_s, parent), albums(new AlbumAPI(this)), player(new PlayerAPI(this)),
-      playlists(new PlaylistsAPI(this)), tracks(new TracksAPI(this))
+Spotify::Spotify(QObject *parent) : Service(u"Spotify"_s, parent)
 {
     m_networkManager = new QNetworkAccessManager(this);
     username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
 
-    connect(m_librespotController.status(), &ServiceStatus::messageChanged, this, &Spotify::forwardClientStatus);
+    connect(m_librespotController.status(), &Status::messageChanged, this, &Spotify::forwardClientStatus);
 
     updateConnector();
 }
@@ -95,28 +96,28 @@ auto Spotify::isGranted() const -> bool
     return m_connector->isAccessGranted();
 }
 
-auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetworkReply *>>
+auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
 {
     if (!connected() || !m_connector) return {};
 
-    const auto callback = [this](RestNetworkReply *reply) {
+    const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
         return reply;
     };
 
-    return m_connector->get(request).then(this, callback);
+    return m_connector->get(request, isAuthRequired).then(this, callback);
 }
 
-auto Spotify::get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply *>>
+auto Spotify::get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>
 {
-    return get(QNetworkRequest(url));
+    return get(QNetworkRequest(url), isAuthRequired);
 }
 
-auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
+auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
 {
     if (!connected() || !m_connector) return {};
 
-    const auto callback = [this](RestNetworkReply *reply) {
+    const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
         return reply;
     };
@@ -124,16 +125,16 @@ auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFu
     return m_connector->put(request, data).then(this, callback);
 }
 
-auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
+auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestReply>
 {
     return put(QNetworkRequest(url), data);
 }
 
-auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
+auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
 {
     if (!connected() || !m_connector) return {};
 
-    const auto callback = [this](RestNetworkReply *reply) {
+    const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
         return reply;
     };
@@ -141,7 +142,7 @@ auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QF
     return m_connector->post(request, data).then(this, callback);
 }
 
-auto Spotify::clientStatus() const -> ServiceStatus *
+auto Spotify::clientStatus() const -> Status *
 {
     return m_librespotController.status();
 }
@@ -174,17 +175,11 @@ void Spotify::disconnectService()
     m_librespotController.stop();
 }
 
-void Spotify::handleNetworkError(const RestNetworkReply *reply)
+void Spotify::handleNetworkError(const RestReply &reply)
 {
-    if (!reply)
-    {
-        qCCritical(gmSpotify()) << "Error: trying to handle network error, but reply is null!";
-        return;
-    }
+    if (!reply.hasError()) return;
 
-    if (!reply->hasError()) return;
-
-    switch (reply->error())
+    switch (reply.error())
     {
     case QNetworkReply::ContentNotFoundError:
         qCDebug(gmSpotify) << "No active spotify device set. Will try to set the current machine.";
@@ -192,11 +187,11 @@ void Spotify::handleNetworkError(const RestNetworkReply *reply)
         break;
 
     case QNetworkReply::ContentAccessDenied:
-        handleAccessDenied(SpotifyNetworkError(reply->data()));
+        handleAccessDenied(SpotifyNetworkError(reply.data()));
         break;
 
     default:
-        qCWarning(gmSpotify) << "A network error occurred:" << reply->error() << reply->data();
+        qCWarning(gmSpotify) << "A network error occurred:" << reply.error() << reply.errorText() << reply.data();
     }
 }
 
@@ -207,11 +202,11 @@ void Spotify::handleAccessDenied(const SpotifyNetworkError &error)
     if (error.reason() == "PREMIUM_REQUIRED"_L1)
     {
         connected(false);
-        updateStatus(ServiceStatus::Type::Error, tr("Error: Spotify premium is required!"));
+        updateStatus(Status::Type::Error, tr("Error: Spotify premium is required!"));
     }
     else
     {
-        updateStatus(ServiceStatus::Type::Error, error.message());
+        updateStatus(Status::Type::Error, error.message());
     }
 }
 

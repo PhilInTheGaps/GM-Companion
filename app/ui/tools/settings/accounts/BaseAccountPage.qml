@@ -111,7 +111,7 @@ Item {
             StatusBar {
                 id: status_label
 
-                required property ServiceStatus modelData
+                required property Status modelData
 
                 anchors.left: parent.left
                 anchors.right: parent.right

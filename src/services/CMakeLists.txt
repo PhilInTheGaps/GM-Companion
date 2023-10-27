@@ -6,81 +6,95 @@ list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/../)
 list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
-set(HEADERS
+set(SRC_COMMON
     service.h
+    service.cpp
     servicestatus.h
-    rest/restserviceconnector.h
-    rest/restserviceconnectorlocal.h
-    rest/restnetworkreply.h
-    rest/requestcontainer.h
+)
+
+set(SRC_REST
     rest/callbackserver.h
+    rest/callbackserver.cpp
+    rest/restserviceconnector.h
+    rest/restserviceconnector.cpp
+    rest/restserviceconnectorlocal.h
+    rest/restserviceconnectorlocal.cpp
+    rest/restreply.h
+    rest/restreply.cpp
+    rest/restrequest.h
+)
+
+set(SRC_SPOTIFY
     spotify/config.h
     spotify/spotify.h
+    spotify/spotify.cpp
     spotify/spotifyutils.h
+    spotify/spotifyutils.cpp
     spotify/spotifyconnectorlocal.h
+    spotify/spotifyconnectorlocal.cpp
     spotify/spotifyconnectorserver.h
+    spotify/spotifyconnectorserver.cpp
     spotify/spotifynetworkerror.h
+    spotify/spotifynetworkerror.cpp
     spotify/clients/abstractspotifyclientcontroller.h
+    spotify/clients/abstractspotifyclientcontroller.cpp
     spotify/clients/librespotcontroller.h
+    spotify/clients/librespotcontroller.cpp
     spotify/data/basespotifyelement.h
     spotify/data/spotifyalbum.h
+    spotify/data/spotifyalbum.cpp
     spotify/data/spotifyalbuminfo.h
+    spotify/data/spotifyalbuminfo.cpp
     spotify/data/spotifyartist.h
+    spotify/data/spotifyartist.cpp
     spotify/data/spotifydevice.h
+    spotify/data/spotifydevice.cpp
     spotify/data/spotifyplaylist.h
+    spotify/data/spotifyplaylist.cpp
     spotify/data/spotifytrack.h
+    spotify/data/spotifytrack.cpp
     spotify/data/spotifytracklist.h
+    spotify/data/spotifytracklist.cpp
     spotify/data/spotifycurrenttrack.h
+    spotify/data/spotifycurrenttrack.cpp
     spotify/data/spotifyimage.h
+    spotify/data/spotifyimage.cpp
     spotify/data/spotifyplaybackstate.h
+    spotify/data/spotifyplaybackstate.cpp
     spotify/api/albumapi.h
+    spotify/api/albumapi.cpp
     spotify/api/playerapi.h
+    spotify/api/playerapi.cpp
     spotify/api/playlistsapi.h
+    spotify/api/playlistsapi.cpp
     spotify/api/tracksapi.h
+    spotify/api/tracksapi.cpp
+)
+
+set(SRC_NEXTCLOUD
     nextcloud/nextcloud.h
+    nextcloud/nextcloud.cpp
+)
+
+set(SRC_GOOGLEDRIVE
     google/googledrive.h
+    google/googledrive.cpp
     google/googledriveconnectorlocal.h
+    google/googledriveconnectorlocal.cpp
     google/googledrivereply.h
 )
 
-set(SOURCES
-    service.cpp
-    rest/restserviceconnectorlocal.cpp
-    rest/restnetworkreply.cpp
-    rest/callbackserver.cpp
-    spotify/spotify.cpp
-    spotify/spotifyutils.cpp
-    spotify/spotifyconnectorlocal.cpp
-    spotify/spotifyconnectorserver.cpp
-    spotify/spotifynetworkerror.cpp
-    spotify/clients/abstractspotifyclientcontroller.cpp
-    spotify/clients/librespotcontroller.cpp
-    spotify/data/spotifyalbum.cpp
-    spotify/data/spotifyalbuminfo.cpp
-    spotify/data/spotifyartist.cpp
-    spotify/data/spotifydevice.cpp
-    spotify/data/spotifyplaylist.cpp
-    spotify/data/spotifytrack.cpp
-    spotify/data/spotifytracklist.cpp
-    spotify/data/spotifycurrenttrack.cpp
-    spotify/data/spotifyimage.cpp
-    spotify/data/spotifyplaybackstate.cpp
-    spotify/api/albumapi.cpp
-    spotify/api/playerapi.cpp
-    spotify/api/playlistsapi.cpp
-    spotify/api/tracksapi.cpp
-    nextcloud/nextcloud.cpp
-    google/googledrive.cpp
-    google/googledriveconnectorlocal.cpp
-)
-
-qt_add_library(services STATIC ${HEADERS} ${SOURCES})
+qt_add_library(services STATIC)
 
 qt_add_qml_module(services
     URI services
     SOURCES
-        ${HEADERS}
-        ${SOURCES}
+        ${SRC_COMMON}
+        ${SRC_REST}
+        ${SRC_SPOTIFY}
+        ${SRC_NEXTCLOUD}
+        # GoogleDrive support is disabled, see comment in googledrive.h
+        # ${SRC_GOOGLEDRIVE}
 )
 
 qt_add_resources(services "services-resources"
@@ -97,8 +111,8 @@ target_include_directories(services
         ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/spotify
-        ${CMAKE_CURRENT_SOURCE_DIR}/google
         ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud)
+        # ${CMAKE_CURRENT_SOURCE_DIR}/google
 
 target_link_libraries(services
     PUBLIC

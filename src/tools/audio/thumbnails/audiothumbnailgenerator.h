@@ -1,9 +1,10 @@
 #pragma once
 
+#include "../project/audioelement.h"
+#include "../project/audioscenario.h"
+#include <QNetworkAccessManager>
 #include <QPixmap>
 #include <QPointer>
-#include <QNetworkAccessManager>
-#include "../project/audioproject.h"
 
 class AudioThumbnailGenerator
 {

@@ -2,9 +2,10 @@
 #include "settings/settingsmanager.h"
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 Service::Service(const QString &name, QObject *parent)
-    : QObject(parent), a_status(new ServiceStatus(this)), a_serviceName(name)
+    : QObject(parent), a_status(new Status(this)), a_serviceName(name)
 {
     connected(SettingsManager::instance()->get(u"connected"_s, false, a_serviceName));
     updateConnectionStatus();
@@ -18,7 +19,7 @@ void Service::disconnect()
     connected(false);
 }
 
-void Service::updateStatus(ServiceStatus::Type type, const QString &message)
+void Service::updateStatus(Status::Type type, const QString &message)
 {
     a_status->type(type);
     a_status->message(message);
@@ -28,11 +29,11 @@ void Service::updateConnectionStatus()
 {
     if (connected())
     {
-        updateStatus(ServiceStatus::Type::Success, tr("Connected"));
+        updateStatus(Status::Type::Success, tr("Connected"));
     }
     else
     {
-        updateStatus(ServiceStatus::Type::Info, tr("Not connected"));
+        updateStatus(Status::Type::Info, tr("Not connected"));
     }
 }
 

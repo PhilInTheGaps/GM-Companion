@@ -1,26 +1,26 @@
 #include "spotifyimage.h"
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
-auto SpotifyImage::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyImage>
+auto SpotifyImage::fromJson(const QJsonObject &json) -> SpotifyImage
 {
-    auto *image = new SpotifyImage();
+    SpotifyImage image;
+    image.url = json["url"_L1].toString();
+    image.width = json["width"_L1].toInt();
+    image.height = json["height"_L1].toInt();
 
-    image->url = json["url"_L1].toString();
-    image->width = json["width"_L1].toInt();
-    image->height = json["height"_L1].toInt();
-
-    return QSharedPointer<SpotifyImage>(image);
+    return image;
 }
 
-auto SpotifyImage::fromJson(const QJsonArray &array) -> QList<QSharedPointer<SpotifyImage>>
+auto SpotifyImage::fromJson(const QJsonArray &array) -> std::vector<SpotifyImage>
 {
-    QList<QSharedPointer<SpotifyImage>> images;
+    std::vector<SpotifyImage> images;
     images.reserve(array.count());
 
     for (const auto &element : array)
     {
-        images << SpotifyImage::fromJson(element.toObject());
+        images.push_back(SpotifyImage::fromJson(element.toObject()));
     }
 
     return images;

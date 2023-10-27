@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-class ServiceStatus : public QObject
+namespace Services
+{
+class Status : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
@@ -25,3 +27,4 @@ public:
     AUTO_PROPERTY_VAL2(Type, type, Type::Info)
     AUTO_PROPERTY(QString, message)
 };
+} // namespace Services

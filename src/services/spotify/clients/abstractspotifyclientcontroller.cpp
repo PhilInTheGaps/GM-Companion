@@ -7,30 +7,32 @@
 #include <QNetworkRequest>
 #include <QRandomGenerator>
 
+using namespace Services;
+
 Q_LOGGING_CATEGORY(gmSpotifyClientController, "gm.service.spotify.clients.abstract")
 
 AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent,
                                                                  const QLoggingCategory &loggingCategory)
-    : QObject{parent}, a_status(new ServiceStatus(this)), m_loggingCategory(loggingCategory)
+    : QObject{parent}, a_status(new Status(this)), m_loggingCategory(loggingCategory)
 {
     generateDeviceName(false);
 }
 
-auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>
+auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<SpotifyDevice>
 {
-    const auto callback = [name](QSharedPointer<SpotifyDeviceList> deviceList) {
-        foreach (const auto &device, deviceList->devices)
+    const auto callback = [name](SpotifyDeviceList deviceList) {
+        foreach (const auto &device, deviceList.devices)
         {
-            if (device->name == name) return device;
+            if (device.name == name) return device;
         }
 
-        return QSharedPointer<SpotifyDevice>();
+        return SpotifyDevice();
     };
 
-    return Spotify::instance()->player->devices().then(Spotify::instance(), callback);
+    return Spotify::instance()->player.devices().then(Spotify::instance(), callback);
 }
 
-void AbstractSpotifyClientController::updateStatus(ServiceStatus::Type type, const QString &message)
+void AbstractSpotifyClientController::updateStatus(Status::Type type, const QString &message)
 {
     a_status->type(type);
     a_status->message(message);
@@ -43,14 +45,13 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
     qCDebug(m_loggingCategory) << "Found librespot instance" << deviceName()
                                << "but it is inactive, setting as active device ...";
 
-    auto future = Spotify::instance()->player->transfer({device.id});
-    const auto onReply = [this](RestNetworkReply *reply) {
-        if (reply->hasError()) updateStatus(ServiceStatus::Type::Error, reply->errorText());
-        reply->deleteLater();
+    auto future = Spotify::instance()->player.transfer({device.id});
+    const auto onReply = [this](RestReply reply) {
+        if (reply.hasError()) updateStatus(Status::Type::Error, reply.errorText());
     };
 
     const auto onCancellation = [this]() {
-        updateStatus(ServiceStatus::Type::Error, tr("Error: Could not start librespot."));
+        updateStatus(Status::Type::Error, tr("Error: Could not start librespot."));
     };
 
     future.then(this, onReply).onCanceled(this, onCancellation);

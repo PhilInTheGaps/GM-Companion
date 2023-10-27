@@ -86,7 +86,7 @@ private:
     [[nodiscard]] auto isCurrentShopValid() const -> bool;
     [[nodiscard]] auto currentShop() const -> ItemShop *;
 
-    void onItemFilesFound(std::shared_ptr<Files::FileListResult> result);
+    void onItemFilesFound(Files::FileListResult &&result);
 
 private slots:
     void itemEditorSaved(ItemGroup *group);

@@ -4,12 +4,17 @@
 #include "spotifyimage.h"
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QSharedPointer>
+#include <vector>
+
+namespace Services
+{
 
 struct SpotifyArtist : public BaseSpotifyElement
 {
-    [[nodiscard]] static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyArtist>;
-    [[nodiscard]] static auto fromJson(const QJsonArray &json) -> QList<QSharedPointer<SpotifyArtist>>;
+    [[nodiscard]] static auto fromJson(const QJsonObject &json) -> SpotifyArtist;
+    [[nodiscard]] static auto fromJson(const QJsonArray &json) -> std::vector<SpotifyArtist>;
 
-    QList<QSharedPointer<SpotifyImage>> images;
+    std::vector<SpotifyImage> images;
 };
+
+} // namespace Services

@@ -15,16 +15,21 @@
 Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot")
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
+
+static constexpr int TRY_AGAIN_TIMEOUT_MS = 3000;
+static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
 
 LibrespotController::LibrespotController(QObject *parent)
     : AbstractSpotifyClientController(parent, gmLibrespotController())
 {
+    m_hasAuthenticated = std::make_unique<QPromise<bool>>();
     initProcess();
 }
 
 auto LibrespotController::start() -> QFuture<bool>
 {
-    updateStatus(ServiceStatus::Type::Info, u"Starting librespot client ..."_s);
+    updateStatus(Status::Type::Info, u"Starting librespot client ..."_s);
 
     if (isOtherProcessIsRunning())
     {
@@ -41,7 +46,7 @@ auto LibrespotController::start() -> QFuture<bool>
     if (username.isEmpty())
     {
         qCWarning(gmLibrespotController()) << "Could not start librespot, username is not set.";
-        updateStatus(ServiceStatus::Type::Error, tr("Error: Username is not set."));
+        updateStatus(Status::Type::Error, tr("Error: Username is not set."));
         return QtFuture::makeReadyFuture(false);
     }
 
@@ -49,7 +54,7 @@ auto LibrespotController::start() -> QFuture<bool>
         if (password.isEmpty())
         {
             qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
-            updateStatus(ServiceStatus::Type::Error, tr("Error: Password is not set."));
+            updateStatus(Status::Type::Error, tr("Error: Password is not set."));
             return QtFuture::makeReadyFuture(false);
         }
 
@@ -57,14 +62,14 @@ auto LibrespotController::start() -> QFuture<bool>
         if (info.version.isEmpty())
         {
             qCWarning(gmLibrespotController()) << "Could not get librespot version number.";
-            updateStatus(ServiceStatus::Type::Error,
+            updateStatus(Status::Type::Error,
                          tr("Error: Could not get librespot version number. "
                             "This probably means that the librespot executable can not be found."));
             return QtFuture::makeReadyFuture(false);
         }
 
         qCDebug(gmLibrespotController()) << QString(info);
-        m_hasAuthenticated.start();
+        m_hasAuthenticated->start();
 
         const auto args = getLibrespotArgs(username);
         const auto librespotPath = getLibrespotPath();
@@ -92,7 +97,7 @@ auto LibrespotController::start() -> QFuture<bool>
             m_librespotProcess.write(u"%1\n"_s.arg(password).toUtf8()); // pass password via stdin
         }
 
-        return m_hasAuthenticated.future();
+        return m_hasAuthenticated->future();
     };
 
     return password.then(this, callback).unwrap();
@@ -104,25 +109,24 @@ auto LibrespotController::stop() -> bool
 
     if (m_librespotProcess.state() == QProcess::NotRunning) return true;
 
-    updateStatus(ServiceStatus::Type::Info, tr("Stopping librespot client ..."));
+    updateStatus(Status::Type::Info, tr("Stopping librespot client ..."));
 
     m_isExitExpected = true;
     m_librespotProcess.terminate();
 
     if (!m_librespotProcess.waitForFinished(PROCESS_TERMINATE_TIMEOUT_MS))
     {
-        updateStatus(ServiceStatus::Type::Error,
-                     tr("Librespot thread could not be terminated, trying to kill it now ..."));
+        updateStatus(Status::Type::Error, tr("Librespot thread could not be terminated, trying to kill it now ..."));
         m_librespotProcess.kill();
 
         if (!m_librespotProcess.waitForFinished(PROCESS_TERMINATE_TIMEOUT_MS))
         {
-            updateStatus(ServiceStatus::Type::Error, tr("Librespot thread could not be killed."));
+            updateStatus(Status::Type::Error, tr("Librespot thread could not be killed."));
             return false;
         }
     }
 
-    updateStatus(ServiceStatus::Type::Info, tr("Librespot client has stopped."));
+    updateStatus(Status::Type::Info, tr("Librespot client has stopped."));
     return true;
 }
 
@@ -149,8 +153,8 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](const QSharedPointer<SpotifyDevice> &device) {
-        if (device.isNull() || device->id.isEmpty())
+    const auto callback = [this](SpotifyDevice device) {
+        if (device.id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
             {
@@ -162,20 +166,20 @@ void LibrespotController::setAsActiveDevice()
             else
             {
                 qCCritical(gmLibrespotController()) << "Could not find spotify device" << deviceName();
-                updateStatus(ServiceStatus::Type::Error,
+                updateStatus(Status::Type::Error,
                              tr("Spotify device could not be found. Are the credentials correct?"));
             }
             return false;
         }
 
-        if (device->isActive)
+        if (device.isActive)
         {
             qCDebug(gmLibrespotController())
                 << "Found librespot instance" << deviceName() << "-> it is already set as the active device.";
             return true;
         }
 
-        setActiveDevice(*device);
+        setActiveDevice(device);
         return true;
     };
 
@@ -290,17 +294,17 @@ void LibrespotController::onLibrespotOutputReady()
         if (line.contains("Authenticated as"))
         {
             m_hasStarted = true;
-            m_hasAuthenticated.addResult(true);
-            m_hasAuthenticated.finish();
-            updateStatus(ServiceStatus::Type::Success,
+            m_hasAuthenticated->addResult(true);
+            m_hasAuthenticated->finish();
+            updateStatus(Status::Type::Success,
                          tr("Successfully started librespot client. (Spotify device %1)").arg(deviceName()));
         }
 
         if (line.contains("Connection failed:"))
         {
-            m_hasAuthenticated.addResult(false);
-            m_hasAuthenticated.finish();
-            updateStatus(ServiceStatus::Type::Error, line);
+            m_hasAuthenticated->addResult(false);
+            m_hasAuthenticated->finish();
+            updateStatus(Status::Type::Error, line);
             stop();
         }
     }
@@ -319,12 +323,12 @@ void LibrespotController::printOutputAndUpdateStatus(const QString &line)
         }
 
         qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-        updateStatus(ServiceStatus::Type::Warning, line);
+        updateStatus(Status::Type::Warning, line);
     }
     else if (line.contains("ERROR"_L1))
     {
         qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-        updateStatus(ServiceStatus::Type::Error, line);
+        updateStatus(Status::Type::Error, line);
     }
     else
     {

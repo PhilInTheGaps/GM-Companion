@@ -6,6 +6,8 @@
 #include <QUrl>
 #include <gtest/gtest.h>
 
+using namespace Services;
+
 class CallbackServerTest : public AbstractTest
 {
 protected:

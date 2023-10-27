@@ -1,16 +1,18 @@
 #pragma once
 
 #include "rest/callbackserver.h"
-#include "rest/requestcontainer.h"
+#include "rest/restrequest.h"
 #include "rest/restserviceconnector.h"
 #include "utils/stringutils.h"
 #include <QJsonObject>
 #include <QObject>
 #include <QPromise>
 #include <QQueue>
-#include <QSharedPointer>
 #include <chrono>
 #include <o0settingsstore.h>
+
+namespace Services
+{
 
 class SpotifyConnectorServer : public RESTServiceConnector
 {
@@ -25,60 +27,40 @@ public:
         return m_isAccessGranted;
     }
 
-    auto get(const QUrl &url) -> QFuture<RestNetworkReply *>;
-    auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *> override;
-    auto put(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestNetworkReply *> override;
-    auto post(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestNetworkReply *> override;
+    auto get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>;
+    auto get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply> override;
+    auto put(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestReply> override;
+    auto post(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestReply> override;
     auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
-        -> QFuture<RestNetworkReply *> override;
+        -> QFuture<RestReply> override;
 
 private:
     O0SettingsStore m_settingsStore = O0SettingsStore(QStringLiteral("gm-companion"));
     CallbackServer m_callbackServer;
 
-    QDateTime m_expireTime;
     bool m_isAccessGranted = false;
     bool m_isWaitingForToken = false;
     bool m_isOnCooldown = false;
     int m_requestCount = 0;
-    int m_currentRequestCount = 0;
-    QQueue<std::pair<RequestContainer *, QSharedPointer<QPromise<RestNetworkReply *>>>> m_requestQueue;
-
-    static constexpr ConstQString ACCESS_TOKEN_KEY = "SPOTIFY_ACCESS_TOKEN";
-    static constexpr ConstQString REFRESH_TOKEN_KEY = "SPOTIFY_REFRESH_TOKEN";
-    static constexpr ConstQString SUCCESS_PAGE_PATH = ":/services/auth-success.html";
-    static constexpr int MAX_CALLBACK_RETRIES = 3;
 
     void authenticate();
 
-    [[nodiscard]] auto getAccessToken() -> QString;
+    [[nodiscard]] auto getAccessToken() -> QString override;
     void saveAccessToken(const QString &token);
     void requestAccessToken(const QString &code);
 
     [[nodiscard]] auto getRefreshToken() -> QString;
     void saveRefreshToken(const QString &token);
-    void refreshAccessToken(bool updateAuthentication = false);
+    void refreshAccessToken(bool updateAuthentication = false) override;
     auto handleRefreshErrors(const QJsonObject &params) -> bool;
 
-    void updateExpireTime(int expiresIn);
-    [[nodiscard]] auto isTokenExpired() const -> bool;
-
-    auto canSendRequest() -> bool;
-    void enqueueRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
-    void dequeueRequests();
-
-    void sendRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
+    void sendRequest(RestRequest &&container, QPromise<RestReply> &&promise) override;
 
     [[nodiscard]] auto addAuthHeader(QNetworkRequest request) -> QNetworkRequest;
 
-    void handleRateLimit(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise,
-                         const QList<std::pair<QByteArray, QByteArray>> &headers);
-    void startCooldown(std::chrono::seconds seconds);
-
 private slots:
-    void onReceivedReply(QNetworkReply *reply, RequestContainer *container,
-                         QSharedPointer<QPromise<RestNetworkReply *>> promise);
-    void onCooldownFinished();
     void onServerError(const QString &error);
     void onServerClosed(bool hasParameters);
 };
+
+} // namespace Services

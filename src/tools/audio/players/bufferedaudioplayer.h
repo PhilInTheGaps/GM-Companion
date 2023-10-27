@@ -53,7 +53,7 @@ protected:
     void play(const QByteArray &data);
     auto loadPlaylist() -> QFuture<void>;
     virtual void handleUnsupportedMediaSource(const AudioFile &file);
-    void onFileReceived(std::shared_ptr<Files::FileDataResult> result);
+    void onFileReceived(Files::FileDataResult &&result);
 
     [[nodiscard]] auto fileSource() const -> AudioFile::Source;
     void setPlaylist(std::unique_ptr<ResolvingAudioPlaylist> playlist);

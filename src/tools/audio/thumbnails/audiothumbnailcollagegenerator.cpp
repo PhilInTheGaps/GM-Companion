@@ -58,8 +58,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *el
         return QtFuture::makeReadyFuture();
     };
 
-    auto future = getCoverArtAsync(element, audioFile);
-    return future.then(element, callback).unwrap();
+    return getCoverArtAsync(element, audioFile).then(element, callback).unwrap();
 }
 
 /**

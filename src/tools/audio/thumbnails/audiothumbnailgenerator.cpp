@@ -3,12 +3,9 @@
 #include "audiothumbnailcache.h"
 #include "audiothumbnailcollagegenerator.h"
 #include "loaders/fileimageloader.h"
-#include "loaders/spotifyimageloader.h"
 #include "loaders/webimageloader.h"
-#include "settings/settingsmanager.h"
 #include "utils/networkutils.h"
 #include <QLoggingCategory>
-#include <QtConcurrent/QtConcurrentRun>
 
 Q_LOGGING_CATEGORY(gmAudioThumbnailGenerator, "gm.audio.thumbnails.generator")
 

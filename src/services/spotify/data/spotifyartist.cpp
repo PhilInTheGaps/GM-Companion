@@ -1,24 +1,23 @@
 #include "spotifyartist.h"
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
-auto SpotifyArtist::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyArtist>
+auto SpotifyArtist::fromJson(const QJsonObject &json) -> SpotifyArtist
 {
-    auto *artist = new SpotifyArtist{
+    return {
         {json["href"_L1].toString(), json["uri"_L1].toString(), json["id"_L1].toString(), json["name"_L1].toString()},
         SpotifyImage::fromJson(json["images"_L1].toArray())};
-
-    return QSharedPointer<SpotifyArtist>(artist);
 }
 
-auto SpotifyArtist::fromJson(const QJsonArray &json) -> QList<QSharedPointer<SpotifyArtist>>
+auto SpotifyArtist::fromJson(const QJsonArray &json) -> std::vector<SpotifyArtist>
 {
-    QList<QSharedPointer<SpotifyArtist>> artists;
+    std::vector<SpotifyArtist> artists;
     artists.reserve(json.count());
 
     for (const auto &item : json)
     {
-        artists << SpotifyArtist::fromJson(item.toObject());
+        artists.push_back(SpotifyArtist::fromJson(item.toObject()));
     }
 
     return artists;

@@ -2,7 +2,6 @@
 #include "config.h"
 #include "exceptions/notimplementedexception.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 #include "utils/networkutils.h"
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -12,13 +11,20 @@
 #include <QUrlQuery>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 Q_LOGGING_CATEGORY(gmSpotifyServer, "gm.service.spotify.server")
 
+constexpr auto ACCESS_TOKEN_KEY = "SPOTIFY_ACCESS_TOKEN";
+constexpr auto REFRESH_TOKEN_KEY = "SPOTIFY_REFRESH_TOKEN";
+constexpr auto SUCCESS_PAGE_PATH = ":/services/auth-success.html";
+constexpr int MAX_CALLBACK_RETRIES = 3;
+
 SpotifyConnectorServer::SpotifyConnectorServer(QNetworkAccessManager &networkManager, QObject *parent)
-    : RESTServiceConnector(networkManager, gmSpotifyServer(), parent)
+    : RESTServiceConnector(networkManager, gmSpotifyServer(), {u"No active device found"_s}, parent)
 {
     m_networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    setMaxConcurrentRequests(MAX_REQUESTS);
 
     connect(&m_callbackServer, &CallbackServer::serverError, this, &SpotifyConnectorServer::onServerError);
     connect(&m_callbackServer, &CallbackServer::serverClosed, this, &SpotifyConnectorServer::onServerClosed);
@@ -45,82 +51,73 @@ void SpotifyConnectorServer::disconnectService()
     saveRefreshToken(u""_s);
 }
 
-void SpotifyConnectorServer::sendRequest(RequestContainer *container,
-                                         QSharedPointer<QPromise<RestNetworkReply *>> deferred)
+void SpotifyConnectorServer::sendRequest(RestRequest &&container, QPromise<RestReply> &&promise)
 {
-    if (!canSendRequest())
-    {
-        enqueueRequest(container, deferred);
-        return;
-    }
-
-    m_currentRequestCount++;
-    auto request = addAuthHeader(container->request());
+    auto request = container.isAuthRequired() ? addAuthHeader(container.request()) : container.request();
     QNetworkReply *reply = nullptr;
 
-    switch (container->requestType())
+    switch (container.type())
     {
-    case GET:
+    case RestRequest::Type::GET:
         qCDebug(gmSpotifyServer) << "Sending GET Request to URL" << request.url();
         reply = m_networkManager.get(request);
         break;
-    case PUT:
-        qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << container->data();
-        reply = m_networkManager.put(request, container->data());
+    case RestRequest::Type::PUT:
+        qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << container.data();
+        reply = m_networkManager.put(request, container.data());
         break;
-    case POST:
-        qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url() << "Data:" << container->data();
+    case RestRequest::Type::POST:
+        qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url() << "Data:" << container.data();
         NetworkUtils::makeJsonRequest(request);
-        reply = m_networkManager.post(request, container->data());
+        reply = m_networkManager.post(request, container.data());
         break;
     default:
         throw NotImplementedException();
     }
 
-    connect(reply, &QNetworkReply::finished, this,
-            [this, reply, container, deferred]() mutable { onReceivedReply(reply, container, deferred); });
+    auto id = container.id();
+    connect(reply, &QNetworkReply::finished, this, [this, reply, id]() mutable {
+        onReplyReceived(id, reply->error(), reply->errorString(), reply->readAll(), reply->rawHeaderPairs());
+    });
+
+    markRequestActive(std::move(container), std::move(promise));
 }
 
-auto SpotifyConnectorServer::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
+auto SpotifyConnectorServer::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
 {
-    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
+    QPromise<RestReply> promise;
+    promise.start();
 
-    auto *container = new RequestContainer(request, GET, "", this);
-
-    sendRequest(container, promise);
-    return promise->future();
+    RestRequest container(request, RestRequest::Type::GET);
+    container.isAuthRequired(isAuthRequired);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
-auto SpotifyConnectorServer::get(const QUrl &url) -> QFuture<RestNetworkReply *>
+auto SpotifyConnectorServer::get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>
 {
-    return get(QNetworkRequest(url));
+    return get(QNetworkRequest(url), isAuthRequired);
 }
 
-auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
 {
-    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
+    QPromise<RestReply> promise;
+    promise.start();
 
-    auto *container = new RequestContainer(request, PUT, data, this);
-
-    sendRequest(container, promise);
-    return promise->future();
+    RestRequest container(request, RestRequest::Type::PUT, data);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
-auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
 {
-    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
+    QPromise<RestReply> promise;
+    promise.start();
 
-    auto *container = new RequestContainer(request, POST, data, this);
-
-    sendRequest(container, promise);
-    return promise->future();
+    RestRequest container(request, RestRequest::Type::POST, data);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
 auto SpotifyConnectorServer::customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                           const QByteArray &data) -> QFuture<RestNetworkReply *>
+                                           const QByteArray &data) -> QFuture<RestReply>
 {
     Q_UNUSED(request)
     Q_UNUSED(verb)
@@ -131,7 +128,7 @@ auto SpotifyConnectorServer::customRequest(const QNetworkRequest &request, const
 void SpotifyConnectorServer::authenticate()
 {
     qCDebug(gmSpotifyServer()) << "Authenticating ...";
-    emit statusChanged(ServiceStatus::Type::Info, tr("Connecting ..."));
+    emit statusChanged(Status::Type::Info, tr("Connecting ..."));
 
     if (!m_callbackServer.isRunning())
     {
@@ -177,7 +174,7 @@ void SpotifyConnectorServer::requestAccessToken(const QString &code)
 
         saveAccessToken(params["access_token"_L1].toString());
         saveRefreshToken(params["refresh_token"_L1].toString());
-        updateExpireTime(params["expires_in"_L1].toInt());
+        updateTokenExpireTime(std::chrono::seconds(params["expires_in"_L1].toInt()));
 
         m_isWaitingForToken = false;
         m_isAccessGranted = true;
@@ -223,7 +220,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
         if (reply->error() != QNetworkReply::NoError)
         {
             qCWarning(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
-            emit statusChanged(ServiceStatus::Type::Error, reply->errorString());
+            emit statusChanged(Status::Type::Error, reply->errorString());
             reply->deleteLater();
             return;
         }
@@ -232,14 +229,14 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
         reply->deleteLater();
 
         saveAccessToken(params["access_token"_L1].toString());
-        updateExpireTime(params["expires_in"_L1].toInt());
+        updateTokenExpireTime(std::chrono::seconds(params["expires_in"_L1].toInt()));
 
         if (handleRefreshErrors(params)) return;
 
         if (getAccessToken().isEmpty())
         {
             qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
-            emit statusChanged(ServiceStatus::Type::Error, u"Unexpected error, access token is empty."_s);
+            emit statusChanged(Status::Type::Error, u"Unexpected error, access token is empty."_s);
             return;
         }
 
@@ -274,21 +271,11 @@ auto SpotifyConnectorServer::handleRefreshErrors(const QJsonObject &params) -> b
     {
         qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:"
                                      << params["error"_L1].toString();
-        emit statusChanged(ServiceStatus::Type::Error, params["error"_L1].toString());
+        emit statusChanged(Status::Type::Error, params["error"_L1].toString());
         return true;
     }
 
     return false;
-}
-
-void SpotifyConnectorServer::updateExpireTime(int expiresIn)
-{
-    m_expireTime = QDateTime::currentDateTime().addSecs(expiresIn);
-}
-
-auto SpotifyConnectorServer::isTokenExpired() const -> bool
-{
-    return QDateTime::currentDateTime() > m_expireTime;
 }
 
 auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkRequest
@@ -297,124 +284,9 @@ auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkR
     return request;
 }
 
-void SpotifyConnectorServer::handleRateLimit(RequestContainer *container,
-                                             QSharedPointer<QPromise<RestNetworkReply *>> promise,
-                                             const QList<std::pair<QByteArray, QByteArray>> &headers)
-{
-    using namespace std;
-
-    qCDebug(gmSpotifyServer) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
-
-    for (const auto &header : headers)
-    {
-        if (header.first == "Retry-After")
-        {
-            qCDebug(gmSpotifyServer()) << header;
-            const auto seconds = chrono::seconds(header.second.toInt());
-            startCooldown(seconds);
-            enqueueRequest(container, promise);
-            return;
-        }
-    }
-
-    startCooldown(2s);
-}
-
-void SpotifyConnectorServer::startCooldown(std::chrono::seconds seconds)
-{
-    m_isOnCooldown = true;
-    QTimer::singleShot(seconds, this, &SpotifyConnectorServer::onCooldownFinished);
-}
-
-auto SpotifyConnectorServer::canSendRequest() -> bool
-{
-    if (!m_isAccessGranted) return false;
-
-    if (isTokenExpired() || getAccessToken().isEmpty())
-    {
-        refreshAccessToken();
-        return false;
-    }
-
-    return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < MAX_REQUESTS;
-}
-
-void SpotifyConnectorServer::enqueueRequest(RequestContainer *container,
-                                            QSharedPointer<QPromise<RestNetworkReply *>> promise)
-{
-    m_requestQueue.enqueue(std::pair(container, promise));
-}
-
-void SpotifyConnectorServer::dequeueRequests()
-{
-    while (!m_requestQueue.isEmpty() && m_currentRequestCount < MAX_REQUESTS)
-    {
-        const auto pair = m_requestQueue.dequeue();
-        auto *container = pair.first;
-        const auto &deferred = pair.second;
-
-        sendRequest(container, deferred);
-    }
-}
-
-void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContainer *container,
-                                             QSharedPointer<QPromise<RestNetworkReply *>> promise)
-{
-    m_currentRequestCount--;
-
-    if (!reply)
-    {
-        qCCritical(gmSpotifyServer()) << "Error: QNetworkReply is null!";
-        return;
-    }
-
-    auto *result =
-        new RestNetworkReply(reply->error(), reply->errorString(), reply->readAll(), reply->rawHeaderPairs(), this);
-
-    // Check if rate limit was exceeded
-    if (result->error() == QNetworkReply::UnknownContentError)
-    {
-        const auto status = QJsonDocument::fromJson(result->data()).object()["error"_L1]["status"_L1].toInt();
-
-        if (status == HttpStatus::TooManyRequests)
-        {
-            handleRateLimit(container, promise, result->headers());
-            return;
-        }
-    }
-
-    if (result->hasError())
-    {
-        // The "No active device found" should not be logged as a warning
-        // because we can recover from that by setting an active device and trying again.
-        if (result->data().contains("No active device found"))
-        {
-            qCDebug(gmSpotifyServer) << result->errorText() << result->data();
-        }
-        else
-        {
-            qCWarning(gmSpotifyServer()) << "Error:" << result->errorText() << result->data();
-        }
-    }
-
-    promise->addResult(result);
-    promise->finish();
-    reply->deleteLater();
-
-    // If there are requests in queue, send next
-    dequeueRequests();
-}
-
-void SpotifyConnectorServer::onCooldownFinished()
-{
-    qCDebug(gmSpotifyServer()) << "Cooldown finished. Continuing ...";
-    m_isOnCooldown = false;
-    dequeueRequests();
-}
-
 void SpotifyConnectorServer::onServerError(const QString &error)
 {
-    emit statusChanged(ServiceStatus::Type::Error, error);
+    emit statusChanged(Status::Type::Error, error);
 }
 
 void SpotifyConnectorServer::onServerClosed(bool hasParameters)

@@ -2,6 +2,9 @@
 
 #include <QString>
 
+namespace Services
+{
+
 struct BaseSpotifyElement
 {
     QString href;
@@ -9,3 +12,5 @@ struct BaseSpotifyElement
     QString id;
     QString name;
 };
+
+} // namespace Services

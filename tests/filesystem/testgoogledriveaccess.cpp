@@ -22,7 +22,7 @@ public:
         QGuiApplication::setOrganizationDomain(u"gm-companion.github.io"_s);
 
         networkManager = std::make_unique<QNetworkAccessManager>(nullptr);
-        gd = new GoogleDrive(*networkManager.get(), nullptr);
+        gd = new Services::GoogleDrive(*networkManager.get(), nullptr);
 
         waitForAuthentication = true;
 
@@ -50,7 +50,7 @@ protected:
     }
 
 private:
-    GoogleDrive *gd = nullptr;
+    Services::GoogleDrive *gd = nullptr;
     QString testPath;
 
     static constexpr auto MOCK_SERVICE = "GoogleDrive_Test";

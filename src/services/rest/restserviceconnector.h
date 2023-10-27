@@ -1,58 +1,92 @@
 #pragma once
 
+#include "restreply.h"
+#include "restrequest.h"
+#include "servicestatus.h"
+#include <QDateTime>
 #include <QFuture>
 #include <QLoggingCategory>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QObject>
+#include <QPromise>
+#include <chrono>
+#include <memory>
+#include <queue>
+#include <unordered_map>
 
-#include "restnetworkreply.h"
-#include "servicestatus.h"
+namespace Services
+{
 
 class RESTServiceConnector : public QObject
 {
     Q_OBJECT
 public:
     RESTServiceConnector(QNetworkAccessManager &networkManager, const QLoggingCategory &loggingCategory,
-                         QObject *parent = nullptr)
-        : QObject(parent), m_networkManager(networkManager), m_loggingCategory(loggingCategory)
-    {
-    }
+                         QStringList &&recoverableErrors, QObject *parent = nullptr);
 
     virtual void grantAccess() = 0;
     virtual void disconnectService() = 0;
     [[nodiscard]] virtual auto isAccessGranted() const -> bool = 0;
 
-    virtual auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *> = 0;
-    virtual auto put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> = 0;
-    virtual auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> = 0;
+    virtual auto get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply> = 0;
+    virtual auto put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply> = 0;
+    virtual auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply> = 0;
     virtual auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data)
-        -> QFuture<RestNetworkReply *> = 0;
+        -> QFuture<RestReply> = 0;
+
+signals:
+    void accessGranted();
+    void statusChanged(const Status::Type &type, const QString &message);
+    void isConnectedChanged(const bool &connected);
+
+protected slots:
+    void onCooldownFinished();
+    void onReplyReceived(int id, QNetworkReply::NetworkError error, const QString &errorText, const QByteArray &data,
+                         const QList<QNetworkReply::RawHeaderPair> &headers);
 
 protected:
+    [[nodiscard]] auto isOnCooldown() const -> bool;
+    void startCooldown(std::chrono::seconds duration);
+
+    void setStatus(Status::Type type, const QString &message);
+
+    void dequeueRequests();
+    [[nodiscard]] auto canSendRequest(QString &reason) -> bool;
+    auto enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>;
+    auto markRequestActive(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>;
+    virtual void sendRequest(RestRequest &&request, QPromise<RestReply> &&reply) = 0;
+
+    [[nodiscard]] auto maxConcurrentRequests() const -> int;
+    void setMaxConcurrentRequests(int count);
+
+    [[nodiscard]] virtual auto getAccessToken() -> QString
+    {
+        return QLatin1String();
+    };
+    virtual void refreshAccessToken(bool updateAuthentication = false) = 0;
+    void updateTokenExpireTime(std::chrono::seconds expiresIn);
+    [[nodiscard]] auto isTokenExpired() const -> bool;
+
     QNetworkAccessManager &m_networkManager;
     const QLoggingCategory &m_loggingCategory;
     bool m_wasConfigured = false;
 
-    void setStatus(ServiceStatus::Type type, const QString &message)
-    {
-        switch (type)
-        {
-        case ServiceStatus::Type::Warning:
-            qCWarning(m_loggingCategory) << message;
-            break;
-        case ServiceStatus::Type::Error:
-            qCCritical(m_loggingCategory) << message;
-            break;
-        default:
-            qCDebug(m_loggingCategory) << message;
-        }
+private:
+    [[nodiscard]] auto activeRequestCount() const -> int;
 
-        emit statusChanged(type, message);
-    }
+    [[nodiscard]] auto wasRateLimitReached(QNetworkReply::NetworkError error, const QByteArray &data) -> bool;
+    void handleRateLimit(std::pair<QPromise<RestReply>, RestRequest> &&pair,
+                         const QList<QNetworkReply::RawHeaderPair> &headers);
 
-signals:
-    void accessGranted();
-    void statusChanged(const ServiceStatus::Type &type, const QString &message);
-    void isConnectedChanged(const bool &connected);
+    bool m_isOnCooldown = false;
+    int m_maxConcurrentRequests = 1;
+    int m_nextQueueId = 1;
+    QStringList m_recoverableErrors;
+    QDateTime m_tokenExpireTime;
+
+    std::unordered_map<int, std::pair<QPromise<RestReply>, RestRequest>> m_activeRequests;
+    std::queue<std::pair<QPromise<RestReply>, RestRequest>> m_requestQueue;
 };
+
+} // namespace Services

@@ -107,7 +107,7 @@ void ItemEditor::save()
 
     Files::File::saveAsync(savePath, data)
         .then(this,
-              [this](QFuture<std::shared_ptr<Files::FileResult>>) {
+              [this](QFuture<Files::FileResult>) {
                   // Notify editor
                   isSaved(true);
                   emit showInfoBar(tr("Saved!"));
@@ -131,7 +131,7 @@ void ItemEditor::loadData()
     const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     Files::File::checkAsync(path)
-        .then(this, [this](std::shared_ptr<Files::FileCheckResult> result) { onFileCheckReceived(result); })
+        .then(this, [this](Files::FileCheckResult &&result) { onFileCheckReceived(std::move(result)); })
         .onCanceled(this, [this]() { isLoading(false); });
 }
 
@@ -148,31 +148,24 @@ auto ItemEditor::defaultGroupName() -> QString
     return tr("Custom");
 }
 
-void ItemEditor::onFileCheckReceived(std::shared_ptr<Files::FileCheckResult> result)
+void ItemEditor::onFileCheckReceived(Files::FileCheckResult &&result)
 {
-    if (!result)
-    {
-        isLoading(false);
-        return;
-    }
+    const auto path = result.path();
 
-    const auto exists = result->exists();
-    const auto path = result->path();
-
-    if (!exists)
+    if (!result.success() || !result.exists())
     {
         isLoading(false);
         return;
     }
 
     Files::File::getDataAsync(path)
-        .then(this, [this](std::shared_ptr<Files::FileDataResult> result) { onDataReceived(result); })
+        .then(this, [this](Files::FileDataResult &&result) { onDataReceived(std::move(result)); })
         .onCanceled(this, [this]() { isLoading(false); });
 }
 
-void ItemEditor::onDataReceived(std::shared_ptr<Files::FileDataResult> result)
+void ItemEditor::onDataReceived(Files::FileDataResult &&result)
 {
-    if (!result)
+    if (!result.success())
     {
         isLoading(false);
         return;
@@ -180,7 +173,7 @@ void ItemEditor::onDataReceived(std::shared_ptr<Files::FileDataResult> result)
 
     qCDebug(gmShopsItemEditor()) << "Received custom items.";
 
-    ItemGroup group(defaultGroupName(), QJsonDocument::fromJson(result->data()).object(), nullptr);
+    ItemGroup group(defaultGroupName(), QJsonDocument::fromJson(result.data()).object(), nullptr);
 
     initItemModel(group);
     updateCategories(group);

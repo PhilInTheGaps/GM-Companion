@@ -1,6 +1,8 @@
 #include "src/services/spotify/spotifyutils.h"
 #include <gtest/gtest.h>
 
+using namespace Services;
+
 struct UriTypeTest
 {
     const char *description;

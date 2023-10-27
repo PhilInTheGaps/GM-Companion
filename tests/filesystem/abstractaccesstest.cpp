@@ -7,7 +7,7 @@ using namespace Files;
 
 AbstractAccessTest::AbstractAccessTest()
 {
-    File::init(nullptr, nullptr);
+    File::init(nullptr);
 }
 
 void AbstractAccessTest::createTestDir()
@@ -79,7 +79,7 @@ void AbstractAccessTest::getDataAsync()
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
 
         const auto &result = future2.result();
-        EXPECT_FALSE(result->success()) << "File::getDataAsync did not return a valid result.";
+        EXPECT_FALSE(result.success()) << "File::getDataAsync did not return a valid result.";
     });
 
     // Multiple files
@@ -100,8 +100,8 @@ void AbstractAccessTest::getDataAsync()
             int index = 0;
             for (const auto &result : results)
             {
-                EXPECT_TRUE(result->success()) << "File::getDataAsync did not return a valid result.";
-                EXPECT_EQ(result->data(), expectedData[index++]);
+                EXPECT_TRUE(result.success()) << "File::getDataAsync did not return a valid result.";
+                EXPECT_EQ(result.data(), expectedData[index++]);
             }
         },
         false);
@@ -111,8 +111,10 @@ void AbstractAccessTest::saveFileAndVerify(const QString &path, const QByteArray
 {
     auto future = File::saveAsync(path, data, fileAccess);
     testFuture(future, "File::saveAsync", [this, future, path, data]() {
-        EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future.result()->success()) << "Could not save file.";
+        ASSERT_FALSE(future.isCanceled()) << "QFuture is canceled!";
+        ASSERT_TRUE(future.result().success())
+            << "Could not save file (" << path.toStdString() << ": " << data.constData() << ")"
+            << future.result().errorMessage().toStdString();
         verifyFileContent(path, data);
     });
 }
@@ -147,7 +149,8 @@ void AbstractAccessTest::moveAsync()
     auto future = File::moveAsync(getFilePath(u"test5"_s), getFilePath(u"test5-moved"_s), fileAccess);
     testFuture(future, "File::moveAsync", [this, future]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future.result()->success()) << "Could not move file test5 to test5-moved";
+        EXPECT_TRUE(future.result().success())
+            << "Could not move file test5 to test5-moved: " << future.result().errorMessage().toStdString();
         verifyFileContent(getFilePath(u"test5-moved"_s), "To be moved.");
     });
 
@@ -155,7 +158,8 @@ void AbstractAccessTest::moveAsync()
     auto future2 = File::moveAsync(getFilePath(u"test5-moved"_s), getFilePath(u"moves/test1"_s), fileAccess);
     testFuture(future2, "File::moveAsync", [this, future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future2.result()->success()) << "Could not move file test5-moved to moves/test1";
+        EXPECT_TRUE(future2.result().success())
+            << "Could not move file test5-moved to moves/test1: " << future2.result().errorMessage().toStdString();
         verifyFileContent(getFilePath(u"moves/test1"_s), "To be moved.");
     });
 
@@ -164,7 +168,7 @@ void AbstractAccessTest::moveAsync()
     auto future3 = File::moveAsync(getFilePath(u"test5"_s), getFilePath(u"test5-moved"_s), fileAccess);
     testFuture(future3, "File::moveAsync", [future3]() {
         EXPECT_FALSE(future3.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future3.result()->success())
+        EXPECT_FALSE(future3.result().success())
             << "Could move file test5 to test5-moved (again) but it should no longer exist.";
     });
 
@@ -173,7 +177,7 @@ void AbstractAccessTest::moveAsync()
     auto future4 = File::moveAsync(getFilePath(u"test5-moved"_s), getFilePath(u"test1"_s), fileAccess);
     testFuture(future4, "File::moveAsync", [future4]() {
         EXPECT_FALSE(future4.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future4.result()->success())
+        EXPECT_FALSE(future4.result().success())
             << "Could move file test5-moved to test1 but the location already exists.";
     });
 }
@@ -183,7 +187,8 @@ void AbstractAccessTest::removeFileAndVerify(const QString &path)
     auto future = File::deleteAsync(path, fileAccess);
     testFuture(future, "File::deleteAsync", [this, future, path]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future.result()->success()) << "Could not delete file " << path.toStdString();
+        EXPECT_TRUE(future.result().success())
+            << "Could not delete file " << path.toStdString() << " " << future.result().errorMessage().toStdString();
         verifyThatFileExists(path, false);
     });
 }
@@ -199,7 +204,7 @@ void AbstractAccessTest::deleteAsync()
     auto future = File::deleteAsync(getFilePath(u"test6-missing"_s), fileAccess);
     testFuture(future, "File::deleteAsync", [future]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future.result()->success()) << "Could delete file but it does not exist.";
+        EXPECT_FALSE(future.result().success()) << "Could delete file but it does not exist.";
     });
 
     // Delete empty dir
@@ -214,8 +219,9 @@ void AbstractAccessTest::copyFileAndVerify(const QString &path, const QString &c
     auto future = File::copyAsync(path, copy, fileAccess);
     testFuture(future, "File::copyAsync", [this, future, path, copy]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future.result()->success())
-            << "Could not copy file " << path.toStdString() << " to " << copy.toStdString();
+        EXPECT_TRUE(future.result().success())
+            << "Could not copy file " << path.toStdString() << " to " << copy.toStdString() << " "
+            << future.result().errorMessage().toStdString();
         verifyThatFileExists(copy, true);
     });
 }
@@ -231,7 +237,7 @@ void AbstractAccessTest::copyAsync()
     auto future2 = File::copyAsync(getFilePath(u"test7-missing"_s), getFilePath(u"test7-copy2"_s), fileAccess);
     testFuture(future2, "File::copyAsync", [future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future2.result()->success()) << "Could copy file but it does not exist.";
+        EXPECT_FALSE(future2.result().success()) << "Could copy file but it does not exist.";
     });
 
     // Try to copy file to exising location
@@ -239,7 +245,7 @@ void AbstractAccessTest::copyAsync()
     auto future3 = File::copyAsync(getFilePath(u"test7-copy"_s), getFilePath(u"test1"_s), fileAccess);
     testFuture(future3, "File::copyAsync", [future3]() {
         EXPECT_FALSE(future3.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future3.result()->success()) << "Could copy file but the location already exists.";
+        EXPECT_FALSE(future3.result().success()) << "Could copy file but the location already exists.";
     });
 
     // Copy file to folder
@@ -253,39 +259,39 @@ void AbstractAccessTest::listAsync()
     auto future = File::listAsync(getFilePath(), true, false, fileAccess);
     testFuture(future, "File::listAsync", [future]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_GT(future.result()->files().length(), 2) << "Could not list files.";
-        EXPECT_TRUE(future.result()->files().contains("test1")) << "List does not include test file 1.";
-        EXPECT_TRUE(future.result()->files().contains("test2")) << "List does not include test file 2.";
+        EXPECT_GT(future.result().files().length(), 2) << "Could not list files.";
+        EXPECT_TRUE(future.result().files().contains("test1")) << "List does not include test file 1.";
+        EXPECT_TRUE(future.result().files().contains("test2")) << "List does not include test file 2.";
 #ifndef Q_OS_WIN
-        EXPECT_TRUE(future.result()->files().contains("file&with\"special characters"))
+        EXPECT_TRUE(future.result().files().contains("file&with\"special characters"))
             << "List does not include file with special characters in it's name.";
 #endif
-        EXPECT_FALSE(future.result()->files().contains("copies")) << "File list includes folders.";
-        EXPECT_TRUE(future.result()->folders().isEmpty()) << "List includes folders when it should not.";
+        EXPECT_FALSE(future.result().files().contains("copies")) << "File list includes folders.";
+        EXPECT_TRUE(future.result().folders().isEmpty()) << "List includes folders when it should not.";
     });
 
     // List files and folders in folder
     auto future2 = File::listAsync(getFilePath(), true, true, fileAccess);
     testFuture(future2, "File::listAsync", [this, future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
-        EXPECT_GT(future2.result()->files().length(), 2) << "Could not list files and folders.";
-        EXPECT_TRUE(future2.result()->files().contains("test1")) << "List does not include test file 1.";
-        EXPECT_TRUE(future2.result()->files().contains("test2")) << "List does not include test file 2.";
-        EXPECT_TRUE(future2.result()->folders().contains("copies")) << "List does not include folders.";
-        EXPECT_FALSE(future2.result()->files().contains("copies")) << "File list contains folders.";
-        EXPECT_FALSE(future2.result()->folders().contains("test1")) << "Folder list contains files.";
+        EXPECT_GT(future2.result().files().length(), 2) << "Could not list files and folders.";
+        EXPECT_TRUE(future2.result().files().contains("test1")) << "List does not include test file 1.";
+        EXPECT_TRUE(future2.result().files().contains("test2")) << "List does not include test file 2.";
+        EXPECT_TRUE(future2.result().folders().contains("copies")) << "List does not include folders.";
+        EXPECT_FALSE(future2.result().files().contains("copies")) << "File list contains folders.";
+        EXPECT_FALSE(future2.result().folders().contains("test1")) << "Folder list contains files.";
 
-        for (const auto &file : future2.result()->filesFull())
+        for (const auto &file : future2.result().filesFull())
         {
             EXPECT_EQ(FileUtils::dirFromPath(file), getFilePath());
         }
 
-        for (const auto &folder : future2.result()->foldersFull())
+        for (const auto &folder : future2.result().foldersFull())
         {
             EXPECT_EQ(FileUtils::dirFromPath(folder), getFilePath());
         }
 
-        const auto &filesWithWildcard = future2.result()->filesFull(u"*1"_s);
+        const auto &filesWithWildcard = future2.result().filesFull(u"*1"_s);
         EXPECT_EQ(filesWithWildcard.length(), 1);
 
         for (const auto &file : filesWithWildcard)
@@ -298,15 +304,14 @@ void AbstractAccessTest::listAsync()
     auto future3 = File::listAsync(getFilePath(), false, true, fileAccess);
     testFuture(future3, "File::listAsync", [future3]() {
         EXPECT_FALSE(future3.isCanceled()) << "QFuture is canceled!";
-        EXPECT_GT(future3.result()->folders().length(), 1) << "Could not list folders.";
-        EXPECT_EQ(future3.result()->folders().length(), 3); // saves, moves, copies
-        EXPECT_TRUE(future3.result()->files().isEmpty())
-            << "Result contains files when it should only contain folders.";
-        EXPECT_TRUE(future3.result()->folders().contains("copies")) << "List does not include folder \"copies\".";
-        EXPECT_FALSE(future3.result()->folders().contains("test1"))
+        EXPECT_GT(future3.result().folders().length(), 1) << "Could not list folders.";
+        EXPECT_EQ(future3.result().folders().length(), 3); // saves, moves, copies
+        EXPECT_TRUE(future3.result().files().isEmpty()) << "Result contains files when it should only contain folders.";
+        EXPECT_TRUE(future3.result().folders().contains("copies")) << "List does not include folder \"copies\".";
+        EXPECT_FALSE(future3.result().folders().contains("test1"))
             << "List does include files when it should only contain folders.";
-        EXPECT_FALSE(future3.result()->files().contains("copies")) << "File list contains folders.";
-        EXPECT_FALSE(future3.result()->folders().contains("test1")) << "Folder list contains files.";
+        EXPECT_FALSE(future3.result().files().contains("copies")) << "File list contains folders.";
+        EXPECT_FALSE(future3.result().folders().contains("test1")) << "Folder list contains files.";
     });
 }
 
@@ -315,7 +320,8 @@ void AbstractAccessTest::createDirAndVerify(const QString &path)
     auto future = File::createDirAsync(path, fileAccess);
     testFuture(future, "File::createDirAsync", [this, future, path]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_TRUE(future.result()->success()) << "Apparently the directory could not be created.";
+        EXPECT_TRUE(future.result().success())
+            << "Apparently the directory could not be created: " << future.result().errorMessage().toStdString();
         verifyThatFileExists(path);
     });
 }
@@ -331,7 +337,7 @@ void AbstractAccessTest::createDirAsync()
     auto future = File::createDirAsync(getFilePath(u"created_dir"_s), fileAccess);
     testFuture(future, "File::createDirAsync", [future]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future.result()->success()) << "Apparently a directory that already existed could be created.";
+        EXPECT_FALSE(future.result().success()) << "Apparently a directory that already existed could be created.";
     });
 }
 
@@ -345,7 +351,7 @@ void AbstractAccessTest::checkAsync()
     auto future2 = File::checkAsync(getFilePath(u"test1-missing"_s), false, fileAccess);
     testFuture(future2, "File::checkAsync", [future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
-        EXPECT_FALSE(future2.result()->exists()) << "Apparently the file exists when it should not.";
+        EXPECT_FALSE(future2.result().exists()) << "Apparently the file exists when it should not.";
     });
 
     // Check single file
@@ -355,7 +361,7 @@ void AbstractAccessTest::checkAsync()
     auto future3 = File::checkAsync(files, false, fileAccess);
     testFuture(future3, "File::checkAsync", [future3]() {
         EXPECT_FALSE(future3.isCanceled()) << "QFuture is canceled!";
-        EXPECT_EQ(future3.result()->existing().length(), 3) << "Incorrect number of files found.";
-        EXPECT_EQ(future3.result()->missing().length(), 1) << "Incorrect number of files not found.";
+        EXPECT_EQ(future3.result().existing().length(), 3) << "Incorrect number of files found.";
+        EXPECT_EQ(future3.result().missing().length(), 1) << "Incorrect number of files not found.";
     });
 }

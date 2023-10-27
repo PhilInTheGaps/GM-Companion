@@ -34,8 +34,7 @@ public:
 private:
     static constexpr const auto PROJECT_FILE_SUFFIX = ".audio";
 
-    static auto loadProjects(QObject *context, std::shared_ptr<Files::FileListResult> files)
-        -> QFuture<std::vector<AudioProject *>>;
+    static auto loadProjects(QObject *context, Files::FileListResult &&files) -> QFuture<std::vector<AudioProject *>>;
     static auto getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath) -> QStringList;
 
     static auto saveProject(AudioProject *project, const QString &filePath, const QByteArray &data) -> QFuture<bool>;

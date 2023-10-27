@@ -3,6 +3,9 @@
 #include <QObject>
 #include <QString>
 
+namespace Services
+{
+
 class SpotifyUtils
 {
     Q_GADGET
@@ -37,3 +40,5 @@ private:
         R"((?'type'albums?|playlists?|tracks?|artists?|episodes?|shows?)\/(?'id'[[:alnum:]]+))";
     static constexpr const char *IS_URI = R"(.+\:.+\:.*)";
 };
+
+} // namespace Services

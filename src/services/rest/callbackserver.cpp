@@ -4,6 +4,7 @@
 #include <QUrlQuery>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 Q_LOGGING_CATEGORY(gmCallbackServer, "gm.service.rest.callbackserver")
 

@@ -13,6 +13,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
+using namespace Services;
 
 class NextcloudAccessTest : public AbstractAccessTest
 {

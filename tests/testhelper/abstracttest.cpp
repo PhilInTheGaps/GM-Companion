@@ -21,11 +21,12 @@ void AbstractTest::verifyFileContent(const QString &path, const QByteArray &cont
     testFuture(
         future, "File::getDataAsync",
         [future, content]() {
-            EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
+            ASSERT_FALSE(future.isCanceled()) << "QFuture is canceled!";
 
             const auto &result = future.result();
-            EXPECT_TRUE(result->success()) << "File::getDataAsync did not return a valid result.";
-            EXPECT_EQ(result->data(), content);
+            EXPECT_TRUE(result.success())
+                << "File::getDataAsync did not return a valid result: " << result.errorMessage().toStdString();
+            EXPECT_EQ(result.data(), content);
         },
         cached);
 }
@@ -39,8 +40,8 @@ void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
     auto future = File::checkAsync(path, false, fileAccess);
     testFuture(future, "File::checkAsync", [future, path, shouldExist]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
-        EXPECT_EQ(shouldExist, future.result()->exists())
-            << "Apparently the file " << path.toStdString() << " does" << (shouldExist ? " not" : "")
+        EXPECT_EQ(shouldExist, future.result().exists())
+            << "Apparently the file " << path.toStdString() << " does " << (shouldExist ? "not " : "")
             << "exist when it should" << (shouldExist ? "" : " not");
     });
 }

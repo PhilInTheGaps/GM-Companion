@@ -8,6 +8,7 @@
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 
+using namespace Services;
 using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioPlaylistResolving, "gm.audio.playlist.resolving")
@@ -84,7 +85,7 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
     case AudioFile::Source::File: {
         const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
         return Files::File::getDataAsync(path).then(
-            &m_fileParent, [callback](std::shared_ptr<Files::FileDataResult> result) { callback(result->data()); });
+            &m_fileParent, [callback](const Files::FileDataResult &result) { callback(result.data()); });
         break;
     }
     case AudioFile::Source::Web: {
@@ -111,22 +112,22 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
 
     if (!SpotifyUtils::isContainerType(type)) return QtFuture::makeReadyFuture();
 
-    const auto callback = [this, index](const QSharedPointer<SpotifyTrackList> &tracks) {
+    const auto callback = [this, index](const SpotifyTrackList &tracklist) {
         QList<AudioFile *> files;
-        foreach (const auto &track, tracks->tracks)
+        foreach (const auto &track, tracklist.tracks)
         {
-            if (!track->isPlayable)
+            if (!track.isPlayable)
             {
-                qCDebug(gmAudioPlaylistResolving()) << "Spotify track" << track->name << track->album->name
-                                                    << track->uri << "is not playable -> ignoring it";
+                qCDebug(gmAudioPlaylistResolving()) << "Spotify track" << track.name << track.album.name << track.uri
+                                                    << "is not playable -> ignoring it";
                 continue;
             }
 
-            switch (SpotifyUtils::getUriType(track->uri))
+            switch (SpotifyUtils::getUriType(track.uri))
             {
             case SpotifyUtils::SpotifyType::Track:
             case SpotifyUtils::SpotifyType::Episode:
-                files << new AudioFile(track->uri, AudioFile::Source::Spotify, track->name, &m_fileParent);
+                files << new AudioFile(track.uri, AudioFile::Source::Spotify, track.name, &m_fileParent);
             default:
                 break;
             }
@@ -137,9 +138,9 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
     switch (type)
     {
     case SpotifyUtils::SpotifyType::Playlist:
-        return Spotify::instance()->playlists->getPlaylistTracks(id).then(&m_fileParent, callback);
+        return Spotify::instance()->playlists.getPlaylistTracks(id).then(&m_fileParent, callback);
     case SpotifyUtils::SpotifyType::Album:
-        return Spotify::instance()->albums->getAlbumTracks(id).then(&m_fileParent, callback);
+        return Spotify::instance()->albums.getAlbumTracks(id).then(&m_fileParent, callback);
     default:
         qCCritical(gmAudioPlaylistResolving())
             << "loadPlaylistRecursiveSpotify(): not implemented for container type" << (int)type;
@@ -184,14 +185,14 @@ void ResolvingAudioPlaylist::loadSpotifyTitles(const QList<AudioFile *> &tracks)
         trackIds << SpotifyUtils::getIdFromUri(track->url());
     }
 
-    const auto callback = [tracks](const std::vector<QSharedPointer<SpotifyTrack>> &results) {
+    const auto callback = [tracks](const std::vector<SpotifyTrack> &results) {
         for (size_t i = 0; i < results.size(); i++)
         {
-            tracks.at(i)->title(results.at(i)->name);
+            tracks.at(i)->title(results.at(i).name);
         }
     };
 
-    Spotify::instance()->tracks->getTracks(trackIds).then(Spotify::instance(), callback);
+    Spotify::instance()->tracks.getTracks(trackIds).then(Spotify::instance(), callback);
 }
 
 auto ResolvingAudioPlaylist::isPlaylist(const QString &file) -> bool

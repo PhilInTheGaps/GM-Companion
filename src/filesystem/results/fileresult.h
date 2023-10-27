@@ -3,7 +3,10 @@
 #include <QObject>
 #include <memory>
 
-class RestNetworkReply;
+namespace Services
+{
+class RestReply;
+}
 
 namespace Files
 {
@@ -23,7 +26,11 @@ public:
     {
     }
 
-    static auto fromNetworkReply(RestNetworkReply *reply) -> std::shared_ptr<FileResult>;
+    explicit FileResult(QString &&errorMessage) : m_success(false), m_errorMessage(std::move(errorMessage))
+    {
+    }
+
+    static auto fromRestReply(Services::RestReply &&reply) -> FileResult;
 
     [[nodiscard]] auto success() const -> bool
     {
@@ -36,8 +43,8 @@ public:
     }
 
 protected:
-    const bool m_success;
-    const QString m_errorMessage;
+    bool m_success;
+    QString m_errorMessage;
 };
 
 } // namespace Files

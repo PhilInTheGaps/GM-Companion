@@ -7,14 +7,15 @@
 Q_LOGGING_CATEGORY(gmSpotifyTracks, "gm.services.spotify.api.tracks")
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 constexpr size_t MAX_TRACK_COUNT = 50;
 
-TracksAPI::TracksAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
+TracksAPI::TracksAPI(Spotify *parent) : m_spotify(parent)
 {
 }
 
-auto TracksAPI::getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTrack>>
+auto TracksAPI::getTrack(const QString &id) -> QFuture<SpotifyTrack>
 {
     if (id.isEmpty())
     {
@@ -28,24 +29,20 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTra
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestNetworkReply *reply) {
-        if (reply->hasError())
+    const auto callback = [](RestReply reply) -> QFuture<SpotifyTrack> {
+        if (reply.hasError())
         {
-            qCWarning(gmSpotifyTracks()) << "getTrack():" << reply->errorText();
-            reply->deleteLater();
-            return QSharedPointer<SpotifyTrack>();
+            qCWarning(gmSpotifyTracks()) << "getTrack():" << reply.errorText();
+            return {};
         }
 
-        const auto data = reply->data();
-        reply->deleteLater();
-
-        return SpotifyTrack::fromJson(data);
+        return QtFuture::makeReadyFuture(SpotifyTrack::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback);
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
 }
 
-auto TracksAPI::getTracks(const QStringList &ids) -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>
+auto TracksAPI::getTracks(const QStringList &ids) -> QFuture<std::vector<SpotifyTrack>>
 {
     if (ids.isEmpty())
     {
@@ -56,8 +53,8 @@ auto TracksAPI::getTracks(const QStringList &ids) -> QFuture<std::vector<QShared
     return getTracks(ids, {});
 }
 
-auto TracksAPI::getTracks(const QStringList &ids, std::vector<QSharedPointer<SpotifyTrack>> &&previous)
-    -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>
+auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&previous)
+    -> QFuture<std::vector<SpotifyTrack>>
 {
     auto batch = getNextBatch(ids, previous);
     if (batch.isEmpty()) return QtFuture::makeReadyFuture(previous);
@@ -69,34 +66,32 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<QSharedPointer<Spo
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this, ids, previous](RestNetworkReply *reply) mutable {
-        if (reply->hasError())
+    const auto callback = [this, ids, previous = std::move(previous)](RestReply reply) mutable {
+        if (reply.hasError())
         {
-            qCWarning(gmSpotifyTracks()) << "getTracks():" << reply->errorText();
-            reply->deleteLater();
-            return QFuture<std::vector<QSharedPointer<SpotifyTrack>>>();
+            qCWarning(gmSpotifyTracks()) << "getTracks():" << reply.errorText();
+            return QFuture<std::vector<SpotifyTrack>>();
         }
 
-        const auto data = reply->data();
-        reply->deleteLater();
-
-        if (previous.empty()) previous = SpotifyTrack::fromJsonArray(data);
+        if (previous.empty()) previous = SpotifyTrack::fromJsonArray(reply.data());
         else
         {
-            auto newTracks = SpotifyTrack::fromJsonArray(data);
+            auto newTracks = SpotifyTrack::fromJsonArray(reply.data());
             previous.insert(previous.end(), newTracks.begin(), newTracks.end());
         }
 
-        if (static_cast<size_t>(ids.length()) > previous.size()) return getTracks(ids, std::move(previous));
+        if (ids.length() > previous.size())
+        {
+            return getTracks(ids, std::move(previous));
+        }
 
         return QtFuture::makeReadyFuture(previous);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
 }
 
-auto TracksAPI::getNextBatch(const QStringList &ids, const std::vector<QSharedPointer<SpotifyTrack>> &previous)
-    -> QStringList
+auto TracksAPI::getNextBatch(const QStringList &ids, const std::vector<SpotifyTrack> &previous) -> QStringList
 {
     size_t remaining = ids.length() - previous.size();
     if (remaining < 1) return {};

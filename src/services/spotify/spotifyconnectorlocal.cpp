@@ -3,6 +3,7 @@
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 Q_LOGGING_CATEGORY(gmSpotifyLocal, "gm.service.spotify.local")
 

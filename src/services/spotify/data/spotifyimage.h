@@ -4,11 +4,15 @@
 #include <QJsonObject>
 #include <QSize>
 #include <QString>
+#include <vector>
+
+namespace Services
+{
 
 struct SpotifyImage
 {
-    static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyImage>;
-    static auto fromJson(const QJsonArray &array) -> QList<QSharedPointer<SpotifyImage>>;
+    static auto fromJson(const QJsonObject &json) -> SpotifyImage;
+    static auto fromJson(const QJsonArray &array) -> std::vector<SpotifyImage>;
 
     QString url;
     int width;
@@ -16,3 +20,5 @@ struct SpotifyImage
 
     [[nodiscard]] auto size() const -> QSize;
 };
+
+} // namespace Services

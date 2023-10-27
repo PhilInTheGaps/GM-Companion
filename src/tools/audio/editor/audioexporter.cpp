@@ -1,5 +1,6 @@
 #include "audioexporter.h"
 #include "filesystem/file.h"
+#include "results/fileresult.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
@@ -151,7 +152,7 @@ auto Worker::copyFile(const QString &filePath, const QString &base, const QStrin
     const auto newPath = FileUtils::fileInDir(FileUtils::fileInDir(filePath, subfolder), m_path);
 
     Files::File::copyAsync(oldPath, newPath)
-        .then(this, [this](std::shared_ptr<Files::FileResult>) { copyNext(); })
+        .then(this, [this](Files::FileResult) { copyNext(); })
         .onCanceled(this, [this]() { copyNext(); });
     return true;
 }

@@ -16,6 +16,11 @@ public:
     {
     }
 
+    explicit FileListResult(const QString &path, QString &&errorMessage)
+        : FileResult(std::move(errorMessage)), m_path(path)
+    {
+    }
+
     explicit FileListResult(const QString &path, const QStringList &folders, const QStringList &files)
         : FileResult(true, QByteArray()), m_folders(folders), m_files(files), m_path(path)
     {

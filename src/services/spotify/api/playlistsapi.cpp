@@ -9,12 +9,15 @@
 Q_LOGGING_CATEGORY(gmSpotifyPlaylists, "gm.spotify.api.playlists")
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
-PlaylistsAPI::PlaylistsAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
+constexpr auto MAX_PLAYLIST_TRACK_COUNT = 50;
+
+PlaylistsAPI::PlaylistsAPI(Spotify *parent) : m_spotify(parent)
 {
 }
 
-auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<QSharedPointer<SpotifyPlaylist>>
+auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<SpotifyPlaylist>
 {
     if (id.isEmpty())
     {
@@ -27,24 +30,20 @@ auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<QSharedPointer<Spot
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](gsl::owner<RestNetworkReply *> reply) -> QSharedPointer<SpotifyPlaylist> {
-        if (reply->hasError())
+    const auto callback = [](RestReply reply) -> QFuture<SpotifyPlaylist> {
+        if (reply.hasError())
         {
-            qCWarning(gmSpotifyPlaylists()) << reply->errorText();
-            reply->deleteLater();
+            qCWarning(gmSpotifyPlaylists()) << reply.errorText();
             return {};
         }
 
-        const auto data = reply->data();
-        reply->deleteLater();
-
-        return SpotifyPlaylist::fromJson(data);
+        return QtFuture::makeReadyFuture(SpotifyPlaylist::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback);
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
 }
 
-auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<QSharedPointer<SpotifyTrackList>>
+auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<SpotifyTrackList>
 {
     if (id.isEmpty())
     {
@@ -55,60 +54,51 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<QSharedPointe
     QUrl url(u"https://api.spotify.com/v1/playlists/%1/tracks"_s.arg(id));
 
     QUrlQuery query;
-    query.addQueryItem(u"limit"_s, QString::number(MAX_TRACK_COUNT));
+    query.addQueryItem(u"limit"_s, QString::number(MAX_PLAYLIST_TRACK_COUNT));
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this](gsl::owner<RestNetworkReply *> reply) -> QFuture<QSharedPointer<SpotifyTrackList>> {
-        if (reply->hasError())
+    const auto callback = [this](RestReply reply) -> QFuture<SpotifyTrackList> {
+        if (reply.hasError())
         {
-            qCWarning(gmSpotifyPlaylists()) << reply->errorText();
-            reply->deleteLater();
+            qCWarning(gmSpotifyPlaylists()) << reply.errorText();
             return {};
         }
 
-        const auto data = reply->data();
-        reply->deleteLater();
-
-        auto tracklist = SpotifyTrackList::fromJson(data);
-        if (!tracklist->next.isEmpty())
-        {
-            return getPlaylistTracks(tracklist);
-        }
-        return QtFuture::makeReadyFuture(tracklist);
-    };
-
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback).unwrap();
-}
-
-auto PlaylistsAPI::getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracklist)
-    -> QFuture<QSharedPointer<SpotifyTrackList>>
-{
-    const QUrl url(tracklist->next);
-
-    const auto callback = [this, tracklist](gsl::owner<RestNetworkReply *> reply) mutable {
-        if (reply->hasError())
-        {
-            qCWarning(gmSpotifyPlaylists()) << reply->errorText();
-            reply->deleteLater();
-            return QtFuture::makeReadyFuture(tracklist);
-        }
-
-        const auto data = reply->data();
-        reply->deleteLater();
-
-        tracklist->append(*SpotifyTrackList::fromJson(data));
-        if (!tracklist->next.isEmpty())
+        auto tracklist = SpotifyTrackList::fromJson(reply.data());
+        if (!tracklist.next.isEmpty())
         {
             return getPlaylistTracks(std::move(tracklist));
         }
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
 }
 
-auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config) const -> QFuture<gsl::owner<RestNetworkReply *>>
+auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist) -> QFuture<SpotifyTrackList>
+{
+    const QUrl url(tracklist.next);
+
+    const auto callback = [this, tracklist = std::move(tracklist)](RestReply reply) mutable {
+        if (reply.hasError())
+        {
+            qCWarning(gmSpotifyPlaylists()) << reply.errorText();
+            return QtFuture::makeReadyFuture(tracklist);
+        }
+
+        tracklist.append(SpotifyTrackList::fromJson(reply.data()));
+        if (!tracklist.next.isEmpty())
+        {
+            return getPlaylistTracks(std::move(tracklist));
+        }
+        return QtFuture::makeReadyFuture(tracklist);
+    };
+
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+}
+
+auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config) const -> QFuture<RestReply>
 {
     QUrl url(u"https://api.spotify.com/v1/playlists/%1"_s.arg(config.id));
 

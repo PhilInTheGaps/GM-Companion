@@ -1,29 +1,28 @@
 #pragma once
 
+#include "../data/spotifyalbum.h"
 #include <QFuture>
-#include <QObject>
 #include <QPointer>
 
-#include "../data/spotifyalbum.h"
+namespace Services
+{
 
 class Spotify;
 
-class AlbumAPI : public QObject
+class AlbumAPI
 {
-    Q_OBJECT
     friend Spotify;
 
 public:
-    [[nodiscard]] auto getAlbum(const QString &id) -> QFuture<QSharedPointer<SpotifyAlbum>>;
+    [[nodiscard]] auto getAlbum(const QString &id) -> QFuture<SpotifyAlbum>;
 
-    [[nodiscard]] auto getAlbumTracks(const QString &id) -> QFuture<QSharedPointer<SpotifyTrackList>>;
-    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyAlbum> album) -> QFuture<QSharedPointer<SpotifyAlbum>>;
-    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist)
-        -> QFuture<QSharedPointer<SpotifyTrackList>>;
+    [[nodiscard]] auto getAlbumTracks(const QString &id) -> QFuture<SpotifyTrackList>;
+    [[nodiscard]] auto getAlbumTracks(SpotifyAlbum &&album) -> QFuture<SpotifyAlbum>;
+    [[nodiscard]] auto getAlbumTracks(SpotifyTrackList &&tracklist) -> QFuture<SpotifyTrackList>;
 
 private:
     explicit AlbumAPI(Spotify *parent);
-    const QPointer<Spotify> m_spotify = nullptr;
-
-    static constexpr auto MAX_TRACK_COUNT = 50;
+    QPointer<Spotify> m_spotify = nullptr;
 };
+
+} // namespace Services

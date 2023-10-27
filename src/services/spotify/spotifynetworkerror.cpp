@@ -3,6 +3,7 @@
 #include <QJsonObject>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 SpotifyNetworkError::SpotifyNetworkError(const QByteArray &data)
 {

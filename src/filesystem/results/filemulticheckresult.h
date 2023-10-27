@@ -10,7 +10,7 @@ namespace Files
 class FileMultiCheckResult : public FileResult
 {
 public:
-    explicit FileMultiCheckResult(std::vector<std::shared_ptr<FileCheckResult>> results)
+    explicit FileMultiCheckResult(std::vector<FileCheckResult> &&results)
         : FileResult(true), m_results(std::move(results))
     {
     }
@@ -23,12 +23,12 @@ public:
     {
     }
 
-    void add(const std::shared_ptr<FileCheckResult> &result)
+    void add(FileCheckResult &&result)
     {
         m_results.push_back(result);
     }
 
-    [[nodiscard]] auto results() const -> const std::vector<std::shared_ptr<FileCheckResult>> &
+    [[nodiscard]] auto results() const -> const std::vector<FileCheckResult> &
     {
         return m_results;
     }
@@ -44,16 +44,16 @@ public:
     }
 
 private:
-    std::vector<std::shared_ptr<FileCheckResult>> m_results;
+    std::vector<FileCheckResult> m_results;
 
     [[nodiscard]] auto find(bool existing) const -> QStringList
     {
         QStringList files;
         for (const auto &result : m_results)
         {
-            if (result->exists() == existing)
+            if (result.exists() == existing)
             {
-                files.append(result->path());
+                files.append(result.path());
             }
         }
         return files;

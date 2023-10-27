@@ -5,6 +5,9 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 
+namespace Services
+{
+
 class CallbackServer : public QObject
 {
     Q_OBJECT
@@ -38,3 +41,5 @@ private slots:
     void onIncomingConnection();
     void onBytesReady();
 };
+
+} // namespace Services

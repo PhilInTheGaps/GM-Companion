@@ -5,6 +5,9 @@
 #include <QProcess>
 #include <QPromise>
 
+namespace Services
+{
+
 class LibrespotController : public AbstractSpotifyClientController
 {
     Q_OBJECT
@@ -22,8 +25,6 @@ private:
     bool m_hasStarted = false;
     bool m_isExitExpected = false;
     bool m_tryAgainIfSettingActiveFails = true;
-    static constexpr int TRY_AGAIN_TIMEOUT_MS = 3000;
-    static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
 
     void initProcess() const;
     static auto isOtherProcessIsRunning() -> bool;
@@ -49,10 +50,12 @@ private:
     auto getLibrespotInfo() -> LibrespotInfo;
     void printOutputAndUpdateStatus(const QString &line);
 
-    QPromise<bool> m_hasAuthenticated;
+    std::unique_ptr<QPromise<bool>> m_hasAuthenticated;
 
 private slots:
     void onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onLibrespotError(QProcess::ProcessError error) const;
     void onLibrespotOutputReady();
 };
+
+} // namespace Services

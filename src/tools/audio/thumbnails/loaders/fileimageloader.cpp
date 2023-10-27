@@ -15,17 +15,17 @@ auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
 
     auto future = File::getDataAsync(path);
 
-    const auto callback = [path](std::shared_ptr<FileDataResult> result) {
+    const auto callback = [path](const FileDataResult &result) {
         return QtConcurrent::run(loadFromFileResult, path, result);
     };
 
     return future.then(callback).unwrap();
 }
 
-auto FileImageLoader::loadFromFileResult(const QString &path, std::shared_ptr<FileDataResult> result) -> QPixmap
+auto FileImageLoader::loadFromFileResult(const QString &path, const FileDataResult &result) -> QPixmap
 {
     QPixmap image;
-    image.loadFromData(result->data());
+    image.loadFromData(result.data());
 
     AudioThumbnailCache::instance()->insertImage(path, image);
 

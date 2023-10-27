@@ -105,7 +105,7 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
     auto future = Files::File::getDataAsync(path);
 
     return future
-        .then([path](std::shared_ptr<Files::FileDataResult> result) {
+        .then([path](const Files::FileDataResult &result) {
             auto fileName = FileUtils::fileName(path);
 
 #ifdef Q_OS_WIN
@@ -117,7 +117,7 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
             tempFile.setAutoRemove(false);
             tempFile.open();
 #endif
-            tempFile.write(result->data());
+            tempFile.write(result.data());
             tempFile.close();
 
             return loadFromLocalFile(tempFile.fileName());

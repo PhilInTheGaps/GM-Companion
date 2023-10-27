@@ -24,11 +24,11 @@ Map::Map(QObject *parent) : QObject(parent), m_markers(this)
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    Files::File::getDataAsync(path).then(this, [this](std::shared_ptr<Files::FileDataResult> result) {
-        if (!result) return;
+    Files::File::getDataAsync(path).then(this, [this](Files::FileDataResult &&result) {
+        if (!result.success()) return;
 
         QPixmap pixmap;
-        pixmap.loadFromData(result->data());
+        pixmap.loadFromData(result.data());
         imageData(QUrl(QString(StringUtils::stringFromImage(pixmap))));
 
         loadMarkers();
@@ -52,23 +52,20 @@ void Map::saveMarkers() const
 void Map::loadMarkers()
 {
     const auto filePath = path() + ".json";
-    Files::File::checkAsync(filePath).then(this, [this, filePath](std::shared_ptr<Files::FileCheckResult> result) {
-        if (!result) return;
+    Files::File::checkAsync(filePath).then(this, [this, filePath](Files::FileCheckResult &&result) {
+        if (!result.success() || !result.exists()) return;
 
-        if (result->exists())
-        {
-            Files::File::getDataAsync(filePath).then(this, [this](std::shared_ptr<Files::FileDataResult> result) {
-                if (!result) return;
+        Files::File::getDataAsync(filePath).then(this, [this](Files::FileDataResult &&result) {
+            if (!result.success()) return;
 
-                auto markers = QJsonDocument::fromJson(result->data()).object()["markers"_L1].toArray();
+            auto markers = QJsonDocument::fromJson(result.data()).object()["markers"_L1].toArray();
 
-                for (const auto &marker : markers)
-                {
-                    addMarker(new MapMarker(marker.toObject(), this));
-                }
-                emit markersChanged();
-            });
-        }
+            for (const auto &marker : markers)
+            {
+                addMarker(new MapMarker(marker.toObject(), this));
+            }
+            emit markersChanged();
+        });
     });
 }
 
@@ -110,10 +107,10 @@ void MapCategory::loadMaps()
 
     const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(u"maps"_s));
 
-    Files::File::listAsync(path, true, false).then(this, [this, path](std::shared_ptr<Files::FileListResult> result) {
-        if (!result) return;
+    Files::File::listAsync(path, true, false).then(this, [this, path](Files::FileListResult &&result) {
+        if (!result.success()) return;
 
-        foreach (const auto &file, result->files())
+        foreach (const auto &file, result.files())
         {
             if (!file.endsWith(".json"_L1))
             {

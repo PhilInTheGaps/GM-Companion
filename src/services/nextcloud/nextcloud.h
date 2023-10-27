@@ -10,9 +10,10 @@
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQml/qqmlregistration.h>
-#include <gsl/gsl>
 
-class NextCloud : public Service
+namespace Services
+{
+class NextCloud : public Services::Service
 {
     Q_OBJECT
     QML_ELEMENT
@@ -56,3 +57,4 @@ private:
     void handleAuthPointNotFound(const QUrl &url, const QString &token);
     void handleAuthPointSuccess(QNetworkReply &reply);
 };
+} // namespace Services

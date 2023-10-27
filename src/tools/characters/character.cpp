@@ -42,10 +42,10 @@ void Character::loadFiles()
 
 void Character::loadFileList()
 {
-    Files::File::listAsync(folder(), true, false).then(this, [this](std::shared_ptr<Files::FileListResult> result) {
-        if (!result) return;
+    Files::File::listAsync(folder(), true, false).then(this, [this](const Files::FileListResult &result) {
+        if (!result.success()) return;
 
-        foreach (const auto &fileName, result->files())
+        foreach (const auto &fileName, result.files())
         {
             m_files.append(new CharacterFile(fileName, FileUtils::fileInDir(fileName, folder()), this));
         }
@@ -65,11 +65,10 @@ void Character::loadFileData(int index)
         return;
     }
 
-    Files::File::getDataAsync(m_files.at(index)->path())
-        .then(this, [this, index](std::shared_ptr<Files::FileDataResult> result) {
-            if (!result) return;
+    Files::File::getDataAsync(m_files.at(index)->path()).then(this, [this, index](const Files::FileDataResult &result) {
+        if (!result.success()) return;
 
-            m_files.at(index)->data(result->data());
-            emit fileDataLoaded(index, result->data());
-        });
+        m_files.at(index)->data(result.data());
+        emit fileDataLoaded(index, result.data());
+    });
 }

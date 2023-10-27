@@ -31,10 +31,10 @@ void AudioEditorFileBrowser::addFiles(const QStringList &path, int index, bool f
 
     const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
     Files::File::listAsync(dir, !folders, folders)
-        .then(this, [this, path, folders, index](std::shared_ptr<Files::FileListResult> result) {
-            if (!result) return;
+        .then(this, [this, path, folders, index](const Files::FileListResult &result) {
+            if (!result.success()) return;
 
-            addFilesToModel(folders ? result->folders() : result->files(), path, folders ? 3 : static_cast<int>(type()),
+            addFilesToModel(folders ? result.folders() : result.files(), path, folders ? 3 : static_cast<int>(type()),
                             index);
         });
 }

@@ -27,8 +27,8 @@ public slots:
     void loadData() override;
 
 protected:
-    void onShopFilesFound(std::shared_ptr<Files::FileListResult> result);
-    void onShopFileDataReceived(const std::vector<std::shared_ptr<Files::FileDataResult>> &results);
+    void onShopFilesFound(Files::FileListResult &&result);
+    void onShopFileDataReceived(std::vector<Files::FileDataResult> &&results);
 
     void setFirstProjectAsCurrent();
 };

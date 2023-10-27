@@ -3,17 +3,21 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QString>
+#include <vector>
+
+namespace Services
+{
 
 struct SpotifyDevice;
 struct SpotifyDeviceList
 {
-    QList<QSharedPointer<SpotifyDevice>> devices;
+    std::vector<SpotifyDevice> devices;
 };
 
 struct SpotifyDevice
 {
-    static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyDevice>;
-    static auto fromJson(const QJsonArray &json) -> QSharedPointer<SpotifyDeviceList>;
+    static auto fromJson(const QJsonObject &json) -> SpotifyDevice;
+    static auto fromJson(const QJsonArray &json) -> SpotifyDeviceList;
 
     /// The device ID.
     QString id;
@@ -37,3 +41,5 @@ struct SpotifyDevice
     /// The current volume in percent. Between 0 and 100 (inclusive).
     int volumePercent;
 };
+
+} // namespace Services

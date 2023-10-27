@@ -4,6 +4,8 @@
 
 Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
 
+using namespace Services;
+
 SpotifyPlayer::SpotifyPlayer(MetaDataReader &mDReader, QObject *parent)
     : AudioPlayer(parent), m_metaDataReader(mDReader)
 {
@@ -56,18 +58,13 @@ void SpotifyPlayer::play(const QString &uri)
     qCDebug(gmAudioSpotify) << "Playing:" << uri;
     m_currentUri = uri;
 
-    const auto callback = [this](RestNetworkReply *reply) {
-        if (!reply) return;
-
-        if (reply->hasError())
+    const auto callback = [this](RestReply &&reply) {
+        if (reply.hasError())
         {
-            qCWarning(gmAudioSpotify()) << reply->errorText();
-            reply->deleteLater();
+            qCWarning(gmAudioSpotify()) << reply.errorText();
             emit songEnded();
             return;
         }
-
-        reply->deleteLater();
 
         m_metaDataReader.clearMetaData();
         startMetaDataTimer();
@@ -75,7 +72,7 @@ void SpotifyPlayer::play(const QString &uri)
         state(AudioPlayer::State::Playing);
     };
 
-    Spotify::instance()->player->play(uri).then(this, callback);
+    Spotify::instance()->player.play(uri).then(this, callback);
 
     state(AudioPlayer::State::Loading);
 }
@@ -89,9 +86,12 @@ void SpotifyPlayer::play()
 
     qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
-    Spotify::instance()->player->play().then(this, [this](RestNetworkReply *reply) {
-        if (reply) reply->deleteLater();
-
+    Spotify::instance()->player.play().then(this, [this](const RestReply &reply) {
+        if (reply.hasError())
+        {
+            qCWarning(gmAudioSpotify()) << "Could not continue playback:" << reply.errorText();
+            return;
+        }
         startMetaDataTimer();
     });
 
@@ -120,8 +120,11 @@ void SpotifyPlayer::pause()
     m_songDurationTimer.stop();
     m_metaDataTimer.stop();
 
-    Spotify::instance()->player->pause().then(this, [](RestNetworkReply *reply) {
-        if (reply) reply->deleteLater();
+    Spotify::instance()->player.pause().then(this, [](const RestReply &reply) {
+        if (reply.hasError())
+        {
+            qCWarning(gmAudioSpotify()) << "Could not pause playback:" << reply.errorText();
+        }
     });
 
     state(AudioPlayer::State::Paused);
@@ -154,8 +157,12 @@ void SpotifyPlayer::next()
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
-    Spotify::instance()->player->next().then(this, [this](RestNetworkReply *reply) {
-        if (reply) reply->deleteLater();
+    Spotify::instance()->player.next().then(this, [this](const RestReply &reply) {
+        if (reply.hasError())
+        {
+            qCWarning(gmAudioSpotify()) << "Could not skip track:" << reply.errorText();
+            return;
+        }
 
         startMetaDataTimer();
     });
@@ -168,8 +175,11 @@ void SpotifyPlayer::again()
 {
     qCDebug(gmAudioSpotify) << "Playing track again ...";
 
-    Spotify::instance()->player->seek(1).then(this, [](RestNetworkReply *reply) {
-        if (reply) reply->deleteLater();
+    Spotify::instance()->player.seek(1).then(this, [](const RestReply &reply) {
+        if (reply.hasError())
+        {
+            qCWarning(gmAudioSpotify()) << "Could not play track again:" << reply.errorText();
+        }
     });
 }
 
@@ -178,9 +188,7 @@ void SpotifyPlayer::setVolume(int linear, int logarithmic)
     Q_UNUSED(linear)
     qCDebug(gmAudioSpotify) << "Setting volume:" << logarithmic;
 
-    Spotify::instance()->player->volume(logarithmic).then(this, [](RestNetworkReply *reply) {
-        if (reply) reply->deleteLater();
-    });
+    auto _ = Spotify::instance()->player.volume(logarithmic);
 
     m_volume = logarithmic;
 }
@@ -192,28 +200,27 @@ void SpotifyPlayer::getCurrentSong()
 {
     qCDebug(gmAudioSpotify) << "Getting info on current song ...";
 
-    const auto callback = [this](QSharedPointer<SpotifyCurrentTrack> track) {
-        if (track->track->uri != m_currentUri)
+    const auto callback = [this](SpotifyCurrentTrack &&track) {
+        if (track.track.uri != m_currentUri)
         {
-            qCDebug(gmAudioSpotify()) << "Found track" << track->track->uri << "is not the expected track"
+            qCDebug(gmAudioSpotify()) << "Found track" << track.track.uri << "is not the expected track"
                                       << m_currentUri;
             startMetaDataTimer();
             return;
         }
 
         AudioMetaData metadata;
-        metadata.title(track->track->name);
-        metadata.album(track->track->album->name);
-        metadata.artist(track->track->artistNames());
-        metadata.cover(track->track->image()->url);
+        metadata.title(track.track.name);
+        metadata.album(track.track.album.name);
+        metadata.artist(track.track.artistNames());
+        metadata.cover(track.track.image().url);
 
-        using namespace std::chrono;
-        auto duration = milliseconds(track->track->durationMs);
-        auto progress = milliseconds(track->progressMs);
+        auto duration = track.track.duration;
+        auto progress = track.progress;
 
         startDurationTimer(duration - progress);
         m_metaDataReader.setMetaData(metadata);
     };
 
-    Spotify::instance()->player->getCurrentlyPlaying().then(this, callback);
+    Spotify::instance()->player.getCurrentlyPlaying().then(this, callback);
 }

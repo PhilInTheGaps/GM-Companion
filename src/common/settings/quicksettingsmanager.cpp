@@ -47,9 +47,9 @@ void QuickSettingsManager::setLanguage(const QString &language)
     a_languageBcp47 = SettingsManager::getLanguageBcp47();
 }
 
-auto QuickSettingsManager::getServerUrl(const QString &service) -> QString
+auto QuickSettingsManager::getServerUrl(const QString &service, bool hasDefault) -> QString
 {
-    return SettingsManager::getServerUrl(service);
+    return SettingsManager::getServerUrl(service, hasDefault);
 }
 
 void QuickSettingsManager::setServerUrl(const QString &url, const QString &service)

@@ -6,17 +6,19 @@ import IconFonts
 Item {
     id: root
 
+//    {
+//        "name": "GoogleDrive",
+//        "icon": FontAwesome.googleDrive,
+//        "iconFont": FontAwesome.fontBrands,
+//        "source": "./accounts/GoogleDriveAccount.qml"
+//    },
+
     readonly property var accounts: [{
             "name": "Spotify",
             "icon": FontAwesome.spotify,
             "iconFont": FontAwesome.fontBrands,
             "source": "./accounts/SpotifyAccount.qml"
-        }, {
-            "name": "GoogleDrive",
-            "icon": FontAwesome.googleDrive,
-            "iconFont": FontAwesome.fontBrands,
-            "source": "./accounts/GoogleDriveAccount.qml"
-        }, {
+        },  {
             "name": "NextCloud",
             "icon": FontAwesome.cloud,
             "iconFont": FontAwesome.fontSolid,

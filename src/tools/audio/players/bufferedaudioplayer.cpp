@@ -112,17 +112,15 @@ void BufferedAudioPlayer::handleUnsupportedMediaSource(const AudioFile &file)
     next();
 }
 
-void BufferedAudioPlayer::onFileReceived(std::shared_ptr<Files::FileDataResult> result)
+void BufferedAudioPlayer::onFileReceived(Files::FileDataResult &&result)
 {
-    if (!result) return;
-
-    if (result->data().isEmpty())
+    if (!result.success() || result.data().isEmpty())
     {
         next();
         return;
     }
 
-    play(result->data());
+    play(result.data());
 }
 
 auto BufferedAudioPlayer::fileSource() const -> AudioFile::Source
@@ -274,7 +272,7 @@ void BufferedAudioPlayer::loadLocalFile(const AudioFile &file)
     m_fileRequestContext = std::make_unique<QObject>();
 
     const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
-    const auto callback = [this](std::shared_ptr<Files::FileDataResult> result) { onFileReceived(result); };
+    const auto callback = [this](Files::FileDataResult &&result) { onFileReceived(std::move(result)); };
 
     Files::File::getDataAsync(path).then(m_fileRequestContext.get(), callback);
 }

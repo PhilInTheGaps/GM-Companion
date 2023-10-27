@@ -8,7 +8,7 @@ Rectangle {
     id: root
     height: Sizes.toolbarHeight
 
-    property ServiceStatus status: undefined
+    property Status status: undefined
 
     visible: status.message !== ""
 

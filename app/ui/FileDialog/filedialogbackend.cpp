@@ -105,16 +105,10 @@ void FileDialogBackend::createFolder(const QString &folderName)
 {
     const auto path = FileUtils::fileInDir(folderName, currentDir());
 
-    File::createDirAsync(path).then(this, [this](std::shared_ptr<FileResult> result) {
-        if (!result)
+    File::createDirAsync(path).then(this, [this](FileResult &&result) {
+        if (!result.success())
         {
-            qCWarning(gmFileDialog()) << "Error: createDirAsync returned a null result!";
-            return;
-        }
-
-        if (!result->success())
-        {
-            qCWarning(gmFileDialog()) << result->errorMessage();
+            qCWarning(gmFileDialog()) << result.errorMessage();
         }
 
         updateFileList();
@@ -131,7 +125,7 @@ void FileDialogBackend::updateFileList()
     isLoading(true);
 
     m_currentFuture = File::listAsync(currentDir(), !folderMode(), true);
-    m_currentFuture.then(this, [this](std::shared_ptr<FileListResult> result) { onFileListReceived(result); })
+    m_currentFuture.then(this, [this](FileListResult &&result) { onFileListReceived(std::move(result)); })
         .onCanceled(this, [this]() {
             qCDebug(gmFileDialog()) << "file list update was cancelled.";
             isLoading(false);
@@ -159,16 +153,16 @@ void FileDialogBackend::stopCurrentRequest()
     }
 }
 
-void FileDialogBackend::onFileListReceived(std::shared_ptr<FileListResult> result)
+void FileDialogBackend::onFileListReceived(FileListResult &&result)
 {
     auto countBefore = a_entries.count();
 
-    foreach (const auto &folder, result->folders())
+    foreach (const auto &folder, result.folders())
     {
         a_entries.append(new FileObject(folder, true, this));
     }
 
-    foreach (const auto &file, result->files())
+    foreach (const auto &file, result.files())
     {
         a_entries.append(new FileObject(file, false, this));
     }

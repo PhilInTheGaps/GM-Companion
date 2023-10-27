@@ -6,25 +6,26 @@
 #include "api/tracksapi.h"
 #include "clients/librespotcontroller.h"
 #include "qmlsingletonfactory.h"
+#include "rest/restserviceconnector.h"
 #include "service.h"
-#include "spotifyconnectorlocal.h"
-#include "spotifyconnectorserver.h"
 #include "spotifynetworkerror.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QPointer>
 #include <QtQml/qqmlregistration.h>
-#include <gsl/gsl>
 
-class Spotify : public Service
+namespace Services
+{
+
+class Spotify : public Services::Service
 {
     Q_OBJECT
     QML_ELEMENT
     QML_SINGLETON
     QML_SINGLETON_FACTORY(Spotify)
 
-    Q_PROPERTY(ServiceStatus *clientStatus READ clientStatus NOTIFY clientStatusChanged)
+    Q_PROPERTY(Services::Status *clientStatus READ clientStatus NOTIFY clientStatusChanged)
 
 public:
     Spotify() = delete;
@@ -33,18 +34,18 @@ public:
     void grant();
     [[nodiscard]] auto isGranted() const -> bool;
 
-    auto get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetworkReply *>>;
-    auto get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply *>>;
-    auto put(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<gsl::owner<RestNetworkReply *>>;
-    auto put(const QUrl &url, const QByteArray &data = "") -> QFuture<gsl::owner<RestNetworkReply *>>;
-    auto post(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<gsl::owner<RestNetworkReply *>>;
+    auto get(const QNetworkRequest &request, bool isAuthRequired = true) -> QFuture<RestReply>;
+    auto get(const QUrl &url, bool isAuthRequired = true) -> QFuture<RestReply>;
+    auto put(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<RestReply>;
+    auto put(const QUrl &url, const QByteArray &data = "") -> QFuture<RestReply>;
+    auto post(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<RestReply>;
 
-    [[nodiscard]] auto clientStatus() const -> ServiceStatus *;
+    [[nodiscard]] auto clientStatus() const -> Status *;
 
-    AlbumAPI *albums;
-    PlayerAPI *player;
-    PlaylistsAPI *playlists;
-    TracksAPI *tracks;
+    AlbumAPI albums = AlbumAPI(this);
+    PlayerAPI player = PlayerAPI(this);
+    PlaylistsAPI playlists = PlaylistsAPI(this);
+    TracksAPI tracks = TracksAPI(this);
 
     AUTO_PROPERTY(QString, username);
 
@@ -60,7 +61,7 @@ private:
     RESTServiceConnector *m_connector = nullptr;
     LibrespotController m_librespotController;
 
-    void handleNetworkError(const RestNetworkReply *reply);
+    void handleNetworkError(const RestReply &reply);
     void handleAccessDenied(const SpotifyNetworkError &error);
 
     void updateConnector();
@@ -68,10 +69,11 @@ private:
 
 signals:
     void authorized();
-    void usernameChanged();
     void clientStatusChanged();
 
 private slots:
     void onAccessGranted();
     void forwardClientStatus(const QString &message);
 };
+
+} // namespace Services

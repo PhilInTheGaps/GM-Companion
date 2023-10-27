@@ -53,17 +53,19 @@ Item {
         anchors.margins: 5
 
         Repeater {
+//            {
+//                "name": "GoogleDrive",
+//                "setting": "GoogleDrive",
+//                "icon": FontAwesome.googleDrive,
+//                "iconFont": FontAwesome.fontBrands
+//            },
+
             model: [{
                     "name": "Local",
                     "setting": "local",
                     "icon": FontAwesome.hardDrive,
                     "iconFont": FontAwesome.fontSolid
-                }, {
-                    "name": "GoogleDrive",
-                    "setting": "GoogleDrive",
-                    "icon": FontAwesome.googleDrive,
-                    "iconFont": FontAwesome.fontBrands
-                }, {
+                },  {
                     "name": "NextCloud",
                     "setting": "NextCloud",
                     "icon": FontAwesome.cloud,

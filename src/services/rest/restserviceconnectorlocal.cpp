@@ -1,7 +1,5 @@
 #include "restserviceconnectorlocal.h"
-#include "o0globals.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -9,13 +7,11 @@
 #include <utility>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
-/**
- * @brief Constructor
- */
 RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager &networkManager, O2 *o2,
                                                      const QLoggingCategory &loggingCategory, QObject *parent = nullptr)
-    : RESTServiceConnector(networkManager, loggingCategory, parent), m_o2(o2)
+    : RESTServiceConnector(networkManager, loggingCategory, {}, parent), m_o2(o2)
 {
     m_settingsStore = new O0SettingsStore(u"gm-companion"_s, this);
     m_o2->setParent(this);
@@ -28,22 +24,15 @@ RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager &netw
 }
 
 /**
- * @brief Destructor
- */
-RESTServiceConnectorLocal::~RESTServiceConnectorLocal()
-{
-    disconnect();
-}
-
-/**
  * @brief Configure parameters like scope, port etc.
  */
-void RESTServiceConnectorLocal::setConfig(const RESTServiceLocalConfig &config)
+void RESTServiceConnectorLocal::setConfig(RESTServiceLocalConfig config)
 {
     qCDebug(m_loggingCategory) << "Configuring rest service connector ...";
-    m_config = config;
+    setMaxConcurrentRequests(config.maxConcurrentRequests);
     m_o2->setScope(config.scope);
     m_o2->setLocalPort(config.port);
+    m_config = std::move(config);
     m_wasConfigured = true;
 }
 
@@ -52,35 +41,45 @@ void RESTServiceConnectorLocal::setConfig(const RESTServiceLocalConfig &config)
  */
 void RESTServiceConnectorLocal::grantAccess()
 {
-    setStatus(ServiceStatus::Type::Info, tr("Connecting..."));
+    setStatus(Status::Type::Info, tr("Connecting..."));
 
     if (!m_wasConfigured)
     {
-        setStatus(ServiceStatus::Type::Error, tr("Internal Error: Connector was not configured."));
+        setStatus(Status::Type::Error, tr("Internal Error: Connector was not configured."));
         return;
     }
 
     auto id = SettingsManager::instance()->get(m_config.idRequest);
-    auto secret = SettingsManager::instance()->get(m_config.secretRequest);
-
+    if (id.isEmpty())
+    {
+        setStatus(Status::Type::Error, tr("Error: No Client ID has been set."));
+        return;
+    }
     m_o2->setClientId(id);
+
+    auto secret = SettingsManager::instance()->get(m_config.secretRequest);
+    if (secret.isEmpty())
+    {
+        setStatus(Status::Type::Error, tr("Error: No Client Secret has been set."));
+        return;
+    }
     m_o2->setClientSecret(secret);
 
-    if (!id.isEmpty() && !secret.isEmpty())
+    qCDebug(m_loggingCategory) << "Found client id and secret. Trying to link now ...";
+    qCDebug(m_loggingCategory) << m_o2->token();
+    qCDebug(m_loggingCategory) << m_o2->refreshToken();
+
+    if (m_o2->linked())
     {
-        qCDebug(m_loggingCategory) << "Found client id and secret. Trying to link now ...";
-        m_o2->link();
+        if (m_o2->token().isEmpty())
+        {
+            m_o2->unlink();
+            m_o2->link();
+        }
     }
     else
     {
-        if (id.isEmpty())
-        {
-            setStatus(ServiceStatus::Type::Error, tr("Error: No Client ID has been set."));
-        }
-        else
-        {
-            setStatus(ServiceStatus::Type::Error, tr("Error: No Client Secret has been set."));
-        }
+        m_o2->link();
     }
 }
 
@@ -90,142 +89,118 @@ void RESTServiceConnectorLocal::disconnectService()
     m_o2->unlink();
 }
 
-void RESTServiceConnectorLocal::sendRequest(RequestContainer *container,
-                                            QSharedPointer<QPromise<RestNetworkReply *>> promise)
+void RESTServiceConnectorLocal::sendRequest(RestRequest &&container, QPromise<RestReply> &&promise)
 {
-    // If amount of concurrent requests is too high, enqueue request
-    if (checkAndEnqueueRequest(container, promise)) return;
-
     auto *requestor = makeRequestor();
-    auto request = container->request();
-    int id = -1;
+    auto request = container.request();
 
-    switch (container->requestType())
+    if (container.isAuthRequired())
     {
-    case GET:
-        qCDebug(m_loggingCategory) << "Sending GET Request to URL" << container->request().url();
-
         // Workaround for google drive requests
         if (!m_config.authHeaderFormat.isEmpty())
         {
             requestor->setAddAccessTokenInQuery(false);
             requestor->setAccessTokenInAuthenticationHTTPHeaderFormat(m_config.authHeaderFormat);
         }
-
-        id = requestor->get(request);
-        break;
-
-    case PUT:
-        qCDebug(m_loggingCategory) << "Sending PUT Request to URL" << request.url() << "with data" << container->data();
-        // request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
-        id = requestor->put(request, container->data());
-        break;
-
-    case POST:
-        qCDebug(m_loggingCategory) << "Sending POST Request to URL" << request.url() << "with data"
-                                   << container->data();
-        // request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
-        id = requestor->post(request, container->data());
-        qCDebug(m_loggingCategory) << "Sent POST request:" << id;
-        break;
-
-    case CUSTOM:
-        qCDebug(m_loggingCategory) << "Sending HTTP request:" << container->verb(), request.url();
-        id = requestor->customRequest(request, container->verb(), container->data());
-        break;
-    }
-
-    if (id == -1)
-    {
-        qCWarning(m_loggingCategory) << "Error: could not start requestor!";
-        promise->future().cancel();
-        container->deleteLater();
     }
     else
     {
-        m_activeRequests[id] = {promise, container};
+        requestor->setAddAccessTokenInQuery(false);
     }
+
+    switch (container.type())
+    {
+    case RestRequest::Type::GET:
+        qCDebug(m_loggingCategory) << "Sending GET Request to URL" << container.request().url();
+
+        container.id(requestor->get(request));
+        break;
+
+    case RestRequest::Type::PUT:
+        qCDebug(m_loggingCategory) << "Sending PUT Request to URL" << request.url() << "with data" << container.data();
+        container.id(requestor->put(request, container.data()));
+        break;
+
+    case RestRequest::Type::POST:
+        qCDebug(m_loggingCategory) << "Sending POST Request to URL" << request.url() << "with data" << container.data();
+        container.id(requestor->post(request, container.data()));
+        qCDebug(m_loggingCategory) << "Sent POST request:" << container.id();
+        break;
+
+    case RestRequest::Type::CUSTOM:
+        qCDebug(m_loggingCategory) << "Sending HTTP request:" << container.verb() << request.url();
+        container.id(requestor->customRequest(request, container.verb(), container.data()));
+        break;
+    }
+
+    if (container.id() == -1)
+    {
+        qCWarning(m_loggingCategory) << "Error: could not start requestor!";
+        promise.future().cancel();
+        return;
+    }
+
+    qCDebug(m_loggingCategory) << "internal request id:" << container.id();
+    markRequestActive(std::move(container), std::move(promise));
 }
 
-/**
- * @brief Send a GET request to the REST API
- */
-auto RESTServiceConnectorLocal::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
+auto RESTServiceConnectorLocal::isAccessGranted() const -> bool
 {
-    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
-
-    auto *container = new RequestContainer(request, GET, "", this);
-
-    sendRequest(container, promise);
-    return promise->future();
+    return m_o2->linked();
 }
 
-auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto RESTServiceConnectorLocal::getAccessToken() -> QString
 {
-    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
-
-    auto *container = new RequestContainer(request, PUT, data, this);
-
-    sendRequest(container, promise);
-    return promise->future();
+    return m_o2->token();
 }
 
-auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+void RESTServiceConnectorLocal::refreshAccessToken(bool /*updateAuthentication*/)
 {
-    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
+    if (getAccessToken().isEmpty())
+    {
+        m_o2->link();
+        return;
+    }
 
-    auto *container = new RequestContainer(request, POST, data, this);
+    m_o2->refresh();
+}
 
-    sendRequest(container, promise);
-    return promise->future();
+auto RESTServiceConnectorLocal::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
+{
+    QPromise<RestReply> promise;
+    promise.start();
+
+    RestRequest container(request, RestRequest::Type::GET);
+    container.isAuthRequired(isAuthRequired);
+    return enqueueRequest(std::move(container), std::move(promise));
+}
+
+auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+{
+    QPromise<RestReply> promise;
+    promise.start();
+
+    RestRequest container(request, RestRequest::Type::PUT, data);
+    return enqueueRequest(std::move(container), std::move(promise));
+}
+
+auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+{
+    QPromise<RestReply> promise;
+    promise.start();
+
+    RestRequest container(request, RestRequest::Type::POST, data);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
 auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                              const QByteArray &data) -> QFuture<RestNetworkReply *>
+                                              const QByteArray &data) -> QFuture<RestReply>
 {
-    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
-    promise->start();
+    QPromise<RestReply> promise;
+    promise.start();
 
-    auto *container = new RequestContainer(request, CUSTOM, data, verb, this);
-
-    sendRequest(container, promise);
-    return promise->future();
-}
-
-/**
- * @brief Check if request can be sent or if requests are blocked.
- * If they are blocked, put request in queue.
- * @return Returns true if the request has been enqueued
- */
-auto RESTServiceConnectorLocal::checkAndEnqueueRequest(RequestContainer *container,
-                                                       QSharedPointer<QPromise<RestNetworkReply *>> promise) -> bool
-{
-    if (m_isOnCooldown)
-    {
-        qCDebug(m_loggingCategory).noquote() << "Connector is on cooldown, putting request in queue ...";
-    }
-    else if (!isAccessGranted())
-    {
-        qCDebug(m_loggingCategory) << "Access has not been granted, putting request in queue ...";
-    }
-    else if (activeRequestCount() >= m_config.maxConcurrentRequests)
-    {
-        qCDebug(m_loggingCategory).noquote()
-            << "Current request count (" << activeRequestCount() << ") too high (" << m_config.maxConcurrentRequests
-            << "are allowed ), putting request in queue ...";
-    }
-    else
-    {
-        return false;
-    }
-
-    container->id(getQueueId());
-    m_requestQueue.enqueue(std::pair(promise, container));
-
-    return true;
+    RestRequest container(request, RestRequest::Type::CUSTOM, data, verb);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
 auto RESTServiceConnectorLocal::makeRequestor() -> O2Requestor *
@@ -242,120 +217,17 @@ auto RESTServiceConnectorLocal::makeRequestor() -> O2Requestor *
     return requestor;
 }
 
-void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkError error, const QString &errorText,
-                                                const QByteArray &data,
-                                                const QList<QNetworkReply::RawHeaderPair> &headers)
-{
-    qCDebug(m_loggingCategory) << "Received reply with internal id" << id;
-
-    // Check if rate limit was exceeded
-    if (error == QNetworkReply::UnknownContentError)
-    {
-        const auto status = QJsonDocument::fromJson(data).object()["error"_L1]["status"_L1].toInt();
-
-        if (status == HttpStatus::TooManyRequests)
-        {
-            handleRateLimit(m_activeRequests[id]);
-            return;
-        }
-    }
-    // Sometimes services (like google drive) hide rate limit errors in 403s
-    else if (error == QNetworkReply::ContentAccessDenied)
-    {
-        const auto error = QJsonDocument::fromJson(data).object()["error"_L1].toObject();
-
-        if (error.contains("errors"_L1))
-        {
-            const auto errors = error["errors"_L1].toArray();
-
-            for (const auto &entry : errors)
-            {
-                if (entry["reason"_L1].toString() == "userRateLimitExceeded"_L1)
-                {
-                    handleRateLimit(m_activeRequests[id]);
-                    return;
-                }
-            }
-        }
-    }
-
-    if (error != QNetworkReply::NoError)
-    {
-        qCWarning(m_loggingCategory) << error << errorText << data << headers;
-    }
-
-    // Finish
-    auto *result = new RestNetworkReply(error, errorText, data, headers, this);
-    const auto pair = m_activeRequests.take(id);
-    auto *container = pair.second;
-    auto promise = pair.first;
-    promise->addResult(result);
-    promise->finish();
-
-    // If there are requests in queue, send next
-    dequeueRequests();
-
-    // Delete O2Requestor and Container
-    container->deleteLater();
-    sender()->deleteLater();
-}
-
 void RESTServiceConnectorLocal::onRefreshFinished(QNetworkReply::NetworkError error)
 {
     if (error != QNetworkReply::NoError)
     {
-        setStatus(ServiceStatus::Type::Error, tr("Error: Could not refresh token."));
-    }
-}
-
-void RESTServiceConnectorLocal::dequeueRequests()
-{
-    qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueue.count();
-
-    QQueue<std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> tempQueue;
-
-    while (tempQueue.length() < m_config.maxConcurrentRequests - activeRequestCount() && !m_requestQueue.empty())
-    {
-        tempQueue.enqueue(m_requestQueue.dequeue());
+        setStatus(Status::Type::Error, tr("Error: Could not refresh token."));
+        return;
     }
 
-    while (!tempQueue.isEmpty())
-    {
-        auto pair = tempQueue.dequeue();
+    qCDebug(m_loggingCategory) << "Refresh Token:" << m_o2->refreshToken();
 
-        sendRequest(pair.second, std::move(pair.first));
-    }
-}
-
-auto RESTServiceConnectorLocal::getQueueId() -> int
-{
-    if (m_nextQueueId == 0)
-    {
-        m_nextQueueId++;
-    }
-
-    return m_nextQueueId++;
-}
-
-void RESTServiceConnectorLocal::handleRateLimit(
-    const std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *> &pair)
-{
-    qCDebug(m_loggingCategory) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
-    startCooldown(2);
-    m_requestQueue.enqueue(pair);
-}
-
-void RESTServiceConnectorLocal::startCooldown(int seconds)
-{
-    m_isOnCooldown = true;
-    QTimer::singleShot(seconds * 1000, this, &RESTServiceConnectorLocal::onCooldownFinished);
-}
-
-void RESTServiceConnectorLocal::onCooldownFinished()
-{
-    qCDebug(m_loggingCategory) << "Cooldown finished.";
-    m_isOnCooldown = false;
-    dequeueRequests();
+    updateTokenExpireTime(std::chrono::seconds(m_o2->expires()));
 }
 
 void RESTServiceConnectorLocal::onLinkingSucceeded()
@@ -368,6 +240,8 @@ void RESTServiceConnectorLocal::onLinkingSucceeded()
 
     emit isConnectedChanged(true);
     emit accessGranted();
+
+    updateTokenExpireTime(std::chrono::seconds(m_o2->expires()));
 
     dequeueRequests();
 }

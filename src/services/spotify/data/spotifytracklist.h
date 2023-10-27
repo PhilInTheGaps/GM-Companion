@@ -1,16 +1,23 @@
 #pragma once
 
 #include "spotifytrack.h"
+#include <QByteArray>
 #include <QJsonObject>
-#include <QStringList>
+#include <QString>
+#include <vector>
+
+namespace Services
+{
 
 struct SpotifyTrackList
 {
-    [[nodiscard]] static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTrackList>;
-    [[nodiscard]] static auto fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTrackList>;
+    [[nodiscard]] static auto fromJson(const QJsonObject &json) -> SpotifyTrackList;
+    [[nodiscard]] static auto fromJson(const QByteArray &data) -> SpotifyTrackList;
 
     void append(const SpotifyTrackList &other);
 
-    QList<QSharedPointer<SpotifyTrack>> tracks;
+    std::vector<SpotifyTrack> tracks;
     QString next;
 };
+
+} // namespace Services

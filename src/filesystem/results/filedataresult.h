@@ -2,6 +2,7 @@
 
 #include "fileresult.h"
 #include <QByteArray>
+#include <utility>
 
 namespace Files
 {
@@ -13,11 +14,19 @@ public:
     {
     }
 
+    explicit FileDataResult(QString &&errorMessage) : FileResult(std::move(errorMessage))
+    {
+    }
+
     explicit FileDataResult(const QByteArray &data) : FileResult(true, QByteArray()), m_data(data)
     {
     }
 
-    static auto fromNetworkReply(RestNetworkReply *reply) -> std::shared_ptr<FileDataResult>;
+    explicit FileDataResult(QByteArray &&data) : FileResult(true, QByteArray()), m_data(std::move(data))
+    {
+    }
+
+    static auto fromRestReply(Services::RestReply &&reply) -> FileDataResult;
 
     [[nodiscard]] auto data() const -> const QByteArray &
     {
@@ -25,7 +34,7 @@ public:
     }
 
 private:
-    const QByteArray m_data;
+    QByteArray m_data;
 };
 
 } // namespace Files

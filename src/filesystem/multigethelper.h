@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <utility>
 
 namespace Files
 {
@@ -10,6 +11,10 @@ template <typename ResultType> class MultiGetHelper
 {
 public:
     explicit MultiGetHelper(const QStringList &paths) : m_paths(paths)
+    {
+    }
+
+    explicit MultiGetHelper(QStringList &&paths) : m_paths(std::move(paths))
     {
     }
 
@@ -23,18 +28,18 @@ public:
         return m_paths.at(index++);
     }
 
-    void addResult(std::shared_ptr<ResultType> result)
+    void addResult(ResultType &&result)
     {
         m_results.push_back(result);
     }
 
-    [[nodiscard]] auto getResults() const -> std::vector<std::shared_ptr<ResultType>>
+    [[nodiscard]] auto getResults() const -> std::vector<ResultType>
     {
         return m_results;
     }
 
 private:
-    std::vector<std::shared_ptr<ResultType>> m_results;
+    std::vector<ResultType> m_results;
     QStringList m_paths;
     int index = 0;
 };

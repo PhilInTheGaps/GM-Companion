@@ -5,6 +5,7 @@
 #include <utility>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 constexpr auto AUTH_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 constexpr auto AUTH_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
@@ -38,38 +39,38 @@ auto GoogleDrive::qmlInstance(QQmlEngine *engine) -> GoogleDrive *
     return s_qmlInstance;
 }
 
-auto GoogleDrive::get(const QUrl &url) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::get(const QUrl &url) -> QFuture<RestReply>
 {
     return get(QNetworkRequest(url));
 }
 
-auto GoogleDrive::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::get(const QNetworkRequest &request) -> QFuture<RestReply>
 {
-    return m_connector->get(request);
+    return m_connector->get(request, true);
 }
 
-auto GoogleDrive::put(const QUrl &url, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::put(const QUrl &url, const QByteArray &data) -> QFuture<RestReply>
 {
     return put(QNetworkRequest(url), data);
 }
 
-auto GoogleDrive::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
 {
     return m_connector->put(request, data);
 }
 
-auto GoogleDrive::post(const QUrl &url, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::post(const QUrl &url, const QByteArray &data) -> QFuture<RestReply>
 {
     return post(QNetworkRequest(url), data);
 }
 
-auto GoogleDrive::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto GoogleDrive::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
 {
     return m_connector->post(request, data);
 }
 
 auto GoogleDrive::customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
-    -> QFuture<RestNetworkReply *>
+    -> QFuture<RestReply>
 {
     return m_connector->customRequest(request, verb, data);
 }
@@ -78,17 +79,18 @@ void GoogleDrive::updateConnector()
 {
     qCDebug(gmGoogleDrive()) << "Updating google drive connector ...";
 
-    if (m_connector) m_connector->deleteLater();
+    if (!m_connector)
+    {
+        auto *o2 = new O2(this, &m_networkManager);
+        o2->setRequestUrl(AUTH_REQUEST_URL);
+        o2->setTokenUrl(AUTH_TOKEN_URL);
+        o2->setRefreshTokenUrl(AUTH_REFRESH_URL);
 
-    auto *o2 = new O2(this, &m_networkManager);
-    o2->setRequestUrl(AUTH_REQUEST_URL);
-    o2->setTokenUrl(AUTH_TOKEN_URL);
-    o2->setRefreshTokenUrl(AUTH_REFRESH_URL);
+        m_connector = new GoogleDriveConnectorLocal(serviceName(), m_networkManager, o2, this);
 
-    m_connector = new GoogleDriveConnectorLocal(serviceName(), m_networkManager, o2, this);
-
-    connect(m_connector, &RESTServiceConnector::accessGranted, this, &GoogleDrive::onAccessGranted);
-    connect(m_connector, &RESTServiceConnector::statusChanged, this, &GoogleDrive::updateStatus);
+        connect(m_connector, &RESTServiceConnector::accessGranted, this, &GoogleDrive::onAccessGranted);
+        connect(m_connector, &RESTServiceConnector::statusChanged, this, &GoogleDrive::updateStatus);
+    }
 
     if (connected()) grant();
 }
@@ -109,9 +111,19 @@ void GoogleDrive::disconnectService()
     SettingsManager::instance()->set(u"googleSecret"_s, u""_s, serviceName());
 }
 
+void GoogleDrive::grant()
+{
+    m_connector->grantAccess();
+}
+
+auto GoogleDrive::isGranted() const -> bool
+{
+    return m_connector->isAccessGranted();
+}
+
 void GoogleDrive::onAccessGranted()
 {
     qCDebug(gmGoogleDrive()) << "Access has been granted.";
-    updateStatus(ServiceStatus::Type::Success, tr("Connected"));
+    updateStatus(Status::Type::Success, tr("Connected"));
     connected(true);
 }

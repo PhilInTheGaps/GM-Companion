@@ -1,6 +1,5 @@
 #include "filesystem/file.h"
 #include "logger.h"
-#include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
 #include "settings/quicksettingsmanager.h"
 #include "tools/audio/thumbnails/audiothumbnailprovider.h"
@@ -18,7 +17,7 @@
 #include <QScopeGuard>
 #include <QTranslator>
 #include <QtQuickControls2/QQuickStyle>
-#include <sentry.h>
+#include <thirdparty/sentry-native/include/sentry.h>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -138,7 +137,7 @@ auto main(int argc, char *argv[]) -> int
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
     // Misc
-    Files::File::init(NextCloud::qmlInstance(&engine), GoogleDrive::qmlInstance(&engine));
+    Files::File::init(Services::NextCloud::qmlInstance(&engine));
 
     engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider());
     engine.loadFromModule("ui"_L1, "Main"_L1);

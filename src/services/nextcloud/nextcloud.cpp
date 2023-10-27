@@ -8,6 +8,7 @@
 #include <QTimer>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
 
 constexpr auto AUTH_URL = "/index.php/login/v2";
 constexpr auto DAV_ENDPOINT = "/remote.php/dav/files";
@@ -30,7 +31,7 @@ NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkM
 {
     if (!connected()) return;
 
-    updateStatus(ServiceStatus::Type::Success, tr("Connected"));
+    updateStatus(Status::Type::Success, tr("Connected"));
     loginName(SettingsManager::instance()->get<QString>(u"loginName"_s, u""_s, serviceName));
     serverUrl(SettingsManager::getServerUrl(serviceName, false));
     m_loggingIn = true;
@@ -125,7 +126,7 @@ void NextCloud::connectService()
     if (m_loggingIn)
     {
         qCDebug(gmNextCloud()) << "Login already in progress ...";
-        updateStatus(ServiceStatus::Type::Success, tr("Connected"));
+        updateStatus(Status::Type::Success, tr("Connected"));
         return;
     }
 
@@ -143,7 +144,7 @@ void NextCloud::connectService()
 void NextCloud::disconnectService()
 {
     qCDebug(gmNextCloud()) << "Logout() ...";
-    updateStatus(ServiceStatus::Type::Info, tr("Logging out ..."));
+    updateStatus(Status::Type::Info, tr("Logging out ..."));
 
     SettingsManager::setPassword(loginName(), ""_L1, serviceName());
 
@@ -162,12 +163,12 @@ void NextCloud::startLoginFlow()
 
     if (serverUrl().isEmpty())
     {
-        updateStatus(ServiceStatus::Type::Error, tr("Error: Server URL is empty."));
+        updateStatus(Status::Type::Error, tr("Error: Server URL is empty."));
         m_loggingIn = false;
         return;
     }
 
-    updateStatus(ServiceStatus::Type::Info, tr("Connecting ..."));
+    updateStatus(Status::Type::Info, tr("Connecting ..."));
     auto authUrl = serverUrl() + AUTH_URL;
 
     qCDebug(gmNextCloud()) << "Server URL:" << serverUrl();
@@ -186,7 +187,7 @@ void NextCloud::startLoginFlow()
         if (reply->error() != QNetworkReply::NoError)
         {
             qCWarning(gmNextCloud()) << "Error:" << reply->error() << reply->errorString();
-            updateStatus(ServiceStatus::Type::Error, reply->errorString());
+            updateStatus(Status::Type::Error, reply->errorString());
             m_loggingIn = false;
         }
         else
@@ -196,7 +197,7 @@ void NextCloud::startLoginFlow()
             auto endpoint = poll["endpoint"_L1].toString();
             auto login = data.object()["login"_L1].toString();
 
-            updateStatus(ServiceStatus::Type::Info, tr("Waiting for login ..."));
+            updateStatus(Status::Type::Info, tr("Waiting for login ..."));
             QDesktopServices::openUrl(QUrl(login));
             pollAuthPoint(QUrl(endpoint), token);
         }
@@ -252,7 +253,7 @@ void NextCloud::handleAuthPointNotFound(const QUrl &url, const QString &token)
     else
     {
         qCWarning(gmNextCloud()) << "Timeout: Max polls (" << MAX_AUTH_POLLS << ") reached!";
-        updateStatus(ServiceStatus::Type::Error, tr("Login timed out, please try again."));
+        updateStatus(Status::Type::Error, tr("Login timed out, please try again."));
         m_loggingIn = false;
     }
 }
