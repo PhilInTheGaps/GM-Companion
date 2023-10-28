@@ -186,7 +186,7 @@ TEST_F(AudioSaveLoadTest, FindMissingFiles)
     files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Youtube,
                                QStringLiteral("Test File (Youtube)"), nullptr));
 
-    auto future = AudioSaveLoad::findMissingFilesAsync(&m_context, files, getFilePath());
+    auto future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
     validateResult(future, true);
 
     for (auto *file : files)
@@ -199,7 +199,7 @@ TEST_F(AudioSaveLoadTest, FindMissingFiles)
     testFuture(future1, "File::saveAsync", []() {});
     verifyThatFileExists(getFilePath(fileName), true);
 
-    future = AudioSaveLoad::findMissingFilesAsync(&m_context, files, getFilePath());
+    future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
     validateResult(future, true);
 
     for (auto *file : files)

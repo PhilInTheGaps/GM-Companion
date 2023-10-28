@@ -391,7 +391,7 @@ auto AddonManager::ensureInstallationDirExists(const QString &fileName) -> bool
 
 auto AddonManager::findAddon(const QString &id) const -> Addon *
 {
-    for (auto *addon : qAsConst(a_addons))
+    foreach (auto *addon, a_addons)
     {
         if (addon && addon->id() == id) return addon;
     }

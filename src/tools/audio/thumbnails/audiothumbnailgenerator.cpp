@@ -28,7 +28,7 @@ void AudioThumbnailGenerator::generateThumbnails(AudioScenario *scenario)
 
     configureNetworkManager();
 
-    for (auto element : scenario->elements(true))
+    foreach (auto element, scenario->elements(true))
     {
         if (!element) continue;
 
@@ -69,21 +69,21 @@ void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
     // Is web url
     if (NetworkUtils::isHttpUrl(iconPath))
     {
-        WebImageLoader::loadImageAsync(iconPath, networkManager).then(element, callbackWithFallback);
+        WebImageLoader::loadImageAsync(iconPath, networkManager).then(callbackWithFallback);
         return;
     }
 
     // Is a local file
     if (!iconPath.isEmpty())
     {
-        FileImageLoader::loadImageAsync(iconPath).then(element, callbackWithFallback);
+        FileImageLoader::loadImageAsync(iconPath).then(callbackWithFallback);
         return;
     }
 
     // If no explicit thumbnail has been specified, generate collage
     const auto callbackWithoutFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); };
 
-    AudioThumbnailCollageGenerator::makeCollageAsync(element).then(element, callbackWithoutFallback);
+    AudioThumbnailCollageGenerator::makeCollageAsync(element).then(callbackWithoutFallback);
 }
 
 auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPixmap

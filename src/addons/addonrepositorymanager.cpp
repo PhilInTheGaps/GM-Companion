@@ -47,7 +47,7 @@ auto AddonRepositoryManager::addRepository(const QString &url) -> bool
 {
     if (url.isEmpty()) return false;
 
-    for (const auto *repo : qAsConst(a_repositories))
+    foreach (const auto *repo, a_repositories)
     {
         if (repo && repo->url() == url) return false;
     }
@@ -62,7 +62,7 @@ auto AddonRepositoryManager::addRepository(const QString &url) -> bool
 auto AddonRepositoryManager::removeRepository(int repositoryIndex) -> bool
 {
     if (repositoryIndex < 0 || repositoryIndex >= repositories().length() ||
-        qAsConst(a_repositories)[repositoryIndex]->isDefault())
+        a_repositories.at(repositoryIndex)->isDefault())
         return false;
 
     auto *repo = a_repositories.takeAt(repositoryIndex);
@@ -83,7 +83,7 @@ void AddonRepositoryManager::fetchAllRepositoryData()
     foreach (const auto *repo, repositories())
     {
         auto future =
-            fetchRepositoryDataAsync(repo->url()).then(this, [this, repo](const std::vector<AddonReleaseInfo> &info) {
+            fetchRepositoryDataAsync(repo->url()).then([this, repo](const std::vector<AddonReleaseInfo> &info) {
                 if (!info.empty())
                 {
                     qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
@@ -96,7 +96,7 @@ void AddonRepositoryManager::fetchAllRepositoryData()
     }
 
     auto callback = [this](const QList<QFuture<void>> &) { isLoading(false); };
-    QtFuture::whenAll(combinator.begin(), combinator.end()).then(this, callback);
+    QtFuture::whenAll(combinator.begin(), combinator.end()).then(callback);
 }
 
 void AddonRepositoryManager::loadLocalRepositories()
@@ -116,7 +116,7 @@ void AddonRepositoryManager::loadLocalRepositories()
 
 void AddonRepositoryManager::loadDefaultRemoteRepositories()
 {
-    for (const auto &url : qAsConst(defaultRepositories))
+    foreach (const auto &url, defaultRepositories)
     {
         a_repositories << new AddonRepository(this, url, true);
     }
@@ -187,7 +187,7 @@ auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url)
 {
     auto *reply = m_networkManager.get(QNetworkRequest(QUrl(url)));
 
-    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, [reply, url]() {
+    return QtFuture::connect(reply, &QNetworkReply::finished).then([reply, url]() {
         if (reply->error() != QNetworkReply::NoError)
         {
             qCWarning(gmAddonRepoManager())

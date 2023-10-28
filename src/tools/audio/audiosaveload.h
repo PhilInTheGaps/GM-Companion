@@ -24,7 +24,7 @@ public:
 
     static auto loadProject(const QByteArray &data, QObject *parent) -> AudioProject *;
 
-    static auto findMissingFilesAsync(QObject *context, const QList<AudioFile *> &audioFiles, const QString &basePath)
+    static auto findMissingFilesAsync(const QList<AudioFile *> &audioFiles, const QString &basePath)
         -> QFuture<bool>;
 
     static auto saveProject(AudioProject *project, const QString &folder = u""_s) -> QFuture<bool>;

@@ -19,15 +19,14 @@ auto DeleteImpl::deleteFile(const QString &path, FileAccessGoogleDrive *fa) -> Q
 auto DeleteImpl::deleteFile(State &&state) -> QFuture<FileResult>
 {
     return state.fa->getFileIdAsync(state.path)
-        .then(state.fa->context(),
-              [state = std::move(state)](const QString &id) mutable {
-                  if (id.isEmpty()) return QtFuture::makeReadyFuture(FileResult(u"Could not get file id"));
+        .then([state = std::move(state)](const QString &id) mutable {
+            if (id.isEmpty()) return QtFuture::makeReadyFuture(FileResult(u"Could not get file id"));
 
-                  state.fileId = id;
-                  return onFileIdReceived(std::move(state));
-              })
+            state.fileId = id;
+            return onFileIdReceived(std::move(state));
+        })
         .unwrap()
-        .onCanceled(state.fa->context(), []() { return FileResult(u"Could not get file id"); });
+        .onCanceled(s[]() { return FileResult(u"Could not get file id"); });
 }
 
 auto DeleteImpl::onFileIdReceived(State &&state) -> QFuture<FileResult>
@@ -36,16 +35,15 @@ auto DeleteImpl::onFileIdReceived(State &&state) -> QFuture<FileResult>
     const auto request = QNetworkRequest(url);
 
     return state.fa->m_gd.customRequest(request, "DELETE", "")
-        .then(state.fa->context(),
-              [state = std::move(state)](RestReply reply) mutable {
-                  if (!reply.hasError())
-                  {
-                      // Save the folder ID
-                      state.fa->m_idCache.removeEntry(state.path);
-                      state.fa->m_fileCache.removeEntry(state.path);
-                  }
+        .then([state = std::move(state)](RestReply reply) mutable {
+            if (!reply.hasError())
+            {
+                // Save the folder ID
+                state.fa->m_idCache.removeEntry(state.path);
+                state.fa->m_fileCache.removeEntry(state.path);
+            }
 
-                  return FileResult::fromRestReply(std::move(reply));
-              })
-        .onCanceled(state.fa->context(), []() { return FileResult(u"Could not delete file"); });
+            return FileResult::fromRestReply(std::move(reply));
+        })
+        .onCanceled([]() { return FileResult(u"Could not delete file"); });
 }

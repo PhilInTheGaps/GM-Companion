@@ -30,10 +30,7 @@ auto SaveImpl::save(State &&state) -> QFuture<FileResult>
         return onFileIdReceived(std::move(state));
     };
 
-    return state.fa->getFileIdAsync(state.path)
-        .then(state.fa->context(), callback)
-        .onCanceled(state.fa->context(), callback)
-        .unwrap();
+    return state.fa->getFileIdAsync(state.path).then(callback).onCanceled(callback).unwrap();
 }
 
 auto SaveImpl::onFileIdReceived(State &&state) -> QFuture<FileResult>
@@ -43,24 +40,23 @@ auto SaveImpl::onFileIdReceived(State &&state) -> QFuture<FileResult>
 
     // Tell GoogleDrive that we want to upload a file
     return state.fa->m_gd.customRequest(request, "PATCH", "")
-        .then(state.fa->context(),
-              [state = std::move(state)](RestReply reply) mutable {
-                  if (reply.hasError())
-                  {
-                      return QtFuture::makeReadyFuture(FileResult::fromRestReply(std::move(reply)));
-                  }
+        .then([state = std::move(state)](RestReply reply) mutable {
+            if (reply.hasError())
+            {
+                return QtFuture::makeReadyFuture(FileResult::fromRestReply(std::move(reply)));
+            }
 
-                  state.uploadUrl = reply.getHeader("location");
-                  if (state.uploadUrl.isEmpty()) state.uploadUrl = reply.getHeader("Location");
-                  if (state.uploadUrl.isEmpty())
-                  {
-                      return QtFuture::makeReadyFuture(FileResult(u"Did not receive an upload URL"_s));
-                  }
+            state.uploadUrl = reply.getHeader("location");
+            if (state.uploadUrl.isEmpty()) state.uploadUrl = reply.getHeader("Location");
+            if (state.uploadUrl.isEmpty())
+            {
+                return QtFuture::makeReadyFuture(FileResult(u"Did not receive an upload URL"_s));
+            }
 
-                  return onEndpointReceived(std::move(state));
-              })
+            return onEndpointReceived(std::move(state));
+        })
         .unwrap()
-        .onCanceled(state.fa->context(), []() { return FileResult(u"Did not receive an upload URL"_s); });
+        .onCanceled([]() { return FileResult(u"Did not receive an upload URL"_s); });
 }
 
 auto SaveImpl::onEndpointReceived(State &&state) -> QFuture<FileResult>
@@ -70,32 +66,30 @@ auto SaveImpl::onEndpointReceived(State &&state) -> QFuture<FileResult>
     request.setHeader(QNetworkRequest::ContentLengthHeader, state.data.size());
 
     return state.fa->m_gd.put(request, state.data)
-        .then(state.fa->context(),
-              [state = std::move(state)](RestReply reply) {
-                  if (reply.error() == QNetworkReply::NoError)
-                  {
-                      state.fa->m_fileCache.createOrUpdateEntry(state.path, state.data);
-                  }
+        .then([state = std::move(state)](RestReply reply) {
+            if (reply.error() == QNetworkReply::NoError)
+            {
+                state.fa->m_fileCache.createOrUpdateEntry(state.path, state.data);
+            }
 
-                  return FileResult::fromRestReply(std::move(reply));
-              })
-        .onCanceled(state.fa->context(), []() { return FileResult(u"Could not upload file to endpoint"_s); });
+            return FileResult::fromRestReply(std::move(reply));
+        })
+        .onCanceled([]() { return FileResult(u"Could not upload file to endpoint"_s); });
 }
 
 auto SaveImpl::createNewFile(State &&state) -> QFuture<FileResult>
 {
     // Create file first
     return state.fa->createFileAsync(state.path, QByteArray())
-        .then(state.fa->context(),
-              [state = std::move(state)](FileResult &&result) mutable {
-                  if (!result.success())
-                  {
-                      return QtFuture::makeReadyFuture(result);
-                  }
+        .then([state = std::move(state)](FileResult &&result) mutable {
+            if (!result.success())
+            {
+                return QtFuture::makeReadyFuture(result);
+            }
 
-                  // try again, since the file should exist now
-                  return save(std::move(state));
-              })
+            // try again, since the file should exist now
+            return save(std::move(state));
+        })
         .unwrap()
-        .onCanceled(state.fa->context(), []() { return FileResult(u"Could not create file"_s); });
+        .onCanceled([]() { return FileResult(u"Could not create file"_s); });
 }

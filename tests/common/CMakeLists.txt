@@ -19,11 +19,13 @@ qt_add_executable(test_common
     utils/testnetworkutils.cpp
     utils/testmarkdownutils.cpp
     utils/testprocessinfo.cpp
+    settings/testsettingsmanager.cpp
 )
 
 target_link_libraries(test_common PRIVATE
     propertyhelper
     common
+    testhelper
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY}
     Qt6::Core

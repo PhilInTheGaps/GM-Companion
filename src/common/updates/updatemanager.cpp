@@ -42,8 +42,7 @@ void UpdateManager::checkForUpdates()
     qCDebug(gmUpdateManager) << "Current version:" << CURRENT_VERSION;
     qCDebug(gmUpdateManager) << "Releases feed URL:" << m_feedURL;
 
-    auto version = fetchNewestVersion();
-    version.then(this, [this](const QString &version) {
+    fetchNewestVersion().then([this](const QString &version) {
         m_newestVersion = version;
         qCDebug(gmUpdateManager()) << "Newest available version:" << version;
 
@@ -131,7 +130,7 @@ auto UpdateManager::fetchNewestVersion() -> QFuture<QString>
     // Get the release feed to check for a new version
     auto *reply = networkManager.get(QNetworkRequest(QUrl(m_feedURL)));
 
-    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, [reply]() {
+    return QtFuture::connect(reply, &QNetworkReply::finished).then([reply]() {
         auto versions = findVersionsFromXML(reply->readAll());
         reply->deleteLater();
 

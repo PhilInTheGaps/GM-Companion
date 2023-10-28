@@ -13,11 +13,10 @@ auto FileAccess::multiGetDataAsync(MultiGetHelper<FileDataResult> &&helper, bool
     auto next = getDataAsync(helper.getNextPath(), allowCache);
 
     return next
-        .then(context(),
-              [this, helper = std::move(helper), allowCache](FileDataResult &&result) mutable {
-                  helper.addResult(std::move(result));
-                  return multiGetDataAsync(std::move(helper), allowCache);
-              })
+        .then([this, helper = std::move(helper), allowCache](FileDataResult &&result) mutable {
+            helper.addResult(std::move(result));
+            return multiGetDataAsync(std::move(helper), allowCache);
+        })
         .unwrap();
 }
 
@@ -32,15 +31,9 @@ auto FileAccess::multiCheckAsync(MultiGetHelper<FileCheckResult> &&helper, bool 
     auto next = checkAsync(helper.getNextPath(), allowCache);
 
     return next
-        .then(context(),
-              [this, helper = std::move(helper), allowCache](FileCheckResult &&result) mutable {
-                  helper.addResult(std::move(result));
-                  return multiCheckAsync(std::move(helper), allowCache);
-              })
+        .then([this, helper = std::move(helper), allowCache](FileCheckResult &&result) mutable {
+            helper.addResult(std::move(result));
+            return multiCheckAsync(std::move(helper), allowCache);
+        })
         .unwrap();
-}
-
-auto FileAccess::context() -> QObject *
-{
-    return &m_context;
 }

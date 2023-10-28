@@ -30,7 +30,7 @@ public:
     static void setServerUrl(const QString &url, const QString &service);
 
     static auto getPassword(const QString &username, const QString &service) -> QFuture<QString>;
-    static void setPassword(const QString &username, const QString &password, const QString &service);
+    static auto setPassword(const QString &username, const QString &password, const QString &service) -> QFuture<bool>;
 
     void setAddonEnabled(const QString &addon, bool enabled);
     auto getIsAddonEnabled(const QString &addon) -> bool;

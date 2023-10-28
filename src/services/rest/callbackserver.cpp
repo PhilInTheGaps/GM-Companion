@@ -72,7 +72,7 @@ auto CallbackServer::parseQueryParams(const QByteArray &data) -> QMap<QString, Q
 
     QMap<QString, QString> queryParams;
 
-    for (const auto &tokenPair : qAsConst(tokens))
+    foreach (const auto &tokenPair, tokens)
     {
         auto key = QUrl::fromPercentEncoding(QByteArray().append(tokenPair.first.trimmed().toLatin1()));
         auto value = QUrl::fromPercentEncoding(QByteArray().append(tokenPair.second.trimmed().toLatin1()));

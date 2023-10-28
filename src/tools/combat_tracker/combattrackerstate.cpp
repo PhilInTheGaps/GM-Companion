@@ -15,7 +15,7 @@ void CombatTrackerState::clear()
     reset();
     m_model.clear();
 
-    for (auto *combatant : qAsConst(m_combatants))
+    foreach (auto *combatant, m_combatants)
     {
         if (Q_LIKELY(combatant)) combatant->deleteLater();
     }
@@ -117,7 +117,7 @@ void CombatTrackerState::load(const QJsonDocument &json)
 auto CombatTrackerState::serialize() const -> QJsonDocument
 {
     QJsonArray combatants;
-    for (auto *combatant : qAsConst(m_combatants))
+    foreach (auto *combatant, m_combatants)
     {
         if (Q_LIKELY(combatant))
         {

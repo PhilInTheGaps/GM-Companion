@@ -44,12 +44,9 @@ protected:
     auto multiGetDataAsync(MultiGetHelper<FileDataResult> &&helper, bool allowCache)
         -> QFuture<std::vector<FileDataResult>>;
     auto multiCheckAsync(MultiGetHelper<FileCheckResult> &&helper, bool allowCache) -> QFuture<FileMultiCheckResult>;
-    auto context() -> QObject *;
 
 private:
     inline static std::shared_ptr<FileAccess> instance = nullptr;
-
-    QObject m_context;
 };
 
 } // namespace Files

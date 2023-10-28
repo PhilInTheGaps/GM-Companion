@@ -96,7 +96,7 @@ void TreeItem::setIsChecked(CheckedState isChecked)
 {
     if (isChecked == m_isChecked) return;
 
-    for (auto *child : qAsConst(children()))
+    foreach (auto *child, children())
     {
         auto *item = qobject_cast<TreeItem *>(child);
         if (item) item->setIsChecked(isChecked);

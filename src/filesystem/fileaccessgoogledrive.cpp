@@ -154,10 +154,7 @@ auto FileAccessGoogleDrive::loadFolderEntries(const QString &parentId, const QSt
         return QtFuture::makeReadyFuture();
     };
 
-    return m_gd.get(url)
-        .then(context(), callback)
-        .onCanceled(context(), []() { return QtFuture::makeReadyFuture(); })
-        .unwrap();
+    return m_gd.get(url).then(callback).onCanceled([]() { return QtFuture::makeReadyFuture(); }).unwrap();
 }
 
 auto FileAccessGoogleDrive::loadFolderEntries(const std::pair<QString, QString> &dir, const QString &pageToken)
@@ -204,7 +201,7 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
                       return QtFuture::makeReadyFuture(QString(id));
                   }
 
-                  return loadFolderEntries(parentPair).then(context(), callback);
+                  return loadFolderEntries(parentPair).then(callback);
               })
         .unwrap();
 }
@@ -220,9 +217,7 @@ auto FileAccessGoogleDrive::getParentIdAsync(const QString &path) -> QFuture<std
         return QtFuture::makeReadyFuture(std::make_pair(parentPath, u"root"_s));
     }
 
-    return getFileIdAsync(parentPath).then(context(), [parentPath](const QString &id) {
-        return std::make_pair(parentPath, id);
-    });
+    return getFileIdAsync(parentPath).then([parentPath](const QString &id) { return std::make_pair(parentPath, id); });
 }
 
 /// Construct file metadata in json format

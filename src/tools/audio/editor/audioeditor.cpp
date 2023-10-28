@@ -554,7 +554,7 @@ void AudioEditor::loadElement(QObject *element)
     }
 
     // Tell AudioSaveLoad to find out if files are missing
-    AudioSaveLoad::findMissingFilesAsync(this, m_currentElement->files(), basePath());
+    AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
 }
 
 /**
@@ -874,7 +874,7 @@ void AudioEditor::removeFile(int index, bool findMissing)
         if (findMissing)
         {
             // Tell AudioSaveLoad to find out if files are missing
-            AudioSaveLoad::findMissingFilesAsync(this, m_currentElement->files(), basePath());
+            AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
         }
     }
 }
@@ -957,7 +957,7 @@ void AudioEditor::replaceFileFolder(int index, const QString &folder)
             }
         }
 
-        AudioSaveLoad::findMissingFilesAsync(this, missingFiles, basePath());
+        AudioSaveLoad::findMissingFilesAsync(missingFiles, basePath());
     }
 }
 
