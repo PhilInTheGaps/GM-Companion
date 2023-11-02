@@ -1,12 +1,15 @@
 #include "logger.h"
 #include "common/utils/fileutils.h"
-#include "messages/messagedispatcher.h"
+#include "messages/messagemanager.h"
 #include <QDateTime>
 #include <QDir>
 #include <QLoggingCategory>
+#include <QMutexLocker>
 #include <iostream>
 
 Q_LOGGING_CATEGORY(gmLogger, "gm.logger")
+
+static constexpr const char *RELATIVE_LOGFILE_PATH = ".gm-companion/log.txt";
 
 Logger::Logger()
 {
@@ -55,7 +58,7 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     if (type != QtDebugMsg)
     {
-        MessageDispatcher::dispatch(timestamp, type, context.category, msg);
+        MessageManager::instance()->addMessage(timestamp, type, context.category, msg);
     }
 
     m_logStream << line << "\n";

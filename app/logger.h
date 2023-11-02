@@ -1,9 +1,8 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 
 #include <QFile>
 #include <QMessageLogContext>
-#include <QMutexLocker>
+#include <QMutex>
 #include <QTextStream>
 
 class Logger
@@ -16,8 +15,6 @@ public:
     static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 private:
-    static constexpr const char *RELATIVE_LOGFILE_PATH = ".gm-companion/log.txt";
-
     inline static QFile m_logFile;
     inline static QTextStream m_logStream;
     inline static QMutex m_logMutex;
@@ -27,5 +24,3 @@ private:
 
     static auto msgTypeToPrefix(QtMsgType type) -> QString;
 };
-
-#endif // LOGGER_H

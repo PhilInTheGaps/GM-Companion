@@ -30,6 +30,7 @@ set(SRC_MODELS
     models/treeitem.cpp
     models/customobjectlistmodel.h
     models/customobjectlistmodel.cpp
+    models/customsharedptrlistmodel.h
     models/baseprojectitem.h
     models/baseprojectitem.cpp)
 

@@ -169,7 +169,7 @@ ApplicationWindow {
             altColor: "orange"
             useAltColor: MessageManager.hasNewErrors
 
-            visible: MessageManager.messages.length > 0
+            visible: message_dialog.hasMessages
 
             onClicked: {
                 if (message_dialog.opened) {

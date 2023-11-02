@@ -1,9 +1,11 @@
 #pragma once
 
 #include "message.h"
+#include "messagemodel.h"
 #include "qmlsingletonfactory.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJSEngine>
+#include <QMutex>
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQml/qqmlregistration.h>
@@ -19,25 +21,23 @@ public:
     MessageManager() = delete;
     static auto instance() -> MessageManager *;
 
+    Q_PROPERTY(MessageModel *messages READ messages CONSTANT FINAL)
+    [[nodiscard]] auto messages() -> MessageModel *;
+
     Q_INVOKABLE void markAllAsRead();
     Q_INVOKABLE void clearMessages();
 
     AUTO_PROPERTY_VAL2(bool, hasNewErrors, false)
-    Q_PROPERTY(QQmlListProperty<Message> messages READ messages NOTIFY messagesChanged FINAL)
-    auto messages() -> QQmlListProperty<Message>;
 
 public slots:
     void addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
-    void addMessage(Message *message);
-
-signals:
-    void messagesChanged();
+    void addMessage(std::shared_ptr<Message> message);
 
 private:
     using QObject::QObject;
 
     inline static MessageManager *single = nullptr;
-    QList<Message *> m_messages;
 
-    void makeMessageReadyForAdding(Message *message);
+    QMutex m_mutex;
+    MessageModel m_model = MessageModel(nullptr);
 };

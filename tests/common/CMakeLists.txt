@@ -12,6 +12,7 @@ qt_add_executable(test_common
     main.cpp
     models/testtreeitem.cpp
     models/testcustomobjectlistmodel.cpp
+    models/testcustomsharedptrlistmodel.cpp
     updates/testupdatemanager.cpp
     utils/testutils.cpp
     utils/teststringutils.cpp

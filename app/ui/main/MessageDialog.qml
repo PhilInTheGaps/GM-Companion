@@ -6,6 +6,8 @@ import src
 Dialog {
     id: root
 
+    property bool hasMessages: repeater.count
+
     title: qsTr("Warnings and Errors")
 
     x: parent.width / 2 - width / 2
@@ -57,14 +59,19 @@ Dialog {
             spacing: 10
 
             Repeater {
+                id: repeater
                 model: MessageManager.messages
 
                 Rectangle {
                     id: message_box
-                    required property Message modelData
+
+                    required property date timestamp
+                    required property int type
+                    required property string category
+                    required property string body
 
                     color: "transparent"
-                    border.color: switch (modelData.type) {
+                    border.color: switch (type) {
                                   case 1:
                                       "orange"
                                       break
@@ -105,7 +112,7 @@ Dialog {
                                 font.styleName: FontAwesome.fontSolid.styleName
                                 font.pointSize: 12
                                 verticalAlignment: Text.AlignVCenter
-                                text: message_box.modelData.type === 4 ? FontAwesome.circleInfo : FontAwesome.triangleExclamation
+                                text: message_box.type === 4 ? FontAwesome.circleInfo : FontAwesome.triangleExclamation
 
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
@@ -117,7 +124,7 @@ Dialog {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                text: message_box.modelData.timestamp.toLocaleString(
+                                text: message_box.timestamp.toLocaleString(
                                           Qt.locale("en_US"),
                                           Locale.ShortFormat)
                                 font.pointSize: 10
@@ -130,7 +137,7 @@ Dialog {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                text: message_box.modelData.category
+                                text: message_box.category
                                 font.pointSize: 10
                                 wrapMode: Label.NoWrap
                                 verticalAlignment: Text.AlignVCenter
@@ -145,7 +152,7 @@ Dialog {
                         anchors.right: parent.right
                         padding: 10
 
-                        text: message_box.modelData.body
+                        text: message_box.body
                         font.pointSize: 12
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         readOnly: true

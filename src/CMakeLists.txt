@@ -223,8 +223,7 @@ set(SRC_MESSAGES
     messages/message.h
     messages/messagemanager.h
     messages/messagemanager.cpp
-    messages/messagedispatcher.h
-    messages/messagedispatcher.cpp)
+    messages/messagemodel.h)
 
 set_source_files_properties(${SRC_MESSAGES} PROPERTIES UNITY_GROUP "messages")
 

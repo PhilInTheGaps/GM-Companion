@@ -1,7 +1,9 @@
 #include "models/customobjectlistmodel.h"
 #include <QAbstractItemModelTester>
-#include <QList>
 #include <gtest/gtest.h>
+
+namespace CustomObjectListTest
+{
 
 class TestModel : public CustomObjectListModel
 {
@@ -137,5 +139,7 @@ TEST_F(CustomObjectListTest, TestNonOwningModelUsingAbstractItemModelTester)
 {
     QAbstractItemModelTester tester(&nonOwningModel, QAbstractItemModelTester::FailureReportingMode::QtTest);
 }
+
+} // namespace CustomObjectListTest
 
 #include "testcustomobjectlistmodel.moc"

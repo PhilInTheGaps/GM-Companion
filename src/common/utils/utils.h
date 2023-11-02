@@ -1,6 +1,8 @@
 #pragma once
 
+#include <QList>
 #include <QObject>
+#include <vector>
 
 class Utils
 {
@@ -24,9 +26,9 @@ public:
         return list;
     }
 
-    template <typename T> static auto isInBounds(const QList<T> &list, qsizetype index) -> bool
+    template <typename T> static auto isInBounds(const T &list, qsizetype index) -> bool
     {
-        return index > -1 && index < list.length();
+        return index > -1 && index < list.size();
     }
 
     template <typename T> static auto copyList(const QList<T *> &original) -> QList<T *>

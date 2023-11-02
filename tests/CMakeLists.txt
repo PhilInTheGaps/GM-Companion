@@ -31,6 +31,7 @@ set(SOURCES
     main.cpp
     addons/testaddonmanager.cpp
     addons/testaddonreader.cpp
+    messages/testmessagemanager.cpp
     tools/audio/testaudioproject.cpp
     tools/audio/testaudioprojectupgrader.cpp
     tools/audio/testaudiosaveload.cpp

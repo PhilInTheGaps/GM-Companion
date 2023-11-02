@@ -1,25 +1,22 @@
 #pragma once
 
-#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QDateTime>
-#include <QObject>
-#include <QtQml>
+#include <QString>
 
-class Message : public QObject
+struct Message
 {
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-
-    READONLY_PROPERTY(QDateTime, timestamp)
-    READONLY_PROPERTY(int, type)
-    READONLY_PROPERTY(QString, category)
-    READONLY_PROPERTY(QString, body)
-
-public:
-    explicit Message(QObject *parent, const QDateTime &timestamp, int type, const QString &category,
-                     const QString &body)
-        : QObject(parent), a_timestamp(timestamp), a_type(type), a_category(category), a_body(body)
+    explicit Message(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body)
+        : timestamp(timestamp), type(type), category(category), body(body)
     {
     }
+
+    explicit Message(QDateTime &timestamp, QtMsgType type, QString &category, QString &body)
+        : timestamp(std::move(timestamp)), type(type), category(std::move(category)), body(std::move(body))
+    {
+    }
+
+    QDateTime timestamp;
+    QtMsgType type;
+    QString category;
+    QString body;
 };

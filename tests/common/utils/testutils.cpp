@@ -20,10 +20,16 @@ template <typename T> void isInBoundsHelper(T &list)
     EXPECT_FALSE(Utils::isInBounds(list, -1));
 }
 
-TEST(UtilsTest, IsInBounds)
+TEST(UtilsTest, IsInBoundsQList)
 {
     QList<QObject *> list;
     isInBoundsHelper(list);
+}
+
+TEST(UtilsTest, IsInBoundsVector)
+{
+    std::vector<QObject *> vector;
+    isInBoundsHelper(vector);
 }
 
 TEST(UtilsTest, IsInHierarchy)

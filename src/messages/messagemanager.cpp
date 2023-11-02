@@ -1,4 +1,5 @@
 #include "messagemanager.h"
+#include <QMutexLocker>
 
 auto MessageManager::instance() -> MessageManager *
 {
@@ -13,41 +14,20 @@ auto MessageManager::instance() -> MessageManager *
 void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category,
                                 const QString &body)
 {
-    auto *message = new Message(this, timestamp, type, category, body);
-    addMessage(message);
+    addMessage(std::make_shared<Message>(timestamp, type, category, body));
 }
 
-void MessageManager::addMessage(Message *message)
+void MessageManager::addMessage(std::shared_ptr<Message> message)
 {
-    makeMessageReadyForAdding(message);
-
-    m_messages.prepend(message);
+    QMutexLocker const lock(&m_mutex); // lock for messages from different threads
 
     // filter errors
-    if (message->type() > 0 && message->type() < 4)
+    if (message->type > QtMsgType::QtDebugMsg && message->type < QtMsgType::QtInfoMsg)
     {
         hasNewErrors(true);
     }
 
-    emit messagesChanged();
-}
-
-void MessageManager::makeMessageReadyForAdding(Message *message)
-{
-    if (message->thread() != this->thread())
-    {
-        if (message->parent() != nullptr)
-        {
-            message->setParent(nullptr);
-        }
-
-        message->moveToThread(this->thread());
-    }
-
-    if (message->parent() != this)
-    {
-        message->setParent(this);
-    }
+    m_model.prepend(std::move(message));
 }
 
 void MessageManager::markAllAsRead()
@@ -57,17 +37,11 @@ void MessageManager::markAllAsRead()
 
 void MessageManager::clearMessages()
 {
-    while (!m_messages.isEmpty())
-    {
-        auto *message = m_messages.takeFirst();
-        message->deleteLater();
-    }
-
-    emit messagesChanged();
+    m_model.clear();
     hasNewErrors(false);
 }
 
-auto MessageManager::messages() -> QQmlListProperty<Message>
+auto MessageManager::messages() -> MessageModel *
 {
-    return {this, &m_messages};
+    return &m_model;
 }
