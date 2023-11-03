@@ -1,5 +1,6 @@
 #include "messages/messagemanager.h"
 #include <QFuture>
+#include <QTest>
 #include <QtConcurrent/QtConcurrent>
 #include <gtest/gtest.h>
 
@@ -51,6 +52,8 @@ TEST(MessageManagerTest, CanAddMessagesFromDifferentThreads)
         auto message2 = std::make_shared<Message>(QDateTime(), QtMsgType::QtWarningMsg, u"category2"_s, u"message2"_s);
         MessageManager::instance()->addMessage(std::move(message2));
     }).waitForFinished();
+
+    QTest::qWait(50);
 
     EXPECT_EQ(MessageManager::instance()->messages()->rowCount(), 3);
 }
