@@ -140,6 +140,9 @@ jobs:
           sudo apt-get upgrade -q
           sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev gnome-keyring dbus-x11 libxcb-cursor0 libfuse2
 
+      - name: Unlock Keyring
+        uses: t1m0thyj/unlock-keyring@v1
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -258,6 +261,9 @@ jobs:
           sudo apt-get upgrade -q
           sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev gnome-keyring dbus-x11 libxcb-cursor0
           sudo pip3 install gcovr
+
+      - name: Unlock Keyring
+        uses: t1m0thyj/unlock-keyring@v1
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
