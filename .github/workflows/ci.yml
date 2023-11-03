@@ -186,7 +186,7 @@ jobs:
         run: |
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DCMAKE_UNITY_BUILD=ON
-      
+
       - name: Linter (QML)
         run: |
           cd build
@@ -259,6 +259,11 @@ jobs:
           sudo apt-get upgrade -q
           sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev gnome-keyring dbus-x11 libxcb-cursor0
           sudo pip3 install gcovr
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Unlock Keyring
         uses: t1m0thyj/unlock-keyring@v1
