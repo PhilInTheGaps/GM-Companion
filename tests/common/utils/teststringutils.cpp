@@ -3,6 +3,8 @@
 #include <QPixmap>
 #include <gtest/gtest.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 struct Rot13Test
 {
     const char *description;
@@ -34,10 +36,10 @@ struct WildcardTest
 
 TEST(StringUtilsTest, HasWildcardMatch)
 {
-    std::vector<WildcardTest> tests = {{"mp3 file match", "file.mp3", "*.mp3", true},
-                                       {"mp3 file no match", "file.mp3_", "*.mp3", false},
-                                       {"doc file match", "file.doc", "*.doc", true},
-                                       {"doc file no match", "file.not_a_doc", "*.doc", false}};
+    std::vector<WildcardTest> tests = {{"mp3 file match", u"file.mp3"_s, u"*.mp3"_s, true},
+                                       {"mp3 file no match", u"file.mp3_"_s, u"*.mp3"_s, false},
+                                       {"doc file match", u"file.doc"_s, u"*.doc"_s, true},
+                                       {"doc file no match", u"file.not_a_doc"_s, u"*.doc"_s, false}};
 
     for (const auto &test : tests)
     {
@@ -64,4 +66,14 @@ TEST(StringUtilsTest, CanConvertJpgToStringAndBack)
     auto pixmap = StringUtils::pixmapFromString(data);
     auto image3 = pixmap.toImage();
     EXPECT_EQ(image3.pixelColor(0, 0), image.pixelColor(0, 0));
+}
+
+TEST(StringUtilsTest, CanCensorStrings)
+{
+    EXPECT_EQ(StringUtils::censor("").toStdString(), "");
+    EXPECT_EQ(StringUtils::censor("1234").toStdString(), "1234");
+    EXPECT_EQ(StringUtils::censor("12345").toStdString(), "1234...");
+    EXPECT_EQ(StringUtils::censor("123456789abcdefghijklmnopqrstuvwxyz").toStdString(), "1234...");
+    EXPECT_EQ(StringUtils::censor(R"(Yf)jH?BaGY>>N-{'!qF.y{^BkKt\~aqB:LpoBzXNffY#y>/n*@>N<Q&%n|FNs{S")").toStdString(),
+              "Yf)j...");
 }

@@ -1,5 +1,6 @@
 #include "restserviceconnectorlocal.h"
 #include "settings/settingsmanager.h"
+#include "utils/stringutils.h"
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -66,8 +67,8 @@ void RESTServiceConnectorLocal::grantAccess()
     m_o2->setClientSecret(secret);
 
     qCDebug(m_loggingCategory) << "Found client id and secret. Trying to link now ...";
-    qCDebug(m_loggingCategory) << m_o2->token();
-    qCDebug(m_loggingCategory) << m_o2->refreshToken();
+    qCDebug(m_loggingCategory) << StringUtils::censor(m_o2->token());
+    qCDebug(m_loggingCategory) << StringUtils::censor(m_o2->refreshToken());
 
     if (m_o2->linked())
     {
@@ -225,7 +226,7 @@ void RESTServiceConnectorLocal::onRefreshFinished(QNetworkReply::NetworkError er
         return;
     }
 
-    qCDebug(m_loggingCategory) << "Refresh Token:" << m_o2->refreshToken();
+    qCDebug(m_loggingCategory) << "Refresh Token:" << StringUtils::censor(m_o2->refreshToken());
 
     updateTokenExpireTime(std::chrono::seconds(m_o2->expires()));
 }

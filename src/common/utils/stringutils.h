@@ -43,6 +43,8 @@ public:
     static auto rot13(const QString &input) -> QString;
     static auto hasWildcardMatch(const QString &string, const QString &wildcard) -> bool;
 
+    static auto censor(QAnyStringView string) -> QString;
+
 private:
     constexpr static auto JPG_BASE64_PREFIX = QLatin1StringView("data:image/jpg;base64,");
 };

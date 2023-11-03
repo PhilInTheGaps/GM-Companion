@@ -5,6 +5,7 @@
 using namespace Qt::Literals::StringLiterals;
 
 constexpr int ROT13_PLACES = 13;
+constexpr int CENSOR_LENGTH = 4;
 
 auto StringUtils::imageFromString(const QByteArray &string) -> QImage
 {
@@ -65,4 +66,13 @@ auto StringUtils::hasWildcardMatch(const QString &string, const QString &wildcar
     hasMatch = match.hasMatch();
 
     return hasMatch;
+}
+
+auto StringUtils::censor(QAnyStringView string) -> QString
+{
+    if (string.isEmpty()) return ""_L1;
+
+    if (string.length() <= CENSOR_LENGTH) return string.toString();
+
+    return string.first(CENSOR_LENGTH).toString() + u"..."_s;
 }

@@ -1,6 +1,7 @@
 #include "nextcloud.h"
 #include "settings/settingsmanager.h"
 #include "utils/networkutils.h"
+#include "utils/stringutils.h"
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -171,8 +172,6 @@ void NextCloud::startLoginFlow()
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         auto data = QJsonDocument::fromJson(reply->readAll());
 
-        qCDebug(gmNextCloud()) << "Auth reply:" << data.toJson();
-
         if (reply->error() != QNetworkReply::NoError)
         {
             qCWarning(gmNextCloud()) << "Error:" << reply->error() << reply->errorString();
@@ -207,7 +206,7 @@ void NextCloud::pollAuthPoint(const QUrl &url, const QString &token)
     m_authPolls++;
 
     qCDebug(gmNextCloud()) << "URL:" << url.toString();
-    qCDebug(gmNextCloud()) << "Token:" << token;
+    qCDebug(gmNextCloud()) << "Token:" << StringUtils::censor(token);
 
     connect(reply, &QNetworkReply::finished, this,
             [this, url, token, reply]() { handleAuthPointReply(reply, url, token); });
@@ -255,7 +254,7 @@ void NextCloud::handleAuthPointSuccess(QNetworkReply &reply)
 
     qCDebug(gmNextCloud()) << "Logged in successfully!";
     qCDebug(gmNextCloud()) << "LoginName:" << loginName();
-    qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
+    qCDebug(gmNextCloud()) << "AppPassword:" << StringUtils::censor(m_appPassword);
 
     SettingsManager::instance()->set("loginName"_L1, loginName(), serviceName());
     SettingsManager::setPassword(loginName(), m_appPassword, serviceName());
