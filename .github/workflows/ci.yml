@@ -124,6 +124,8 @@ jobs:
       matrix:
         qt-version: ["6.5.2"]
         compiler: ["gcc_64"]
+    env:
+      QT_QPA_PLATFORM: "offscreen"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -192,14 +194,11 @@ jobs:
 
       - name: Make
         run: |
-          export QT_QPA_PLATFORM="offscreen"
           cd build
           cmake --build . -j2
 
       - name: Tests
         run: |
-          export QT_QPA_PLATFORM="offscreen"
-
           cd build
           ctest --output-on-failure
 
@@ -243,8 +242,7 @@ jobs:
         qt-version: ["6.5.2"]
         compiler: ["gcc_64"]
     env:
-      SONAR_SCANNER_VERSION: 4.8.0.2856
-      SONAR_SERVER_URL: "https://sonarcloud.io"
+      QT_QPA_PLATFORM: "offscreen"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -282,22 +280,8 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Download and set up sonar-scanner
-        env:
-          SONAR_SCANNER_DOWNLOAD_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${{ env.SONAR_SCANNER_VERSION }}-linux.zip
-        run: |
-          mkdir -p $HOME/.sonar
-          curl -sSLo $HOME/.sonar/sonar-scanner.zip ${{ env.SONAR_SCANNER_DOWNLOAD_URL }} 
-          unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
-          echo "$HOME/.sonar/sonar-scanner-${{ env.SONAR_SCANNER_VERSION }}-linux/bin" >> $GITHUB_PATH
-
-      - name: Download and set up build-wrapper
-        env:
-          BUILD_WRAPPER_DOWNLOAD_URL: ${{ env.SONAR_SERVER_URL }}/static/cpp/build-wrapper-linux-x86.zip
-        run: |
-          curl -sSLo $HOME/.sonar/build-wrapper-linux-x86.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
-          unzip -o $HOME/.sonar/build-wrapper-linux-x86.zip -d $HOME/.sonar/
-          echo "$HOME/.sonar/build-wrapper-linux-x86" >> $GITHUB_PATH
+      - name: Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v1
 
       - name: Install cget
         run: sudo pip3 install wheel cget
@@ -321,15 +305,12 @@ jobs:
 
       - name: Run build-wrapper
         run: |
-          export QT_QPA_PLATFORM="offscreen"
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DENABLE_CODE_COVERAGE=ON
           build-wrapper-linux-x86-64 --out-dir bw-output cmake --build . -j2
 
       - name: Tests
         run: |
-          export QT_QPA_PLATFORM="offscreen"
-
           cd build
           ctest --output-on-failure
 
