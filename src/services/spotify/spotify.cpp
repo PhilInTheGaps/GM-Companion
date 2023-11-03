@@ -44,24 +44,21 @@ void Spotify::updateConnector()
     connect(m_connector, &RESTServiceConnector::isConnectedChanged, this,
             [this](bool connected) { this->connected(connected); });
 
-    if (connected())
-    {
+    if (!connected()) return;
+
+    // start client delayed
+    QTimer::singleShot(0, this, [this]() {
         if (m_librespotController.hasStarted())
         {
             grant();
         }
         else
         {
-            m_librespotController.start().then(this, [this](bool success) {
+            m_librespotController.start().then([this](bool success) {
                 if (success) grant();
             });
         }
-    }
-}
-
-auto Spotify::startClient() -> QFuture<bool>
-{
-    return m_librespotController.start();
+    });
 }
 
 auto Spotify::instance() -> Spotify *
@@ -105,7 +102,7 @@ auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired) -> QFutur
         return reply;
     };
 
-    return m_connector->get(request, isAuthRequired).then(this, callback);
+    return m_connector->get(request, isAuthRequired).then(callback);
 }
 
 auto Spotify::get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>
@@ -122,7 +119,7 @@ auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFu
         return reply;
     };
 
-    return m_connector->put(request, data).then(this, callback);
+    return m_connector->put(request, data).then(callback);
 }
 
 auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestReply>
@@ -139,7 +136,7 @@ auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QF
         return reply;
     };
 
-    return m_connector->post(request, data).then(this, callback);
+    return m_connector->post(request, data).then(callback);
 }
 
 auto Spotify::clientStatus() const -> Status *
@@ -151,9 +148,7 @@ void Spotify::connectService()
 {
     username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
 
-    auto hasClientStarted = startClient();
-
-    hasClientStarted.then(this, [this](bool success) {
+    m_librespotController.start().then([this](bool success) {
         qCDebug(gmSpotify()) << "Client has started:" << success;
 
         if (success)

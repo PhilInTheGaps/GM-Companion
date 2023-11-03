@@ -29,8 +29,8 @@ public:
     static auto getServerUrl(const QString &service, bool hasDefault = true) -> QString;
     static void setServerUrl(const QString &url, const QString &service);
 
-    static auto getPassword(const QString &username, const QString &service) -> QFuture<QString>;
-    static auto setPassword(const QString &username, const QString &password, const QString &service) -> QFuture<bool>;
+    static auto getPassword(const QString &username, const QString &service) -> QString;
+    static auto setPassword(const QString &username, const QString &password, const QString &service) -> bool;
 
     void setAddonEnabled(const QString &addon, bool enabled);
     auto getIsAddonEnabled(const QString &addon) -> bool;

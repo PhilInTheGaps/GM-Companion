@@ -151,9 +151,9 @@ auto Worker::copyFile(const QString &filePath, const QString &base, const QStrin
     const auto oldPath = FileUtils::fileInDir(filePath, base);
     const auto newPath = FileUtils::fileInDir(FileUtils::fileInDir(filePath, subfolder), m_path);
 
-    Files::File::copyAsync(oldPath, newPath)
-        .then(this, [this](Files::FileResult) { copyNext(); })
-        .onCanceled(this, [this]() { copyNext(); });
+    Files::File::copyAsync(oldPath, newPath).then([this](Files::FileResult &&) { copyNext(); }).onCanceled([this]() {
+        copyNext();
+    });
     return true;
 }
 

@@ -1,4 +1,5 @@
 #include "abstracttest.h"
+#include "settings/settingsmanager.h"
 #include "src/filesystem/file.h"
 #include "src/filesystem/fileaccesslocal.h"
 #include <QDebug>
@@ -8,7 +9,15 @@ using namespace Files;
 
 AbstractTest::AbstractTest() : StaticAbstractTest()
 {
+    cloudMode = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s);
+    SettingsManager::instance()->set(u"cloudMode"_s, u"local"_s);
+
     tempDir.setAutoRemove(true);
+}
+
+AbstractTest::~AbstractTest()
+{
+    SettingsManager::instance()->set(u"cloudMode"_s, cloudMode);
 }
 
 void AbstractTest::verifyFileContent(const QString &path, const QByteArray &content, bool cached)

@@ -5,7 +5,7 @@
 #include "loaders/tagimageloader.h"
 #include <QPainter>
 
-auto AudioThumbnailCollageGenerator::makeCollageAsync(AudioElement *element) -> QFuture<QPixmap>
+auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> element) -> QFuture<QPixmap>
 {
     // Check if collage can be generated
     if (!canMakeCollage(element))
@@ -16,16 +16,20 @@ auto AudioThumbnailCollageGenerator::makeCollageAsync(AudioElement *element) -> 
     // Get pixmaps to use in the collage
     auto future = findPixmapsForCollageAsync(element, 0, 0, 0);
 
-    return future.then(element, [element]() { return generateCollageImage(element); });
+    return future.then([element]() { return generateCollageImage(element); });
 }
 
-auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *element, int index, int fileCount,
-                                                                int failCount) -> QFuture<void>
+auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioElement> element, int index,
+                                                                int fileCount, int failCount) -> QFuture<void>
 {
-    auto *audioFile = element->files().at(index);
+    if (!element) return QtFuture::makeReadyFuture();
+
+    QPointer<AudioFile> audioFile = element->files().at(index);
     if (!audioFile) return QtFuture::makeReadyFuture();
 
     const auto callback = [element, audioFile, index, fileCount, failCount](const QPixmap &pixmap) {
+        if (!element) return QtFuture::makeReadyFuture(); // element has possibly been deleted by now
+
         const auto audioFileCount = element->files().length();
 
         if (pixmap.isNull())
@@ -58,14 +62,14 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *el
         return QtFuture::makeReadyFuture();
     };
 
-    return getCoverArtAsync(element, audioFile).then(element, callback).unwrap();
+    return getCoverArtAsync(element, audioFile).then(callback).unwrap();
 }
 
 /**
  * @brief Check if a collage can be generated.
  * False if element is nullptr or of type radio or does not contain any files.
  */
-auto AudioThumbnailCollageGenerator::canMakeCollage(AudioElement *element) -> bool
+auto AudioThumbnailCollageGenerator::canMakeCollage(QPointer<AudioElement> element) -> bool
 {
     return element && element->type() != AudioElement::Type::Radio && element->files().length() > 0;
 }
@@ -73,8 +77,11 @@ auto AudioThumbnailCollageGenerator::canMakeCollage(AudioElement *element) -> bo
 /**
  * @brief Get the cover art of an audio file.
  */
-auto AudioThumbnailCollageGenerator::getCoverArtAsync(AudioElement *element, AudioFile *audioFile) -> QFuture<QPixmap>
+auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile)
+    -> QFuture<QPixmap>
 {
+    if (!element || !audioFile) return QtFuture::makeReadyFuture(QPixmap());
+
     switch (audioFile->source())
     {
     case AudioFile::Source::File:
@@ -88,8 +95,10 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(AudioElement *element, Aud
     }
 }
 
-auto AudioThumbnailCollageGenerator::generateCollageImage(AudioElement *element) -> QPixmap
+auto AudioThumbnailCollageGenerator::generateCollageImage(QPointer<AudioElement> element) -> QPixmap
 {
+    if (!element) return QPixmap();
+
     auto thumbnail = element->thumbnail();
 
     if (!thumbnail || thumbnail->collageImages().isEmpty()) return {};
@@ -115,8 +124,10 @@ auto AudioThumbnailCollageGenerator::generateCollageImage(AudioElement *element)
     return image;
 }
 
-auto AudioThumbnailCollageGenerator::getUniquePixmaps(AudioThumbnail *thumbnail) -> QList<QPixmap>
+auto AudioThumbnailCollageGenerator::getUniquePixmaps(QPointer<AudioThumbnail> thumbnail) -> QList<QPixmap>
 {
+    if (!thumbnail) return {};
+
     QList<QPixmap> images;
 
     foreach (const auto &imagePair, thumbnail->collageImages())

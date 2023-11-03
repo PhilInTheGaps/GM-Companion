@@ -29,7 +29,7 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<SpotifyTrack>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply reply) -> QFuture<SpotifyTrack> {
+    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyTrack> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyTracks()) << "getTrack():" << reply.errorText();
@@ -39,7 +39,7 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<SpotifyTrack>
         return QtFuture::makeReadyFuture(SpotifyTrack::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto TracksAPI::getTracks(const QStringList &ids) -> QFuture<std::vector<SpotifyTrack>>
@@ -66,7 +66,7 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&pr
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this, ids, previous = std::move(previous)](RestReply reply) mutable {
+    const auto callback = [this, ids, previous = std::move(previous)](RestReply &&reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyTracks()) << "getTracks():" << reply.errorText();
@@ -88,7 +88,7 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&pr
         return QtFuture::makeReadyFuture(previous);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto TracksAPI::getNextBatch(const QStringList &ids, const std::vector<SpotifyTrack> &previous) -> QStringList

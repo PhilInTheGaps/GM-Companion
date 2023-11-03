@@ -22,7 +22,7 @@ void AudioThumbnailGenerator::configureNetworkManager()
     }
 }
 
-void AudioThumbnailGenerator::generateThumbnails(AudioScenario *scenario)
+void AudioThumbnailGenerator::generateThumbnails(QPointer<AudioScenario> scenario)
 {
     if (!scenario) return;
 
@@ -36,13 +36,10 @@ void AudioThumbnailGenerator::generateThumbnails(AudioScenario *scenario)
     }
 }
 
-void AudioThumbnailGenerator::receivedImage(AudioElement *element, const QPixmap &pixmap, bool makeFallbackCollage)
+void AudioThumbnailGenerator::receivedImage(QPointer<AudioElement> element, const QPixmap &pixmap,
+                                            bool makeFallbackCollage)
 {
-    if (!element || !element->thumbnail())
-    {
-        qCCritical(gmAudioThumbnailGenerator()) << "Received image but related element or thumbnail object is null";
-        return;
-    }
+    if (!element || !element->thumbnail()) return;
 
     if (pixmap.isNull() && makeFallbackCollage)
     {
@@ -56,7 +53,7 @@ void AudioThumbnailGenerator::receivedImage(AudioElement *element, const QPixmap
     element->thumbnail()->update();
 }
 
-void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
+void AudioThumbnailGenerator::generateThumbnail(QPointer<AudioElement> element)
 {
     // Paranoid check
     if (!element || !element->thumbnail()) return;
@@ -86,7 +83,7 @@ void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
     AudioThumbnailCollageGenerator::makeCollageAsync(element).then(callbackWithoutFallback);
 }
 
-auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPixmap
+auto AudioThumbnailGenerator::getPlaceholderImage(QPointer<AudioElement> element) -> QPixmap
 {
     if (!element) return emptyPixmap();
     return getPlaceholderImage(element->type());

@@ -29,7 +29,8 @@ public:
     }
 
 protected:
-    auto sendMockReply(Operation, const QNetworkRequest &, const QByteArray &) -> QNetworkReply * override
+    auto sendMockReply(Operation /*op*/, const QNetworkRequest & /*req*/, const QByteArray & /*data*/)
+        -> QNetworkReply * override
     {
         emit replySent();
         return MockNetworkReply::successEmpty(this);

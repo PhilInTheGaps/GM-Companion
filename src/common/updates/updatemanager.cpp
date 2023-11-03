@@ -42,9 +42,9 @@ void UpdateManager::checkForUpdates()
     qCDebug(gmUpdateManager) << "Current version:" << CURRENT_VERSION;
     qCDebug(gmUpdateManager) << "Releases feed URL:" << m_feedURL;
 
-    fetchNewestVersion().then([this](const QString &version) {
-        m_newestVersion = version;
-        qCDebug(gmUpdateManager()) << "Newest available version:" << version;
+    fetchNewestVersion().then([this](QString &&version) {
+        m_newestVersion = std::move(version);
+        qCDebug(gmUpdateManager()) << "Newest available version:" << m_newestVersion;
 
         if (compareVersions(CURRENT_VERSION, m_newestVersion))
         {

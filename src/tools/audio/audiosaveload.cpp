@@ -52,7 +52,7 @@ auto AudioSaveLoad::loadProjects(QObject *context, FileListResult &&files) -> QF
 
     auto futureContents = File::getDataAsync(fileNames);
 
-    return futureContents.then([context](const std::vector<FileDataResult> &contents) {
+    return futureContents.then([context](std::vector<FileDataResult> &&contents) {
         qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
         std::vector<AudioProject *> projects;
         projects.reserve(contents.size());
@@ -181,7 +181,7 @@ auto AudioSaveLoad::deleteProject(AudioProject *project, const QString &folder) 
     }
 
     auto filePath = getProjectFolder(folder) + "/" + project->name() + PROJECT_FILE_SUFFIX;
-    return File::deleteAsync(filePath).then([](const FileResult &result) { return result.success(); }).onCanceled([]() {
+    return File::deleteAsync(filePath).then([](FileResult &&result) { return result.success(); }).onCanceled([]() {
         return false;
     });
 }

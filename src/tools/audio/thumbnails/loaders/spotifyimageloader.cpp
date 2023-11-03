@@ -97,11 +97,11 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
             return image;
         };
 
-        return future.then(Spotify::instance(), callback);
+        return future.then(callback);
     };
 
     auto future = Spotify::instance()->playlists.getPlaylist(id);
-    return future.then(Spotify::instance(), callback).unwrap();
+    return future.then(callback).unwrap();
 }
 
 void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
@@ -116,7 +116,7 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
     qCDebug(gmAudioSpotifyImageLoader()) << "Sending batch request:" << url;
 
     auto future = Spotify::instance()->get(url, true);
-    future.then(Spotify::instance(), [type](RestReply &&reply) { receivedRequest(std::move(reply), type); });
+    future.then([type](RestReply &&reply) { receivedRequest(std::move(reply), type); });
 
     // Start timer again if there still are ids in the queue
     if (!getQueue(type)->isEmpty())
@@ -173,7 +173,7 @@ void SpotifyImageLoader::receivedRequest(RestReply &&reply, SpotifyUtils::Spotif
             fulfillPromises(id, image);
         };
 
-        future.then(Spotify::instance(), callback);
+        future.then(callback);
     }
 }
 

@@ -42,7 +42,8 @@ private:
                                const std::function<QFuture<FileResult>(const T1 &, const T2 &)> &func)
         -> QFuture<FileResult>;
 
-    auto parseListResponse(const QByteArray &data, const QString &path, bool files, bool folders) -> FileListResult;
+    static auto parseListResponse(const QByteArray &data, const QString &path, bool files, bool folders)
+        -> FileListResult;
 };
 
 } // namespace Files

@@ -2,6 +2,7 @@
 
 #include "fileaccess.h"
 #include <QDir>
+#include <QObject>
 
 namespace Files
 {
@@ -30,6 +31,13 @@ private:
     static auto copy(const QString &path, const QString &copy) -> FileResult;
     static auto getDirFilter(bool files, bool folders) -> QFlags<QDir::Filter>;
     static auto check(const QString &path, bool allowCache) -> FileCheckResult;
+
+    // There is an issue in qt >= 6.6 where futures resolved on the same thread as the context object
+    // of their continuation become stuck trying to lock a mutex.
+    // As a workaround all fileaccess futures are resolved on the main thread event so that
+    // the context objects for continuations become unecessary.
+    // That's what this context object is for.
+    QObject m_context;
 };
 
 } // namespace Files

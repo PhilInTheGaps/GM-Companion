@@ -82,15 +82,14 @@ void AddonRepositoryManager::fetchAllRepositoryData()
 
     foreach (const auto *repo, repositories())
     {
-        auto future =
-            fetchRepositoryDataAsync(repo->url()).then([this, repo](const std::vector<AddonReleaseInfo> &info) {
-                if (!info.empty())
-                {
-                    qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
-                }
+        auto future = fetchRepositoryDataAsync(repo->url()).then([this, repo](std::vector<AddonReleaseInfo> &&info) {
+            if (!info.empty())
+            {
+                qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
+            }
 
-                m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
-            });
+            m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
+        });
 
         combinator << future;
     }

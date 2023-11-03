@@ -72,7 +72,7 @@ void SpotifyPlayer::play(const QString &uri)
         state(AudioPlayer::State::Playing);
     };
 
-    Spotify::instance()->player.play(uri).then(this, callback);
+    Spotify::instance()->player.play(uri).then(callback);
 
     state(AudioPlayer::State::Loading);
 }
@@ -86,7 +86,7 @@ void SpotifyPlayer::play()
 
     qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
-    Spotify::instance()->player.play().then(this, [this](const RestReply &reply) {
+    Spotify::instance()->player.play().then([this](RestReply &&reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not continue playback:" << reply.errorText();
@@ -120,7 +120,7 @@ void SpotifyPlayer::pause()
     m_songDurationTimer.stop();
     m_metaDataTimer.stop();
 
-    Spotify::instance()->player.pause().then(this, [](const RestReply &reply) {
+    Spotify::instance()->player.pause().then([](RestReply &&reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not pause playback:" << reply.errorText();
@@ -157,7 +157,7 @@ void SpotifyPlayer::next()
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
-    Spotify::instance()->player.next().then(this, [this](const RestReply &reply) {
+    Spotify::instance()->player.next().then([this](RestReply &&reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not skip track:" << reply.errorText();
@@ -175,7 +175,7 @@ void SpotifyPlayer::again()
 {
     qCDebug(gmAudioSpotify) << "Playing track again ...";
 
-    Spotify::instance()->player.seek(1).then(this, [](const RestReply &reply) {
+    Spotify::instance()->player.seek(1).then([](RestReply &&reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not play track again:" << reply.errorText();
@@ -222,5 +222,5 @@ void SpotifyPlayer::getCurrentSong()
         m_metaDataReader.setMetaData(metadata);
     };
 
-    Spotify::instance()->player.getCurrentlyPlaying().then(this, callback);
+    Spotify::instance()->player.getCurrentlyPlaying().then(callback);
 }

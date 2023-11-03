@@ -42,7 +42,7 @@ void Character::loadFiles()
 
 void Character::loadFileList()
 {
-    Files::File::listAsync(folder(), true, false).then(this, [this](const Files::FileListResult &result) {
+    Files::File::listAsync(folder(), true, false).then([this](Files::FileListResult &&result) {
         if (!result.success()) return;
 
         foreach (const auto &fileName, result.files())
@@ -65,7 +65,7 @@ void Character::loadFileData(int index)
         return;
     }
 
-    Files::File::getDataAsync(m_files.at(index)->path()).then(this, [this, index](const Files::FileDataResult &result) {
+    Files::File::getDataAsync(m_files.at(index)->path()).then([this, index](Files::FileDataResult &&result) {
         if (!result.success()) return;
 
         m_files.at(index)->data(result.data());

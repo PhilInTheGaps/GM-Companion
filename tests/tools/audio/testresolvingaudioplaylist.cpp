@@ -49,7 +49,7 @@ public:
         QDesktopServices::setUrlHandler(u"http"_s, networkManager.get(), "simulateBrowser");
         QDesktopServices::setUrlHandler(u"https"_s, networkManager.get(), "simulateBrowser");
 
-        m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, *networkManager.get());
+        m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, *networkManager);
 
         auto testingDir = SettingsManager::getPath(u"testing"_s);
         backupDir = backupUserFolder(testingDir);
@@ -58,7 +58,7 @@ public:
         copyResourceToFile(u":/resources/audioplaylist/test.pls"_s, FileUtils::fileInDir(u"test.pls"_s, testingDir));
     }
 
-    ~ResolvingAudioPlaylistTest()
+    ~ResolvingAudioPlaylistTest() override
     {
         restoreUserFolder(backupDir, SettingsManager::getPath(u"testing"_s));
     }

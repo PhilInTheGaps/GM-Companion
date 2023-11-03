@@ -58,7 +58,7 @@ void ShopEditor::findItems()
     itemGroups({});
 
     Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
-        .then(this, [this](Files::FileListResult result) { onItemFilesFound(std::move(result)); });
+        .then([this](Files::FileListResult &&result) { onItemFilesFound(std::move(result)); });
 }
 
 void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
@@ -71,7 +71,7 @@ void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
         return;
     }
 
-    Files::File::getDataAsync(files).then(this, [this](const std::vector<Files::FileDataResult> &results) {
+    Files::File::getDataAsync(files).then([this](std::vector<Files::FileDataResult> &&results) {
         QList<ItemGroup *> groups = {};
         groups.reserve(results.size());
 
@@ -198,12 +198,11 @@ void ShopEditor::save()
     }
 
     QtFuture::whenAll(combinator.begin(), combinator.end())
-        .then(this,
-              [this](const QList<QFuture<Files::FileResult>> &) {
-                  isSaved(true);
-                  emit showInfoBar(tr("Saved!"));
-              })
-        .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save project(s)!")); });
+        .then([this](QList<QFuture<Files::FileResult>> &&) {
+            isSaved(true);
+            emit showInfoBar(tr("Saved!"));
+        })
+        .onCanceled([this]() { emit showInfoBar(tr("Error: Could not save project(s)!")); });
 
     sendProjectCopiesToTool();
 }

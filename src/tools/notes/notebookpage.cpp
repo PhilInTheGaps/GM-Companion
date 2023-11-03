@@ -58,8 +58,8 @@ void NoteBookPage::onContentLoaded(const QString &content)
 void NoteBookPage::generateHtml()
 {
     auto future = HtmlGenerator::generateFromMarkdownAsync(m_content);
-    future.then([this](const QString &html) {
-        m_html = html;
+    future.then([this](QString &&html) {
+        m_html = std::move(html);
         emit htmlGenerated();
     });
 }

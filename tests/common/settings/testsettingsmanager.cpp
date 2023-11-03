@@ -13,19 +13,14 @@ TEST(SettingsManagerTest, CanReadWritePassword)
     const auto service = u"TestService"_s;
 
     auto save = SettingsManager::setPassword(username, password, service);
-    StaticAbstractTest::testFutureNoAuth(save, "SettingsManager::getPassword",
-                                         [password, save]() { EXPECT_TRUE(save.result()); });
+    EXPECT_TRUE(save);
 
     auto read = SettingsManager::getPassword(username, service);
-    StaticAbstractTest::testFutureNoAuth(read, "SettingsManager::getPassword", [password, read]() {
-        EXPECT_EQ(read.result().toStdString(), password.toStdString());
-    });
+    EXPECT_EQ(read.toStdString(), password.toStdString());
 
     auto save2 = SettingsManager::setPassword(username, u""_s, service);
-    StaticAbstractTest::testFutureNoAuth(save2, "SettingsManager::getPassword",
-                                         [password, save2]() { EXPECT_TRUE(save2.result()); });
+    EXPECT_TRUE(save2);
 
     auto read2 = SettingsManager::getPassword(username, service);
-    StaticAbstractTest::testFutureNoAuth(read2, "SettingsManager::getPassword",
-                                         [read2]() { EXPECT_TRUE(read2.result().isEmpty()); });
+    EXPECT_TRUE(read2.isEmpty());
 }

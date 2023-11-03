@@ -4,7 +4,7 @@
 #include "src/common/abstracttool.h"
 #include "src/tools/audio/project/audioproject.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
-#include <QMap>
+#include <QHash>
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
@@ -15,8 +15,12 @@ class AddonElementManager : public AbstractTool
     QML_UNCREATABLE("")
 
     READ_LIST_PROPERTY(Addon, addons)
-    READ_LIST_PROPERTY(AudioProject, projects)
-    AUTO_PROPERTY_VAL2(int, currentIndex, -1)
+    AUTO_PROPERTY_VAL2(int, currentAddonIndex, -1)
+    READ_PROPERTY2(Addon *, currentAddon, nullptr)
+
+    READ_LIST_PROPERTY(AudioProject, availableProjects)
+    AUTO_PROPERTY_VAL2(int, currentProjectIndex, -1)
+    READ_PROPERTY2(AudioProject *, currentProject, nullptr)
 
 public:
     explicit AddonElementManager(QObject *parent = nullptr);
@@ -26,9 +30,9 @@ public slots:
 
 private slots:
     void onInstalledAddonsChanged();
-    void onCurrentIndexChanged(int index);
+    void onCurrentAddonIndexChanged(int index);
+    void onCurrentProjectIndexChanged(int index);
     void onCurrentScenarioChanged(AudioScenario *scenario) const;
-    void onProjectsChanged() const;
 
 private:
     void loadAddonProjects(const Addon &addon);
@@ -37,7 +41,10 @@ private:
     static void removeUnsupportedElementsFromScenario(AudioScenario &scenario);
     static void removeEmptySubscenarios(AudioScenario &scenario);
 
-    QMap<QString, QList<AudioProject *>> m_projects;
+    void clearAddons();
+    void clearProjects();
+
+    QHash<QString, QList<AudioProject *>> m_projects;
 };
 
 Q_DECLARE_METATYPE(AddonElementManager *)

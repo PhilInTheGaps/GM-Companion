@@ -65,7 +65,6 @@ private:
     void handleAccessDenied(const SpotifyNetworkError &error);
 
     void updateConnector();
-    auto startClient() -> QFuture<bool>;
 
 signals:
     void authorized();

@@ -180,7 +180,7 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
 
     url.setQuery(query);
 
-    const auto callback = [](RestReply reply) -> QFuture<SpotifyPlaybackState> {
+    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyPlaybackState> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlayer()) << reply.errorText();
@@ -190,7 +190,7 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
         return QtFuture::makeReadyFuture(SpotifyPlaybackState::fromJson(QJsonDocument::fromJson(reply.data())));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto PlayerAPI::getCurrentlyPlaying() -> QFuture<SpotifyCurrentTrack>
@@ -217,7 +217,7 @@ auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QS
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply reply) -> QFuture<SpotifyCurrentTrack> {
+    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyCurrentTrack> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlayer()) << reply.errorText();
@@ -227,7 +227,7 @@ auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QS
         return QtFuture::makeReadyFuture(SpotifyCurrentTrack::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto PlayerAPI::transfer(const QStringList &deviceIds) const -> QFuture<RestReply>
@@ -249,13 +249,13 @@ auto PlayerAPI::devices() -> QFuture<SpotifyDeviceList>
 {
     const QUrl url(u"https://api.spotify.com/v1/me/player/devices"_s);
 
-    const auto callback = [](RestReply reply) {
+    const auto callback = [](RestReply &&reply) {
         const auto json = QJsonDocument::fromJson(reply.data()).object();
         const auto devices = json["devices"_L1].toArray();
         return SpotifyDevice::fromJson(devices);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback);
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback);
 }
 
 auto PlayerAPI::repeat(SpotifyRepeatMode mode) const -> QFuture<RestReply>

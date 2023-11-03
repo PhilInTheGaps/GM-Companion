@@ -20,7 +20,7 @@ AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent
 
 auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<SpotifyDevice>
 {
-    const auto callback = [name](SpotifyDeviceList deviceList) {
+    const auto callback = [name](SpotifyDeviceList &&deviceList) {
         foreach (const auto &device, deviceList.devices)
         {
             if (device.name == name) return device;
@@ -29,7 +29,7 @@ auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<
         return SpotifyDevice();
     };
 
-    return Spotify::instance()->player.devices().then(Spotify::instance(), callback);
+    return Spotify::instance()->player.devices().then(callback);
 }
 
 void AbstractSpotifyClientController::updateStatus(Status::Type type, const QString &message)
@@ -46,7 +46,7 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
                                << "but it is inactive, setting as active device ...";
 
     auto future = Spotify::instance()->player.transfer({device.id});
-    const auto onReply = [this](RestReply reply) {
+    const auto onReply = [this](RestReply &&reply) {
         if (reply.hasError()) updateStatus(Status::Type::Error, reply.errorText());
     };
 
@@ -54,7 +54,7 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
         updateStatus(Status::Type::Error, tr("Error: Could not start librespot."));
     };
 
-    future.then(this, onReply).onCanceled(this, onCancellation);
+    future.then(onReply).onCanceled(onCancellation);
 }
 
 void AbstractSpotifyClientController::generateDeviceName(bool makeUnique)

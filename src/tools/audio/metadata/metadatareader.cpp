@@ -153,12 +153,11 @@ void MetaDataReader::loadMetaData(const QString &path, const QByteArray &data)
     auto album = tag->album();
     if (!album.isEmpty()) m_metaData.album(QString::fromStdString(album.to8Bit(true)));
 
-    TagImageLoader::loadFromData(path, std::move(bvstream)).then(&m_metaData, [this](const QPixmap &pixmap) {
-        if (!pixmap.isNull())
-        {
-            m_metaData.cover(StringUtils::stringFromImage(pixmap));
-        }
-    });
+    auto pixmap = TagImageLoader::loadFromData(path, std::move(bvstream));
+    if (!pixmap.isNull())
+    {
+        m_metaData.cover(StringUtils::stringFromImage(pixmap));
+    }
 }
 
 void MetaDataReader::setDuration(qint64 duration)

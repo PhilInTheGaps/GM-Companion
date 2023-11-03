@@ -106,13 +106,12 @@ void ItemEditor::save()
     const auto data = QJsonDocument(group.toJson()).toJson();
 
     Files::File::saveAsync(savePath, data)
-        .then(this,
-              [this](QFuture<Files::FileResult>) {
-                  // Notify editor
-                  isSaved(true);
-                  emit showInfoBar(tr("Saved!"));
-              })
-        .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save items!")); });
+        .then([this](Files::FileResult &&) {
+            // Notify editor
+            isSaved(true);
+            emit showInfoBar(tr("Saved!"));
+        })
+        .onCanceled([this]() { emit showInfoBar(tr("Error: Could not save items!")); });
 
     // Copy all items and send them to the shop editor
     auto *copy = new ItemGroup(group, this);
@@ -131,8 +130,8 @@ void ItemEditor::loadData()
     const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     Files::File::checkAsync(path)
-        .then(this, [this](Files::FileCheckResult &&result) { onFileCheckReceived(std::move(result)); })
-        .onCanceled(this, [this]() { isLoading(false); });
+        .then([this](Files::FileCheckResult &&result) { onFileCheckReceived(std::move(result)); })
+        .onCanceled([this]() { isLoading(false); });
 }
 
 /**
@@ -150,7 +149,7 @@ auto ItemEditor::defaultGroupName() -> QString
 
 void ItemEditor::onFileCheckReceived(Files::FileCheckResult &&result)
 {
-    const auto path = result.path();
+    const auto &path = result.path();
 
     if (!result.success() || !result.exists())
     {
@@ -159,8 +158,8 @@ void ItemEditor::onFileCheckReceived(Files::FileCheckResult &&result)
     }
 
     Files::File::getDataAsync(path)
-        .then(this, [this](Files::FileDataResult &&result) { onDataReceived(std::move(result)); })
-        .onCanceled(this, [this]() { isLoading(false); });
+        .then([this](Files::FileDataResult &&result) { onDataReceived(std::move(result)); })
+        .onCanceled([this]() { isLoading(false); });
 }
 
 void ItemEditor::onDataReceived(Files::FileDataResult &&result)
@@ -173,7 +172,7 @@ void ItemEditor::onDataReceived(Files::FileDataResult &&result)
 
     qCDebug(gmShopsItemEditor()) << "Received custom items.";
 
-    ItemGroup group(defaultGroupName(), QJsonDocument::fromJson(result.data()).object(), nullptr);
+    ItemGroup const group(defaultGroupName(), QJsonDocument::fromJson(result.data()).object(), nullptr);
 
     initItemModel(group);
     updateCategories(group);

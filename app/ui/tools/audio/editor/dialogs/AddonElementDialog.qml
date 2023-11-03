@@ -48,19 +48,17 @@ Dialog {
     }
 
     onAccepted: {
-        let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
         let subscenario = asSubscenario ? subscenarioIndex : -1
 
         switch (mode) {
         case AddonElementDialog.Mode.Project:
-            AudioTool.editor.createProjectFromTemplate(project)
+            AudioTool.editor.createProjectFromTemplate(AudioTool.editor.addons.currentProject)
             break
         case AddonElementDialog.Mode.Category:
-            AudioTool.editor.createCategoryFromTemplate(project.currentCategory)
+            AudioTool.editor.createCategoryFromTemplate(AudioTool.editor.addons.currentProject.currentCategory)
             break
         case AddonElementDialog.Mode.Scenario:
-            AudioTool.editor.createScenarioFromTemplate(project.currentScenario,
-                                                    asSubscenario)
+            AudioTool.editor.createScenarioFromTemplate(AudioTool.editor.addons.currentProject.currentScenario, asSubscenario)
             break
         case AddonElementDialog.Mode.Music:
         case AddonElementDialog.Mode.Sound:
@@ -92,7 +90,7 @@ Dialog {
                 textRole: "shortName"
 
                 onCurrentTextChanged: {
-                    AudioTool.editor.addons.currentIndex = currentIndex
+                    AudioTool.editor.addons.currentAddonIndex = currentIndex
                 }
             }
 
@@ -103,8 +101,12 @@ Dialog {
                 anchors.right: parent.right
                 emptyString: qsTr("No Projects")
 
-                model: AudioTool.editor.addons.projects
+                model: AudioTool.editor.addons.availableProjects
                 textRole: "name"
+
+                onCurrentTextChanged: {
+                    AudioTool.editor.addons.currentProjectIndex = currentIndex
+                }
             }
 
             Flickable {
@@ -129,19 +131,18 @@ Dialog {
                     anchors.right: parent.right
 
                     Repeater {
-                        model: addon_project_combo_box.currentIndex >= 0
-                               ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].categories : []
+                        model: AudioTool.editor.addons.currentProject ?
+                               AudioTool.editor.addons.currentProject.categories : []
 
                         CustomButton {
-                            required property AudioProject modelData
+                            required property AudioCategory modelData
 
-                            anchors.left: parent.left
-                            anchors.right: parent.right
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
                             buttonText: modelData.name // qmllint disable missing-property
 
                             onClicked: {
-                                let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
-                                project.currentCategory = modelData
+                                AudioTool.editor.addons.currentProject.currentCategory = modelData
                             }
                         }
                     }
@@ -166,8 +167,8 @@ Dialog {
                 Repeater {
                     id: scenario_repeater
 
-                    model: addon_project_combo_box.currentIndex >= 0
-                           ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.scenarios : []
+                    model: AudioTool.editor.addons.currentProject && AudioTool.editor.addons.currentProject.currentCategory ?
+                           AudioTool.editor.addons.currentProject.currentCategory.scenarios : []
 
                     CustomButton {
                         required property AudioScenario modelData
@@ -177,8 +178,7 @@ Dialog {
                         backgroundColor: "transparent"
                         usesFixedWidth: false
                         onClicked: {
-                            let project = AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex]
-                            let category = project.currentCategory
+                            let category = AudioTool.editor.addons.currentProject.currentCategory
                             category.currentScenario = modelData
                         }
                     }
@@ -205,9 +205,9 @@ Dialog {
 
                 clip: true
 
-                model: addon_project_combo_box.currentIndex >= 0
-                       && AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario
-                        ? AudioTool.editor.addons.projects[addon_project_combo_box.currentIndex].currentCategory.currentScenario.model : []
+                model: AudioTool.editor.addons.currentProject
+                       && AudioTool.editor.addons.currentProject.currentCategory.currentScenario
+                        ? AudioTool.editor.addons.currentProject.currentCategory.currentScenario.model : []
 
                 ScrollBar.vertical: ScrollBar {
                     id: verticalScrollBar

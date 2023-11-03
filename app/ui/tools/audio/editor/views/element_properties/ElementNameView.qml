@@ -67,8 +67,8 @@ Item {
                     required property AudioScenario modelData
                     required property int index
 
-                    anchors.right: parent.right
-                    anchors.left: parent.left
+                    anchors.right: parent ? parent.right : undefined
+                    anchors.left: parent ? parent.left : undefined
 
                     text: modelData.name // qmllint disable missing-property
 

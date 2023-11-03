@@ -31,22 +31,16 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> 
     // Fetch from web
     auto future = m_nc.sendDavRequest("GET", encodePath(path), "");
 
-    return future
-        .then([future, path](QNetworkReply *reply) {
-            const auto callback = [path, reply]() -> FileDataResult {
-                if (replyHasError(reply))
-                {
-                    auto errorMessage = makeAndPrintError(u"Could not get data from %1"_s.arg(path), reply);
-                    return deleteReplyAndReturn(FileDataResult(std::move(errorMessage)), reply);
-                }
+    return future.then([future, path](QNetworkReply *reply) {
+        if (replyHasError(reply))
+        {
+            auto errorMessage = makeAndPrintError(u"Could not get data from %1"_s.arg(path), reply);
+            return deleteReplyAndReturn(FileDataResult(std::move(errorMessage)), reply);
+        }
 
-                qCDebug(gmFileAccessNextCloud()) << "Received data from file" << path;
-                return deleteReplyAndReturn(FileDataResult(reply->readAll()), reply);
-            };
-
-            return QtFuture::connect(reply, &QNetworkReply::finished).then(callback);
-        })
-        .unwrap();
+        qCDebug(gmFileAccessNextCloud()) << "Received data from file" << path;
+        return deleteReplyAndReturn(FileDataResult(reply->readAll()), reply);
+    });
 }
 
 auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache)
@@ -76,31 +70,29 @@ auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data)
 
     return future
         .then([this, future, path, data](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([this, path, data, reply]() {
-                if (replyHasError(reply))
+            if (replyHasError(reply))
+            {
+                const auto isDirMissing = reply->error() == QNetworkReply::ContentNotFoundError;
+                if (isDirMissing)
                 {
-                    const auto isDirMissing = reply->error() == QNetworkReply::ContentNotFoundError;
-                    if (isDirMissing)
-                    {
-                        return deleteReplyAndReturn(
-                            createDirThenContinue<QString, QByteArray>(
-                                FileUtils::dirFromPath(path), path, data,
-                                [this](const QString &path, const QByteArray &data) { return saveAsync(path, data); }),
-                            reply);
-                    }
-
-                    auto errorMessage = makeAndPrintError(u"Could not save file %1"_s.arg(path), reply);
-                    return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+                    return deleteReplyAndReturn(
+                        createDirThenContinue<QString, QByteArray>(
+                            FileUtils::dirFromPath(path), path, data,
+                            [this](const QString &path, const QByteArray &data) { return saveAsync(path, data); }),
+                        reply);
                 }
 
-                if (!m_cache.createOrUpdateEntry(path, data))
-                {
-                    qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << path << "in cache";
-                }
+                auto errorMessage = makeAndPrintError(u"Could not save file %1"_s.arg(path), reply);
+                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+            }
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully saved file" << path;
-                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
-            });
+            if (!m_cache.createOrUpdateEntry(path, data))
+            {
+                qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << path << "in cache";
+            }
+
+            qCDebug(gmFileAccessNextCloud()) << "Successfully saved file" << path;
+            return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
         })
         .unwrap();
 }
@@ -113,35 +105,32 @@ auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPa
 
     return future
         .then([this, future, oldPath, newPath](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([this, oldPath, newPath, reply]() {
-                qCDebug(gmFileAccessNextCloud()) << "MOVE Reply:" << reply->error() << reply->errorString();
+            qCDebug(gmFileAccessNextCloud()) << "MOVE Reply:" << reply->error() << reply->errorString();
 
-                if (replyHasError(reply))
+            if (replyHasError(reply))
+            {
+                const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
+                if (isDirMissing)
                 {
-                    const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
-                    if (isDirMissing)
-                    {
-                        return deleteReplyAndReturn(createDirThenContinue<QString, QString>(
-                                                        FileUtils::dirFromPath(newPath), oldPath, newPath,
-                                                        [this](const QString &oldPath, const QString &newPath) {
-                                                            return moveAsync(oldPath, newPath);
-                                                        }),
-                                                    reply);
-                    }
-
-                    auto errorMessage =
-                        makeAndPrintError(u"Could not move file %1 to %2"_s.arg(oldPath, newPath), reply);
-                    return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+                    return deleteReplyAndReturn(
+                        createDirThenContinue<QString, QString>(FileUtils::dirFromPath(newPath), oldPath, newPath,
+                                                                [this](const QString &oldPath, const QString &newPath) {
+                                                                    return moveAsync(oldPath, newPath);
+                                                                }),
+                        reply);
                 }
 
-                if (!m_cache.moveEntry(oldPath, newPath))
-                {
-                    qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << oldPath << "in cache";
-                }
+                auto errorMessage = makeAndPrintError(u"Could not move file %1 to %2"_s.arg(oldPath, newPath), reply);
+                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+            }
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully moved file" << oldPath << "to" << newPath;
-                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
-            });
+            if (!m_cache.moveEntry(oldPath, newPath))
+            {
+                qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << oldPath << "in cache";
+            }
+
+            qCDebug(gmFileAccessNextCloud()) << "Successfully moved file" << oldPath << "to" << newPath;
+            return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
         })
         .unwrap();
 }
@@ -154,18 +143,16 @@ auto FileAccessNextcloud::deleteAsync(const QString &path) -> QFuture<FileResult
 
     return future
         .then([this, future, path](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([this, path, reply]() {
-                if (replyHasError(reply))
-                {
-                    auto errorMessage = makeAndPrintError(u"Could not delete file/folder %1"_s.arg(path), reply);
-                    return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
-                }
+            if (replyHasError(reply))
+            {
+                auto errorMessage = makeAndPrintError(u"Could not delete file/folder %1"_s.arg(path), reply);
+                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+            }
 
-                m_cache.removeEntry(path);
+            m_cache.removeEntry(path);
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
-                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
-            });
+            qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
+            return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
         })
         .unwrap();
 }
@@ -181,32 +168,30 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
 
     return future
         .then([this, future, path, copy](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([this, path, copy, reply]() {
-                if (replyHasError(reply))
+            if (replyHasError(reply))
+            {
+                const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
+                if (isDirMissing)
                 {
-                    const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
-                    if (isDirMissing)
-                    {
-                        return deleteReplyAndReturn(
-                            createDirThenContinue<QString, QString>(
-                                FileUtils::dirFromPath(copy), path, copy,
-                                [this](const QString &path, const QString &copy) { return copyAsync(path, copy); }),
-                            reply);
-                    }
-
-                    auto errorMessage = makeAndPrintError(u"Could not copy %1 to %2: %3 %4"_s.arg(path), reply);
-                    return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+                    return deleteReplyAndReturn(
+                        createDirThenContinue<QString, QString>(
+                            FileUtils::dirFromPath(copy), path, copy,
+                            [this](const QString &path, const QString &copy) { return copyAsync(path, copy); }),
+                        reply);
                 }
 
-                if (!m_cache.copyEntry(path, copy))
-                {
-                    qCDebug(gmFileAccessNextCloud()) << "Could not copy file" << path << "to" << copy
-                                                     << "in cache. (local version of file is probably too old)";
-                }
+                auto errorMessage = makeAndPrintError(u"Could not copy %1 to %2: %3 %4"_s.arg(path), reply);
+                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(std::move(errorMessage))), reply);
+            }
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
-                return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
-            });
+            if (!m_cache.copyEntry(path, copy))
+            {
+                qCDebug(gmFileAccessNextCloud()) << "Could not copy file" << path << "to" << copy
+                                                 << "in cache. (local version of file is probably too old)";
+            }
+
+            qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
+            return deleteReplyAndReturn(QtFuture::makeReadyFuture(FileResult(true)), reply);
         })
         .unwrap();
 }
@@ -219,21 +204,16 @@ auto FileAccessNextcloud::listAsync(const QString &path, bool files, bool folder
 
     auto future = m_nc.sendDavRequest("PROPFIND", encodePath(path), QByteArray());
 
-    return future
-        .then([this, future, path, files, folders](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([this, path, files, folders, reply]() {
-                if (replyHasError(reply))
-                {
-                    const auto errorMessage =
-                        makeAndPrintError(u"Could not list content of folder %1"_s.arg(path), reply);
-                    return deleteReplyAndReturn(FileListResult(path, std::move(errorMessage)), reply);
-                }
+    return future.then([future, path, files, folders](QNetworkReply *reply) {
+        if (replyHasError(reply))
+        {
+            const auto errorMessage = makeAndPrintError(u"Could not list content of folder %1"_s.arg(path), reply);
+            return deleteReplyAndReturn(FileListResult(path, std::move(errorMessage)), reply);
+        }
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully received content of" << path;
-                return deleteReplyAndReturn(parseListResponse(reply->readAll(), path, files, folders), reply);
-            });
-        })
-        .unwrap();
+        qCDebug(gmFileAccessNextCloud()) << "Successfully received content of" << path;
+        return deleteReplyAndReturn(parseListResponse(reply->readAll(), path, files, folders), reply);
+    });
 }
 
 auto FileAccessNextcloud::parseListResponse(const QByteArray &data, const QString &path, bool files, bool folders)
@@ -297,20 +277,16 @@ auto FileAccessNextcloud::createDirAsync(const QString &path) -> QFuture<FileRes
 
     auto future = m_nc.sendDavRequest("MKCOL", encodePath(path), {});
 
-    return future
-        .then([future, path](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([path, reply]() {
-                if (replyHasError(reply))
-                {
-                    auto errorMessage = makeAndPrintError(u"Could not create directory %1"_s.arg(path), reply);
-                    return deleteReplyAndReturn(FileResult(std::move(errorMessage)), reply);
-                }
+    return future.then([future, path](QNetworkReply *reply) {
+        if (replyHasError(reply))
+        {
+            auto errorMessage = makeAndPrintError(u"Could not create directory %1"_s.arg(path), reply);
+            return deleteReplyAndReturn(FileResult(std::move(errorMessage)), reply);
+        }
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully created directory" << path;
-                return deleteReplyAndReturn(FileResult(true), reply);
-            });
-        })
-        .unwrap();
+        qCDebug(gmFileAccessNextCloud()) << "Successfully created directory" << path;
+        return deleteReplyAndReturn(FileResult(true), reply);
+    });
 }
 
 auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult>
@@ -326,25 +302,21 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
     // If file is not in cache or cache is outdated, fetch from web
     auto future = m_nc.sendDavRequest("PROPFIND", encodePath(path), QByteArray());
 
-    return future
-        .then([future, path](QNetworkReply *reply) {
-            return QtFuture::connect(reply, &QNetworkReply::finished).then([path, reply]() {
-                const auto doesExist = reply->error() != QNetworkReply::ContentNotFoundError;
-                const auto hasError = replyHasError(reply) && doesExist;
+    return future.then([future, path](QNetworkReply *reply) {
+        const auto doesExist = reply->error() != QNetworkReply::ContentNotFoundError;
+        const auto hasError = replyHasError(reply) && doesExist;
 
-                if (hasError)
-                {
-                    auto errorMessage = makeAndPrintError(u"Could not check if file %1 exists"_s.arg(path), reply);
-                    return deleteReplyAndReturn(FileCheckResult(path, std::move(errorMessage)), reply);
-                }
+        if (hasError)
+        {
+            auto errorMessage = makeAndPrintError(u"Could not check if file %1 exists"_s.arg(path), reply);
+            return deleteReplyAndReturn(FileCheckResult(path, std::move(errorMessage)), reply);
+        }
 
-                qCDebug(gmFileAccessNextCloud()) << "PROPFIND:" << reply->readAll();
+        qCDebug(gmFileAccessNextCloud()) << "PROPFIND:" << reply->readAll();
 
-                qCDebug(gmFileAccessNextCloud()) << "Successfully checked if file" << path << "exists:" << doesExist;
-                return deleteReplyAndReturn(FileCheckResult(path, doesExist), reply);
-            });
-        })
-        .unwrap();
+        qCDebug(gmFileAccessNextCloud()) << "Successfully checked if file" << path << "exists:" << doesExist;
+        return deleteReplyAndReturn(FileCheckResult(path, doesExist), reply);
+    });
 }
 
 auto FileAccessNextcloud::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult>

@@ -21,7 +21,7 @@ void BaseShopTool::loadData()
     projects({});
 
     Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
-        .then(this, [this](Files::FileListResult &&result) { onShopFilesFound(std::move(result)); });
+        .then([this](Files::FileListResult &&result) { onShopFilesFound(std::move(result)); });
 }
 
 void BaseShopTool::onShopFilesFound(Files::FileListResult &&result)
@@ -35,7 +35,7 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult &&result)
     }
 
     Files::File::getDataAsync(files).then(
-        this, [this](std::vector<Files::FileDataResult> &&results) { onShopFileDataReceived(std::move(results)); });
+        [this](std::vector<Files::FileDataResult> &&results) { onShopFileDataReceived(std::move(results)); });
 }
 
 void BaseShopTool::onShopFileDataReceived(std::vector<Files::FileDataResult> &&results)

@@ -30,13 +30,12 @@ void AudioEditorFileBrowser::addFiles(const QStringList &path, int index, bool f
     qCDebug(gmAudioEditorFileBrowser()) << "Adding files:" << m_basePath << path << index << folders;
 
     const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
-    Files::File::listAsync(dir, !folders, folders)
-        .then(this, [this, path, folders, index](const Files::FileListResult &result) {
-            if (!result.success()) return;
+    Files::File::listAsync(dir, !folders, folders).then([this, path, folders, index](Files::FileListResult &&result) {
+        if (!result.success()) return;
 
-            addFilesToModel(folders ? result.folders() : result.files(), path, folders ? 3 : static_cast<int>(type()),
-                            index);
-        });
+        addFilesToModel(folders ? result.folders() : result.files(), path, folders ? 3 : static_cast<int>(type()),
+                        index);
+    });
 }
 
 void AudioEditorFileBrowser::addFilesToModel(const QStringList &files, const QStringList &path, int type, int index)
@@ -178,6 +177,8 @@ auto AudioEditorFileBrowserModel::roleNames() const -> QHash<int, QByteArray>
 
 void AudioEditorFileBrowserModel::clear()
 {
+    if (m_items.isEmpty()) return;
+
     beginRemoveRows(QModelIndex(), 0, m_items.count() - 1);
 
     while (!m_items.empty())

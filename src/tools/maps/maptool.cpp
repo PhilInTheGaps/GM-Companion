@@ -179,7 +179,7 @@ void MapTool::findCategories()
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
     const auto dir = SettingsManager::getPath(u"maps"_s);
-    Files::File::listAsync(dir, false, true).then(this, [this](const Files::FileListResult &result) {
+    Files::File::listAsync(dir, false, true).then([this](Files::FileListResult &&result) {
         receivedCategories(result.folders());
     });
 }

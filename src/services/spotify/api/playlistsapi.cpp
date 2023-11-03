@@ -30,7 +30,7 @@ auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<SpotifyPlaylist>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply reply) -> QFuture<SpotifyPlaylist> {
+    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyPlaylist> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -40,7 +40,7 @@ auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<SpotifyPlaylist>
         return QtFuture::makeReadyFuture(SpotifyPlaylist::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<SpotifyTrackList>
@@ -58,7 +58,7 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<SpotifyTrackL
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this](RestReply reply) -> QFuture<SpotifyTrackList> {
+    const auto callback = [this](RestReply &&reply) -> QFuture<SpotifyTrackList> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -73,14 +73,14 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<SpotifyTrackL
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist) -> QFuture<SpotifyTrackList>
 {
     const QUrl url(tracklist.next);
 
-    const auto callback = [this, tracklist = std::move(tracklist)](RestReply reply) mutable {
+    const auto callback = [this, tracklist = std::move(tracklist)](RestReply &&reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -95,7 +95,7 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist) -> QFuture<Sp
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(m_spotify, callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
 }
 
 auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config) const -> QFuture<RestReply>

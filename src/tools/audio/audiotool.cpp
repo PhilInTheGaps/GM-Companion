@@ -70,7 +70,7 @@ void AudioTool::loadData()
 void AudioTool::updateProjectList()
 {
     AudioSaveLoad::findProjectsAsync(this).then(
-        this, [this](const std::vector<AudioProject *> &projects) { onProjectsChanged(projects); });
+        [this](const std::vector<AudioProject *> &projects) { onProjectsChanged(projects); });
 }
 
 /**
@@ -80,11 +80,6 @@ void AudioTool::updateProjectList()
 void AudioTool::onProjectsChanged(const std::vector<AudioProject *> &projects)
 {
     a_projects = Utils::toList<AudioProject *>(projects);
-
-    foreach (auto *project, a_projects)
-    {
-        project->setParent(this);
-    }
 
     emit projectsChanged();
     isLoading(false);

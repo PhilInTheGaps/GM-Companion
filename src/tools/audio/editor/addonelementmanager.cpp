@@ -10,8 +10,10 @@ using namespace Qt::Literals::StringLiterals;
 
 AddonElementManager::AddonElementManager(QObject *parent) : AbstractTool(parent)
 {
-    connect(this, &AddonElementManager::currentIndexChanged, this, &AddonElementManager::onCurrentIndexChanged);
-    connect(this, &AddonElementManager::projectsChanged, this, &AddonElementManager::onProjectsChanged);
+    connect(this, &AddonElementManager::currentAddonIndexChanged, this,
+            &AddonElementManager::onCurrentAddonIndexChanged);
+    connect(this, &AddonElementManager::currentProjectIndexChanged, this,
+            &AddonElementManager::onCurrentProjectIndexChanged);
 }
 
 void AddonElementManager::loadData()
@@ -33,7 +35,8 @@ void AddonElementManager::loadData()
 
 void AddonElementManager::onInstalledAddonsChanged()
 {
-    QList<Addon *> list;
+    clearProjects();
+    clearAddons();
 
     foreach (auto *addon, AddonManager::instance()->addons())
     {
@@ -44,27 +47,42 @@ void AddonElementManager::onInstalledAddonsChanged()
 
             if (features.testFlag(AddonReader::Feature::Audio))
             {
-                list << addon;
+                a_addons.append(addon);
                 loadAddonProjects(*addon);
             }
         }
     }
 
-    a_addons = list;
     emit addonsChanged();
+
+    onCurrentAddonIndexChanged(currentAddonIndex());
     isLoading(false);
 }
 
-void AddonElementManager::onCurrentIndexChanged(int index)
+void AddonElementManager::onCurrentAddonIndexChanged(int index)
 {
-    if (!Utils::isInBounds(addons(), index)) return;
+    currentProjectIndex(-1);
 
-    const auto *addon = addons().at(index);
+    if (!Utils::isInBounds(addons(), index))
+    {
+        a_currentAddon = nullptr;
+        emit currentAddonChanged(nullptr);
+        return;
+    }
 
-    if (!addon) return;
+    a_currentAddon = a_addons.at(index);
+    emit currentAddonChanged(nullptr);
 
-    a_projects = m_projects[addon->id()];
-    emit projectsChanged();
+    a_availableProjects.clear();
+
+    foreach (auto *project, m_projects.value(a_currentAddon->id()))
+    {
+        a_availableProjects.append(project);
+    }
+
+    emit availableProjectsChanged();
+
+    currentProjectIndex(0);
 }
 
 void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario) const
@@ -72,14 +90,17 @@ void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario) cons
     AudioThumbnailGenerator::generateThumbnails(scenario);
 }
 
-void AddonElementManager::onProjectsChanged() const
+void AddonElementManager::onCurrentProjectIndexChanged(int index)
 {
-    foreach (auto *project, projects())
-    {
-        if (!project || !project->currentScenario()) continue;
+    if (!a_currentAddon) return;
+    if (!Utils::isInBounds(m_projects.value(a_currentAddon->id()), index)) return;
 
-        AudioThumbnailGenerator::generateThumbnails(project->currentScenario());
-    }
+    a_currentProject = m_projects.value(a_currentAddon->id()).at(index);
+    emit currentProjectChanged(a_currentProject);
+
+    if (!a_currentProject || !a_currentProject->currentScenario()) return;
+
+    AudioThumbnailGenerator::generateThumbnails(a_currentProject->currentScenario());
 }
 
 void AddonElementManager::loadAddonProjects(const Addon &addon)
@@ -107,7 +128,7 @@ void AddonElementManager::loadAddonProjects(const Addon &addon)
     {
         auto list = m_projects.take(addon.id());
 
-        for (auto *project : list)
+        foreach (auto *project, list)
         {
             if (project) project->deleteLater();
         }
@@ -133,7 +154,7 @@ void AddonElementManager::removeUnsupportedElementsFromProject(AudioProject &pro
         }
     }
 
-    for (auto *category : qAsConst(categoriesToDelete))
+    foreach (auto *category, categoriesToDelete)
     {
         project.deleteCategory(category);
     }
@@ -144,7 +165,7 @@ void AddonElementManager::removeUnsupportedElementsFromCategory(AudioCategory &c
     const auto scenarios = category.scenarios();
     QList<AudioScenario *> scenariosToDelete;
 
-    for (auto *scenario : scenarios)
+    foreach (auto *scenario, scenarios)
     {
         if (!scenario) continue;
 
@@ -157,7 +178,7 @@ void AddonElementManager::removeUnsupportedElementsFromCategory(AudioCategory &c
         }
     }
 
-    for (auto *scenario : qAsConst(scenariosToDelete))
+    foreach (auto *scenario, scenariosToDelete)
     {
         category.deleteScenario(scenario);
     }
@@ -168,12 +189,12 @@ void AddonElementManager::removeUnsupportedElementsFromScenario(AudioScenario &s
     const auto elements = scenario.elements(true);
     QList<AudioElement *> elementsToDelete;
 
-    for (auto *element : elements)
+    foreach (auto *element, elements)
     {
         const auto files = element->files();
         int fileIndex = 0;
 
-        for (const auto *file : files)
+        foreach (const auto *file, files)
         {
             switch (file->source())
             {
@@ -194,7 +215,7 @@ void AddonElementManager::removeUnsupportedElementsFromScenario(AudioScenario &s
         }
     }
 
-    for (auto *element : qAsConst(elementsToDelete))
+    foreach (auto *element, elementsToDelete)
     {
         scenario.removeElement(element, true);
     }
@@ -206,7 +227,7 @@ void AddonElementManager::removeEmptySubscenarios(AudioScenario &scenario)
     QList<AudioScenario *> scenariosToDelete;
     scenariosToDelete.reserve(subscenarios.size());
 
-    for (auto *subscenario : subscenarios)
+    foreach (auto *subscenario, subscenarios)
     {
         removeEmptySubscenarios(*subscenario);
 
@@ -216,8 +237,37 @@ void AddonElementManager::removeEmptySubscenarios(AudioScenario &scenario)
         }
     }
 
-    for (auto *subscenario : qAsConst(scenariosToDelete))
+    foreach (auto *subscenario, scenariosToDelete)
     {
         scenario.deleteScenario(subscenario);
+    }
+}
+
+void AddonElementManager::clearAddons()
+{
+    if (a_addons.isEmpty()) return;
+
+    a_addons.clear();
+    emit addonsChanged();
+}
+
+void AddonElementManager::clearProjects()
+{
+    if (a_availableProjects.isEmpty()) return;
+
+    a_currentProject = nullptr;
+    emit currentProjectChanged(nullptr);
+
+    a_availableProjects.clear();
+    emit availableProjectsChanged();
+
+    foreach (const auto &key, m_projects.keys())
+    {
+        auto list = m_projects.take(key);
+
+        foreach (auto *project, list)
+        {
+            if (project) project->deleteLater();
+        }
     }
 }

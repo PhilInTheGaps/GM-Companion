@@ -9,7 +9,7 @@ public:
         m_testAddons = enableTestAddons();
     }
 
-    ~AudioAddonsTest()
+    ~AudioAddonsTest() override
     {
         disableTestAddons(m_testAddons);
     }
@@ -33,7 +33,8 @@ TEST_F(AudioAddonsTest, CanFindAddonsWithAudioContent)
 
     EXPECT_EQ(manager.addons().length(), 2);
 
-    manager.currentIndex(0);
-    const auto projects = manager.projects();
+    manager.currentAddonIndex(0);
+    const auto projects = manager.availableProjects();
     EXPECT_EQ(projects.length(), 1);
+    EXPECT_TRUE(manager.currentProject());
 }

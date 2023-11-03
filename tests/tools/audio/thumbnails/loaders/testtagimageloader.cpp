@@ -16,7 +16,7 @@ TEST_F(TagImageLoaderTest, LoadFromFile)
         const auto resource = FileUtils::fileInDir(file, ":/resources/audiofiles");
         auto *tempFile = copyResourceToTempFile(resource);
 
-        const auto future = TagImageLoader::loadFromFile(tempFile->fileName(), true);
+        const auto future = TagImageLoader::loadFromFileAsync(tempFile->fileName(), true);
         testFuture(future, "loadFromFile", [future, tempFile]() {
             tempFile->remove();
             tempFile->deleteLater();

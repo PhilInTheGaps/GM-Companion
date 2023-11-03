@@ -79,6 +79,4 @@ private:
 
     QPointer<AudioElement> m_element = nullptr;
     AudioFile::Source m_currentFileSource = AudioFile::Source::Unknown;
-
-    std::unique_ptr<QObject> m_fileRequestContext = nullptr;
 };

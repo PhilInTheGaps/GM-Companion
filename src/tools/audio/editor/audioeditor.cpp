@@ -30,7 +30,7 @@ void AudioEditor::loadData()
     setIsDataLoaded(true);
 
     AudioSaveLoad::findProjectsAsync(this).then(
-        this, [this](const std::vector<AudioProject *> &projects) { onFoundProjects(projects); });
+        [this](const std::vector<AudioProject *> &projects) { onFoundProjects(projects); });
 }
 
 void AudioEditor::onFoundProjects(const std::vector<AudioProject *> &projects)
@@ -720,13 +720,12 @@ void AudioEditor::saveProject()
                 emit showInfoBar(tr("Saving ..."));
 
                 AudioSaveLoad::saveProject(project)
-                    .then(this,
-                          [this](bool success) {
-                              if (success) emit showInfoBar(tr("Saved!"));
-                              else
-                                  emit showInfoBar(tr("Error: Could not save project!"));
-                          })
-                    .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save project!")); });
+                    .then([this](bool success) {
+                        if (success) emit showInfoBar(tr("Saved!"));
+                        else
+                            emit showInfoBar(tr("Error: Could not save project!"));
+                    })
+                    .onCanceled([this]() { emit showInfoBar(tr("Error: Could not save project!")); });
             }
             else
             {

@@ -33,7 +33,9 @@ auto FileAccessLocal::getDataAsync(const QString &path, bool allowCache) -> QFut
 {
     qCDebug(gmFileAccessLocal()) << "Getting data from file:" << path << "...";
 
-    return QtConcurrent::run(&FileAccessLocal::getData, path, allowCache);
+    return QtConcurrent::run(&FileAccessLocal::getData, path, allowCache).then(&m_context, [](FileDataResult &&result) {
+        return result;
+    });
 }
 
 /// Read data from multiple files
@@ -42,16 +44,17 @@ auto FileAccessLocal::getDataAsync(const QStringList &paths, bool allowCache) ->
     qCDebug(gmFileAccessLocal()) << "Getting data from multiple files:" << paths << "...";
 
     return QtConcurrent::run([paths, allowCache]() {
-        std::vector<FileDataResult> results;
-        results.reserve(paths.size());
+               std::vector<FileDataResult> results;
+               results.reserve(paths.size());
 
-        foreach (const auto &path, paths)
-        {
-            results.push_back(getData(path, allowCache));
-        }
+               foreach (const auto &path, paths)
+               {
+                   results.push_back(getData(path, allowCache));
+               }
 
-        return results;
-    });
+               return results;
+           })
+        .then(&m_context, [](std::vector<FileDataResult> &&result) { return result; });
 }
 
 /// Create a directory
@@ -77,7 +80,9 @@ auto FileAccessLocal::createDir(const QDir &dir) -> FileResult
 auto FileAccessLocal::createDirAsync(const QString &path) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Creating directory:" << path << "...";
-    return QtConcurrent::run(&FileAccessLocal::createDir, QDir(path));
+    return QtConcurrent::run(&FileAccessLocal::createDir, QDir(path)).then(&m_context, [](FileResult &&result) {
+        return result;
+    });
 }
 
 /// Save data to a file
@@ -87,7 +92,7 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
     QString errorMessage;
     bool status = false;
 
-    if (QFileInfo info(f); !info.dir().exists())
+    if (QFileInfo const info(f); !info.dir().exists())
     {
         auto createDirResult = createDir(info.dir());
         if (!createDirResult.success())
@@ -127,13 +132,15 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
 auto FileAccessLocal::saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Saving file:" << path << "...";
-    return QtConcurrent::run(&FileAccessLocal::save, path, data);
+    return QtConcurrent::run(&FileAccessLocal::save, path, data).then(&m_context, [](FileResult &&result) {
+        return result;
+    });
 }
 
 auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> FileResult
 {
     QFile f(oldPath);
-    QFileInfo info(newPath);
+    QFileInfo const info(newPath);
 
     if (!info.dir().exists())
     {
@@ -161,7 +168,9 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
 auto FileAccessLocal::moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Moving file:" << oldPath << "->" << newPath << "...";
-    return QtConcurrent::run(&FileAccessLocal::move, oldPath, newPath);
+    return QtConcurrent::run(&FileAccessLocal::move, oldPath, newPath).then(&m_context, [](FileResult &&result) {
+        return result;
+    });
 }
 
 /// Delete the file or folder at path
@@ -169,33 +178,35 @@ auto FileAccessLocal::deleteAsync(const QString &path) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Deleting file:" << path << "...";
     return QtConcurrent::run([path]() {
-        QFileInfo info(path);
+               QFileInfo const info(path);
 
-        if (!info.exists()) return FileResult(false, u"The file or folder %1 does not exist"_s.arg(path));
+               if (!info.exists()) return FileResult(false, u"The file or folder %1 does not exist"_s.arg(path));
 
-        if (QDir dir(path); info.isDir() && !dir.removeRecursively())
-        {
-            auto errorMessage = u"Could not delete folder %1"_s.arg(path);
-            qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
-            return FileResult(false, errorMessage);
-        }
-        else if (QFile f(path); info.isFile() && !f.remove())
-        {
-            auto errorMessage =
-                u"Could not delete file %1: %2 %3"_s.arg(path, QString::number(f.error()), f.errorString());
-            qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
-            return FileResult(false, errorMessage);
-        }
+               if (QDir dir(path); info.isDir() && !dir.removeRecursively())
+               {
+                   auto errorMessage = u"Could not delete folder %1"_s.arg(path);
+                   qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
+                   return FileResult(false, errorMessage);
+               }
 
-        return FileResult(true);
-    });
+               if (QFile f(path); info.isFile() && !f.remove())
+               {
+                   auto errorMessage =
+                       u"Could not delete file %1: %2 %3"_s.arg(path, QString::number(f.error()), f.errorString());
+                   qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
+                   return FileResult(false, errorMessage);
+               }
+
+               return FileResult(true);
+           })
+        .then(&m_context, [](FileResult &&result) { return result; });
 }
 
 auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResult
 {
     QFile f(path);
 
-    if (QFileInfo info(copy); !info.dir().exists())
+    if (QFileInfo const info(copy); !info.dir().exists())
     {
         auto createDirResult = createDir(info.dir());
         if (!createDirResult.success())
@@ -221,17 +232,20 @@ auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResu
 auto FileAccessLocal::copyAsync(const QString &path, const QString &copy) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Copying file:" << path << "->" << copy << "...";
-    return QtConcurrent::run(&FileAccessLocal::copy, path, copy);
+    return QtConcurrent::run(&FileAccessLocal::copy, path, copy).then(&m_context, [](FileResult &&result) {
+        return result;
+    });
 }
 
 /// List files or/and folders in a directory
 auto FileAccessLocal::listAsync(const QString &path, bool files, bool folders) -> QFuture<FileListResult>
 {
     return QtConcurrent::run([path, files, folders]() {
-        QDir dir(path);
-        return FileListResult(path, dir.entryList(getDirFilter(false, folders)),
-                              dir.entryList(getDirFilter(files, false)));
-    });
+               QDir const dir(path);
+               return FileListResult(path, dir.entryList(getDirFilter(false, folders)),
+                                     dir.entryList(getDirFilter(files, false)));
+           })
+        .then(&m_context, [](FileListResult &&result) { return result; });
 }
 
 /// Check if a file exists
@@ -239,27 +253,30 @@ auto FileAccessLocal::check(const QString &path, bool allowCache) -> FileCheckRe
 {
     Q_UNUSED(allowCache)
 
-    QFile f(path);
+    QFile const f(path);
     return FileCheckResult(path, f.exists());
 }
 
 /// Check if a file exists async
 auto FileAccessLocal::checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult>
 {
-    return QtConcurrent::run(&FileAccessLocal::check, path, allowCache);
+    return QtConcurrent::run(&FileAccessLocal::check, path, allowCache).then(&m_context, [](FileCheckResult &&result) {
+        return result;
+    });
 }
 
 /// Check which files exist
 auto FileAccessLocal::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult>
 {
     return QtConcurrent::run([paths, allowCache]() {
-        FileMultiCheckResult result(true);
-        for (const auto &path : paths)
-        {
-            result.add(check(path, allowCache));
-        }
-        return result;
-    });
+               FileMultiCheckResult result(true);
+               for (const auto &path : paths)
+               {
+                   result.add(check(path, allowCache));
+               }
+               return result;
+           })
+        .then(&m_context, [](FileMultiCheckResult &&result) { return result; });
 }
 
 auto FileAccessLocal::getDirFilter(bool files, bool folders) -> QFlags<QDir::Filter>

@@ -24,6 +24,7 @@ class AbstractTest : public StaticAbstractTest
 {
 public:
     explicit AbstractTest();
+    virtual ~AbstractTest();
 
 protected:
     std::unique_ptr<QNetworkAccessManager> networkManager = nullptr;
@@ -62,4 +63,6 @@ protected:
 
 private:
     void checkOrCreateFileAccess();
+
+    QString cloudMode;
 };

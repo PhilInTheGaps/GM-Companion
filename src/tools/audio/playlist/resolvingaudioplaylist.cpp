@@ -58,7 +58,7 @@ auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
         }
     }
 
-    return QtFuture::whenAll(futures.begin(), futures.end()).then([](const QList<QFuture<void>> &) {});
+    return QtFuture::whenAll(futures.begin(), futures.end()).then([](QList<QFuture<void>> &&) {});
 }
 
 auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile &file) -> QFuture<void>
@@ -85,12 +85,12 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
     case AudioFile::Source::File: {
         const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
         return Files::File::getDataAsync(path).then(
-            &m_fileParent, [callback](const Files::FileDataResult &result) { callback(result.data()); });
+            [callback](Files::FileDataResult &&result) { callback(result.data()); });
         break;
     }
     case AudioFile::Source::Web: {
         auto *reply = m_networkManager.get(QNetworkRequest(QUrl(file.url())));
-        return QtFuture::connect(reply, &QNetworkReply::finished).then(&m_fileParent, [reply, callback]() {
+        return QtFuture::connect(reply, &QNetworkReply::finished).then([reply, callback]() {
             const auto &data = reply->readAll();
             reply->deleteLater();
             callback(data);
@@ -138,9 +138,9 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
     switch (type)
     {
     case SpotifyUtils::SpotifyType::Playlist:
-        return Spotify::instance()->playlists.getPlaylistTracks(id).then(&m_fileParent, callback);
+        return Spotify::instance()->playlists.getPlaylistTracks(id).then(callback);
     case SpotifyUtils::SpotifyType::Album:
-        return Spotify::instance()->albums.getAlbumTracks(id).then(&m_fileParent, callback);
+        return Spotify::instance()->albums.getAlbumTracks(id).then(callback);
     default:
         qCCritical(gmAudioPlaylistResolving())
             << "loadPlaylistRecursiveSpotify(): not implemented for container type" << (int)type;
@@ -192,7 +192,7 @@ void ResolvingAudioPlaylist::loadSpotifyTitles(const QList<AudioFile *> &tracks)
         }
     };
 
-    Spotify::instance()->tracks.getTracks(trackIds).then(Spotify::instance(), callback);
+    Spotify::instance()->tracks.getTracks(trackIds).then(callback);
 }
 
 auto ResolvingAudioPlaylist::isPlaylist(const QString &file) -> bool

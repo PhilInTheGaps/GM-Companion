@@ -148,7 +148,7 @@ auto AddonManager::installRemoteAsync(Addon &addon) -> QFuture<void>
         qCDebug(gmAddonManager()) << "Installed remote addon" << addon.id();
     };
 
-    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, callback);
+    return QtFuture::connect(reply, &QNetworkReply::finished).then(callback);
 }
 
 /// Update addon by removing the old version and installing the new one

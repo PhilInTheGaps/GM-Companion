@@ -117,52 +117,47 @@ void SettingsManager::setServerUrl(const QString &url, const QString &service)
     instance()->set(u"server"_s, url, service);
 }
 
-auto SettingsManager::getPassword(const QString &username, const QString &service) -> QFuture<QString>
+auto SettingsManager::getPassword(const QString &username, const QString &service) -> QString
 {
-    return QtConcurrent::run([username, service]() {
-        auto job = std::make_unique<QKeychain::ReadPasswordJob>(u"gm-companion.%1"_s.arg(service));
-        job->setAutoDelete(false);
-        job->setKey(username);
+    // job is deleted automatically when finished
+    auto *job = new QKeychain::ReadPasswordJob(u"gm-companion.%1"_s.arg(service));
+    job->setKey(username);
 
-        QEventLoop loop;
-        job->connect(job.get(), &QKeychain::ReadPasswordJob::finished, &loop, &QEventLoop::quit);
-        job->start();
-        loop.exec();
+    QEventLoop loop;
+    job->connect(job, &QKeychain::ReadPasswordJob::finished, &loop, &QEventLoop::quit);
+    job->start();
+    loop.exec();
 
-        if (job->error())
-        {
-            qCCritical(gmSettings) << "Could not read password:" << job->error() << job->errorString();
-            return u""_s;
-        }
+    if (job->error())
+    {
+        qCCritical(gmSettings) << "Could not read password:" << job->error() << job->errorString();
+        return u""_s;
+    }
 
-        qCDebug(gmSettings) << "Successfully read password for service" << service;
-        return job->textData();
-    });
+    qCDebug(gmSettings) << "Successfully read password for service" << service;
+    return job->textData();
 }
 
-auto SettingsManager::setPassword(const QString &username, const QString &password, const QString &service)
-    -> QFuture<bool>
+auto SettingsManager::setPassword(const QString &username, const QString &password, const QString &service) -> bool
 {
-    return QtConcurrent::run([username, password, service]() {
-        auto job = std::make_unique<QKeychain::WritePasswordJob>(u"gm-companion.%1"_s.arg(service));
-        job->setAutoDelete(false);
-        job->setKey(username);
-        job->setTextData(password);
+    // job is deleted automatically when finished
+    auto *job = new QKeychain::WritePasswordJob(u"gm-companion.%1"_s.arg(service));
+    job->setKey(username);
+    job->setTextData(password);
 
-        QEventLoop loop;
-        job->connect(job.get(), &QKeychain::WritePasswordJob::finished, &loop, &QEventLoop::quit);
-        job->start();
-        loop.exec();
+    QEventLoop loop;
+    job->connect(job, &QKeychain::WritePasswordJob::finished, &loop, &QEventLoop::quit);
+    job->start();
+    loop.exec();
 
-        if (job->error())
-        {
-            qCCritical(gmSettings) << "Unable to save password:" << job->error() << job->errorString();
-            return false;
-        }
+    if (job->error())
+    {
+        qCCritical(gmSettings) << "Unable to save password:" << job->error() << job->errorString();
+        return false;
+    }
 
-        qCDebug(gmSettings) << "Successfully saved password.";
-        return true;
-    });
+    qCDebug(gmSettings) << "Successfully saved password.";
+    return true;
 }
 
 auto SettingsManager::getDefaultPath(const QString &setting, const QString &group) -> QString

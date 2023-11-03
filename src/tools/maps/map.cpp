@@ -24,7 +24,7 @@ Map::Map(QObject *parent) : QObject(parent), m_markers(this)
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    Files::File::getDataAsync(path).then(this, [this](Files::FileDataResult &&result) {
+    Files::File::getDataAsync(path).then([this](Files::FileDataResult &&result) {
         if (!result.success()) return;
 
         QPixmap pixmap;
@@ -52,10 +52,10 @@ void Map::saveMarkers() const
 void Map::loadMarkers()
 {
     const auto filePath = path() + ".json";
-    Files::File::checkAsync(filePath).then(this, [this, filePath](Files::FileCheckResult &&result) {
+    Files::File::checkAsync(filePath).then([this, filePath](Files::FileCheckResult &&result) {
         if (!result.success() || !result.exists()) return;
 
-        Files::File::getDataAsync(filePath).then(this, [this](Files::FileDataResult &&result) {
+        Files::File::getDataAsync(filePath).then([this](Files::FileDataResult &&result) {
             if (!result.success()) return;
 
             auto markers = QJsonDocument::fromJson(result.data()).object()["markers"_L1].toArray();
@@ -107,7 +107,7 @@ void MapCategory::loadMaps()
 
     const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(u"maps"_s));
 
-    Files::File::listAsync(path, true, false).then(this, [this, path](Files::FileListResult &&result) {
+    Files::File::listAsync(path, true, false).then([this, path](Files::FileListResult &&result) {
         if (!result.success()) return;
 
         foreach (const auto &file, result.files())

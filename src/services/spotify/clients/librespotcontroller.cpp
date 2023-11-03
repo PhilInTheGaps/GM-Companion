@@ -50,57 +50,52 @@ auto LibrespotController::start() -> QFuture<bool>
         return QtFuture::makeReadyFuture(false);
     }
 
-    const auto callback = [this, username](const QString &password) {
-        if (password.isEmpty())
-        {
-            qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
-            updateStatus(Status::Type::Error, tr("Error: Password is not set."));
-            return QtFuture::makeReadyFuture(false);
-        }
+    if (password.isEmpty())
+    {
+        qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
+        updateStatus(Status::Type::Error, tr("Error: Password is not set."));
+        return QtFuture::makeReadyFuture(false);
+    }
 
-        const auto info = getLibrespotInfo();
-        if (info.version.isEmpty())
-        {
-            qCWarning(gmLibrespotController()) << "Could not get librespot version number.";
-            updateStatus(Status::Type::Error,
-                         tr("Error: Could not get librespot version number. "
-                            "This probably means that the librespot executable can not be found."));
-            return QtFuture::makeReadyFuture(false);
-        }
+    const auto info = getLibrespotInfo();
+    if (info.version.isEmpty())
+    {
+        qCWarning(gmLibrespotController()) << "Could not get librespot version number.";
+        updateStatus(Status::Type::Error, tr("Error: Could not get librespot version number. "
+                                             "This probably means that the librespot executable can not be found."));
+        return QtFuture::makeReadyFuture(false);
+    }
 
-        qCDebug(gmLibrespotController()) << QString(info);
-        m_hasAuthenticated->start();
+    qCDebug(gmLibrespotController()) << QString(info);
+    m_hasAuthenticated->start();
 
-        const auto args = getLibrespotArgs(username);
-        const auto librespotPath = getLibrespotPath();
+    const auto args = getLibrespotArgs(username);
+    const auto librespotPath = getLibrespotPath();
 
-        qCDebug(gmLibrespotController()) << librespotPath << args;
+    qCDebug(gmLibrespotController()) << librespotPath << args;
 
-        if (m_librespotProcess.state() == QProcess::Running || QProcess::Starting)
-        {
-            stop();
-        }
+    if (m_librespotProcess.state() == QProcess::Running || QProcess::Starting)
+    {
+        stop();
+    }
 
-        // In librespot versions > 0.3.1 passing the password via stdin is broken
-        // but older versions don't support passing the pw via env variables
-        if (UpdateManager::compareVersions(info.version, u"0.3.1"_s))
-        {
-            auto env = QProcessEnvironment::systemEnvironment();
-            env.insert(u"LIBRESPOT_PASSWORD"_s, password);
-            m_librespotProcess.setProcessEnvironment(env);
+    // In librespot versions > 0.3.1 passing the password via stdin is broken
+    // but older versions don't support passing the pw via env variables
+    if (UpdateManager::compareVersions(info.version, u"0.3.1"_s))
+    {
+        auto env = QProcessEnvironment::systemEnvironment();
+        env.insert(u"LIBRESPOT_PASSWORD"_s, password);
+        m_librespotProcess.setProcessEnvironment(env);
 
-            m_librespotProcess.start(librespotPath, args);
-        }
-        else
-        {
-            m_librespotProcess.start(librespotPath, args);
-            m_librespotProcess.write(u"%1\n"_s.arg(password).toUtf8()); // pass password via stdin
-        }
+        m_librespotProcess.start(librespotPath, args);
+    }
+    else
+    {
+        m_librespotProcess.start(librespotPath, args);
+        m_librespotProcess.write(u"%1\n"_s.arg(password).toUtf8()); // pass password via stdin
+    }
 
-        return m_hasAuthenticated->future();
-    };
-
-    return password.then(this, callback).unwrap();
+    return m_hasAuthenticated->future();
 }
 
 auto LibrespotController::stop() -> bool
@@ -153,7 +148,7 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](SpotifyDevice device) {
+    const auto callback = [this](SpotifyDevice &&device) {
         if (device.id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
@@ -184,7 +179,7 @@ void LibrespotController::setAsActiveDevice()
     };
 
     auto future = getDevice(deviceName());
-    future.then(this, callback);
+    future.then(callback);
 }
 
 auto LibrespotController::isOtherProcessIsRunning() -> bool

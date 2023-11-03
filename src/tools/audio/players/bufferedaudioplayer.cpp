@@ -70,7 +70,7 @@ void BufferedAudioPlayer::play(AudioElement *element)
         return;
     }
 
-    loadPlaylist().then(this, [this]() { startPlaying(); });
+    loadPlaylist().then([this]() { startPlaying(); });
 }
 
 void BufferedAudioPlayer::play()
@@ -269,12 +269,10 @@ void BufferedAudioPlayer::loadMedia(const AudioFile &file)
 
 void BufferedAudioPlayer::loadLocalFile(const AudioFile &file)
 {
-    m_fileRequestContext = std::make_unique<QObject>();
-
     const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
     const auto callback = [this](Files::FileDataResult &&result) { onFileReceived(std::move(result)); };
 
-    Files::File::getDataAsync(path).then(m_fileRequestContext.get(), callback);
+    Files::File::getDataAsync(path).then(callback);
 }
 
 void BufferedAudioPlayer::loadWebFile(const AudioFile &file)

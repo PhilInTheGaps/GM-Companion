@@ -36,31 +36,19 @@ NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkM
     serverUrl(SettingsManager::getServerUrl(serviceName, false));
     m_loggingIn = true;
 
-    auto future = SettingsManager::getPassword(loginName(), serviceName);
+    m_appPassword = SettingsManager::getPassword(loginName(), serviceName);
 
-    future
-        .then(this,
-              [this](const QString &password) {
-                  m_appPassword = password;
+    if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
+    {
+        connected(false);
+    }
+    else
+    {
+        qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
+        emit loggedIn();
+    }
 
-                  if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
-                  {
-                      connected(false);
-                  }
-                  else
-                  {
-                      qCDebug(gmNextCloud())
-                          << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
-                  }
-
-                  m_loggingIn = false;
-                  emit loggedIn();
-              })
-        .onCanceled(this, [this]() {
-            qCCritical(gmNextCloud()) << "Error during reading of password";
-            m_loggingIn = false;
-            connected(false);
-        });
+    m_loggingIn = false;
 }
 
 auto NextCloud::qmlInstance(QQmlEngine *engine) -> NextCloud *
@@ -84,7 +72,7 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
         qCDebug(gmNextCloud()) << "Delaying DAV request, because we are waiting for authentication ...";
 
         return QtFuture::connect(this, &NextCloud::loggedIn)
-            .then(this, [this, method, path, data]() { return sendDavRequest(method, path, data); })
+            .then([this, method, path, data]() { return sendDavRequest(method, path, data); })
             .unwrap();
     }
 
@@ -110,7 +98,8 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
         }
     }
 
-    return QtFuture::makeReadyFuture(m_networkManager.sendCustomRequest(request, method, data));
+    auto *reply = m_networkManager.sendCustomRequest(request, method, data);
+    return QtFuture::connect(reply, &QNetworkReply::finished).then([reply]() { return reply; });
 }
 
 auto NextCloud::getPathUrl(const QString &path) const -> QString
