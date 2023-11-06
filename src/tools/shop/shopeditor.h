@@ -46,10 +46,10 @@ public:
     Q_INVOKABLE bool createThing(const QString &name, ShopEditor::Type type);
 
     Q_INVOKABLE bool deleteProject(ShopProject *project);
-    Q_INVOKABLE bool deleteCategory(ShopCategory *category);
+    Q_INVOKABLE bool deleteCategory(ShopCategory *category) const;
 
-    Q_INVOKABLE bool moveShop(int positions);
-    Q_INVOKABLE bool deleteShop();
+    Q_INVOKABLE bool moveShop(int positions) const;
+    Q_INVOKABLE bool deleteShop() const;
 
     Q_INVOKABLE bool addItem(int index);
     Q_INVOKABLE bool deleteItem(int index);
@@ -80,7 +80,7 @@ private:
     auto createCategory(const QString &name) -> bool;
     auto createShop(const QString &name) -> bool;
 
-    void connectProject(ShopProject *project) const;
+    void connectProject(const ShopProject *project) const;
     void sendProjectCopiesToTool();
 
     [[nodiscard]] auto isCurrentShopValid() const -> bool;
@@ -91,9 +91,9 @@ private:
 private slots:
     void itemEditorSaved(ItemGroup *group);
     void onProjectWasEdited();
-    void onCurrentProjectChanged(ShopProject *currentProject);
-    void onCurrentShopChanged(ItemShop *currentShop);
-    void onCurrentItemGroupChanged(ItemGroup *currentGroup);
+    void onCurrentProjectChanged(const ShopProject *currentProject);
+    void onCurrentShopChanged(const ItemShop *currentShop);
+    void onCurrentItemGroupChanged(const ItemGroup *currentGroup);
     void onDisabledItemCategoriesChanged(const QStringList &categories);
-    void onIsLoadingChanged(bool isLoading);
+    void onIsLoadingChanged(bool isLoading) const;
 };

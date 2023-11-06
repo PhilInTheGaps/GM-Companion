@@ -37,6 +37,7 @@ public:
     explicit AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent);
     explicit AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent);
     explicit AudioElement(const AudioElement &other);
+    ~AudioElement() override = default;
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
 
@@ -65,7 +66,7 @@ public:
 
     static auto compare(const AudioElement *e1, const AudioElement *e2) -> bool;
 
-    inline operator QString() const
+    explicit inline operator QString() const
     {
         return QStringLiteral("%1 (%2)").arg(name(), typeToString(type()));
     }

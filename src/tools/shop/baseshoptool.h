@@ -28,7 +28,7 @@ public slots:
 
 protected:
     void onShopFilesFound(Files::FileListResult &&result);
-    void onShopFileDataReceived(std::vector<Files::FileDataResult> &&results);
+    void onShopFileDataReceived(const std::vector<Files::FileDataResult> &results);
 
     void setFirstProjectAsCurrent();
 };

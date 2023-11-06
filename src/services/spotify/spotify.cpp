@@ -99,7 +99,7 @@ auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired) -> QFutur
 
     const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
-        return reply;
+        return std::move(reply);
     };
 
     return m_connector->get(request, isAuthRequired).then(callback);
@@ -116,7 +116,7 @@ auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFu
 
     const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
-        return reply;
+        return std::move(reply);
     };
 
     return m_connector->put(request, data).then(callback);
@@ -133,7 +133,7 @@ auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QF
 
     const auto callback = [this](RestReply &&reply) {
         handleNetworkError(reply);
-        return reply;
+        return std::move(reply);
     };
 
     return m_connector->post(request, data).then(callback);

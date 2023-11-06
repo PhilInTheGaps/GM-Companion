@@ -29,7 +29,7 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<SpotifyTrack>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyTrack> {
+    const auto callback = [](const RestReply &reply) -> QFuture<SpotifyTrack> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyTracks()) << "getTrack():" << reply.errorText();
@@ -66,7 +66,7 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&pr
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this, ids, previous = std::move(previous)](RestReply &&reply) mutable {
+    const auto callback = [this, ids, previous = std::move(previous)](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyTracks()) << "getTracks():" << reply.errorText();

@@ -5,6 +5,8 @@
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioExporter, "gm.audio.exporter")
 
 /**
@@ -29,7 +31,7 @@ void AudioExporter::exportFiles()
     auto *worker = new Worker(m_path, m_project);
 
     worker->moveToThread(&workerThread);
-    connect(worker, &Worker::copiedFiles, [=]() { worker->deleteLater(); });
+    connect(worker, &Worker::copiedFiles, [worker]() { worker->deleteLater(); });
     connect(worker, &Worker::progressChanged, this, &AudioExporter::updateProgress);
     connect(this, &AudioExporter::startCopying, worker, &Worker::startCopying);
     workerThread.start();
@@ -39,7 +41,11 @@ void AudioExporter::exportFiles()
 void AudioExporter::updateProgress(float progress)
 {
     m_progress = progress;
-    if (m_progress >= 1) m_progress = 0;
+    if (m_progress >= 1)
+    {
+        m_progress = 0;
+    }
+
     emit progressChanged();
 }
 
@@ -78,9 +84,7 @@ void Worker::collectFilesToExport()
 {
     if (Q_UNLIKELY(!m_project)) return;
 
-    // Categories
-    const auto categories = m_project->categories();
-    for (auto *category : categories)
+    foreach (const auto *category, m_project->categories())
     {
         if (category && category->isChecked() != TreeItem::CheckedState::Unchecked)
         {
@@ -101,7 +105,7 @@ auto Worker::copyNext() -> bool
 {
     if (m_fileCount > 0)
     {
-        const float percent = static_cast<float>(m_exportCount++) / m_fileCount;
+        const float percent = static_cast<float>(m_exportCount++) / static_cast<float>(m_fileCount);
         emit progressChanged(percent);
         qCDebug(gmAudioExporter()) << "   Progress:" << m_exportCount << "/" << m_fileCount << "(" << percent * 100
                                    << "%)";
@@ -157,16 +161,15 @@ auto Worker::copyFile(const QString &filePath, const QString &base, const QStrin
     return true;
 }
 
-void Worker::copyElements(AudioScenario *scenario)
+void Worker::copyElements(const AudioScenario *scenario)
 {
     if (Q_UNLIKELY(!scenario)) return;
 
-    for (auto *element : scenario->elements(true))
+    foreach (const auto *element, scenario->elements(true))
     {
         if (element && element->isChecked() != TreeItem::CheckedState::Unchecked)
         {
-            const auto files = element->files();
-            for (auto *file : files)
+            foreach (const auto *file, element->files())
             {
                 // Only export local files
                 if (file->source() != AudioFile::Source::File) continue;

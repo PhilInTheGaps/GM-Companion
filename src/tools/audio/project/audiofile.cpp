@@ -32,11 +32,10 @@ auto AudioFile::displayName() const -> QString
 {
     if (!title().isEmpty()) return title();
 
-    switch (source())
+    if (source() == Source::File)
     {
-    case Source::File:
         return FileUtils::fileName(url());
-    default:
-        return url();
     }
+
+    return url();
 }

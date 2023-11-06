@@ -32,9 +32,9 @@ auto Item::toJson() const -> QJsonObject
     return QJsonObject{{"name", name()}, {"price", price()}, {"description", description()}, {"category", category()}};
 }
 
-auto Item::findLastIndexWithCategory(const QString &category, const QList<Item *> &items) -> int
+auto Item::findLastIndexWithCategory(const QString &category, const QList<Item *> &items) -> qsizetype
 {
-    for (int i = items.size() - 1; i >= 0; i--)
+    for (auto i = items.size() - 1; i >= 0; i--)
     {
         if (items.at(i) && items.at(i)->category() == category) return i;
     }

@@ -18,7 +18,7 @@ void QuickSettingsManager::setPath(const QString &path, const QString &value)
     SettingsManager::setPath(path, value);
 }
 
-auto QuickSettingsManager::getLanguageIndex() -> int
+auto QuickSettingsManager::getLanguageIndex() -> qsizetype
 {
     auto language = SettingsManager::getLanguageString();
     auto languages = getLanguageNames();

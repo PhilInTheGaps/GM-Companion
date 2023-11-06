@@ -16,7 +16,7 @@ public:
     auto removeEntry(const QString &path) -> bool;
     auto moveEntry(const QString &oldPath, const QString &newPath) -> bool;
     auto copyEntry(const QString &path, const QString &copy) -> bool;
-    auto checkEntry(const QString &path) -> bool;
+    auto checkEntry(const QString &path) const -> bool;
 
     void printEntries() const;
 

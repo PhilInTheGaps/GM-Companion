@@ -62,7 +62,7 @@ public:
     // Project
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE void createProject(const QString &name);
-    Q_INVOKABLE void createProjectFromTemplate(AudioProject *other);
+    Q_INVOKABLE void createProjectFromTemplate(const AudioProject *other);
     Q_INVOKABLE void renameProject(const QString &name);
     Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
@@ -77,7 +77,7 @@ public:
     Q_INVOKABLE void setCurrentCategory(int index);
     Q_INVOKABLE void setCurrentCategory(AudioCategory *category);
     Q_INVOKABLE void createCategory(const QString &name);
-    Q_INVOKABLE void createCategoryFromTemplate(AudioCategory *other);
+    Q_INVOKABLE void createCategoryFromTemplate(const AudioCategory *other);
     Q_INVOKABLE void renameCategory(const QString &name);
     Q_INVOKABLE void deleteCategory();
 
@@ -85,7 +85,7 @@ public:
     Q_INVOKABLE void setCurrentScenario(int index);
     Q_INVOKABLE void setCurrentScenario(AudioScenario *scenario);
     Q_INVOKABLE void createScenario(const QString &name, bool isSubscenario = false) const;
-    Q_INVOKABLE void createScenarioFromTemplate(AudioScenario *other, bool isSubscenario);
+    Q_INVOKABLE void createScenarioFromTemplate(const AudioScenario *other, bool isSubscenario);
     Q_INVOKABLE void renameScenario(const QString &name) const;
     Q_INVOKABLE void deleteScenario();
     Q_INVOKABLE void deleteSubScenario(AudioScenario *subscenario);
@@ -98,14 +98,14 @@ public:
     Q_INVOKABLE void setSubscenario(int index) const;
 
     // Create new element
-    Q_INVOKABLE void createElement(const QString &name, AudioElement::Type type, int subscenario);
-    Q_INVOKABLE void createElementFromTemplate(AudioElement *other, int subscenario);
+    Q_INVOKABLE void createElement(const QString &name, AudioElement::Type type, int subscenario) const;
+    Q_INVOKABLE void createElementFromTemplate(const AudioElement *other, int subscenario) const;
 
     // Edit element
     Q_INVOKABLE void removeFile(int index, bool findMissing = true);
     Q_INVOKABLE void moveFile(int index, int positions);
     Q_INVOKABLE void removeMissingFiles();
-    Q_INVOKABLE void replaceFileFolder(int index, const QString &folder);
+    Q_INVOKABLE void replaceFileFolder(int index, const QString &folder) const;
     Q_INVOKABLE bool addFile(QStringList path, const QString &filename);
     Q_INVOKABLE bool addUrl(const QString &url, int mode, const QString &title = QLatin1String());
     Q_INVOKABLE bool addYtUrl(const QString &videoUrl);
@@ -159,7 +159,7 @@ private:
     AudioProject *m_currentProject = nullptr;
     QPointer<AudioElement> m_currentElement;
 
-    auto loadFirstElement(AudioScenario *scenario = nullptr) -> bool;
+    auto loadFirstElement(const AudioScenario *scenario = nullptr) -> bool;
     void clearCurrentElement();
     int m_fileIndex{};
 

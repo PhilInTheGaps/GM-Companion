@@ -20,7 +20,7 @@ class CombatTracker : public AbstractTool
 
 public:
     CombatTracker() = delete;
-    explicit CombatTracker(QQmlEngine *qmlEngine, QObject *parent = nullptr);
+    explicit CombatTracker(const QQmlEngine *qmlEngine, QObject *parent = nullptr);
     static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *;
 
     Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
@@ -74,7 +74,7 @@ protected:
     [[nodiscard]] auto combatants() const -> QList<Combatant *>;
     [[nodiscard]] auto getCombatant(int index) -> Combatant *;
 
-    void resetDelayForAll();
+    void resetDelayForAll() const;
     void saveToDisk() const;
 
     static auto getCacheFile() -> QFile;

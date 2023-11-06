@@ -34,7 +34,7 @@ auto FileAccessLocal::getDataAsync(const QString &path, bool allowCache) -> QFut
     qCDebug(gmFileAccessLocal()) << "Getting data from file:" << path << "...";
 
     return QtConcurrent::run(&FileAccessLocal::getData, path, allowCache).then(&m_context, [](FileDataResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
@@ -54,7 +54,7 @@ auto FileAccessLocal::getDataAsync(const QStringList &paths, bool allowCache) ->
 
                return results;
            })
-        .then(&m_context, [](std::vector<FileDataResult> &&result) { return result; });
+        .then(&m_context, [](std::vector<FileDataResult> &&result) { return std::move(result); });
 }
 
 /// Create a directory
@@ -81,7 +81,7 @@ auto FileAccessLocal::createDirAsync(const QString &path) -> QFuture<FileResult>
 {
     qCDebug(gmFileAccessLocal()) << "Creating directory:" << path << "...";
     return QtConcurrent::run(&FileAccessLocal::createDir, QDir(path)).then(&m_context, [](FileResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
@@ -133,16 +133,13 @@ auto FileAccessLocal::saveAsync(const QString &path, const QByteArray &data) -> 
 {
     qCDebug(gmFileAccessLocal()) << "Saving file:" << path << "...";
     return QtConcurrent::run(&FileAccessLocal::save, path, data).then(&m_context, [](FileResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
 auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> FileResult
 {
-    QFile f(oldPath);
-    QFileInfo const info(newPath);
-
-    if (!info.dir().exists())
+    if (QFileInfo const info(newPath); !info.dir().exists())
     {
         auto createDirResult = createDir(info.dir());
         if (!createDirResult.success())
@@ -152,6 +149,8 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
             return FileResult(false, errorMessage);
         }
     }
+
+    QFile f(oldPath);
 
     if (!f.rename(newPath))
     {
@@ -169,7 +168,7 @@ auto FileAccessLocal::moveAsync(const QString &oldPath, const QString &newPath) 
 {
     qCDebug(gmFileAccessLocal()) << "Moving file:" << oldPath << "->" << newPath << "...";
     return QtConcurrent::run(&FileAccessLocal::move, oldPath, newPath).then(&m_context, [](FileResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
@@ -199,7 +198,7 @@ auto FileAccessLocal::deleteAsync(const QString &path) -> QFuture<FileResult>
 
                return FileResult(true);
            })
-        .then(&m_context, [](FileResult &&result) { return result; });
+        .then(&m_context, [](FileResult &&result) { return std::move(result); });
 }
 
 auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResult
@@ -233,7 +232,7 @@ auto FileAccessLocal::copyAsync(const QString &path, const QString &copy) -> QFu
 {
     qCDebug(gmFileAccessLocal()) << "Copying file:" << path << "->" << copy << "...";
     return QtConcurrent::run(&FileAccessLocal::copy, path, copy).then(&m_context, [](FileResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
@@ -245,7 +244,7 @@ auto FileAccessLocal::listAsync(const QString &path, bool files, bool folders) -
                return FileListResult(path, dir.entryList(getDirFilter(false, folders)),
                                      dir.entryList(getDirFilter(files, false)));
            })
-        .then(&m_context, [](FileListResult &&result) { return result; });
+        .then(&m_context, [](FileListResult &&result) { return std::move(result); });
 }
 
 /// Check if a file exists
@@ -261,7 +260,7 @@ auto FileAccessLocal::check(const QString &path, bool allowCache) -> FileCheckRe
 auto FileAccessLocal::checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult>
 {
     return QtConcurrent::run(&FileAccessLocal::check, path, allowCache).then(&m_context, [](FileCheckResult &&result) {
-        return result;
+        return std::move(result);
     });
 }
 
@@ -276,7 +275,7 @@ auto FileAccessLocal::checkAsync(const QStringList &paths, bool allowCache) -> Q
                }
                return result;
            })
-        .then(&m_context, [](FileMultiCheckResult &&result) { return result; });
+        .then(&m_context, [](FileMultiCheckResult &&result) { return std::move(result); });
 }
 
 auto FileAccessLocal::getDirFilter(bool files, bool folders) -> QFlags<QDir::Filter>

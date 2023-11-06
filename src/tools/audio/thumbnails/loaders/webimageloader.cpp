@@ -12,8 +12,10 @@ auto WebImageLoader::loadImageAsync(const QString &url, QNetworkAccessManager *n
     qCDebug(gmAudioWebImageLoader()) << "Loading image from web:" << url << "...";
 
     // Try to load from cache
-    QPixmap pixmap;
-    if (AudioThumbnailCache::tryGet(url, &pixmap)) return QtFuture::makeReadyFuture(pixmap);
+    if (QPixmap pixmap; AudioThumbnailCache::tryGet(url, &pixmap))
+    {
+        return QtFuture::makeReadyFuture(pixmap);
+    }
 
     // Load from url
     const auto request = QNetworkRequest(QUrl(url));

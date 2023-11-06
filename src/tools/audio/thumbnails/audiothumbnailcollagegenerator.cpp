@@ -19,7 +19,7 @@ auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> ele
     return future.then([element]() { return generateCollageImage(element); });
 }
 
-auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioElement> element, int index,
+auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioElement> element, qsizetype index,
                                                                 int fileCount, int failCount) -> QFuture<void>
 {
     if (!element) return QtFuture::makeReadyFuture();
@@ -71,7 +71,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
  */
 auto AudioThumbnailCollageGenerator::canMakeCollage(QPointer<AudioElement> element) -> bool
 {
-    return element && element->type() != AudioElement::Type::Radio && element->files().length() > 0;
+    return element && element->type() != AudioElement::Type::Radio && !element->files().isEmpty();
 }
 
 /**
@@ -115,9 +115,9 @@ auto AudioThumbnailCollageGenerator::generateCollageImage(QPointer<AudioElement>
     {
         if (i > 3) break;
 
-        QRectF target = getTargetRect(thumbnailSize(), images.count(), i);
-        QRectF source = getSourceRect(images[i].rect(), images.count(), i);
-        painter.drawPixmap(target, images[i], source);
+        QRectF target = getTargetRect(thumbnailSize(), static_cast<int>(images.count()), i);
+        QRectF source = getSourceRect(images.at(i).rect(), static_cast<int>(images.count()), i);
+        painter.drawPixmap(target, images.at(i), source);
     }
     painter.end();
 
@@ -156,7 +156,7 @@ auto AudioThumbnailCollageGenerator::getTargetRect(QSize imageSize, int imageCou
     const qreal width = imageCount == 4 ? imageSize.width() / 2 : imageSize.width() / imageCount;
     const qreal height = imageCount == 4 ? imageSize.height() / 2 : imageSize.height();
     const qreal left = imageCount == 4 ? width * ((index + 1) % 2) : width * index;
-    const qreal top = imageCount == 4 ? (index > 1 ? height : 0) : 0;
+    const qreal top = imageCount == 4 && index > 1 ? height : 0;
 
     return {left, top, width, height};
 }

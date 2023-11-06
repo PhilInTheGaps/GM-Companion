@@ -45,7 +45,7 @@ public:
     { /* Not Implemented */
     }
 
-    [[nodiscard]] auto rate() -> double
+    [[nodiscard]] auto rate() const -> double
     {
         return 1.0;
     }
@@ -72,7 +72,7 @@ public:
         return m_Volume;
     }
     void setVolume(double /*volume*/) const
-    {
+    { /* Not Implemented */
     }
 
     [[nodiscard]] auto position() const -> qlonglong

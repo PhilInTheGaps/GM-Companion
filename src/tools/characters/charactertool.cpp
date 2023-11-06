@@ -38,7 +38,7 @@ auto CharacterTool::characters() const -> QStringList
 {
     QStringList names;
 
-    for (auto *character : m_characters)
+    foreach (const auto *character, m_characters)
     {
         if (!m_active != !m_inactiveCharacters.contains(character->name()))
         {
@@ -60,18 +60,18 @@ void CharacterTool::updateCharacter() const
     //    }
 }
 
-void CharacterTool::setCurrentCharacter(int index)
+void CharacterTool::setCurrentCharacter(qsizetype index)
 {
     auto characterNames = characters();
 
     if (!Utils::isInBounds(characterNames, index)) return;
 
-    auto name = characterNames[index];
+    const auto &name = characterNames.at(index);
     m_currentCharacter = nullptr;
 
     for (int i = 0; i < m_characters.length(); i++)
     {
-        auto *character = m_characters.at(i);
+        const auto *character = m_characters.at(i);
 
         if (character && (index >= i) && (character->name() == name))
         {
@@ -114,13 +114,13 @@ void CharacterTool::setCurrentCategory(int index)
     m_currentViewer->setCurrentCategory(index);
 }
 
-void CharacterTool::toggleCharacterActive(int index)
+void CharacterTool::toggleCharacterActive(qsizetype index)
 {
     auto characterNames = characters();
 
     if (!Utils::isInBounds(characterNames, index)) return;
 
-    auto name = characterNames[index];
+    const auto &name = characterNames.at(index);
 
     if (m_active) m_inactiveCharacters.append(name);
     else
@@ -209,7 +209,7 @@ void CharacterTool::loadCharacters()
     qCDebug(gmCharactersTool()) << "Loaded inactive character list, now loading character files and folders ...";
 
     const auto dir = SettingsManager::getPath(u"characters"_s);
-    Files::File::listAsync(dir, true, true).then([this](Files::FileListResult &&result) {
+    Files::File::listAsync(dir, true, true).then([this](const Files::FileListResult &result) {
         receivedCharacterFiles(result.files());
         receivedCharacterFolders(result.folders());
     });

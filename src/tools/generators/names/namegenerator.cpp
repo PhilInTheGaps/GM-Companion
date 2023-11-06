@@ -73,9 +73,9 @@ auto NameGenerator::findAndReadAllFiles(const QString &path) -> QByteArrayList
     QByteArrayList result;
     result.reserve(entries.length());
 
-    for (int i = 0; i < entries.length(); i++)
+    foreach (const auto &entry, entries)
     {
-        QFile file(FileUtils::fileInDir(entries[i], path));
+        QFile file(FileUtils::fileInDir(entry, path));
 
         if (file.open(QIODevice::ReadOnly))
         {

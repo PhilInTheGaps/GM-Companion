@@ -27,7 +27,7 @@ public:
     {
     }
 
-    [[nodiscard]] auto depth() const -> int
+    [[nodiscard]] auto depth() const -> qsizetype
     {
         return path().count();
     }
@@ -44,7 +44,7 @@ public:
 
     [[nodiscard]] auto rowCount(const QModelIndex &) const -> int override
     {
-        return m_items.size();
+        return static_cast<int>(m_items.size());
     }
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
@@ -70,7 +70,7 @@ public:
     }
 
     void insert(int index, QObject *item);
-    void remove(QObject *item);
+    void remove(const QObject *item);
     void append(QObject *item);
 
 signals:

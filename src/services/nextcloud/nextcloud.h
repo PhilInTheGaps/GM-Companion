@@ -21,7 +21,7 @@ class NextCloud : public Services::Service
     QML_ONLY_SINGLETON_FACTORY(NextCloud)
 
 public:
-    explicit NextCloud(QQmlEngine &engine, QObject *parent);
+    explicit NextCloud(const QQmlEngine &engine, QObject *parent);
     explicit NextCloud(QNetworkAccessManager &networkManager, QObject *parent);
     explicit NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent);
 

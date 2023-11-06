@@ -61,12 +61,12 @@ public:
 
     [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
-        return m_items.size();
+        return size();
     }
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
     [[nodiscard]] auto size() const -> int
     {
-        return m_items.size();
+        return static_cast<int>(m_items.size());
     }
 
     void setElements(QList<Map *> elements);

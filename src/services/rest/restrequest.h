@@ -8,8 +8,6 @@ namespace Services
 
 class RestRequest
 {
-    Q_GADGET
-
 public:
     enum class Type
     {
@@ -18,7 +16,6 @@ public:
         POST,
         CUSTOM
     };
-    Q_ENUM(Type)
 
     explicit RestRequest(const QNetworkRequest &request, Type type, QByteArray data = {}, QByteArray verb = {})
         : RestRequest(-1, request, type, std::move(data), std::move(verb))

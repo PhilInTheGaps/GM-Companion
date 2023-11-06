@@ -16,7 +16,7 @@ class UnsplashParser : public QObject
     Q_PROPERTY(ImageListModel *model READ model CONSTANT)
 
 public:
-    explicit UnsplashParser(QQmlEngine *engine, QObject *parent = nullptr);
+    explicit UnsplashParser(const QQmlEngine *engine, QObject *parent = nullptr);
 
     [[nodiscard]] auto model() -> ImageListModel *;
 

@@ -10,8 +10,10 @@ using namespace Files;
 auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
 {
     // Try to load from cache
-    QPixmap pixmap;
-    if (AudioThumbnailCache::tryGet(path, &pixmap)) return QtFuture::makeReadyFuture(pixmap);
+    if (QPixmap pixmap; AudioThumbnailCache::tryGet(path, &pixmap))
+    {
+        return QtFuture::makeReadyFuture(pixmap);
+    }
 
     auto future = File::getDataAsync(path);
 

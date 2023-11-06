@@ -25,7 +25,7 @@ public:
     explicit ConverterTool(QObject *parent = nullptr);
     static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> ConverterTool *;
 
-    Q_INVOKABLE static QString convert(ConverterUnit *fromUnit, const QString &fromValue, ConverterUnit *toUnit);
+    Q_INVOKABLE static QString convert(const ConverterUnit *fromUnit, const QString &fromValue, const ConverterUnit *toUnit);
 
     Q_PROPERTY(ConverterEditor *editor READ editor CONSTANT)
     [[nodiscard]] auto editor() -> ConverterEditor *;
@@ -41,8 +41,8 @@ public slots:
 
 private slots:
     void onProjectsChanged();
-    void onCurrentProjectChanged(ConverterProject *project);
-    void onCurrentCategoryChanged(ConverterCategory *category);
+    void onCurrentProjectChanged(const ConverterProject *project);
+    void onCurrentCategoryChanged(const ConverterCategory *category);
     void onEditorSavedChanged(bool isSaved);
     void onAddonManagerLoadingChanged(bool isLoading);
 

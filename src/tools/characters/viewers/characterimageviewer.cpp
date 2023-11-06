@@ -39,8 +39,11 @@ void CharacterImageViewer::onCharacterFileListLoaded(const QList<CharacterFile *
 {
     qCDebug(gmCharactersImageViewer()) << "Character files list was loaded.";
 
-    for (auto *file : files)
+    for (const auto *file : files)
+    {
         m_categories.append(file->name());
+    }
+
     emit categoriesChanged();
 
     if (!m_categories.isEmpty()) setCurrentCategory(0);
@@ -152,7 +155,7 @@ void CharacterImageViewer::setCurrentCategory(qsizetype index)
 
     if ((m_currentCharacter->type() == 1) && (index > 0))
     {
-        setPDFPage(index);
+        setPDFPage(static_cast<int>(index));
     }
     else
     {

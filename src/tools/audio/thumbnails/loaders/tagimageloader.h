@@ -17,7 +17,7 @@
 class TagImageLoader
 {
 public:
-    static auto loadImageAsync(AudioElement *element, AudioFile *audioFile) -> QFuture<QPixmap>;
+    static auto loadImageAsync(const AudioElement *element, const AudioFile *audioFile) -> QFuture<QPixmap>;
     static auto loadFromFileAsync(const QString &path, bool isLocalFile) -> QFuture<QPixmap>;
     static auto loadFromData(const QString &path, const QByteArray &data) -> QPixmap;
     static auto loadFromData(const QString &path, std::unique_ptr<TagLib::ByteVectorStream> data) -> QPixmap;

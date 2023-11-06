@@ -56,7 +56,7 @@ auto FileAccessNextcloud::createDirThenContinue(const QString &dir, const T1 &ar
 {
     return createDirAsync(dir)
         .then([arg1, arg2, func](FileResult &&result) {
-            if (!result.success()) return QtFuture::makeReadyFuture(result);
+            if (!result.success()) return QtFuture::makeReadyFuture(std::move(result));
             return func(arg1, arg2);
         })
         .unwrap();
@@ -72,8 +72,7 @@ auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data)
         .then([this, future, path, data](QNetworkReply *reply) {
             if (replyHasError(reply))
             {
-                const auto isDirMissing = reply->error() == QNetworkReply::ContentNotFoundError;
-                if (isDirMissing)
+                if (const auto isDirMissing = reply->error() == QNetworkReply::ContentNotFoundError; isDirMissing)
                 {
                     return deleteReplyAndReturn(
                         createDirThenContinue<QString, QByteArray>(
@@ -109,8 +108,7 @@ auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPa
 
             if (replyHasError(reply))
             {
-                const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
-                if (isDirMissing)
+                if (const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError; isDirMissing)
                 {
                     return deleteReplyAndReturn(
                         createDirThenContinue<QString, QString>(FileUtils::dirFromPath(newPath), oldPath, newPath,
@@ -170,8 +168,7 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
         .then([this, future, path, copy](QNetworkReply *reply) {
             if (replyHasError(reply))
             {
-                const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
-                if (isDirMissing)
+                if (const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError; isDirMissing)
                 {
                     return deleteReplyAndReturn(
                         createDirThenContinue<QString, QString>(
@@ -207,7 +204,7 @@ auto FileAccessNextcloud::listAsync(const QString &path, bool files, bool folder
     return future.then([future, path, files, folders](QNetworkReply *reply) {
         if (replyHasError(reply))
         {
-            const auto errorMessage = makeAndPrintError(u"Could not list content of folder %1"_s.arg(path), reply);
+            auto errorMessage = makeAndPrintError(u"Could not list content of folder %1"_s.arg(path), reply);
             return deleteReplyAndReturn(FileListResult(path, std::move(errorMessage)), reply);
         }
 
@@ -254,9 +251,9 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray &data, const QStrin
                 }
             }
             else if (files && xml.name() == "getcontenttype"_L1 &&
-                     !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty())
+                     !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty() && !element.isEmpty())
             {
-                if (!element.isEmpty()) fileList << element;
+                fileList << element;
             }
         }
     }
@@ -304,9 +301,8 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
 
     return future.then([future, path](QNetworkReply *reply) {
         const auto doesExist = reply->error() != QNetworkReply::ContentNotFoundError;
-        const auto hasError = replyHasError(reply) && doesExist;
 
-        if (hasError)
+        if (const auto hasError = replyHasError(reply) && doesExist; hasError)
         {
             auto errorMessage = makeAndPrintError(u"Could not check if file %1 exists"_s.arg(path), reply);
             return deleteReplyAndReturn(FileCheckResult(path, std::move(errorMessage)), reply);
@@ -329,7 +325,7 @@ auto FileAccessNextcloud::encodePath(const QString &data) -> QByteArray
     return QUrl::toPercentEncoding(data, "/");
 }
 
-auto FileAccessNextcloud::replyHasError(QNetworkReply *reply) -> bool
+auto FileAccessNextcloud::replyHasError(const QNetworkReply *reply) -> bool
 {
     return reply->error() != QNetworkReply::NoError;
 }
@@ -353,8 +349,8 @@ auto FileAccessNextcloud::makeMoveHeaders(const QString &newPath) -> QList<std::
     return {destinationHeader, overwriteHeader};
 }
 
-template <typename T> auto FileAccessNextcloud::deleteReplyAndReturn(T value, QNetworkReply *reply) -> T
+template <typename T> auto FileAccessNextcloud::deleteReplyAndReturn(T &&value, QNetworkReply *reply) -> T
 {
     QScopedPointer scopedReply(reply);
-    return value;
+    return std::move(value);
 }

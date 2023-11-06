@@ -20,7 +20,7 @@ AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent
 
 auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<SpotifyDevice>
 {
-    const auto callback = [name](SpotifyDeviceList &&deviceList) {
+    const auto callback = [name](const SpotifyDeviceList &deviceList) {
         foreach (const auto &device, deviceList.devices)
         {
             if (device.name == name) return device;
@@ -46,7 +46,7 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
                                << "but it is inactive, setting as active device ...";
 
     auto future = Spotify::instance()->player.transfer({device.id});
-    const auto onReply = [this](RestReply &&reply) {
+    const auto onReply = [this](const RestReply &reply) {
         if (reply.hasError()) updateStatus(Status::Type::Error, reply.errorText());
     };
 

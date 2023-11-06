@@ -30,7 +30,7 @@ private:
     QMetaObject::Connection m_projectConnection;
 
 private slots:
-    void onCurrentProjectChanged(ShopProject *project);
-    void onCurrentShopChanged(ItemShop *shop);
+    void onCurrentProjectChanged(const ShopProject *project);
+    void onCurrentShopChanged(const ItemShop *shop);
     void onShopEditorSaved(const QList<ShopProject *> &projects);
 };

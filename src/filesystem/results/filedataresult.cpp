@@ -5,7 +5,7 @@ using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 using namespace Services;
 
-auto FileDataResult::fromRestReply(RestReply &&reply) -> FileDataResult
+auto FileDataResult::fromRestReply(const RestReply &reply) -> FileDataResult
 {
     bool success = true;
     QString errorMessage;

@@ -71,7 +71,7 @@ void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
         return;
     }
 
-    Files::File::getDataAsync(files).then([this](std::vector<Files::FileDataResult> &&results) {
+    Files::File::getDataAsync(files).then([this](const std::vector<Files::FileDataResult> &results) {
         QList<ItemGroup *> groups = {};
         groups.reserve(results.size());
 
@@ -122,14 +122,14 @@ auto ShopEditor::deleteProject(ShopProject *project) -> bool
     return true;
 }
 
-auto ShopEditor::deleteCategory(ShopCategory *category) -> bool
+auto ShopEditor::deleteCategory(ShopCategory *category) const -> bool
 {
     if (!currentProject() || !category) return false;
 
     return currentProject()->deleteCategory(category);
 }
 
-auto ShopEditor::moveShop(int positions) -> bool
+auto ShopEditor::moveShop(int positions) const -> bool
 {
     qCDebug(gmShopsEditor()) << "Moving shop by" << positions << "position(s) ...";
 
@@ -139,11 +139,11 @@ auto ShopEditor::moveShop(int positions) -> bool
 }
 
 /// Delete the current shop
-auto ShopEditor::deleteShop() -> bool
+auto ShopEditor::deleteShop() const -> bool
 {
     if (!isCurrentShopValid()) return false;
 
-    const qsizetype index = currentProject()->currentCategory()->deleteShop(currentShop());
+    const auto index = currentProject()->currentCategory()->deleteShop(currentShop());
 
     if (!currentProject()->currentCategory()->shops().isEmpty())
     {
@@ -249,7 +249,7 @@ auto ShopEditor::createShop(const QString &name) -> bool
     return true;
 }
 
-void ShopEditor::connectProject(ShopProject *project) const
+void ShopEditor::connectProject(const ShopProject *project) const
 {
     connect(project, &ShopProject::wasEdited, this, &ShopEditor::onProjectWasEdited);
     connect(project, &ShopProject::currentShopChanged, this, &ShopEditor::onCurrentShopChanged);
@@ -347,7 +347,7 @@ void ShopEditor::onProjectWasEdited()
     madeChanges();
 }
 
-void ShopEditor::onCurrentProjectChanged(ShopProject *currentProject)
+void ShopEditor::onCurrentProjectChanged(const ShopProject *currentProject)
 {
     if (!currentProject || !currentProject->currentCategory())
     {
@@ -358,7 +358,7 @@ void ShopEditor::onCurrentProjectChanged(ShopProject *currentProject)
     onCurrentShopChanged(currentProject->currentCategory()->currentShop());
 }
 
-void ShopEditor::onCurrentShopChanged(ItemShop *currentShop)
+void ShopEditor::onCurrentShopChanged(const ItemShop *currentShop)
 {
     if (!currentShop)
     {
@@ -369,7 +369,7 @@ void ShopEditor::onCurrentShopChanged(ItemShop *currentShop)
     m_itemModelShop.replaceAll(Utils::toQObjectList(currentShop->items()));
 }
 
-void ShopEditor::onCurrentItemGroupChanged(ItemGroup *currentGroup)
+void ShopEditor::onCurrentItemGroupChanged(const ItemGroup *currentGroup)
 {
     if (!currentGroup)
     {
@@ -386,7 +386,7 @@ void ShopEditor::onDisabledItemCategoriesChanged(const QStringList &categories)
     m_itemModelGroupProxy.setFilterRegularExpression(ex);
 }
 
-void ShopEditor::onIsLoadingChanged(bool isLoading)
+void ShopEditor::onIsLoadingChanged(bool isLoading) const
 {
     if (isLoading) return;
 

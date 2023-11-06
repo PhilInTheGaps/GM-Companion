@@ -18,7 +18,7 @@ void AudioFileModel::insert(int index, QObject *item)
 
 void AudioFileModel::append(QObject *item)
 {
-    beginInsertRows(QModelIndex(), m_items.size(), m_items.size());
+    beginInsertRows(QModelIndex(), static_cast<int>(m_items.size()), static_cast<int>(m_items.size()));
     m_items.append(item);
     endInsertRows();
 
@@ -28,8 +28,9 @@ void AudioFileModel::append(QObject *item)
 auto AudioFileModel::moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent,
                              int destinationChild) -> bool
 {
-    int destination = destinationChild > sourceRow ? destinationChild + 1 : destinationChild;
-    if (beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, destination))
+
+    if (int destination = destinationChild > sourceRow ? destinationChild + 1 : destinationChild;
+        beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, destination))
     {
         m_items.move(sourceRow, destinationChild);
         endMoveRows();
@@ -39,7 +40,7 @@ auto AudioFileModel::moveRow(const QModelIndex &sourceParent, int sourceRow, con
     return false;
 }
 
-void AudioFileModel::remove(QObject *item)
+void AudioFileModel::remove(const QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {

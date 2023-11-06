@@ -10,22 +10,16 @@ namespace Files
 class FileMultiCheckResult : public FileResult
 {
 public:
+    using FileResult::FileResult;
+
     explicit FileMultiCheckResult(std::vector<FileCheckResult> &&results)
         : FileResult(true), m_results(std::move(results))
     {
     }
 
-    explicit FileMultiCheckResult(bool success, const QString &errorMessage) : FileResult(success, errorMessage)
-    {
-    }
-
-    explicit FileMultiCheckResult(bool success) : FileResult(success)
-    {
-    }
-
     void add(FileCheckResult &&result)
     {
-        m_results.push_back(result);
+        m_results.emplace_back(std::move(result));
     }
 
     [[nodiscard]] auto results() const -> const std::vector<FileCheckResult> &

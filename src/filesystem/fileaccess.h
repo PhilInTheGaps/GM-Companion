@@ -17,6 +17,7 @@ class FileAccess
 {
 public:
     FileAccess() = default;
+    virtual ~FileAccess() = default;
     Q_DISABLE_COPY_MOVE(FileAccess);
 
     virtual auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult> = 0;

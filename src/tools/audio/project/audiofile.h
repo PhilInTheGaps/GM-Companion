@@ -25,6 +25,7 @@ public:
     explicit AudioFile(const QString &url, Source source, const QString &title, QObject *parent);
     explicit AudioFile(const QJsonObject &object, QObject *parent = nullptr);
     explicit AudioFile(const AudioFile &other);
+    ~AudioFile() override = default;
 
     [[nodiscard]] auto printableUrl() const -> QString;
     [[nodiscard]] auto toJson() const -> QJsonObject;

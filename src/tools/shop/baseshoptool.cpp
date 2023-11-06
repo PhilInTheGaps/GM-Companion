@@ -35,10 +35,10 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult &&result)
     }
 
     Files::File::getDataAsync(files).then(
-        [this](std::vector<Files::FileDataResult> &&results) { onShopFileDataReceived(std::move(results)); });
+        [this](const std::vector<Files::FileDataResult> &results) { onShopFileDataReceived(results); });
 }
 
-void BaseShopTool::onShopFileDataReceived(std::vector<Files::FileDataResult> &&results)
+void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResult> &results)
 {
     qCDebug(gmShopsBaseTool()) << "Loading" << results.size() << "projects ...";
 

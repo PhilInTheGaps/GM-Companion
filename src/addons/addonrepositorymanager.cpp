@@ -82,14 +82,15 @@ void AddonRepositoryManager::fetchAllRepositoryData()
 
     foreach (const auto *repo, repositories())
     {
-        auto future = fetchRepositoryDataAsync(repo->url()).then([this, repo](std::vector<AddonReleaseInfo> &&info) {
-            if (!info.empty())
-            {
-                qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
-            }
+        auto future =
+            fetchRepositoryDataAsync(repo->url()).then([this, repo](const std::vector<AddonReleaseInfo> &info) {
+                if (!info.empty())
+                {
+                    qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
+                }
 
-            m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
-        });
+                m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
+            });
 
         combinator << future;
     }
@@ -213,10 +214,10 @@ auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> std:
         auto release = getNewestCompatibleRelease(entry["releases"_L1].toArray());
         if (release.isEmpty()) continue;
 
-        result.push_back(AddonReleaseInfo(entry["id"_L1].toString(), entry["name"_L1].toString(),
-                                          entry["name_short"_L1].toString(), release["version"_L1].toString(),
-                                          entry["author"_L1].toString(), entry["description"_L1].toString(),
-                                          release["download"_L1].toString()));
+        result.emplace_back(AddonReleaseInfo(entry["id"_L1].toString(), entry["name"_L1].toString(),
+                                             entry["name_short"_L1].toString(), release["version"_L1].toString(),
+                                             entry["author"_L1].toString(), entry["description"_L1].toString(),
+                                             release["download"_L1].toString()));
     }
 
     return result;

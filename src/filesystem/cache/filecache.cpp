@@ -88,7 +88,7 @@ auto FileCache::copyEntry(const QString &path, const QString &copy) -> bool
     return false;
 }
 
-auto FileCache::checkEntry(const QString &path) -> bool
+auto FileCache::checkEntry(const QString &path) const -> bool
 {
     return m_entries.contains(path) && m_entries.value(path)->isFresh(m_expirationTimeMs);
 }

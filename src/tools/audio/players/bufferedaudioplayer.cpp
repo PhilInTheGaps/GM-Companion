@@ -38,7 +38,7 @@ auto BufferedAudioPlayer::element() const -> QPointer<AudioElement>
     return m_element;
 }
 
-void BufferedAudioPlayer::setIndex(int index)
+void BufferedAudioPlayer::setIndex(qsizetype index)
 {
     playlistIndex(index);
 
@@ -112,7 +112,7 @@ void BufferedAudioPlayer::handleUnsupportedMediaSource(const AudioFile &file)
     next();
 }
 
-void BufferedAudioPlayer::onFileReceived(Files::FileDataResult &&result)
+void BufferedAudioPlayer::onFileReceived(const Files::FileDataResult &result)
 {
     if (!result.success() || result.data().isEmpty())
     {

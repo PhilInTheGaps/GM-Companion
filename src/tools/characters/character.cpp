@@ -42,7 +42,7 @@ void Character::loadFiles()
 
 void Character::loadFileList()
 {
-    Files::File::listAsync(folder(), true, false).then([this](Files::FileListResult &&result) {
+    Files::File::listAsync(folder(), true, false).then([this](const Files::FileListResult &result) {
         if (!result.success()) return;
 
         foreach (const auto &fileName, result.files())
@@ -54,18 +54,18 @@ void Character::loadFileList()
     });
 }
 
-void Character::loadFileData(int index)
+void Character::loadFileData(qsizetype index)
 {
     if (!Utils::isInBounds(files(), index)) return;
 
-    if (!m_files[index]->data().isEmpty())
+    if (!m_files.at(index)->data().isEmpty())
     {
         qCDebug(gmCharactersCharacter()) << "File data already loaded.";
         emit fileDataLoaded(index, m_files.at(index)->data());
         return;
     }
 
-    Files::File::getDataAsync(m_files.at(index)->path()).then([this, index](Files::FileDataResult &&result) {
+    Files::File::getDataAsync(m_files.at(index)->path()).then([this, index](const Files::FileDataResult &result) {
         if (!result.success()) return;
 
         m_files.at(index)->data(result.data());

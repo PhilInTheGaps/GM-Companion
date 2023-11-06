@@ -17,7 +17,7 @@ Q_LOGGING_CATEGORY(gmAudioTagImageLoader, "gm.audio.thumbnails.loaders.tag")
 
 using namespace TagLib;
 
-auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile) -> QFuture<QPixmap>
+auto TagImageLoader::loadImageAsync(const AudioElement *element, const AudioFile *audioFile) -> QFuture<QPixmap>
 {
     // Paranoid pointer check
     if (!audioFile) return QtFuture::makeReadyFuture(QPixmap());
@@ -34,8 +34,7 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
     path = FileUtils::fileInDir(audioFile->url(), path);
 
     // Try to retrieve image from cache
-    QPixmap pixmap;
-    if (AudioThumbnailCache::tryGet(path, &pixmap))
+    if (QPixmap pixmap; AudioThumbnailCache::tryGet(path, &pixmap))
     {
         return QtFuture::makeReadyFuture(pixmap);
     }
@@ -53,7 +52,7 @@ auto TagImageLoader::loadFromFileAsync(const QString &path, bool isLocalFile) ->
 
 auto TagImageLoader::loadFromData(const QString &path, const QByteArray &data) -> QPixmap
 {
-    const ByteVector bvector(data.data(), data.length());
+    const ByteVector bvector(data.data(), static_cast<unsigned int>(data.length()));
     auto bvstream = std::make_unique<ByteVectorStream>(bvector);
 
     return loadFromData(path, std::move(bvstream));
@@ -66,33 +65,27 @@ auto TagImageLoader::loadFromData(const QString &path, std::unique_ptr<ByteVecto
     switch (mimeType)
     {
     case FileUtils::MimeType::MPEG: {
-        auto mpeg = std::make_unique<MPEG::File>(data.get(), ID3v2::FrameFactory::instance());
-        return loadFromMpeg(std::move(mpeg), path);
+        return loadFromMpeg(std::make_unique<MPEG::File>(data.get(), ID3v2::FrameFactory::instance()), path);
     }
     case FileUtils::MimeType::OGA: {
-        Ogg::FLAC::File flac(data.get());
-        if (flac.isValid())
+        if (Ogg::FLAC::File flac(data.get()); flac.isValid())
         {
             return loadFromFlac(flac, path);
         }
 
-        Ogg::Vorbis::File vorbis(data.get());
-        return loadFromVorbis(vorbis, path);
+        return loadFromVorbis(Ogg::Vorbis::File(data.get()), path);
     }
     case FileUtils::MimeType::Vorbis: {
-        Ogg::Vorbis::File vorbis(data.get());
-        return loadFromVorbis(vorbis, path);
+        return loadFromVorbis(Ogg::Vorbis::File(data.get()), path);
     }
     case FileUtils::MimeType::FLAC: {
-        FLAC::File flac(data.get(), ID3v2::FrameFactory::instance());
-        if (flac.isValid()) return loadFromFlac(flac, path);
+        if (FLAC::File flac(data.get(), ID3v2::FrameFactory::instance()); flac.isValid())
+            return loadFromFlac(flac, path);
 
-        Ogg::FLAC::File oggflac(data.get());
-        return loadFromFlac(oggflac, path);
+        return loadFromFlac(Ogg::FLAC::File(data.get()), path);
     }
     case FileUtils::MimeType::WAV: {
-        RIFF::WAV::File wav(data.get());
-        return loadFromWav(wav, path);
+        return loadFromWav(RIFF::WAV::File(data.get()), path);
     }
     default:
         qCDebug(gmAudioTagImageLoader()) << "Could not load image from" << path << "mime type is not supported yet";
@@ -104,7 +97,7 @@ auto TagImageLoader::loadViaTempFileAsync(const QString &path) -> QFuture<QPixma
 {
     auto future = Files::File::getDataAsync(path);
 
-    return future.then(QtFuture::Launch::Async, [path](Files::FileDataResult &&result) {
+    return future.then(QtFuture::Launch::Async, [path](const Files::FileDataResult &result) {
         auto fileName = FileUtils::fileName(path);
 
 #ifdef Q_OS_WIN
@@ -147,8 +140,7 @@ auto TagImageLoader::loadFromLocalFile(const QString &path) -> QPixmap
 
 auto TagImageLoader::loadFromMpeg(const QString &path) -> QPixmap
 {
-    auto mpeg = std::make_unique<MPEG::File>(QFile::encodeName(path).constData());
-    return loadFromMpeg(std::move(mpeg), path);
+    return loadFromMpeg(std::make_unique<MPEG::File>(QFile::encodeName(path).constData()), path);
 }
 
 auto TagImageLoader::loadFromMpeg(std::unique_ptr<MPEG::File> mpeg, const QString &path) -> QPixmap
@@ -232,8 +224,7 @@ auto TagImageLoader::pixmapFromId3v2Frames(const ID3v2::FrameList &frames) -> QP
 auto TagImageLoader::loadFromOga(const QString &path) -> QPixmap
 {
     // Can be of type FLAC or Vorbis, check FLAC first
-    auto flac = Ogg::FLAC::File(QFile::encodeName(path).constData());
-    if (flac.isValid())
+    if (auto flac = Ogg::FLAC::File(QFile::encodeName(path).constData()); flac.isValid())
     {
         return loadFromFlac(flac, path);
     }
@@ -244,8 +235,7 @@ auto TagImageLoader::loadFromOga(const QString &path) -> QPixmap
 
 auto TagImageLoader::loadFromVorbis(const QString &path) -> QPixmap
 {
-    const auto file = Ogg::Vorbis::File(QFile::encodeName(path).constData());
-    return loadFromVorbis(file, path);
+    return loadFromVorbis(Ogg::Vorbis::File(QFile::encodeName(path).constData()), path);
 }
 
 auto TagImageLoader::loadFromVorbis(const Ogg::Vorbis::File &file, const QString &path) -> QPixmap
@@ -261,14 +251,12 @@ auto TagImageLoader::loadFromVorbis(const Ogg::Vorbis::File &file, const QString
 
 auto TagImageLoader::loadFromFlac(const QString &path) -> QPixmap
 {
-    auto flac = FLAC::File(QFile::encodeName(path).constData());
-    if (flac.isValid())
+    if (auto flac = FLAC::File(QFile::encodeName(path).constData()); flac.isValid())
     {
         return loadFromFlac(flac, path);
     }
 
-    auto oggflac = Ogg::FLAC::File(QFile::encodeName(path).constData());
-    if (oggflac.isValid())
+    if (auto oggflac = Ogg::FLAC::File(QFile::encodeName(path).constData()); oggflac.isValid())
     {
         return loadFromFlac(oggflac, path);
     }
@@ -341,11 +329,10 @@ auto TagImageLoader::loadFromXiphComment(Ogg::XiphComment *tag, const QString &p
 
 auto TagImageLoader::loadFromWav(const QString &path) -> QPixmap
 {
-    const auto file = RIFF::WAV::File(QFile::encodeName(path).constData());
-    return loadFromWav(file, path);
+    return loadFromWav(RIFF::WAV::File(QFile::encodeName(path).constData()), path);
 }
 
-auto TagImageLoader::loadFromWav(const TagLib::RIFF::WAV::File &file, const QString &path) -> QPixmap
+auto TagImageLoader::loadFromWav(const RIFF::WAV::File &file, const QString &path) -> QPixmap
 {
     if (!file.isValid())
     {

@@ -30,7 +30,7 @@ auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<SpotifyPlaylist>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyPlaylist> {
+    const auto callback = [](const RestReply &reply) -> QFuture<SpotifyPlaylist> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -58,7 +58,7 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<SpotifyTrackL
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this](RestReply &&reply) -> QFuture<SpotifyTrackList> {
+    const auto callback = [this](const RestReply &reply) -> QFuture<SpotifyTrackList> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -80,7 +80,7 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist) -> QFuture<Sp
 {
     const QUrl url(tracklist.next);
 
-    const auto callback = [this, tracklist = std::move(tracklist)](RestReply &&reply) mutable {
+    const auto callback = [this, tracklist = std::move(tracklist)](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();

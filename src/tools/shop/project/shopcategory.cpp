@@ -60,9 +60,9 @@ void ShopCategory::addShop(ItemShop *shop)
 }
 
 /// Delete a shop, returns the shop's index
-auto ShopCategory::deleteShop(ItemShop *shop) -> int
+auto ShopCategory::deleteShop(ItemShop *shop) -> qsizetype
 {
-    const int index = a_shops.indexOf(shop);
+    const auto index = a_shops.indexOf(shop);
     if (index < 0) return index;
 
     a_shops.removeAt(index);
@@ -74,7 +74,7 @@ auto ShopCategory::deleteShop(ItemShop *shop) -> int
 
 auto ShopCategory::moveShop(ItemShop *shop, int positions) -> bool
 {
-    const int index = a_shops.indexOf(shop);
+    const auto index = a_shops.indexOf(shop);
 
     if (!Utils::isInBounds(a_shops, index + positions)) return false;
 
@@ -83,20 +83,20 @@ auto ShopCategory::moveShop(ItemShop *shop, int positions) -> bool
     return true;
 }
 
-void ShopCategory::connectShops()
+void ShopCategory::connectShops() const
 {
-    foreach (auto *shop, shops())
+    foreach (const auto *shop, shops())
     {
         connectShop(shop);
     }
 }
 
-void ShopCategory::connectShop(ItemShop *shop)
+void ShopCategory::connectShop(const ItemShop *shop) const
 {
     connect(shop, &ItemShop::wasEdited, this, &ShopCategory::wasEdited);
 }
 
-void ShopCategory::connectSignals()
+void ShopCategory::connectSignals() const
 {
     connect(this, &ShopCategory::shopsChanged, this, &ShopCategory::wasEdited);
 }

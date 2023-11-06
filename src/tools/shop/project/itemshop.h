@@ -29,5 +29,5 @@ public:
     auto deleteItem(int index) -> bool;
 
 private:
-    void connectSignals();
+    void connectSignals() const;
 };

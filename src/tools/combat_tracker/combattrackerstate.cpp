@@ -48,7 +48,7 @@ void CombatTrackerState::moveCombatant(int from, int to)
 
 void CombatTrackerState::moveCombatantToBack(int from)
 {
-    moveCombatant(from, m_combatants.size() - 1);
+    moveCombatant(from, static_cast<int>(m_combatants.size()) - 1);
 }
 
 void CombatTrackerState::addCombatant(Combatant *combatant)

@@ -75,7 +75,7 @@ public:
     Q_INVOKABLE static QString getPath(const QString &path);
     Q_INVOKABLE static void setPath(const QString &path, const QString &value);
 
-    Q_INVOKABLE static int getLanguageIndex();
+    Q_INVOKABLE static qsizetype getLanguageIndex();
     Q_INVOKABLE static QStringList getLanguageNames();
     Q_INVOKABLE void setLanguage(const QString &language);
 

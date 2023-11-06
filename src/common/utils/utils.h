@@ -28,7 +28,7 @@ public:
 
     template <typename T> static auto isInBounds(const T &list, qsizetype index) -> bool
     {
-        return index > -1 && index < list.size();
+        return index > -1 && index < std::size(list);
     }
 
     template <typename T> static auto copyList(const QList<T *> &original) -> QList<T *>

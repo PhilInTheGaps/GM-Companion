@@ -94,10 +94,10 @@ auto FileUtils::incrementFileName(const QString &fileName) -> QString
 {
     if (fileName.isEmpty()) return u""_s;
 
-    auto nameAndSuffix = splitFileNameAndSuffix(fileName);
-    auto incrementedName = incrementName(nameAndSuffix.first);
+    auto [name, suffix] = splitFileNameAndSuffix(fileName);
+    auto incrementedName = incrementName(name);
 
-    return incrementedName + '.' + nameAndSuffix.second;
+    return incrementedName + '.' + suffix;
 }
 
 auto FileUtils::incrementName(const QString &name) -> QString

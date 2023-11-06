@@ -22,7 +22,7 @@ public:
     [[nodiscard]] auto rowCount(const QModelIndex &parent = QModelIndex()) const -> int override
     {
         Q_UNUSED(parent)
-        return m_objects.size();
+        return static_cast<int>(m_objects.size());
     }
 
     [[nodiscard]] auto headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
@@ -51,9 +51,9 @@ public:
     auto removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) -> bool override
     {
         const auto firstIndex = row;
-        auto lastIndex = row + count - 1;
 
-        if (Utils::isInBounds(m_objects, firstIndex) && Utils::isInBounds(m_objects, lastIndex))
+        if (auto lastIndex = row + count - 1;
+            Utils::isInBounds(m_objects, firstIndex) && Utils::isInBounds(m_objects, lastIndex))
         {
             beginRemoveRows(parent, firstIndex, lastIndex);
             m_objects.erase(m_objects.begin() + firstIndex, m_objects.begin() + firstIndex + count);

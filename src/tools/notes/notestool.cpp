@@ -29,8 +29,7 @@ void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
     if (!m_qmlTextDoc || !m_qmlTextDoc->textDocument()) return;
 
     // Load style sheet
-    QFile f(u":/notes/style.css"_s);
-    if (f.open(QIODevice::ReadOnly))
+    if (QFile f(u":/notes/style.css"_s); f.open(QIODevice::ReadOnly))
     {
         const QString style = f.readAll();
         m_qmlTextDoc->textDocument()->setDefaultStyleSheet(style);
@@ -104,10 +103,10 @@ void NotesTool::exportPdf()
 {
     if (editMode() || !m_currentPage || !m_qmlTextDoc) return;
 
-    auto *textDoc = m_qmlTextDoc->textDocument();
+    const auto *textDoc = m_qmlTextDoc->textDocument();
     if (!textDoc) return;
 
-    m_saveLoad.exportPage(*m_currentPage, *textDoc);
+    NotesSaveLoad::exportPage(*m_currentPage, *textDoc);
 }
 
 /**
@@ -129,7 +128,7 @@ void NotesTool::createBook(const QString &name)
 /**
  * Connect signals of newly loaded pages
  */
-void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages)
+void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages) const
 {
     foreach (const auto *page, pages)
     {
@@ -200,7 +199,7 @@ void NotesTool::onClosePage()
 {
     qCDebug(gmNotesTool()) << "Closing page ...";
 
-    int i = 0;
+    qsizetype i = 0;
 
     foreach (auto *page, a_openedPages)
     {
@@ -215,11 +214,15 @@ void NotesTool::onClosePage()
                 break;
             }
 
-            if (i >= a_openedPages.length()) i = a_openedPages.length() - 1;
+            if (i >= a_openedPages.length())
+            {
+                i = a_openedPages.length() - 1;
+            }
 
-            auto *newPage = a_openedPages.at(i);
-
-            if (newPage) newPage->toggle();
+            if (auto *newPage = a_openedPages.at(i); newPage)
+            {
+                newPage->toggle();
+            }
 
             break;
         }
@@ -261,7 +264,7 @@ void NotesTool::onDocumentEdited()
 {
     if (!m_currentPage || !m_qmlTextDoc) return;
 
-    auto *doc = m_qmlTextDoc->textDocument();
+    const auto *doc = m_qmlTextDoc->textDocument();
 
     if (editMode())
     {

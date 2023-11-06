@@ -30,12 +30,13 @@ void AudioEditorFileBrowser::addFiles(const QStringList &path, int index, bool f
     qCDebug(gmAudioEditorFileBrowser()) << "Adding files:" << m_basePath << path << index << folders;
 
     const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
-    Files::File::listAsync(dir, !folders, folders).then([this, path, folders, index](Files::FileListResult &&result) {
-        if (!result.success()) return;
+    Files::File::listAsync(dir, !folders, folders)
+        .then([this, path, folders, index](const Files::FileListResult &result) {
+            if (!result.success()) return;
 
-        addFilesToModel(folders ? result.folders() : result.files(), path, folders ? 3 : static_cast<int>(type()),
-                        index);
-    });
+            addFilesToModel(folders ? result.folders() : result.files(), path, folders ? 3 : static_cast<int>(type()),
+                            index);
+        });
 }
 
 void AudioEditorFileBrowser::addFilesToModel(const QStringList &files, const QStringList &path, int type, int index)
@@ -110,9 +111,8 @@ void AudioEditorFileBrowser::openFolder(bool open, const QString &folder, const 
 
     foreach (auto *element, m_fileModel.elements())
     {
-        auto *file = qobject_cast<AudioEditorFile *>(element);
-
-        if ((file->name() == folder) && (file->path() == path))
+        if (const auto *file = qobject_cast<AudioEditorFile *>(element);
+            (file->name() == folder) && (file->path() == path))
         {
             if (open)
             {
@@ -151,7 +151,7 @@ void AudioEditorFileBrowserModel::append(QObject *item)
     emit isEmptyChanged();
 }
 
-void AudioEditorFileBrowserModel::remove(QObject *item)
+void AudioEditorFileBrowserModel::remove(const QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {
@@ -179,7 +179,7 @@ void AudioEditorFileBrowserModel::clear()
 {
     if (m_items.isEmpty()) return;
 
-    beginRemoveRows(QModelIndex(), 0, m_items.count() - 1);
+    beginRemoveRows(QModelIndex(), 0, static_cast<int>(m_items.count()) - 1);
 
     while (!m_items.empty())
     {
@@ -195,9 +195,9 @@ void AudioEditorFileBrowserModel::setElements(const QList<AudioEditorFile *> &el
 {
     clear();
 
-    for (int i = elements.size() - 1; i > -1; i--)
+    for (auto i = elements.size() - 1; i > -1; i--)
     {
-        append(elements[i]);
+        append(elements.at(i));
     }
 
     emit isEmptyChanged();

@@ -37,11 +37,11 @@ AudioProject::AudioProject(QJsonObject object, QObject *parent)
     const auto categories = object["categories"_L1].toArray();
     a_categories.reserve(categories.size());
 
-    foreach (const auto &category, categories)
+    foreach (const auto &categoryJson, categories)
     {
-        auto *object = new AudioCategory(category.toObject(), name(), this);
-        prepareCategory(object);
-        a_categories.append(object);
+        auto *category = new AudioCategory(categoryJson.toObject(), name(), this);
+        prepareCategory(category);
+        a_categories.append(category);
     }
 
     if (!a_categories.isEmpty()) setCurrentCategory(a_categories.constFirst());
@@ -115,7 +115,7 @@ auto AudioProject::setCurrentCategory(AudioCategory *category) -> bool
     return false;
 }
 
-auto AudioProject::categoryIndex() const -> int
+auto AudioProject::categoryIndex() const -> qsizetype
 {
     return a_categories.indexOf(m_currentCategory);
 }

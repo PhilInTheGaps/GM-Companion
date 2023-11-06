@@ -16,10 +16,13 @@ using namespace Files;
 
 Q_LOGGING_CATEGORY(gmAudioSaveLoad, "gm.audio.saveload")
 
+static constexpr auto PROJECT_FILE_SUFFIX = ".audio";
+
 /**
  * @brief Find audio project files
  */
-auto AudioSaveLoad::findProjectsAsync(QObject *context, const QString &folder) -> QFuture<std::vector<AudioProject *>>
+auto AudioSaveLoad::findProjectsAsync(const QObject *context, const QString &folder)
+    -> QFuture<std::vector<AudioProject *>>
 {
     qCDebug(gmAudioSaveLoad()) << "Finding audio projects ...";
 
@@ -38,7 +41,7 @@ auto AudioSaveLoad::loadProject(const QByteArray &data, QObject *parent) -> Audi
     return new AudioProject(doc.object(), parent);
 }
 
-auto AudioSaveLoad::loadProjects(QObject *context, FileListResult &&files) -> QFuture<std::vector<AudioProject *>>
+auto AudioSaveLoad::loadProjects(const QObject *context, FileListResult &&files) -> QFuture<std::vector<AudioProject *>>
 {
     QStringList fileNames;
     const auto filePaths = files.filesFull();
@@ -52,7 +55,7 @@ auto AudioSaveLoad::loadProjects(QObject *context, FileListResult &&files) -> QF
 
     auto futureContents = File::getDataAsync(fileNames);
 
-    return futureContents.then([context](std::vector<FileDataResult> &&contents) {
+    return futureContents.then([context](const std::vector<FileDataResult> &contents) {
         qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
         std::vector<AudioProject *> projects;
         projects.reserve(contents.size());
@@ -77,7 +80,7 @@ auto AudioSaveLoad::findMissingFilesAsync(const QList<AudioFile *> &audioFiles, 
 
     auto futureCheckResult = File::checkAsync(filePaths, true);
     return futureCheckResult
-        .then([audioFiles, basePath](FileMultiCheckResult &&multiResult) {
+        .then([audioFiles, basePath](const FileMultiCheckResult &multiResult) {
             const auto foundPaths = multiResult.existing();
 
             for (auto *audioFile : audioFiles)
@@ -149,9 +152,9 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
 auto AudioSaveLoad::saveProject(AudioProject *project, const QString &filePath, const QByteArray &data) -> QFuture<bool>
 {
     return File::saveAsync(filePath, data)
-        .then([project](FileResult &&result) {
+        .then([project](const FileResult &result) {
             project->isSaved(result.success());
-            return true;
+            return result.success();
         })
         .onCanceled([]() { return false; });
 }
@@ -163,7 +166,7 @@ auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &fil
     auto future = File::moveAsync(filePathOld, filePath);
 
     return future
-        .then([filePath, data, project](FileResult &&result) {
+        .then([filePath, data, project](const FileResult &result) {
             if (!result.success()) return QtFuture::makeReadyFuture(false);
 
             project->wasRenamed(false);
@@ -173,7 +176,7 @@ auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &fil
         .unwrap();
 }
 
-auto AudioSaveLoad::deleteProject(AudioProject *project, const QString &folder) -> QFuture<bool>
+auto AudioSaveLoad::deleteProject(const AudioProject *project, const QString &folder) -> QFuture<bool>
 {
     if (!project)
     {
@@ -181,7 +184,7 @@ auto AudioSaveLoad::deleteProject(AudioProject *project, const QString &folder) 
     }
 
     auto filePath = getProjectFolder(folder) + "/" + project->name() + PROJECT_FILE_SUFFIX;
-    return File::deleteAsync(filePath).then([](FileResult &&result) { return result.success(); }).onCanceled([]() {
+    return File::deleteAsync(filePath).then([](const FileResult &result) { return result.success(); }).onCanceled([]() {
         return false;
     });
 }

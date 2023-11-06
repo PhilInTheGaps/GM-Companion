@@ -119,7 +119,7 @@ void AudioTool::setCurrentProject(int index)
     emit currentProjectChanged(a_currentProject);
 }
 
-auto AudioTool::getCurrentProjectIndex() -> int
+auto AudioTool::getCurrentProjectIndex() const -> qsizetype
 {
     if (!currentProject()) return 0;
 
@@ -178,13 +178,9 @@ void AudioTool::onStateChanged(AudioPlayer::State state)
  */
 void AudioTool::next()
 {
-    switch (m_musicElementType)
+    if (m_musicElementType == AudioElement::Type::Music)
     {
-    case AudioElement::Type::Music:
         musicPlayer.next();
-        break;
-    default:
-        return;
     }
 }
 
@@ -239,13 +235,9 @@ void AudioTool::stop()
  */
 void AudioTool::again()
 {
-    switch (m_musicElementType)
+    if (m_musicElementType == AudioElement::Type::Music)
     {
-    case AudioElement::Type::Music:
         musicPlayer.again();
-        break;
-    default:
-        break;
     }
 }
 
@@ -253,7 +245,7 @@ void AudioTool::again()
  * @brief Set volume of music players (music, radio)
  * @param volume Volume, float between 0 and 1
  */
-void AudioTool::setMusicVolume(qreal volume)
+void AudioTool::setMusicVolume(float volume)
 {
     // Convert volume to logarithmic scale
     auto logarithmicVolume = makeLogarithmicVolume(volume);
@@ -274,7 +266,7 @@ void AudioTool::setMusicVolume(qreal volume)
  * @brief Set volume of sound players
  * @param volume Volume, float between 0 and 1
  */
-void AudioTool::setSoundVolume(qreal volume)
+void AudioTool::setSoundVolume(float volume)
 {
     auto linearVolume = makeLinearVolume(volume);
     auto logarithmicVolume = makeLogarithmicVolume(volume);
@@ -283,12 +275,12 @@ void AudioTool::setSoundVolume(qreal volume)
     soundPlayerController.setVolume(linearVolume, logarithmicVolume);
 }
 
-auto AudioTool::makeLinearVolume(qreal linearVolume) -> int
+auto AudioTool::makeLinearVolume(float linearVolume) -> int
 {
     return qRound(linearVolume * VOLUME_FACTOR);
 }
 
-auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
+auto AudioTool::makeLogarithmicVolume(float linearVolume) -> int
 {
     return qRound(QAudio::convertVolume(linearVolume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) *
                   VOLUME_FACTOR);
@@ -296,13 +288,12 @@ auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
 
 auto AudioTool::playlistQml() -> QQmlListProperty<AudioFile>
 {
-    switch (m_musicElementType)
+    if (m_musicElementType == AudioElement::Type::Music)
     {
-    case AudioElement::Type::Music:
         return musicPlayer.playlistQml();
-    default:
-        return {};
     }
+
+    return {};
 }
 
 /**
@@ -311,14 +302,13 @@ auto AudioTool::playlistQml() -> QQmlListProperty<AudioFile>
  */
 auto AudioTool::index() const -> int
 {
-    switch (m_musicElementType)
+    if (m_musicElementType == AudioElement::Type::Music)
     {
-    case AudioElement::Type::Music:
         qCDebug(gmAudioTool()) << musicPlayer.playlistIndex();
         return musicPlayer.playlistIndex();
-    default:
-        return 0;
     }
+
+    return 0;
 }
 
 /**
@@ -327,13 +317,9 @@ auto AudioTool::index() const -> int
  */
 void AudioTool::setMusicIndex(int index)
 {
-    switch (m_musicElementType)
+    if (m_musicElementType == AudioElement::Type::Music)
     {
-    case AudioElement::Type::Music:
         musicPlayer.setIndex(index);
-        break;
-    default:
-        return;
     }
 }
 

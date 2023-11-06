@@ -7,8 +7,6 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-using namespace Qt::Literals::StringLiterals;
-
 class Combatant : public QObject
 {
     Q_OBJECT
@@ -30,10 +28,10 @@ public:
     [[nodiscard]] auto toJson() const -> QJsonObject;
     static auto fromJson(const QJsonObject &json, QObject *parent) -> Combatant *;
 
-    inline operator QString() const
+    explicit inline operator QString() const
     {
-        return u"%1 (Ini: %2 [%3], Health: %4)"_s.arg(name(), QString::number(ini()), QString::number(priority()),
-                                                      QString::number(health()));
+        return QStringLiteral("%1 (Ini: %2 [%3], Health: %4)")
+            .arg(name(), QString::number(ini()), QString::number(priority()), QString::number(health()));
     }
 };
 
@@ -48,7 +46,7 @@ public:
 
     [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
-        return m_items.size();
+        return static_cast<int>(m_items.size());
     }
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 

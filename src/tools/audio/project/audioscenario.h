@@ -20,6 +20,7 @@ public:
     explicit AudioScenario(const AudioScenario &other);
     explicit AudioScenario(const QJsonObject &object, const QString &path, AudioCategory *parent);
     explicit AudioScenario(const QJsonObject &object, const QString &path, AudioScenario *parent);
+    ~AudioScenario() override = default;
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
     [[nodiscard]] auto isCheckable() const -> bool override
@@ -82,7 +83,7 @@ private:
     QList<AudioElement *> m_elements;
 
     void prepareElement(AudioElement *element);
-    void releaseElement(AudioElement *element) const;
+    void releaseElement(const AudioElement *element) const;
     void prepareScenario(AudioScenario *scenario);
     void updateModel();
 };

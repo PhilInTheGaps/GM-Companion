@@ -33,13 +33,13 @@ signals:
     void currentShopChanged(ItemShop *currentShop);
 
 private slots:
-    void onCurrentCategoryChanged(ShopCategory *category);
+    void onCurrentCategoryChanged(const ShopCategory *category);
     void onWasEdited();
 
 private:
     void connectSignals() const;
-    void connectCategories();
-    void connectCategory(ShopCategory *category) const;
+    void connectCategories() const;
+    void connectCategory(const ShopCategory *category) const;
 
     QMetaObject::Connection m_categoryConnection;
 };

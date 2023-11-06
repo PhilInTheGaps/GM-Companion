@@ -58,7 +58,7 @@ void SpotifyPlayer::play(const QString &uri)
     qCDebug(gmAudioSpotify) << "Playing:" << uri;
     m_currentUri = uri;
 
-    const auto callback = [this](RestReply &&reply) {
+    const auto callback = [this](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << reply.errorText();
@@ -86,7 +86,7 @@ void SpotifyPlayer::play()
 
     qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
-    Spotify::instance()->player.play().then([this](RestReply &&reply) {
+    Spotify::instance()->player.play().then([this](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not continue playback:" << reply.errorText();
@@ -120,7 +120,7 @@ void SpotifyPlayer::pause()
     m_songDurationTimer.stop();
     m_metaDataTimer.stop();
 
-    Spotify::instance()->player.pause().then([](RestReply &&reply) {
+    Spotify::instance()->player.pause().then([](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not pause playback:" << reply.errorText();
@@ -157,7 +157,7 @@ void SpotifyPlayer::next()
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
-    Spotify::instance()->player.next().then([this](RestReply &&reply) {
+    Spotify::instance()->player.next().then([this](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not skip track:" << reply.errorText();
@@ -175,7 +175,7 @@ void SpotifyPlayer::again()
 {
     qCDebug(gmAudioSpotify) << "Playing track again ...";
 
-    Spotify::instance()->player.seek(1).then([](RestReply &&reply) {
+    Spotify::instance()->player.seek(1).then([](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmAudioSpotify()) << "Could not play track again:" << reply.errorText();
@@ -200,7 +200,7 @@ void SpotifyPlayer::getCurrentSong()
 {
     qCDebug(gmAudioSpotify) << "Getting info on current song ...";
 
-    const auto callback = [this](SpotifyCurrentTrack &&track) {
+    const auto callback = [this](const SpotifyCurrentTrack &track) {
         if (track.track.uri != m_currentUri)
         {
             qCDebug(gmAudioSpotify()) << "Found track" << track.track.uri << "is not the expected track"

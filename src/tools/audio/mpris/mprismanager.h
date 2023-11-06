@@ -14,7 +14,7 @@ public:
     explicit MprisManager(QObject *parent = nullptr);
 
     void setPlaybackStatus(AudioPlayer::State status);
-    void setVolume(double volume);
+    void setVolume(double volume) const;
     void setMetaDataReader(MetaDataReader *reader);
 
 signals:

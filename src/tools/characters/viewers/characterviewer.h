@@ -2,6 +2,7 @@
 
 #include "tools/characters/character.h"
 #include <QObject>
+#include <QPointer>
 #include <QtQml/qqmlregistration.h>
 
 class CharacterViewer : public QObject
@@ -46,5 +47,5 @@ protected:
     QStringList m_categories;
     qsizetype m_categoryIndex = 0;
 
-    Character *m_currentCharacter = nullptr;
+    QPointer<Character> m_currentCharacter = nullptr;
 };

@@ -123,7 +123,7 @@ void AudioEditor::createProject(const QString &name)
     madeChanges();
 }
 
-void AudioEditor::createProjectFromTemplate(AudioProject *other)
+void AudioEditor::createProjectFromTemplate(const AudioProject *other)
 {
     if (!other) return;
 
@@ -239,7 +239,7 @@ void AudioEditor::createCategory(const QString &name)
     }
 }
 
-void AudioEditor::createCategoryFromTemplate(AudioCategory *other)
+void AudioEditor::createCategoryFromTemplate(const AudioCategory *other)
 {
     if (!m_currentProject || !other) return;
 
@@ -283,7 +283,7 @@ void AudioEditor::deleteCategory()
     if (!categoryExists()) return;
 
     auto *category = m_currentProject->currentCategory();
-    auto *scenario = category->currentScenario();
+    const auto *scenario = category->currentScenario();
 
     qCDebug(gmAudioEditor) << "Deleting current category:" << category->name() << "...";
 
@@ -310,7 +310,7 @@ void AudioEditor::setCurrentScenario(int index)
 {
     if (!categoryExists()) return;
 
-    auto *category = m_currentProject->currentCategory();
+    const auto *category = m_currentProject->currentCategory();
 
     if (!Utils::isInBounds(category->scenarios(), index))
     {
@@ -359,7 +359,7 @@ void AudioEditor::onCurrentScenarioChanged() const
  */
 void AudioEditor::onProjectSavedChanged()
 {
-    auto *project = qobject_cast<AudioProject *>(sender());
+    const auto *project = qobject_cast<AudioProject *>(sender());
     if (project && !project->isSaved())
     {
         madeChanges();
@@ -402,7 +402,7 @@ void AudioEditor::createScenario(const QString &name, bool isSubscenario) const
     }
 }
 
-void AudioEditor::createScenarioFromTemplate(AudioScenario *other, bool isSubscenario)
+void AudioEditor::createScenarioFromTemplate(const AudioScenario *other, bool isSubscenario)
 {
     if (!categoryExists() || !other) return;
 
@@ -501,12 +501,9 @@ void AudioEditor::deleteSubScenario(AudioScenario *subscenario)
         qCWarning(gmAudioEditor()) << "Error: Could not delete subscenario" << subscenario->name();
     }
 
-    if (m_currentElement.isNull())
+    if (m_currentElement.isNull() && !loadFirstElement(scenario))
     {
-        if (!loadFirstElement(scenario))
-        {
-            emit currentElementChanged();
-        }
+        emit currentElementChanged();
     }
 }
 
@@ -560,7 +557,7 @@ void AudioEditor::loadElement(QObject *element)
 /**
  * @brief Load the first element of a scenario.
  */
-auto AudioEditor::loadFirstElement(AudioScenario *scenario) -> bool
+auto AudioEditor::loadFirstElement(const AudioScenario *scenario) -> bool
 {
     if (!scenario)
     {
@@ -573,11 +570,9 @@ auto AudioEditor::loadFirstElement(AudioScenario *scenario) -> bool
         scenario = m_currentProject->currentScenario();
     }
 
-    auto elements = scenario->elements(true);
-
-    if (!elements.isEmpty())
+    if (const auto elements = scenario->elements(true); !elements.isEmpty())
     {
-        loadElement(elements.first());
+        loadElement(elements.constFirst());
         return true;
     }
 
@@ -595,7 +590,7 @@ void AudioEditor::clearCurrentElement()
     emit currentElementChanged();
 }
 
-void AudioEditor::createElement(const QString &name, AudioElement::Type type, int subscenario)
+void AudioEditor::createElement(const QString &name, AudioElement::Type type, int subscenario) const
 {
     if (!scenarioExists() || name.isEmpty()) return;
 
@@ -607,8 +602,7 @@ void AudioEditor::createElement(const QString &name, AudioElement::Type type, in
     auto path = scenario->path();
 
     // index -1 means no subscenario
-    const auto subscenarios = scenario->scenarios();
-    if (Utils::isInBounds(subscenarios, subscenario))
+    if (const auto subscenarios = scenario->scenarios(); Utils::isInBounds(subscenarios, subscenario))
     {
         scenario = subscenarios[subscenario];
     }
@@ -618,7 +612,7 @@ void AudioEditor::createElement(const QString &name, AudioElement::Type type, in
     onCurrentScenarioChanged();
 }
 
-void AudioEditor::createElementFromTemplate(AudioElement *other, int subscenario)
+void AudioEditor::createElementFromTemplate(const AudioElement *other, int subscenario) const
 {
     if (!scenarioExists() || !other) return;
 
@@ -629,8 +623,7 @@ void AudioEditor::createElementFromTemplate(AudioElement *other, int subscenario
     if (!scenario) return;
 
     // index -1 means no subscenario
-    const auto subscenarios = scenario->scenarios();
-    if (Utils::isInBounds(subscenarios, subscenario))
+    if (const auto subscenarios = scenario->scenarios(); Utils::isInBounds(subscenarios, subscenario))
     {
         scenario = subscenarios[subscenario];
     }
@@ -683,7 +676,6 @@ void AudioEditor::deleteCurrentElement()
         qCWarning(gmAudioEditor()) << "Error: Could not delete element, no scenario selected.";
     }
 
-    // m_currentElement.clear();
     emit currentElementChanged();
 }
 
@@ -711,26 +703,29 @@ void AudioEditor::saveProject()
 {
     qCDebug(gmAudioEditor) << "Saving projects ...";
 
-    if (!a_projects.empty())
+    if (a_projects.empty())
     {
-        foreach (auto *project, a_projects)
-        {
-            if (project == m_currentProject)
-            {
-                emit showInfoBar(tr("Saving ..."));
+        isSaved(true);
+        return;
+    }
 
-                AudioSaveLoad::saveProject(project)
-                    .then([this](bool success) {
-                        if (success) emit showInfoBar(tr("Saved!"));
-                        else
-                            emit showInfoBar(tr("Error: Could not save project!"));
-                    })
-                    .onCanceled([this]() { emit showInfoBar(tr("Error: Could not save project!")); });
-            }
-            else
-            {
-                AudioSaveLoad::saveProject(project);
-            }
+    foreach (auto *project, a_projects)
+    {
+        if (project == m_currentProject)
+        {
+            emit showInfoBar(tr("Saving ..."));
+
+            AudioSaveLoad::saveProject(project)
+                .then([this](bool success) {
+                    if (success) emit showInfoBar(tr("Saved!"));
+                    else
+                        emit showInfoBar(tr("Error: Could not save project!"));
+                })
+                .onCanceled([this]() { emit showInfoBar(tr("Error: Could not save project!")); });
+        }
+        else
+        {
+            AudioSaveLoad::saveProject(project);
         }
     }
 
@@ -782,9 +777,7 @@ auto AudioEditor::addUrl(const QString &url, int mode, const QString &title) -> 
 
     AudioFile *audioFile = nullptr;
 
-    const auto isSpotify = mode == 1;
-
-    if (isSpotify)
+    if (const auto isSpotify = mode == 1; isSpotify)
     {
         audioFile = new AudioFile(SpotifyUtils::makeUri(url), AudioFile::Source::Spotify, title, m_currentElement);
     }
@@ -809,16 +802,11 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
 
     qCDebug(gmAudioEditor) << "Adding YouTube URL to element" << QString(*m_currentElement) << ":" << videoUrl;
 
-    auto *audioFile = new AudioFile(videoUrl, AudioFile::Source::Youtube, u""_s, m_currentElement);
-    if (!addAudioFile(audioFile)) return false;
+    if (auto *audioFile = new AudioFile(videoUrl, AudioFile::Source::Youtube, u""_s, m_currentElement);
+        !addAudioFile(audioFile))
+        return false;
 
     qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
-
-    //    auto *video = ytClient->getVideo(videoUrl);
-    //    connect(video, &YouTube::Videos::Video::ready, audioFile, [audioFile, video]() {
-    //        audioFile->title(video->title());
-    //        video->deleteLater();
-    //    });
 
     return true;
 }
@@ -890,17 +878,17 @@ void AudioEditor::removeMissingFiles()
     auto files = m_currentElement->files();
     QList<int> indices;
 
-    for (int i = files.length() - 1; i > 0; i--)
+    for (auto i = files.length() - 1; i > 0; i--)
     {
         const auto *file = files.at(i);
 
         if (file && file->missing())
         {
-            indices.prepend(i);
+            indices.prepend(static_cast<int>(i));
         }
     }
 
-    foreach (const int index, indices)
+    foreach (const auto index, indices)
     {
         removeFile(index, false);
     }
@@ -930,7 +918,7 @@ void AudioEditor::moveFile(int index, int positions)
  * @param index Index of the file to change
  * @param folder New folder where file can be found
  */
-void AudioEditor::replaceFileFolder(int index, const QString &folder)
+void AudioEditor::replaceFileFolder(int index, const QString &folder) const
 {
     if (!m_currentElement || !scenarioExists()) return;
 

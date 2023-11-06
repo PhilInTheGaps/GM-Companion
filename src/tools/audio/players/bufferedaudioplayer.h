@@ -25,7 +25,7 @@ class BufferedAudioPlayer : public AudioPlayer
     QML_UNCREATABLE("")
 
     Q_PROPERTY(QQmlListProperty<AudioFile> playlist READ playlistQml NOTIFY playlistChanged FINAL)
-    AUTO_PROPERTY_VAL2(int, playlistIndex, 0);
+    AUTO_PROPERTY_VAL2(qsizetype, playlistIndex, 0);
 
 public:
     explicit BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager &networkManager, QObject *parent);
@@ -33,7 +33,7 @@ public:
     [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
     [[nodiscard]] auto element() const -> QPointer<AudioElement>;
 
-    void setIndex(int index);
+    void setIndex(qsizetype index);
 
 public slots:
     virtual void play(AudioElement *element);
@@ -53,7 +53,7 @@ protected:
     void play(const QByteArray &data);
     auto loadPlaylist() -> QFuture<void>;
     virtual void handleUnsupportedMediaSource(const AudioFile &file);
-    void onFileReceived(Files::FileDataResult &&result);
+    void onFileReceived(const Files::FileDataResult &result);
 
     [[nodiscard]] auto fileSource() const -> AudioFile::Source;
     void setPlaylist(std::unique_ptr<ResolvingAudioPlaylist> playlist);

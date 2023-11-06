@@ -98,7 +98,7 @@ auto ShopProject::deleteCategory(ShopCategory *category) -> bool
     return true;
 }
 
-void ShopProject::onCurrentCategoryChanged(ShopCategory *category)
+void ShopProject::onCurrentCategoryChanged(const ShopCategory *category)
 {
     if (m_categoryConnection)
     {
@@ -124,7 +124,7 @@ void ShopProject::connectSignals() const
     connect(this, &ShopProject::categoriesChanged, this, &ShopProject::wasEdited);
 }
 
-void ShopProject::connectCategories()
+void ShopProject::connectCategories() const
 {
     foreach (auto *category, categories())
     {
@@ -132,7 +132,7 @@ void ShopProject::connectCategories()
     }
 }
 
-void ShopProject::connectCategory(ShopCategory *category) const
+void ShopProject::connectCategory(const ShopCategory *category) const
 {
     connect(category, &ShopCategory::wasEdited, this, &ShopProject::wasEdited);
 }

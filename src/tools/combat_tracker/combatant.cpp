@@ -38,7 +38,7 @@ auto CombatantListModel::data(const QModelIndex &index, int /*role*/) const -> Q
 
 auto CombatantListModel::append(QObject *item) -> void
 {
-    beginInsertRows(QModelIndex(), m_items.length(), m_items.length());
+    beginInsertRows(QModelIndex(), static_cast<int>(m_items.length()), static_cast<int>(m_items.length()));
     m_items.push_back(item);
     endInsertRows();
 }
@@ -54,7 +54,7 @@ auto CombatantListModel::remove(int index) -> void
 
 auto CombatantListModel::remove(QObject *item) -> void
 {
-    const auto index = m_items.indexOf(item);
+    const auto index = static_cast<int>(m_items.indexOf(item));
     remove(index);
 }
 

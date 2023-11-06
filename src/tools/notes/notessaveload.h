@@ -10,7 +10,7 @@ class NotesSaveLoad : public QObject
 public:
     using QObject::QObject;
 
-    static void exportPage(NoteBookPage &page, const QTextDocument &document);
+    static void exportPage(const NoteBookPage &page, const QTextDocument &document);
 
 public slots:
     void loadBooks();
@@ -29,17 +29,17 @@ private:
     static auto getPdfPath(const NoteBookPage &page) -> QString;
 
 private slots:
-    void loadChapters();
+    void loadChapters() const;
     void loadPages();
-    void loadPageContent();
-    void savePage();
+    void loadPageContent() const;
+    void savePage() const;
 
-    void createChapter(const QString &name);
+    void createChapter(const QString &name) const;
     void createPage(const QString &name);
 
-    void renameChapter(const QString &oldPath);
-    void renamePage(const QString &oldPath);
+    void renameChapter(const QString &oldPath) const;
+    void renamePage(const QString &oldPath) const;
 
-    void deleteChapter();
-    void deletePage();
+    void deleteChapter() const;
+    void deletePage() const;
 };

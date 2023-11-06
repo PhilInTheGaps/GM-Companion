@@ -11,7 +11,7 @@ Q_LOGGING_CATEGORY(gmAudioScenario, "gm.audio.project.scenario")
 
 AudioScenario::AudioScenario(const QString &name, const QString &path, const QList<AudioElement *> &elements,
                              const QList<AudioScenario *> &scenarios, bool isSubscenario, QObject *parent)
-    : TreeItem(name, path.split(u"/"_s).length() - 1, true, parent), a_scenarios(scenarios),
+    : TreeItem(name, static_cast<int>(path.split(u"/"_s).length()) - 1, true, parent), a_scenarios(scenarios),
       a_isSubscenario(isSubscenario), m_path(path + u"/"_s + name), m_elements(elements)
 {
     this->name(name);
@@ -46,39 +46,39 @@ AudioScenario::AudioScenario(const AudioScenario &other)
 }
 
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, bool isSubscenario, QObject *parent)
-    : TreeItem(u""_s, path.split(u"/"_s).length() - 1, true, parent), a_isSubscenario(isSubscenario)
+    : TreeItem(u""_s, static_cast<int>(path.split(u"/"_s).length()) - 1, true, parent), a_isSubscenario(isSubscenario)
 {
     name(object["name"_L1].toString());
     m_path = path + u"/"_s + name();
 
     connect(this, &AudioScenario::scenariosChanged, this, &AudioScenario::onScenariosChanged);
 
-    foreach (const auto &element, object["music_elements"_L1].toArray())
+    foreach (const auto &elementJson, object["music_elements"_L1].toArray())
     {
-        auto *object = new AudioElement(element.toObject(), AudioElement::Type::Music, m_path, this);
-        prepareElement(object);
-        m_elements.append(object);
+        auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Music, m_path, this);
+        prepareElement(element);
+        m_elements.append(element);
     }
 
-    foreach (const auto &element, object["sound_elements"_L1].toArray())
+    foreach (const auto &elementJson, object["sound_elements"_L1].toArray())
     {
-        auto *object = new AudioElement(element.toObject(), AudioElement::Type::Sound, m_path, this);
-        prepareElement(object);
-        m_elements.append(object);
+        auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Sound, m_path, this);
+        prepareElement(element);
+        m_elements.append(element);
     }
 
-    foreach (const auto &element, object["radio_elements"_L1].toArray())
+    foreach (const auto &elementJson, object["radio_elements"_L1].toArray())
     {
-        auto *object = new AudioElement(element.toObject(), AudioElement::Type::Radio, m_path, this);
-        prepareElement(object);
-        m_elements.append(object);
+        auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Radio, m_path, this);
+        prepareElement(element);
+        m_elements.append(element);
     }
 
-    foreach (const auto &scenario, object["scenarios"_L1].toArray())
+    foreach (const auto &scenarioJson, object["scenarios"_L1].toArray())
     {
-        auto *object = new AudioScenario(scenario.toObject(), m_path, this);
-        prepareScenario(object);
-        a_scenarios.append(object);
+        auto *scenario = new AudioScenario(scenarioJson.toObject(), m_path, this);
+        prepareScenario(scenario);
+        a_scenarios.append(scenario);
     }
 
     updateModel();
@@ -227,10 +227,9 @@ auto AudioScenario::moveElement(AudioElement *element, int steps) -> bool
 {
     if (!element) return false;
 
-    int index = m_elements.indexOf(element);
-    int indexNew = index + steps;
+    auto index = m_elements.indexOf(element);
 
-    if (Utils::isInBounds(m_elements, indexNew))
+    if (auto indexNew = index + steps; Utils::isInBounds(m_elements, indexNew))
     {
         qCDebug(gmAudioScenario()) << index << indexNew;
         m_elements.move(index, indexNew);
@@ -365,8 +364,8 @@ auto AudioScenario::moveScenario(AudioScenario *scenario, int steps) -> bool
         return false;
     }
 
-    const int from = a_scenarios.indexOf(scenario);
-    const int to = from + steps;
+    const auto from = a_scenarios.indexOf(scenario);
+    const auto to = from + steps;
 
     if (Utils::isInBounds(a_scenarios, to))
     {
@@ -399,7 +398,7 @@ auto AudioScenario::prepareElement(AudioElement *element) -> void
     connect(element, &AudioElement::filesChanged, this, &AudioScenario::wasEdited);
 }
 
-void AudioScenario::releaseElement(AudioElement *element) const
+void AudioScenario::releaseElement(const AudioElement *element) const
 {
     if (!element || element->parent() != this) return;
 

@@ -17,8 +17,8 @@ class MapMarker : public QObject
     AUTO_PROPERTY(QString, description)
     AUTO_PROPERTY(QString, color)
     AUTO_PROPERTY(QString, icon)
-    Q_PROPERTY(int x READ x NOTIFY xChanged)
-    Q_PROPERTY(int y READ y NOTIFY yChanged)
+    Q_PROPERTY(qreal x READ x NOTIFY xChanged)
+    Q_PROPERTY(qreal y READ y NOTIFY yChanged)
 
 public:
     explicit MapMarker(const QString &name, const QString &description, qreal x, qreal y, const QString &icon,
@@ -50,7 +50,8 @@ signals:
     void yChanged();
 
 private:
-    qreal m_x = 0, m_y = 0;
+    qreal m_x = 0;
+    qreal m_y = 0;
 };
 
 // Model for QML
@@ -64,11 +65,11 @@ public:
 
     [[nodiscard]] auto rowCount(const QModelIndex & /*parent*/) const -> int override
     {
-        return m_items.size();
+        return size();
     }
     [[nodiscard]] auto size() const -> int
     {
-        return m_items.size();
+        return static_cast<int>(m_items.size());
     }
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
@@ -92,7 +93,7 @@ public:
 
 public slots:
     void insert(QObject *item);
-    void remove(QObject *item);
+    void remove(const QObject *item);
 
 protected:
     [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;

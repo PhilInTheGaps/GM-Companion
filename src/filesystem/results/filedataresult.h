@@ -10,13 +10,7 @@ namespace Files
 class FileDataResult : public FileResult
 {
 public:
-    explicit FileDataResult(const QString &errorMessage) : FileResult(errorMessage)
-    {
-    }
-
-    explicit FileDataResult(QString &&errorMessage) : FileResult(std::move(errorMessage))
-    {
-    }
+    using FileResult::FileResult;
 
     explicit FileDataResult(const QByteArray &data) : FileResult(true, QByteArray()), m_data(data)
     {
@@ -26,7 +20,7 @@ public:
     {
     }
 
-    static auto fromRestReply(Services::RestReply &&reply) -> FileDataResult;
+    static auto fromRestReply(const Services::RestReply &reply) -> FileDataResult;
 
     [[nodiscard]] auto data() const -> const QByteArray &
     {

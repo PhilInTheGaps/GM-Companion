@@ -12,11 +12,11 @@ ShopTool::ShopTool(QObject *parent) : BaseShopTool(parent), m_shopEditor(this)
 
 auto ShopTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> ShopTool *
 {
-    Q_UNUSED(jsEngine);
+    Q_UNUSED(jsEngine)
     return new ShopTool(qmlEngine);
 }
 
-void ShopTool::onCurrentProjectChanged(ShopProject *project)
+void ShopTool::onCurrentProjectChanged(const ShopProject *project)
 {
     if (m_projectConnection)
     {
@@ -32,7 +32,7 @@ void ShopTool::onCurrentProjectChanged(ShopProject *project)
     onCurrentShopChanged(shop);
 }
 
-void ShopTool::onCurrentShopChanged(ItemShop *shop)
+void ShopTool::onCurrentShopChanged(const ItemShop *shop)
 {
     if (!shop) return;
 

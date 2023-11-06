@@ -18,7 +18,7 @@ constexpr auto MAX_AUTH_POLLS = 20;
 
 Q_LOGGING_CATEGORY(gmNextCloud, "gm.service.nextcloud")
 
-NextCloud::NextCloud(QQmlEngine &engine, QObject *parent) : NextCloud(*engine.networkAccessManager(), parent)
+NextCloud::NextCloud(const QQmlEngine &engine, QObject *parent) : NextCloud(*engine.networkAccessManager(), parent)
 {
 }
 
@@ -86,15 +86,15 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
 
     if (!headers.isEmpty())
     {
-        for (const auto &pair : headers)
+        for (const auto &[key, value] : headers)
         {
-            if (pair.first == "Destination")
+            if (key == "Destination")
             {
-                request.setRawHeader(pair.first, getPathUrl(pair.second).toUtf8());
+                request.setRawHeader(key, getPathUrl(value).toUtf8());
             }
             else
             {
-                request.setRawHeader(pair.first, pair.second);
+                request.setRawHeader(key, value);
             }
         }
     }

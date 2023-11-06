@@ -38,7 +38,7 @@ void MapMarkerModel::insert(QObject *item)
     endInsertRows();
 }
 
-void MapMarkerModel::remove(QObject *item)
+void MapMarkerModel::remove(const QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {
@@ -72,9 +72,9 @@ void MapMarkerModel::setElements(const QList<MapMarker *> &elements)
 {
     clear();
 
-    for (int i = elements.size() - 1; i > -1; i--)
+    for (auto i = elements.size() - 1; i > -1; i--)
     {
-        insert(elements[i]);
+        insert(elements.at(i));
     }
 }
 

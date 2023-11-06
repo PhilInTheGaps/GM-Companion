@@ -18,7 +18,7 @@ private:
     auto unwrapSpotify(qsizetype index, const AudioFile &file) -> QFuture<void>;
 
     void loadTitles();
-    void loadSpotifyTitles(const QList<AudioFile *> &tracks);
+    void loadSpotifyTitles(const QList<AudioFile *> &tracks) const;
 
     static auto isPlaylist(const QString &file) -> bool;
 

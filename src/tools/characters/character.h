@@ -45,7 +45,7 @@ public:
 
     void loadFiles();
     void loadFileList();
-    void loadFileData(int index);
+    void loadFileData(qsizetype index);
 
 signals:
     void fileListLoaded(const QList<CharacterFile *> &files);

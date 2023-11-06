@@ -13,7 +13,7 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
-CombatTracker::CombatTracker(QQmlEngine *qmlEngine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
+CombatTracker::CombatTracker(const QQmlEngine *qmlEngine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
 {
     if (qmlEngine)
     {
@@ -26,7 +26,7 @@ CombatTracker::CombatTracker(QQmlEngine *qmlEngine, QObject *parent) : AbstractT
 
 auto CombatTracker::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *
 {
-    Q_UNUSED(jsEngine);
+    Q_UNUSED(jsEngine)
     return new CombatTracker(qmlEngine, qmlEngine);
 }
 
@@ -134,7 +134,7 @@ void CombatTracker::sortByIni(bool keepDelay)
 
     if (combatant)
     {
-        m_state.currentIndex(combatants().indexOf(combatant));
+        m_state.currentIndex(static_cast<int>(combatants().indexOf(combatant)));
     }
 }
 
@@ -276,9 +276,9 @@ auto CombatTracker::getCombatant(int index) -> Combatant *
     return nullptr;
 }
 
-void CombatTracker::resetDelayForAll()
+void CombatTracker::resetDelayForAll() const
 {
-    for (auto *combatant : combatants())
+    foreach (auto *combatant, combatants())
     {
         if (Q_LIKELY(combatant)) combatant->delay(false);
     }
@@ -290,9 +290,7 @@ void CombatTracker::loadData()
 {
     if (isDataLoaded()) return;
 
-    auto tempFile = getCacheFile();
-
-    if (tempFile.exists() && tempFile.open(QIODevice::ReadOnly))
+    if (auto tempFile = getCacheFile(); tempFile.exists() && tempFile.open(QIODevice::ReadOnly))
     {
         const auto data = tempFile.readAll();
         tempFile.close();

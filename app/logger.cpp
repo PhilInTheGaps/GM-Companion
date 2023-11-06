@@ -9,7 +9,7 @@
 
 Q_LOGGING_CATEGORY(gmLogger, "gm.logger")
 
-static constexpr const char *RELATIVE_LOGFILE_PATH = ".gm-companion/log.txt";
+static constexpr auto RELATIVE_LOGFILE_PATH = ".gm-companion/log.txt";
 
 Logger::Logger()
 {
@@ -28,14 +28,6 @@ Logger::Logger()
     m_logStream.setDevice(&m_logFile);
 
     qInstallMessageHandler(messageHandler);
-}
-
-Logger::~Logger()
-{
-    if (m_logFile.isOpen())
-    {
-        m_logFile.close();
-    }
 }
 
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)

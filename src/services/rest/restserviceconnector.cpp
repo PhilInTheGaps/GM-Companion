@@ -101,10 +101,10 @@ void RESTServiceConnector::dequeueRequests()
     QString reason;
     while (canSendRequest(reason) && !m_requestQueue.empty())
     {
-        auto pair = std::move(m_requestQueue.front());
+        auto [reply, request] = std::move(m_requestQueue.front());
         m_requestQueue.pop();
 
-        sendRequest(std::move(pair.second), std::move(pair.first));
+        sendRequest(std::move(request), std::move(reply));
     }
 }
 
@@ -141,8 +141,9 @@ auto RESTServiceConnector::canSendRequest(QString &reason) -> bool
 auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>
 {
     auto future = reply.future();
-    request.id(m_nextQueueId++);
-    m_requestQueue.push(std::make_pair(std::move(reply), std::move(request)));
+    request.id(m_nextQueueId);
+    m_nextQueueId++;
+    m_requestQueue.emplace(std::make_pair(std::move(reply), std::move(request)));
 
     // try to dispatch request
     dequeueRequests();
@@ -153,11 +154,11 @@ auto RESTServiceConnector::markRequestActive(RestRequest &&request, QPromise<Res
 {
     auto id = request.id();
     auto future = reply.future();
-    m_activeRequests.emplace(id, std::make_pair(std::move(reply), std::move(request)));
+    m_activeRequests.try_emplace(id, std::make_pair(std::move(reply), std::move(request)));
     return future;
 }
 
-auto RESTServiceConnector::maxConcurrentRequests() const -> int
+auto RESTServiceConnector::maxConcurrentRequests() const -> size_t
 {
     return m_maxConcurrentRequests;
 }
@@ -177,12 +178,12 @@ auto RESTServiceConnector::isTokenExpired() const -> bool
     return !m_tokenExpireTime.isValid() || QDateTime::currentDateTime() > m_tokenExpireTime;
 }
 
-auto RESTServiceConnector::activeRequestCount() const -> int
+auto RESTServiceConnector::activeRequestCount() const -> size_t
 {
     return m_activeRequests.size();
 }
 
-auto RESTServiceConnector::wasRateLimitReached(QNetworkReply::NetworkError error, const QByteArray &data) -> bool
+auto RESTServiceConnector::wasRateLimitReached(QNetworkReply::NetworkError error, const QByteArray &data) const -> bool
 {
     if (error == QNetworkReply::UnknownContentError)
     {
@@ -193,11 +194,11 @@ auto RESTServiceConnector::wasRateLimitReached(QNetworkReply::NetworkError error
     // Sometimes services (like google drive) hide rate limit errors in 403s
     if (error == QNetworkReply::ContentAccessDenied)
     {
-        const auto error = QJsonDocument::fromJson(data).object()["error"_L1].toObject();
+        const auto errorObject = QJsonDocument::fromJson(data).object()["error"_L1].toObject();
 
-        if (error.contains("errors"_L1))
+        if (errorObject.contains("errors"_L1))
         {
-            foreach (const auto &entry, error["errors"_L1].toArray())
+            foreach (const auto &entry, errorObject["errors"_L1].toArray())
             {
                 return entry["reason"_L1].toString() == "userRateLimitExceeded"_L1;
             }

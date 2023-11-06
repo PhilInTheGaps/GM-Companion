@@ -17,6 +17,7 @@ public:
                            AudioProject *parent);
     explicit AudioCategory(const AudioCategory &other);
     explicit AudioCategory(const QJsonObject &object, const QString &path, AudioProject *parent);
+    ~AudioCategory() override = default;
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
     [[nodiscard]] auto isCheckable() const -> bool override
@@ -39,9 +40,9 @@ public:
     auto setCurrentScenario(AudioScenario *scenario) -> bool;
 
     Q_PROPERTY(int scenarioIndex READ scenarioIndex NOTIFY currentScenarioChanged)
-    [[nodiscard]] auto scenarioIndex() const -> int
+    [[nodiscard]] auto scenarioIndex() const -> int // needs to be int for qml
     {
-        return a_scenarios.indexOf(m_currentScenario);
+        return static_cast<int>(a_scenarios.indexOf(m_currentScenario));
     }
     [[nodiscard]] auto containsScenario(const QString &name) const -> bool;
 

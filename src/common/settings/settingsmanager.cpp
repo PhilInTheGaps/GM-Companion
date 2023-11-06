@@ -119,12 +119,14 @@ void SettingsManager::setServerUrl(const QString &url, const QString &service)
 
 auto SettingsManager::getPassword(const QString &username, const QString &service) -> QString
 {
+    using namespace QKeychain;
+
     // job is deleted automatically when finished
-    auto *job = new QKeychain::ReadPasswordJob(u"gm-companion.%1"_s.arg(service));
+    auto *job = new ReadPasswordJob(u"gm-companion.%1"_s.arg(service));
     job->setKey(username);
 
     QEventLoop loop;
-    job->connect(job, &QKeychain::ReadPasswordJob::finished, &loop, &QEventLoop::quit);
+    connect(job, &ReadPasswordJob::finished, &loop, &QEventLoop::quit);
     job->start();
     loop.exec();
 
@@ -140,13 +142,15 @@ auto SettingsManager::getPassword(const QString &username, const QString &servic
 
 auto SettingsManager::setPassword(const QString &username, const QString &password, const QString &service) -> bool
 {
+    using namespace QKeychain;
+
     // job is deleted automatically when finished
-    auto *job = new QKeychain::WritePasswordJob(u"gm-companion.%1"_s.arg(service));
+    auto *job = new WritePasswordJob(u"gm-companion.%1"_s.arg(service));
     job->setKey(username);
     job->setTextData(password);
 
     QEventLoop loop;
-    job->connect(job, &QKeychain::WritePasswordJob::finished, &loop, &QEventLoop::quit);
+    connect(job, &WritePasswordJob::finished, &loop, &QEventLoop::quit);
     job->start();
     loop.exec();
 
@@ -173,11 +177,9 @@ auto SettingsManager::getDefaultPath(const QString &setting, const QString &grou
 /// Default value is PATHS_GROUP.
 auto SettingsManager::getActivePathGroup() -> QString
 {
-    auto cloudMode = instance()->get<QString>(u"cloudMode"_s, u"local"_s);
-
-    if (cloudMode == "GoogleDrive"_L1) return cloudMode;
-
-    if (cloudMode == "NextCloud"_L1) return cloudMode;
+    if (auto cloudMode = instance()->get<QString>(u"cloudMode"_s, u"local"_s);
+        cloudMode == "GoogleDrive"_L1 || cloudMode == "NextCloud"_L1)
+        return cloudMode;
 
     return PATHS_GROUP;
 }
@@ -203,9 +205,7 @@ auto SettingsManager::getIsAddonEnabled(const QString &addon) -> bool
 /// Updates the settings if something changed from a previous version
 void SettingsManager::updateSettings()
 {
-    const auto cloudMode = get(u"cloudMode"_s, u"0"_s);
-
-    if (cloudMode == "0"_L1)
+    if (const auto cloudMode = get(u"cloudMode"_s, u"0"_s); cloudMode == "0"_L1)
     {
         set(u"cloudMode"_s, u"local"_s);
     }

@@ -23,11 +23,11 @@ public:
     [[nodiscard]] auto toJson() const -> QJsonObject;
 
     void addShop(ItemShop *shop);
-    auto deleteShop(ItemShop *shop) -> int;
+    auto deleteShop(ItemShop *shop) -> qsizetype;
     auto moveShop(ItemShop *shop, int positions) -> bool;
 
 private:
-    void connectShops();
-    void connectShop(ItemShop *shop);
-    void connectSignals();
+    void connectShops() const;
+    void connectShop(const ItemShop *shop) const;
+    void connectSignals() const;
 };

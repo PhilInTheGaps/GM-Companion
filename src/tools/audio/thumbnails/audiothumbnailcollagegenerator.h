@@ -16,8 +16,8 @@ private:
     static auto generateCollageImage(QPointer<AudioElement> element) -> QPixmap;
     static auto getUniquePixmaps(QPointer<AudioThumbnail> thumbnail) -> QList<QPixmap>;
 
-    static auto findPixmapsForCollageAsync(QPointer<AudioElement> element, int index, int fileCount, int failCount)
-        -> QFuture<void>;
+    static auto findPixmapsForCollageAsync(QPointer<AudioElement> element, qsizetype index, int fileCount,
+                                           int failCount) -> QFuture<void>;
 
     static auto getTargetRect(QSize imageSize, int imageCount, int index) -> QRectF;
     static auto getSourceRect(QRect imageRect, int imageCount, int index) -> QRectF;

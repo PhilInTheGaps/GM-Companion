@@ -23,10 +23,10 @@ public:
 
 public slots:
     void play() override
-    {
+    { /* Not Implemented */
     }
     void pause() override
-    {
+    { /* Not Implemented */
     }
     void stop() override
     {
@@ -34,10 +34,10 @@ public slots:
     }
     void setVolume(int linear, int logarithmic) override;
     void next() override
-    {
+    { /* Not Implemented */
     }
     void again() override
-    {
+    { /* Not Implemented */
     }
 
 private:

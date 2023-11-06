@@ -23,7 +23,7 @@ constexpr int CRITICAL_TRACK_QUEUE_LENGTH = 50;
 constexpr int DEFAULT_TIMEOUT_MS = 200;
 constexpr int RANDOM_TIMEOUT_MS = 100;
 
-auto SpotifyImageLoader::loadImageAsync(AudioFile *audioFile) -> QFuture<QPixmap>
+auto SpotifyImageLoader::loadImageAsync(const AudioFile *audioFile) -> QFuture<QPixmap>
 {
     return loadImageAsync(audioFile->url());
 }
@@ -34,8 +34,7 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
     const auto id = SpotifyUtils::getIdFromUri(uri);
 
     // Try to get image from cache
-    QPixmap image;
-    if (AudioThumbnailCache::tryGet(id, &image))
+    if (QPixmap image; AudioThumbnailCache::tryGet(id, &image))
     {
         return QtFuture::makeReadyFuture(image);
     }
@@ -81,11 +80,11 @@ void SpotifyImageLoader::enqueueRequest(const QString &id, SpotifyUtils::Spotify
 
 auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QPixmap>
 {
-    const auto callback = [id](const SpotifyPlaylist &playlist) {
+    const auto playlistCallback = [id](const SpotifyPlaylist &playlist) {
         const auto url = playlist.images.front().url;
         auto future = Services::Spotify::instance()->get(url, false);
 
-        const auto callback = [id, url](const RestReply &reply) {
+        const auto imageCallback = [id, url](const RestReply &reply) {
             QPixmap image;
 
             if (image.loadFromData(reply.data()))
@@ -97,11 +96,11 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
             return image;
         };
 
-        return future.then(callback);
+        return future.then(imageCallback);
     };
 
     auto future = Spotify::instance()->playlists.getPlaylist(id);
-    return future.then(callback).unwrap();
+    return future.then(playlistCallback).unwrap();
 }
 
 void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
@@ -152,19 +151,18 @@ void SpotifyImageLoader::receivedRequest(RestReply &&reply, SpotifyUtils::Spotif
 
         const auto url = images.first()["url"_L1].toString();
 
-        QPixmap image;
-        if (AudioThumbnailCache::tryGet(url, &image))
+        if (QPixmap image; AudioThumbnailCache::tryGet(url, &image))
         {
             fulfillPromises(id, image);
             continue;
         }
 
         const auto request = QNetworkRequest(url);
-        auto future = Spotify::instance()->get(request);
+        auto future = Spotify::instance()->get(request, false);
 
-        const auto callback = [id, url](const RestReply &reply) {
+        const auto callback = [id, url](const RestReply &imageReply) {
             QPixmap image;
-            if (image.loadFromData(reply.data()))
+            if (image.loadFromData(imageReply.data()))
             {
                 AudioThumbnailCache::instance()->insertImage(url, image);
                 AudioThumbnailCache::instance()->insertImage(id, image);
@@ -207,9 +205,7 @@ auto SpotifyImageLoader::getBatchIds(SpotifyUtils::SpotifyType type) -> QStringL
 
 auto SpotifyImageLoader::shouldTimerBeStopped(SpotifyUtils::SpotifyType type) -> bool
 {
-    const auto *queue = getQueue(type);
-
-    if (queue)
+    if (const auto *queue = getQueue(type); queue)
     {
         return queue->length() >= getCriticalQueueLength(type);
     }

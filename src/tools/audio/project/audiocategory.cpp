@@ -39,11 +39,11 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, Aud
     const auto scenarios = object["scenarios"_L1].toArray();
     a_scenarios.reserve(scenarios.size());
 
-    foreach (const auto &scenario, scenarios)
+    foreach (const auto &scenarioJson, scenarios)
     {
-        auto *object = new AudioScenario(scenario.toObject(), m_path, this);
-        prepareScenario(object);
-        a_scenarios.append(object);
+        auto *scenario = new AudioScenario(scenarioJson.toObject(), m_path, this);
+        prepareScenario(scenario);
+        a_scenarios.append(scenario);
     }
 
     if (!a_scenarios.isEmpty()) setCurrentScenario(a_scenarios.first());

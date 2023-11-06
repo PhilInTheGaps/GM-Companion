@@ -41,7 +41,7 @@ public slots:
 
 private slots:
     void onProjectsChanged();
-    void onCurrentProjectChanged(ConverterProject *project);
+    void onCurrentProjectChanged(const ConverterProject *project);
 
 private:
     static auto getLocalProjectPath() -> QString;

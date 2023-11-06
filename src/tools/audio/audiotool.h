@@ -50,7 +50,7 @@ public:
     // Project
     void updateProjectList();
     Q_INVOKABLE void setCurrentProject(int index);
-    Q_INVOKABLE int getCurrentProjectIndex();
+    Q_INVOKABLE qsizetype getCurrentProjectIndex() const;
 
     [[nodiscard]] auto soundController() -> SoundPlayerController *
     {
@@ -62,13 +62,13 @@ public:
     {
         return m_musicVolume;
     }
-    Q_INVOKABLE void setMusicVolume(qreal volume);
+    Q_INVOKABLE void setMusicVolume(float volume);
 
     [[nodiscard]] auto soundVolume() const -> qreal
     {
         return m_soundVolume;
     }
-    Q_INVOKABLE void setSoundVolume(qreal volume);
+    Q_INVOKABLE void setSoundVolume(float volume);
 
     // Playback control
     Q_INVOKABLE void play(AudioElement *element);
@@ -129,13 +129,13 @@ private:
     AudioElement::Type m_musicElementType = AudioElement::Type::Music;
 
     // Volume
-    static constexpr qreal DEFAULT_MUSIC_VOLUME = 0.25;
-    static constexpr qreal DEFAULT_SOUND_VOLUME = 0.25;
+    static constexpr float DEFAULT_MUSIC_VOLUME = 0.25;
+    static constexpr float DEFAULT_SOUND_VOLUME = 0.25;
     static constexpr int VOLUME_FACTOR = 100;
 
-    qreal m_musicVolume = DEFAULT_MUSIC_VOLUME;
-    qreal m_soundVolume = DEFAULT_SOUND_VOLUME;
+    float m_musicVolume = DEFAULT_MUSIC_VOLUME;
+    float m_soundVolume = DEFAULT_SOUND_VOLUME;
 
-    static auto makeLinearVolume(qreal linearVolume) -> int;
-    static auto makeLogarithmicVolume(qreal linearVolume) -> int;
+    static auto makeLinearVolume(float linearVolume) -> int;
+    static auto makeLogarithmicVolume(float linearVolume) -> int;
 };

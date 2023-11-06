@@ -143,8 +143,7 @@ void MapTool::setMapIndex(int index)
 
 auto MapTool::currentMarker() const -> MapMarker *
 {
-    const auto &elements = m_mapMarkerModel.elements();
-    if (Utils::isInBounds(elements, markerIndex()))
+    if (const auto &elements = m_mapMarkerModel.elements(); Utils::isInBounds(elements, markerIndex()))
     {
         return m_mapMarkerModel.elements().at(markerIndex());
     }
@@ -179,7 +178,7 @@ void MapTool::findCategories()
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
     const auto dir = SettingsManager::getPath(u"maps"_s);
-    Files::File::listAsync(dir, false, true).then([this](Files::FileListResult &&result) {
+    Files::File::listAsync(dir, false, true).then([this](const Files::FileListResult &result) {
         receivedCategories(result.folders());
     });
 }

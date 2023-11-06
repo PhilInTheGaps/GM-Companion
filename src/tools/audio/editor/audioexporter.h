@@ -7,8 +7,6 @@
 #include <QThread>
 #include <QtQml/qqmlregistration.h>
 
-using namespace Qt::Literals::StringLiterals;
-
 class Worker : public QObject
 {
     Q_OBJECT
@@ -30,10 +28,10 @@ private:
     QQueue<QString> m_soundFiles;
     QQueue<QString> m_radioFiles;
 
-    int m_fileCount = 0;
-    int m_exportCount = 0;
+    qsizetype m_fileCount = 0;
+    qsizetype m_exportCount = 0;
 
-    void copyElements(AudioScenario *scenario);
+    void copyElements(const AudioScenario *scenario);
     void collectFilesToExport();
 
     auto copyNext() -> bool;
@@ -90,7 +88,7 @@ private:
     QPointer<AudioProject> m_model = nullptr;
 
     float m_progress = 0;
-    QString m_path = u""_s;
+    QString m_path;
 
 public slots:
     void updateProgress(float progress);

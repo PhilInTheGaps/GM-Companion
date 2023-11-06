@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QDir>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
 AbstractTest::AbstractTest() : StaticAbstractTest()

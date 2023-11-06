@@ -16,7 +16,7 @@ public:
     explicit CustomObjectListModel(bool isOwning, QObject *parent = nullptr);
 
     [[nodiscard]] auto rowCount(const QModelIndex &parent = QModelIndex()) const -> int override;
-    [[nodiscard]] virtual auto data(const QModelIndex &index, int role) const -> QVariant override = 0;
+    [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override = 0;
     [[nodiscard]] auto headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
         -> QVariant override;
 

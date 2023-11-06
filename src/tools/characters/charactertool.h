@@ -36,9 +36,9 @@ public:
     }
 
     Q_PROPERTY(int categoryIndex READ categoryIndex NOTIFY categoryChanged)
-    [[nodiscard]] auto categoryIndex() const -> int
+    [[nodiscard]] auto categoryIndex() const -> int // needs to be int for qml
     {
-        return m_currentViewer ? m_currentViewer->categoryIndex() : 0;
+        return m_currentViewer ? static_cast<int>(m_currentViewer->categoryIndex()) : 0;
     }
 
     Q_PROPERTY(int pageIndex READ pageIndex NOTIFY pageIndexChanged)
@@ -54,9 +54,9 @@ public:
     {
         return m_active;
     }
-    Q_INVOKABLE void toggleCharacterActive(int index);
+    Q_INVOKABLE void toggleCharacterActive(qsizetype index);
 
-    Q_INVOKABLE void setCurrentCharacter(int index);
+    Q_INVOKABLE void setCurrentCharacter(qsizetype index);
     Q_INVOKABLE void displayActiveCharacters(bool active);
 
 public slots:

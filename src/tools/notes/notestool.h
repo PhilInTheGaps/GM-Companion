@@ -74,7 +74,7 @@ private:
 
 private slots:
     void onNoteBooksLoaded(TreeItem *root);
-    void onPagesLoaded(const QList<NoteBookPage *> &pages);
+    void onPagesLoaded(const QList<NoteBookPage *> &pages) const;
     void onPageClicked();
     void onPageContentLoaded();
     void onPageHtmlLoaded();

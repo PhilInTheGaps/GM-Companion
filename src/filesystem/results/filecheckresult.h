@@ -23,7 +23,7 @@ public:
     {
     }
 
-    static auto fromRestReply(Services::RestReply &&reply, const QString &path) -> FileCheckResult;
+    static auto fromRestReply(const Services::RestReply &reply, const QString &path) -> FileCheckResult;
 
     [[nodiscard]] auto path() const -> const QString &
     {

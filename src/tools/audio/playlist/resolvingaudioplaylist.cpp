@@ -34,7 +34,7 @@ auto ResolvingAudioPlaylist::resolve() -> QFuture<void>
 auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
 {
     QList<QFuture<void>> futures;
-    AudioFile *audioFile = nullptr;
+    const AudioFile *audioFile = nullptr;
 
     for (qsizetype i = 0; i < length(); i++)
     {
@@ -58,7 +58,9 @@ auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
         }
     }
 
-    return QtFuture::whenAll(futures.begin(), futures.end()).then([](QList<QFuture<void>> &&) {});
+    return QtFuture::whenAll(futures.begin(), futures.end()).then([](const QList<QFuture<void>> &) {
+        // empty continuation to return void
+    });
 }
 
 auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile &file) -> QFuture<void>
@@ -85,7 +87,7 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
     case AudioFile::Source::File: {
         const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
         return Files::File::getDataAsync(path).then(
-            [callback](Files::FileDataResult &&result) { callback(result.data()); });
+            [callback](const Files::FileDataResult &result) { callback(result.data()); });
         break;
     }
     case AudioFile::Source::Web: {
@@ -173,7 +175,7 @@ void ResolvingAudioPlaylist::loadTitles()
     loadSpotifyTitles(spotifyTracks);
 }
 
-void ResolvingAudioPlaylist::loadSpotifyTitles(const QList<AudioFile *> &tracks)
+void ResolvingAudioPlaylist::loadSpotifyTitles(const QList<AudioFile *> &tracks) const
 {
     if (tracks.isEmpty()) return;
 

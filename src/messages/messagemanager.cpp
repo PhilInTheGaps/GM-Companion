@@ -21,7 +21,8 @@ void MessageManager::addMessage(std::shared_ptr<Message> message)
 {
     if (QThread::currentThread() != this->thread())
     {
-        QTimer::singleShot(0, this, [this, message = std::move(message)]() { addMessage(message); });
+        QTimer::singleShot(std::chrono::milliseconds::zero(), this,
+                           [this, message = std::move(message)]() { addMessage(std::move(message)); });
         return;
     }
 

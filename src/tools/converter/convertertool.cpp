@@ -60,7 +60,7 @@ void ConverterTool::onProjectsChanged()
     currentProject(a_projects.constFirst());
 }
 
-void ConverterTool::onCurrentProjectChanged(ConverterProject *project)
+void ConverterTool::onCurrentProjectChanged(const ConverterProject *project)
 {
     if (!project || project->categories().isEmpty())
     {
@@ -72,7 +72,7 @@ void ConverterTool::onCurrentProjectChanged(ConverterProject *project)
     currentCategory(categories.first());
 }
 
-void ConverterTool::onCurrentCategoryChanged(ConverterCategory *category)
+void ConverterTool::onCurrentCategoryChanged(const ConverterCategory *category)
 {
     if (!category || category->units().isEmpty())
     {
@@ -192,7 +192,8 @@ void ConverterTool::forceReloadData()
     loadData();
 }
 
-auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, ConverterUnit *toUnit) -> QString
+auto ConverterTool::convert(const ConverterUnit *fromUnit, const QString &fromValue, const ConverterUnit *toUnit)
+    -> QString
 {
     if (!fromUnit || !toUnit) return u""_s;
 

@@ -217,7 +217,7 @@ auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QS
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyCurrentTrack> {
+    const auto callback = [](const RestReply &reply) -> QFuture<SpotifyCurrentTrack> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlayer()) << reply.errorText();
@@ -249,7 +249,7 @@ auto PlayerAPI::devices() -> QFuture<SpotifyDeviceList>
 {
     const QUrl url(u"https://api.spotify.com/v1/me/player/devices"_s);
 
-    const auto callback = [](RestReply &&reply) {
+    const auto callback = [](const RestReply &reply) {
         const auto json = QJsonDocument::fromJson(reply.data()).object();
         const auto devices = json["devices"_L1].toArray();
         return SpotifyDevice::fromJson(devices);
@@ -274,7 +274,7 @@ auto PlayerAPI::repeat(SpotifyRepeatMode mode, const QString &deviceId) const ->
     case SpotifyRepeatMode::Off:
         return repeat(u"off"_s, deviceId);
     default:
-        qCCritical(gmSpotifyPlayer()) << "repeat(): unknown repeat mode" << mode;
+        qCCritical(gmSpotifyPlayer()) << "repeat(): unknown repeat mode" << static_cast<int>(mode);
         return {};
     }
 }
@@ -373,8 +373,8 @@ auto PlayerAPI::addToQueue(const QString &uri) const -> QFuture<RestReply>
 
 auto PlayerAPI::addToQueue(const QString &uri, const QString &deviceId) const -> QFuture<RestReply>
 {
-    const auto type = SpotifyUtils::getUriType(uri);
-    if (!(type == SpotifyUtils::SpotifyType::Track || type == SpotifyUtils::SpotifyType::Episode))
+    if (const auto type = SpotifyUtils::getUriType(uri);
+        !(type == SpotifyUtils::SpotifyType::Track || type == SpotifyUtils::SpotifyType::Episode))
     {
         qCWarning(gmSpotifyPlayer()) << R"(addToQueue(): "uri" must be a track or episode!)";
         return {};

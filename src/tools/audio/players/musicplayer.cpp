@@ -37,16 +37,13 @@ void MusicPlayer::play()
 
 void MusicPlayer::pause()
 {
-    switch (fileSource())
+    if (fileSource() == AudioFile::Source::Spotify)
     {
-    case AudioFile::Source::Spotify:
         m_spotifyPlayer.pause();
-        break;
-
-    default:
-        BufferedAudioPlayer::pause();
-        break;
+        return;
     }
+
+    BufferedAudioPlayer::pause();
 }
 
 void MusicPlayer::stop()
@@ -58,16 +55,13 @@ void MusicPlayer::stop()
 
 void MusicPlayer::again()
 {
-    switch (fileSource())
+    if (fileSource() == AudioFile::Source::Spotify)
     {
-    case AudioFile::Source::Spotify:
         m_spotifyPlayer.again();
-        break;
-
-    default:
-        BufferedAudioPlayer::again();
-        break;
+        return;
     }
+
+    BufferedAudioPlayer::again();
 }
 
 void MusicPlayer::setVolume(int linear, int logarithmic)

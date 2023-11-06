@@ -57,7 +57,7 @@ protected:
     auto markRequestActive(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>;
     virtual void sendRequest(RestRequest &&request, QPromise<RestReply> &&reply) = 0;
 
-    [[nodiscard]] auto maxConcurrentRequests() const -> int;
+    [[nodiscard]] auto maxConcurrentRequests() const -> size_t;
     void setMaxConcurrentRequests(int count);
 
     [[nodiscard]] virtual auto getAccessToken() -> QString
@@ -73,14 +73,14 @@ protected:
     bool m_wasConfigured = false;
 
 private:
-    [[nodiscard]] auto activeRequestCount() const -> int;
+    [[nodiscard]] auto activeRequestCount() const -> size_t;
 
-    [[nodiscard]] auto wasRateLimitReached(QNetworkReply::NetworkError error, const QByteArray &data) -> bool;
+    [[nodiscard]] auto wasRateLimitReached(QNetworkReply::NetworkError error, const QByteArray &data) const -> bool;
     void handleRateLimit(std::pair<QPromise<RestReply>, RestRequest> &&pair,
                          const QList<QNetworkReply::RawHeaderPair> &headers);
 
     bool m_isOnCooldown = false;
-    int m_maxConcurrentRequests = 1;
+    size_t m_maxConcurrentRequests = 1;
     int m_nextQueueId = 1;
     QStringList m_recoverableErrors;
     QDateTime m_tokenExpireTime;

@@ -9,7 +9,7 @@ CustomObjectListModel::CustomObjectListModel(bool isOwning, QObject *parent)
 auto CustomObjectListModel::rowCount(const QModelIndex &parent) const -> int
 {
     Q_UNUSED(parent)
-    return m_objects.size();
+    return static_cast<int>(m_objects.size());
 }
 
 auto CustomObjectListModel::headerData(int section, Qt::Orientation orientation, int role) const -> QVariant
@@ -55,9 +55,9 @@ void CustomObjectListModel::replaceAll(const QList<QObject *> &objects)
 auto CustomObjectListModel::removeRows(int row, int count, const QModelIndex &parent) -> bool
 {
     const auto firstIndex = row;
-    auto lastIndex = row + count - 1;
 
-    if (Utils::isInBounds(m_objects, firstIndex) && Utils::isInBounds(m_objects, lastIndex))
+    if (auto lastIndex = row + count - 1;
+        Utils::isInBounds(m_objects, firstIndex) && Utils::isInBounds(m_objects, lastIndex))
     {
         beginRemoveRows(parent, firstIndex, lastIndex);
 
@@ -100,7 +100,7 @@ void CustomObjectListModel::append(QObject *object, const QModelIndex &parent)
 {
     takeOwnershipIfRequired(object);
 
-    const auto lastIndex = m_objects.size();
+    const auto lastIndex = static_cast<int>(m_objects.size());
     beginInsertRows(parent, lastIndex, lastIndex);
     m_objects.append(object);
     endInsertRows();

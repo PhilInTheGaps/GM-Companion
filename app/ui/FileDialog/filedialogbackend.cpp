@@ -105,7 +105,7 @@ void FileDialogBackend::createFolder(const QString &folderName)
 {
     const auto path = FileUtils::fileInDir(folderName, currentDir());
 
-    File::createDirAsync(path).then([this](FileResult &&result) {
+    File::createDirAsync(path).then([this](const FileResult &result) {
         if (!result.success())
         {
             qCWarning(gmFileDialog()) << result.errorMessage();
@@ -153,7 +153,7 @@ void FileDialogBackend::stopCurrentRequest()
     }
 }
 
-void FileDialogBackend::onFileListReceived(FileListResult &&result)
+void FileDialogBackend::onFileListReceived(const FileListResult &result)
 {
     auto countBefore = a_entries.count();
 

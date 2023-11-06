@@ -70,11 +70,14 @@ void ItemShop::addItem(const Item &item)
 {
     auto *copy = new Item(item, this);
 
-    int insert = Item::findLastIndexWithCategory(copy->category(), items()) + 1;
-
-    if (insert <= 0) a_items.append(copy);
+    if (auto insert = Item::findLastIndexWithCategory(copy->category(), items()) + 1; insert <= 0)
+    {
+        a_items.append(copy);
+    }
     else
+    {
         a_items.insert(insert, copy);
+    }
 
     emit itemsChanged(a_items);
 }
@@ -90,7 +93,7 @@ auto ItemShop::deleteItem(int index) -> bool
     return true;
 }
 
-void ItemShop::connectSignals()
+void ItemShop::connectSignals() const
 {
     connect(this, &ItemShop::ownerChanged, this, &ItemShop::wasEdited);
     connect(this, &ItemShop::descriptionChanged, this, &ItemShop::wasEdited);

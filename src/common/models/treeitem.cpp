@@ -6,7 +6,7 @@ using namespace Qt::Literals::StringLiterals;
 TreeItem::TreeItem(const QString &name, int depth, bool canToggle, QObject *parent)
     : BaseProjectItem(name, parent), a_canToggle(canToggle), a_depth(depth)
 {
-    if (auto *parentItem = qobject_cast<TreeItem *>(parent); parentItem)
+    if (const QPointer parentItem = qobject_cast<TreeItem *>(parent); parentItem)
     {
         connect(this, &TreeItem::childItemsChanged, parentItem, &TreeItem::childItemsChanged);
         connect(this, &TreeItem::destroyed, parentItem, &TreeItem::childItemsChanged);
@@ -132,7 +132,6 @@ void TreeItem::onChildIsCheckedChanged()
                 emit isCheckedChanged();
             }
             return;
-        case CheckedState::Checked:
         default:
             checkedChildren++;
             break;

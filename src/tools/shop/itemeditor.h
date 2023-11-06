@@ -50,6 +50,6 @@ private:
 
     static auto defaultGroupName() -> QString;
 
-    void onFileCheckReceived(Files::FileCheckResult &&result);
-    void onDataReceived(Files::FileDataResult &&result);
+    void onFileCheckReceived(const Files::FileCheckResult &checkResult);
+    void onDataReceived(const Files::FileDataResult &result);
 };

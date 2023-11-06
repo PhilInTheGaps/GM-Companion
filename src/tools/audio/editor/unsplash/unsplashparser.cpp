@@ -14,9 +14,9 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmUnsplashParser, "gm.unsplash.parser")
 
-UnsplashParser::UnsplashParser(QQmlEngine *engine, QObject *parent) : QObject(parent)
+UnsplashParser::UnsplashParser(const QQmlEngine *engine, QObject *parent)
+    : QObject(parent), m_networkManager(engine->networkAccessManager())
 {
-    m_networkManager = engine->networkAccessManager();
     parse();
 }
 
@@ -27,12 +27,12 @@ auto UnsplashParser::model() -> ImageListModel *
 
 void UnsplashParser::parse()
 {
-    QNetworkRequest request(QUrl("https://gist.githubusercontent.com/PhilInTheGaps/0d61b30b0f5ccc00f4abd81566a4cf77/"
-                                 "raw/gm-companion-unsplash.json"));
+    QNetworkRequest request(QUrl(
+        u"https://gist.githubusercontent.com/PhilInTheGaps/0d61b30b0f5ccc00f4abd81566a4cf77/raw/gm-companion-unsplash.json"_s));
 
     auto reply = m_networkManager->get(request);
 
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         qCDebug(gmUnsplashParser()) << "Received Unsplash JSON file.";
 
         if (reply->error() != QNetworkReply::NoError)

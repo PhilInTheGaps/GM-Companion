@@ -27,7 +27,7 @@ public:
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
 
-    static auto findLastIndexWithCategory(const QString &category, const QList<Item *> &items) -> int;
+    static auto findLastIndexWithCategory(const QString &category, const QList<Item *> &items) -> qsizetype;
 };
 
 class ItemModel : public CustomObjectListModel

@@ -63,9 +63,9 @@ auto ItemEditor::addItem(const QString &name, const QString &price, const QStrin
     if (name.isEmpty() || category.isEmpty()) return false;
 
     auto *item = new Item(name, price, description.replace("\n"_L1, " "_L1), category, this);
-    const auto insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
 
-    if (insert <= 0)
+    if (const auto insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
+        insert <= 0)
     {
         m_itemModel.append(item);
     }
@@ -130,7 +130,7 @@ void ItemEditor::loadData()
     const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     Files::File::checkAsync(path)
-        .then([this](Files::FileCheckResult &&result) { onFileCheckReceived(std::move(result)); })
+        .then([this](const Files::FileCheckResult &result) { onFileCheckReceived(result); })
         .onCanceled([this]() { isLoading(false); });
 }
 
@@ -147,22 +147,22 @@ auto ItemEditor::defaultGroupName() -> QString
     return tr("Custom");
 }
 
-void ItemEditor::onFileCheckReceived(Files::FileCheckResult &&result)
+void ItemEditor::onFileCheckReceived(const Files::FileCheckResult &checkResult)
 {
-    const auto &path = result.path();
+    const auto &path = checkResult.path();
 
-    if (!result.success() || !result.exists())
+    if (!checkResult.success() || !checkResult.exists())
     {
         isLoading(false);
         return;
     }
 
     Files::File::getDataAsync(path)
-        .then([this](Files::FileDataResult &&result) { onDataReceived(std::move(result)); })
+        .then([this](const Files::FileDataResult &dataResult) { onDataReceived(dataResult); })
         .onCanceled([this]() { isLoading(false); });
 }
 
-void ItemEditor::onDataReceived(Files::FileDataResult &&result)
+void ItemEditor::onDataReceived(const Files::FileDataResult &result)
 {
     if (!result.success())
     {

@@ -63,8 +63,10 @@ auto DiceTool::getSuccessMax() -> int
 auto DiceTool::roll() -> int
 {
     int result = 0;
-    int criticalSuccesses = 0, criticalFailures = 0;
-    int criticalSuccess = 0, criticalFailure = 0;
+    int criticalSuccesses = 0;
+    int criticalFailures = 0;
+    int criticalSuccess = 0;
+    int criticalFailure = 0;
 
     // Initialize values for crits
     if (getMinMax())
@@ -102,7 +104,7 @@ auto DiceTool::roll() -> int
     for (int i = 0; i < m_amount; i++)
     {
         // Generate random integer
-        int temp = rand() % m_sides + 1;
+        int temp = QRandomGenerator::system()->bounded(m_sides) + 1;
 
         // Check for critical successes or failures
         if (temp == criticalSuccess) criticalSuccesses++;

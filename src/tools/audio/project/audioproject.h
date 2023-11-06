@@ -19,6 +19,7 @@ public:
     AudioProject(const QString &name, int version, QList<AudioCategory *> categories, QObject *parent = nullptr);
     AudioProject(const AudioProject &other, QObject *parent = nullptr);
     AudioProject(QJsonObject object, QObject *parent = nullptr);
+    ~AudioProject() override = default;
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
     [[nodiscard]] auto isCheckable() const -> bool override
@@ -32,7 +33,7 @@ public:
     auto setCurrentCategory(AudioCategory *category) -> bool;
 
     Q_PROPERTY(int categoryIndex READ categoryIndex NOTIFY currentCategoryChanged)
-    [[nodiscard]] auto categoryIndex() const -> int;
+    [[nodiscard]] auto categoryIndex() const -> qsizetype;
     auto deleteCategory(AudioCategory *category) -> bool;
     auto addCategory(AudioCategory *category, bool setAsCurrent = false) -> bool;
     [[nodiscard]] auto containsCategory(const QString &name) const -> bool;

@@ -6,7 +6,7 @@ AbstractNameGenerator::AbstractNameGenerator(QObject *parent, QString name, QStr
                                              QStringList prefixes, QStringList suffixes)
     : QObject{parent}, a_name{std::move(name)}, a_categories(std::move(categories)), a_prefixes(std::move(prefixes)),
       a_suffixes(std::move(suffixes)), a_generatedNames(buildEmptyNameList()),
-      a_enabledCategories(buildInitialEnabledCategoryList()), a_activePrefix(0), a_activeSuffix(0)
+      a_enabledCategories(buildInitialEnabledCategoryList())
 {
 }
 

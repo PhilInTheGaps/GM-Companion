@@ -25,12 +25,14 @@ public:
 
     [[nodiscard]] auto getNextPath() -> QString
     {
-        return m_paths.at(index++);
+        auto value = m_paths.at(index);
+        index++;
+        return value;
     }
 
     void addResult(ResultType &&result)
     {
-        m_results.push_back(result);
+        m_results.emplace_back(std::move(result));
     }
 
     [[nodiscard]] auto getResults() const -> std::vector<ResultType>

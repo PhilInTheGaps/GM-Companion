@@ -45,7 +45,7 @@ void AudioThumbnailGenerator::receivedImage(QPointer<AudioElement> element, cons
     {
         qCDebug(gmAudioThumbnailGenerator()) << "Received pixmap is null, making collage as fallback ...";
         AudioThumbnailCollageGenerator::makeCollageAsync(element).then(
-            [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); });
+            [element](const QPixmap &collage) { receivedImage(element, collage, false); });
         return;
     }
 

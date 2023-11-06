@@ -30,7 +30,7 @@ public:
     {
     }
 
-    static auto fromRestReply(Services::RestReply &&reply) -> FileResult;
+    static auto fromRestReply(const Services::RestReply &reply) -> FileResult;
 
     [[nodiscard]] auto success() const -> bool
     {

@@ -55,7 +55,7 @@ private:
     void stopCurrentRequest();
     void clearForward();
 
-    void onFileListReceived(FileListResult &&result);
+    void onFileListReceived(const FileListResult &result);
 
 private slots:
     void onCurrentDirChanged(const QString &dir);

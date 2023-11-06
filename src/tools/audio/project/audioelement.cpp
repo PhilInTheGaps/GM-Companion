@@ -12,7 +12,7 @@ using namespace Qt::Literals::StringLiterals;
 Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
 AudioElement::AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(name, path.split(u"/"_s).length() - 1, false, parent), a_type(type)
+    : TreeItem(name, static_cast<int>(path.split(u"/"_s).length()) - 1, false, parent), a_type(type)
 {
     this->name(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
@@ -20,7 +20,7 @@ AudioElement::AudioElement(const QString &name, Type type, const QString &path, 
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(u""_s, path.split(u"/"_s).length() - 1, false, parent), a_type(type)
+    : TreeItem(u""_s, static_cast<int>(path.split(u"/"_s).length()) - 1, false, parent), a_type(type)
 {
     name(object["name"_L1].toString());
     mode(static_cast<Mode>(object["mode"_L1].toInt()));
@@ -110,9 +110,7 @@ auto AudioElement::removeFile(int index) -> bool
  */
 auto AudioElement::moveFile(int from, int steps) -> bool
 {
-    const int to = from + steps;
-
-    if (Utils::isInBounds(m_files, to))
+    if (const int to = from + steps; Utils::isInBounds(m_files, to))
     {
         m_files.move(from, to);
         emit filesChanged();

@@ -148,7 +148,7 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](SpotifyDevice &&device) {
+    const auto callback = [this](const SpotifyDevice &device) {
         if (device.id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)

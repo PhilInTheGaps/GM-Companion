@@ -59,7 +59,8 @@ signals:
 
 private:
     AudioElement *element = nullptr;
-    QString m_imageId, m_relativeUrl;
+    QString m_imageId;
+    QString m_relativeUrl;
     QList<std::pair<QString, QPixmap>> m_collageIcons;
     bool m_imageIdCounter = false;
 };

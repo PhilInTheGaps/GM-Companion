@@ -16,7 +16,7 @@
 class SpotifyImageLoader
 {
 public:
-    static auto loadImageAsync(AudioFile *audioFile) -> QFuture<QPixmap>;
+    static auto loadImageAsync(const AudioFile *audioFile) -> QFuture<QPixmap>;
     static auto loadImageAsync(const QString &uri) -> QFuture<QPixmap>;
 
 private:

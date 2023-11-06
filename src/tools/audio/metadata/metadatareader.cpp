@@ -17,13 +17,6 @@ void MetaDataReader::setMetaData(const AudioMetaData &metaData)
     m_metaData.apply(metaData);
 }
 
-// void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
-//{
-//     if (!m_metaData) m_metaData = new AudioMetaData(this);
-
-//    setDuration(mediaPlayer->duration() * 1000);
-//}
-
 void MetaDataReader::setMetaData(QMediaMetaData::Key key, const QVariant &value)
 {
     if (!value.isValid() || value.isNull()) return;
@@ -135,26 +128,31 @@ void MetaDataReader::setMetaData(const QString &key, const QVariant &value)
 
 void MetaDataReader::loadMetaData(const QString &path, const QByteArray &data)
 {
-    const TagLib::ByteVector bvector(data.data(), data.length());
+    const TagLib::ByteVector bvector(data.data(), static_cast<unsigned int>(data.length()));
     auto bvstream = std::make_unique<TagLib::ByteVectorStream>(bvector);
     const TagLib::FileRef ref(bvstream.get());
-    auto *tag = ref.tag();
+    const auto *tag = ref.tag();
 
     if (!tag || tag->isEmpty()) return;
 
     qCDebug(gmAudioMetaData()) << "Updating meta data from data ...";
 
-    auto title = tag->title();
-    if (!title.isEmpty()) m_metaData.title(QString::fromStdString(title.to8Bit(true)));
+    if (auto title = tag->title(); !title.isEmpty())
+    {
+        m_metaData.title(QString::fromStdString(title.to8Bit(true)));
+    }
 
-    auto artist = tag->artist();
-    if (!artist.isEmpty()) m_metaData.artist(QString::fromStdString(artist.to8Bit(true)).split(", "));
+    if (auto artist = tag->artist(); !artist.isEmpty())
+    {
+        m_metaData.artist(QString::fromStdString(artist.to8Bit(true)).split(", "));
+    }
 
-    auto album = tag->album();
-    if (!album.isEmpty()) m_metaData.album(QString::fromStdString(album.to8Bit(true)));
+    if (auto album = tag->album(); !album.isEmpty())
+    {
+        m_metaData.album(QString::fromStdString(album.to8Bit(true)));
+    }
 
-    auto pixmap = TagImageLoader::loadFromData(path, std::move(bvstream));
-    if (!pixmap.isNull())
+    if (auto pixmap = TagImageLoader::loadFromData(path, std::move(bvstream)); !pixmap.isNull())
     {
         m_metaData.cover(StringUtils::stringFromImage(pixmap));
     }

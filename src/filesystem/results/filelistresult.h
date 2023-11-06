@@ -3,7 +3,6 @@
 #include "fileresult.h"
 #include <QStringList>
 
-using namespace Qt::Literals::StringLiterals;
 namespace Files
 {
 
@@ -26,8 +25,8 @@ public:
     {
     }
 
-    [[nodiscard]] auto filesFull(const QString &wildcard = u""_s) const -> QStringList;
-    [[nodiscard]] auto foldersFull(const QString &wildcard = u""_s) const -> QStringList;
+    [[nodiscard]] auto filesFull(const QString &wildcard = QLatin1String()) const -> QStringList;
+    [[nodiscard]] auto foldersFull(const QString &wildcard = QLatin1String()) const -> QStringList;
 
     [[nodiscard]] auto folders() const -> const QStringList &
     {

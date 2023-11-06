@@ -25,8 +25,8 @@ public:
 
     AUTO_PROPERTY(QList<QStringList>, generatedNames)
     AUTO_PROPERTY(QList<bool>, enabledCategories)
-    AUTO_PROPERTY_VAL(int, activePrefix)
-    AUTO_PROPERTY_VAL(int, activeSuffix)
+    AUTO_PROPERTY_VAL2(int, activePrefix, 0)
+    AUTO_PROPERTY_VAL2(int, activeSuffix, 0)
 
 private:
     [[nodiscard]] auto buildEmptyNameList() const -> QList<QStringList>;

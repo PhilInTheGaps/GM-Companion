@@ -62,9 +62,9 @@ void MarkdownHighlighter::applyRegexMatch(const QString &text, const QString &re
     {
         auto match = iterator.next();
 
-        for (int i = match.capturedStart(group); i < match.capturedEnd(group); i++)
+        for (auto i = match.capturedStart(group); i < match.capturedEnd(group); i++)
         {
-            setFormat(i, 1, combineFormats(format(i), charFormat));
+            setFormat(static_cast<int>(i), 1, combineFormats(format(i), charFormat));
         }
     }
 }
@@ -85,9 +85,9 @@ auto MarkdownHighlighter::combineFormats(const QTextCharFormat &one, const QText
         format.setForeground(one.foreground());
     }
 
-    auto isTypeWriter = one.fontStyleHint() == QFont::TypeWriter || two.fontStyleHint() == QFont::TypeWriter;
-
-    if (isTypeWriter) format.setFontStyleHint(QFont::TypeWriter);
+    if (auto isTypeWriter = one.fontStyleHint() == QFont::TypeWriter || two.fontStyleHint() == QFont::TypeWriter;
+        isTypeWriter)
+        format.setFontStyleHint(QFont::TypeWriter);
 
     return format;
 }

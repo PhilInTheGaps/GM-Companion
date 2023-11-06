@@ -17,7 +17,6 @@ class Spotify;
 
 class PlayerAPI
 {
-    Q_GADGET
     friend Spotify;
 
 public:
@@ -72,7 +71,7 @@ public:
     /// Get information about a user’s available devices
     [[nodiscard]] auto devices() -> QFuture<SpotifyDeviceList>;
 
-    enum SpotifyRepeatMode
+    enum class SpotifyRepeatMode
     {
         /// Repeat current track
         Track,
@@ -81,7 +80,6 @@ public:
         /// Don't repeat
         Off
     };
-    Q_ENUM(SpotifyRepeatMode)
 
     /// Set the repeat mode for the user's playback. Options are repeat-track, repeat-context, and off (current device)
     [[nodiscard]] auto repeat(SpotifyRepeatMode mode) const -> QFuture<RestReply>;

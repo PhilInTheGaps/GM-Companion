@@ -3,7 +3,6 @@
 #include "src/common/utils/fileutils.h"
 #include <QDir>
 #include <QLoggingCategory>
-#include <gsl/gsl>
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -19,7 +18,7 @@ auto ConverterEditor::createProject(const QString &name) -> bool
 {
     if (name.isEmpty()) return false;
 
-    gsl::owner<ConverterProject *> project = new ConverterProject(name, this);
+    auto *project = new ConverterProject(name, this);
 
     a_projects << project;
     emit projectsChanged();
@@ -61,7 +60,7 @@ auto ConverterEditor::createCategory(const QString &name) -> bool
 {
     if (!currentProject() || name.isEmpty()) return false;
 
-    gsl::owner<ConverterCategory *> category = new ConverterCategory(name, currentProject());
+    auto *category = new ConverterCategory(name, currentProject());
 
     auto categories = currentProject()->categories();
     categories << category;
@@ -119,7 +118,7 @@ auto ConverterEditor::createUnit(const QString &name, const QString &value) -> b
 
     if (!ok) return false;
 
-    gsl::owner<ConverterUnit *> unit = new ConverterUnit(name, number, currentCategory());
+    auto *unit = new ConverterUnit(name, number, currentCategory());
 
     auto units = currentCategory()->units();
     units << unit;
@@ -212,7 +211,7 @@ void ConverterEditor::onProjectsChanged()
     currentProject(a_projects.constFirst());
 }
 
-void ConverterEditor::onCurrentProjectChanged(ConverterProject *project)
+void ConverterEditor::onCurrentProjectChanged(const ConverterProject *project)
 {
     if (!project) return;
 
@@ -244,8 +243,10 @@ void ConverterEditor::backupV1Projects()
 
     if (entries.isEmpty()) return;
 
-    QDir const backupDir(backupPath);
-    if (!backupDir.exists()) backupDir.mkpath(backupPath);
+    if (QDir const backupDir(backupPath); !backupDir.exists())
+    {
+        backupDir.mkpath(backupPath);
+    }
 
     for (const auto &entry : entries)
     {

@@ -11,9 +11,6 @@ public:
     explicit RadioPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader,
                          QObject *parent = nullptr);
 
-signals:
-    void metaDataChanged(const QMediaMetaData &metaData);
-
 private slots:
     void onMetaDataChanged(const QMediaMetaData &data);
 

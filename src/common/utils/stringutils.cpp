@@ -40,12 +40,12 @@ auto StringUtils::rot13(const QString &input) -> QString
     {
         if (lowCaps.contains(character))
         {
-            const int index = lowCaps.indexOf(character);
+            const auto index = lowCaps.indexOf(character);
             encrypted.append(lowCaps.at(index + ROT13_PLACES));
         }
         else if (upperCaps.contains(character))
         {
-            const int index = upperCaps.indexOf(character);
+            const auto index = upperCaps.indexOf(character);
             encrypted.append(upperCaps.at(index + ROT13_PLACES));
         }
         else

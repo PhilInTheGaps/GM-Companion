@@ -34,7 +34,7 @@ void MprisManager::setPlaybackStatus(AudioPlayer::State status)
     sendMprisUpdateSignal(u"PlaybackStatus"_s, m_mprisPlayerAdaptor->playbackStatus());
 }
 
-void MprisManager::setVolume(double volume)
+void MprisManager::setVolume(double volume) const
 {
     m_mprisPlayerAdaptor->setVolume(volume);
 }
