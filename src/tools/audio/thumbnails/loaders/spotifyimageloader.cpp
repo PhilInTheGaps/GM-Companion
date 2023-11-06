@@ -231,8 +231,13 @@ void SpotifyImageLoader::startTimer(SpotifyUtils::SpotifyType type)
 
     if (timer && !timer->isActive())
     {
-        auto *rng = QRandomGenerator::system();
-        timer->start(DEFAULT_TIMEOUT_MS + rng->bounded(RANDOM_TIMEOUT_MS));
+        QMetaObject::invokeMethod(
+            timer,
+            [timer]() {
+                auto *rng = QRandomGenerator::system();
+                timer->start(DEFAULT_TIMEOUT_MS + rng->bounded(RANDOM_TIMEOUT_MS));
+            },
+            Qt::ConnectionType::QueuedConnection);
     }
 }
 
