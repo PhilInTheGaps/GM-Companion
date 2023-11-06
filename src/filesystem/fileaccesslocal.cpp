@@ -150,9 +150,7 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
         }
     }
 
-    QFile f(oldPath);
-
-    if (!f.rename(newPath))
+    if (QFile f(oldPath); !f.rename(newPath))
     {
         auto errorMessage =
             u"Could not move %1 to %2: %3 %4"_s.arg(oldPath, newPath, QString::number(f.error()), f.errorString());

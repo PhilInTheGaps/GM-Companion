@@ -13,7 +13,7 @@ class FileAccessNextcloud : public FileAccess
 {
 public:
     explicit FileAccessNextcloud(Services::NextCloud &nextcloud);
-    virtual ~FileAccessNextcloud() = default;
+    ~FileAccessNextcloud() override = default;
     Q_DISABLE_COPY_MOVE(FileAccessNextcloud)
 
     auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult> override;

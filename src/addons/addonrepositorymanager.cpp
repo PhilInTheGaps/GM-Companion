@@ -214,10 +214,9 @@ auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> std:
         auto release = getNewestCompatibleRelease(entry["releases"_L1].toArray());
         if (release.isEmpty()) continue;
 
-        result.emplace_back(AddonReleaseInfo(entry["id"_L1].toString(), entry["name"_L1].toString(),
-                                             entry["name_short"_L1].toString(), release["version"_L1].toString(),
-                                             entry["author"_L1].toString(), entry["description"_L1].toString(),
-                                             release["download"_L1].toString()));
+        result.emplace_back(entry["id"_L1].toString(), entry["name"_L1].toString(), entry["name_short"_L1].toString(),
+                            release["version"_L1].toString(), entry["author"_L1].toString(),
+                            entry["description"_L1].toString(), release["download"_L1].toString());
     }
 
     return result;

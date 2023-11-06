@@ -47,7 +47,8 @@ AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
     });
     connect(&mprisManager, &MprisManager::next, this, [this]() { next(); });
     connect(&mprisManager, &MprisManager::previous, this, [this]() { again(); });
-    connect(&mprisManager, &MprisManager::changeVolume, this, [this](double volume) { setMusicVolume(volume); });
+    connect(&mprisManager, &MprisManager::changeVolume, this,
+            [this](double volume) { setMusicVolume(static_cast<int>(volume)); });
 #endif
 }
 
@@ -300,7 +301,7 @@ auto AudioTool::playlistQml() -> QQmlListProperty<AudioFile>
  * @brief Get index of current song in playlist
  * @return Index as integer
  */
-auto AudioTool::index() const -> int
+auto AudioTool::index() const -> qsizetype
 {
     if (m_musicElementType == AudioElement::Type::Music)
     {

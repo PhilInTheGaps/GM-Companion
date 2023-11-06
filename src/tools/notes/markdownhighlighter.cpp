@@ -62,9 +62,9 @@ void MarkdownHighlighter::applyRegexMatch(const QString &text, const QString &re
     {
         auto match = iterator.next();
 
-        for (auto i = match.capturedStart(group); i < match.capturedEnd(group); i++)
+        for (auto i = static_cast<int>(match.capturedStart(group)); i < match.capturedEnd(group); i++)
         {
-            setFormat(static_cast<int>(i), 1, combineFormats(format(i), charFormat));
+            setFormat(i, 1, combineFormats(format(i), charFormat));
         }
     }
 }

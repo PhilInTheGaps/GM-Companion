@@ -24,9 +24,6 @@ public slots:
     virtual void connectService() = 0;
     virtual void disconnectService() = 0;
 
-protected:
-    void disconnect();
-
 protected slots:
     void updateStatus(Status::Type type, const QString &message);
 

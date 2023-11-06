@@ -138,7 +138,7 @@ void NextCloud::disconnectService()
 
     SettingsManager::setPassword(loginName(), ""_L1, serviceName());
 
-    disconnect();
+    connected(false);
 }
 
 /**

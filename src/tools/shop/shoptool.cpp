@@ -28,7 +28,7 @@ void ShopTool::onCurrentProjectChanged(const ShopProject *project)
     m_projectConnection = connect(project, &ShopProject::currentShopChanged, this, &ShopTool::onCurrentShopChanged);
 
     if (!project->currentCategory()) return;
-    auto *shop = project->currentCategory()->currentShop();
+    const auto *shop = project->currentCategory()->currentShop();
     onCurrentShopChanged(shop);
 }
 

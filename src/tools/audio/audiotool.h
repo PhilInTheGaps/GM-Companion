@@ -89,7 +89,7 @@ public:
     {
         return metaDataReader.metaData();
     }
-    [[nodiscard]] auto index() const -> int;
+    [[nodiscard]] auto index() const -> qsizetype;
     [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
 
 public slots:

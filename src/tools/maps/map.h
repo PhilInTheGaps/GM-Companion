@@ -69,7 +69,7 @@ public:
         return static_cast<int>(m_items.size());
     }
 
-    void setElements(QList<Map *> elements);
+    void setElements(const QList<Map *> &elements);
     void clear();
 
     [[nodiscard]] auto elements() const -> QList<Map *>
@@ -83,7 +83,7 @@ public:
 
 public slots:
     void insert(QObject *item);
-    void remove(QObject *item);
+    void remove(const QObject *item);
 
 protected:
     [[nodiscard]] auto roleNames() const -> QHash<int, QByteArray> override;

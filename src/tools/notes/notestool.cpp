@@ -99,7 +99,7 @@ void NotesTool::encrypt()
 /**
  * Export the current page as PDF document
  */
-void NotesTool::exportPdf()
+void NotesTool::exportPdf() const
 {
     if (editMode() || !m_currentPage || !m_qmlTextDoc) return;
 

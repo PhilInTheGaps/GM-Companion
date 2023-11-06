@@ -125,11 +125,10 @@ void FileDialogBackend::updateFileList()
     isLoading(true);
 
     m_currentFuture = File::listAsync(currentDir(), !folderMode(), true);
-    m_currentFuture.then([this](FileListResult &&result) { onFileListReceived(std::move(result)); })
-        .onCanceled([this]() {
-            qCDebug(gmFileDialog()) << "file list update was cancelled.";
-            isLoading(false);
-        });
+    m_currentFuture.then([this](const FileListResult &result) { onFileListReceived(result); }).onCanceled([this]() {
+        qCDebug(gmFileDialog()) << "file list update was cancelled.";
+        isLoading(false);
+    });
 }
 
 void FileDialogBackend::clearFileList()

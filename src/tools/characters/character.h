@@ -49,7 +49,7 @@ public:
 
 signals:
     void fileListLoaded(const QList<CharacterFile *> &files);
-    void fileDataLoaded(int index, const QByteArray &data);
+    void fileDataLoaded(qsizetype index, const QByteArray &data);
 
 private:
     QList<CharacterFile *> m_files;

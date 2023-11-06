@@ -24,7 +24,7 @@ Map::Map(QObject *parent) : QObject(parent), m_markers(this)
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    Files::File::getDataAsync(path).then([this](Files::FileDataResult &&result) {
+    Files::File::getDataAsync(path).then([this](const Files::FileDataResult &result) {
         if (!result.success()) return;
 
         QPixmap pixmap;
@@ -52,15 +52,15 @@ void Map::saveMarkers() const
 void Map::loadMarkers()
 {
     const auto filePath = path() + ".json";
-    Files::File::checkAsync(filePath).then([this, filePath](Files::FileCheckResult &&result) {
-        if (!result.success() || !result.exists()) return;
+    Files::File::checkAsync(filePath).then([this, filePath](const Files::FileCheckResult &checkResult) {
+        if (!checkResult.success() || !checkResult.exists()) return;
 
-        Files::File::getDataAsync(filePath).then([this](Files::FileDataResult &&result) {
-            if (!result.success()) return;
+        Files::File::getDataAsync(filePath).then([this](const Files::FileDataResult &dataResult) {
+            if (!dataResult.success()) return;
 
-            auto markers = QJsonDocument::fromJson(result.data()).object()["markers"_L1].toArray();
+            auto markers = QJsonDocument::fromJson(dataResult.data()).object()["markers"_L1].toArray();
 
-            for (const auto &marker : markers)
+            foreach (const auto &marker, markers)
             {
                 addMarker(new MapMarker(marker.toObject(), this));
             }
@@ -107,7 +107,7 @@ void MapCategory::loadMaps()
 
     const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(u"maps"_s));
 
-    Files::File::listAsync(path, true, false).then([this, path](Files::FileListResult &&result) {
+    Files::File::listAsync(path, true, false).then([this, path](const Files::FileListResult &result) {
         if (!result.success()) return;
 
         foreach (const auto &file, result.files())
@@ -135,7 +135,7 @@ void MapListModel::insert(QObject *item)
     endInsertRows();
 }
 
-void MapListModel::remove(QObject *item)
+void MapListModel::remove(const QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i)
     {
@@ -165,12 +165,12 @@ void MapListModel::clear()
     }
 }
 
-void MapListModel::setElements(QList<Map *> elements)
+void MapListModel::setElements(const QList<Map *> &elements)
 {
     clear();
 
-    for (int i = elements.size() - 1; i > -1; i--)
+    for (auto i = elements.size() - 1; i > -1; i--)
     {
-        insert(elements[i]);
+        insert(elements.at(i));
     }
 }

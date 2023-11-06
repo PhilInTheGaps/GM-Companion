@@ -59,7 +59,7 @@ private:
     auto makeRequestor() -> O2Requestor *;
     void sendRequest(RestRequest &&container, QPromise<RestReply> &&promise) override;
 
-    [[nodiscard]] virtual auto getAccessToken() -> QString override;
+    [[nodiscard]] auto getAccessToken() -> QString override;
     void refreshAccessToken(bool /*updateAuthentication*/ = false) override;
 };
 

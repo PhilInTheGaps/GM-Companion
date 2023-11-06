@@ -365,9 +365,8 @@ auto AudioScenario::moveScenario(AudioScenario *scenario, int steps) -> bool
     }
 
     const auto from = a_scenarios.indexOf(scenario);
-    const auto to = from + steps;
 
-    if (Utils::isInBounds(a_scenarios, to))
+    if (const auto to = from + steps; Utils::isInBounds(a_scenarios, to))
     {
         a_scenarios.move(from, to);
         emit scenariosChanged();

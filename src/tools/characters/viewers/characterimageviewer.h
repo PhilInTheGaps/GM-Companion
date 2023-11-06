@@ -43,5 +43,5 @@ private:
 
 private slots:
     void onCharacterFileListLoaded(const QList<CharacterFile *> &files);
-    void onCharacterFileDataLoaded(int index, const QByteArray &data);
+    void onCharacterFileDataLoaded(qsizetype index, const QByteArray &data);
 };

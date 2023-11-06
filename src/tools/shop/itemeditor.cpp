@@ -71,7 +71,7 @@ auto ItemEditor::addItem(const QString &name, const QString &price, const QStrin
     }
     else
     {
-        m_itemModel.insert(insert, item);
+        m_itemModel.insert(static_cast<int>(insert), item);
     }
 
     madeChanges();

@@ -62,7 +62,7 @@ void AudioEditorFileBrowser::removeElement(const QStringList &path)
 {
     foreach (auto *element, m_fileModel.elements())
     {
-        auto *file = qobject_cast<AudioEditorFile *>(element);
+        const auto *file = qobject_cast<AudioEditorFile *>(element);
 
         if ((file->path() == path) ||
             FileUtils::dirFromFolders(file->path()).startsWith(FileUtils::dirFromFolders(path)))

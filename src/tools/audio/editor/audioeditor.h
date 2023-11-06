@@ -32,7 +32,7 @@ class AudioEditor : public AbstractTool
     AUTO_PROPERTY_VAL2(bool, isSaved, true)
 
 public:
-    explicit AudioEditor(QQmlEngine *engine, QObject *parent = nullptr);
+    explicit AudioEditor(const QQmlEngine *engine, QObject *parent = nullptr);
 
     [[nodiscard]] auto exporter() -> AudioExporter *
     {

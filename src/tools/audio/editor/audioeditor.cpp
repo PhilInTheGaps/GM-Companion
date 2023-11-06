@@ -13,7 +13,7 @@ using namespace Services;
 
 Q_LOGGING_CATEGORY(gmAudioEditor, "gm.audio.editor")
 
-AudioEditor::AudioEditor(QQmlEngine *engine, QObject *parent)
+AudioEditor::AudioEditor(const QQmlEngine *engine, QObject *parent)
     : AbstractTool(parent), m_addonElementManager(this), m_audioExporter(this), m_fileBrowser(this),
       m_unsplashParser(engine, this), m_fileModel(this)
 {
@@ -99,7 +99,7 @@ auto AudioEditor::projectIndex() const -> int
 {
     if (!m_currentProject || a_projects.isEmpty()) return -1;
 
-    return a_projects.indexOf(m_currentProject);
+    return static_cast<int>(a_projects.indexOf(m_currentProject));
 }
 
 /**

@@ -49,7 +49,7 @@ void CharacterImageViewer::onCharacterFileListLoaded(const QList<CharacterFile *
     if (!m_categories.isEmpty()) setCurrentCategory(0);
 }
 
-void CharacterImageViewer::onCharacterFileDataLoaded(int index, const QByteArray &data)
+void CharacterImageViewer::onCharacterFileDataLoaded(qsizetype index, const QByteArray &data)
 {
     qCDebug(gmCharactersImageViewer()) << "File data was loaded.";
 
@@ -62,7 +62,7 @@ void CharacterImageViewer::onCharacterFileDataLoaded(int index, const QByteArray
         break;
 
     case 1: // PDF
-        loadPDF(index, data);
+        loadPDF(static_cast<int>(index), data);
         break;
 
     default:

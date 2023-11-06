@@ -47,7 +47,7 @@ public:
 public slots:
     void loadData() override;
     void encrypt();
-    void exportPdf();
+    void exportPdf() const;
     void linkClicked(const QString &link) const;
     void createBook(const QString &name);
 

@@ -57,7 +57,7 @@ void NotesSaveLoad::loadPages()
 
     qCDebug(gmNotesSaveLoad()) << "Loading pages in" << directory;
 
-    Files::File::listAsync(directory, true, false).then([this, chapter](Files::FileListResult &&result) {
+    Files::File::listAsync(directory, true, false).then([this, chapter](const Files::FileListResult &result) {
         if (!chapter) return;
         buildPages(result.files(), *chapter);
     });

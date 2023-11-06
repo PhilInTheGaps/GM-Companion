@@ -11,7 +11,7 @@ class FileAccessLocal : public FileAccess
 {
 public:
     FileAccessLocal() = default;
-    virtual ~FileAccessLocal() = default;
+    ~FileAccessLocal() override = default;
     Q_DISABLE_COPY_MOVE(FileAccessLocal)
 
     auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult> override;

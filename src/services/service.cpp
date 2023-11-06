@@ -13,12 +13,6 @@ Service::Service(const QString &name, QObject *parent)
     connect(this, &Service::connectedChanged, this, &Service::onConnectedChanged);
 }
 
-void Service::disconnect()
-{
-    SettingsManager::instance()->set(u"connected"_s, false, a_serviceName);
-    connected(false);
-}
-
 void Service::updateStatus(Status::Type type, const QString &message)
 {
     a_status->type(type);

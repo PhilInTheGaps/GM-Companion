@@ -30,7 +30,7 @@ auto AlbumAPI::getAlbum(const QString &id) -> QFuture<SpotifyAlbum>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this](RestReply &&reply) {
+    const auto callback = [this](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << "getAlbum():" << reply.errorText();
@@ -65,7 +65,7 @@ auto AlbumAPI::getAlbumTracks(const QString &id) -> QFuture<SpotifyTrackList>
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    auto callback = [this](RestReply &&reply) -> QFuture<SpotifyTrackList> {
+    auto callback = [this](const RestReply &reply) -> QFuture<SpotifyTrackList> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
@@ -89,7 +89,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album) -> QFuture<SpotifyAlbum>
 
     const QUrl url(album.tracks.next);
 
-    const auto callback = [this, album](RestReply &&reply) mutable {
+    const auto callback = [this, album](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
@@ -111,7 +111,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist) -> QFuture<SpotifyTr
 {
     const QUrl url(tracklist.next);
 
-    const auto callback = [this, tracklist](RestReply &&reply) mutable {
+    const auto callback = [this, tracklist](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();

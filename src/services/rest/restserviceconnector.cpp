@@ -143,7 +143,7 @@ auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestRe
     auto future = reply.future();
     request.id(m_nextQueueId);
     m_nextQueueId++;
-    m_requestQueue.emplace(std::make_pair(std::move(reply), std::move(request)));
+    m_requestQueue.emplace(std::move(reply), std::move(request));
 
     // try to dispatch request
     dequeueRequests();
@@ -154,7 +154,7 @@ auto RESTServiceConnector::markRequestActive(RestRequest &&request, QPromise<Res
 {
     auto id = request.id();
     auto future = reply.future();
-    m_activeRequests.try_emplace(id, std::make_pair(std::move(reply), std::move(request)));
+    m_activeRequests.try_emplace(id, std::move(reply), std::move(request));
     return future;
 }
 

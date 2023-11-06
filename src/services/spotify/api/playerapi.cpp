@@ -40,9 +40,8 @@ auto PlayerAPI::play(const QString &deviceId, const QJsonObject &body) const -> 
 
 auto PlayerAPI::play(const QString &uri) const -> QFuture<RestReply>
 {
-    const auto type = SpotifyUtils::getUriType(uri);
-
-    if (type == SpotifyUtils::SpotifyType::Track || type == SpotifyUtils::SpotifyType::Episode)
+    if (const auto type = SpotifyUtils::getUriType(uri);
+        type == SpotifyUtils::SpotifyType::Track || type == SpotifyUtils::SpotifyType::Episode)
     {
         return play(makePlayBody(u""_s, {uri}, -1, -1));
     }
@@ -180,7 +179,7 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
 
     url.setQuery(query);
 
-    const auto callback = [](RestReply &&reply) -> QFuture<SpotifyPlaybackState> {
+    const auto callback = [](const RestReply &reply) -> QFuture<SpotifyPlaybackState> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlayer()) << reply.errorText();
