@@ -5,7 +5,6 @@
 #include "qmlsingletonfactory.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJSEngine>
-#include <QMutex>
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQml/qqmlregistration.h>
@@ -27,10 +26,11 @@ public:
     Q_INVOKABLE void markAllAsRead();
     Q_INVOKABLE void clearMessages();
 
+    void addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
+
     AUTO_PROPERTY_VAL2(bool, hasNewErrors, false)
 
 public slots:
-    void addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
     void addMessage(std::shared_ptr<Message> message);
 
 private:
@@ -38,6 +38,5 @@ private:
 
     inline static MessageManager *single = nullptr;
 
-    QMutex m_mutex;
     MessageModel m_model = MessageModel(nullptr);
 };

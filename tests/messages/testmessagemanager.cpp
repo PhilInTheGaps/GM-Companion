@@ -47,10 +47,15 @@ TEST(MessageManagerTest, CanAddMessagesFromDifferentThreads)
     EXPECT_EQ(MessageManager::instance()->messages()->rowCount(), 1);
 
     QtConcurrent::run(QThreadPool::globalInstance(), []() {
+        // via implicit move
         MessageManager::instance()->addMessage(QDateTime(), QtMsgType::QtWarningMsg, u"category1"_s, u"message1"_s);
 
-        auto message2 = std::make_shared<Message>(QDateTime(), QtMsgType::QtWarningMsg, u"category2"_s, u"message2"_s);
-        MessageManager::instance()->addMessage(std::move(message2));
+        // via const ref
+        auto ts = QDateTime();
+        auto type = QtMsgType::QtWarningMsg;
+        auto category = u"category2"_s;
+        auto message = u"message2"_s;
+        MessageManager::instance()->addMessage(ts, type, category, message);
     }).waitForFinished();
 
     QTest::qWait(50);

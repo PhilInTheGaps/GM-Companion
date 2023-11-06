@@ -10,7 +10,7 @@ struct Message
     {
     }
 
-    explicit Message(QDateTime &timestamp, QtMsgType type, QString &category, QString &body)
+    explicit Message(QDateTime &&timestamp, QtMsgType type, QString &&category, QString &&body)
         : timestamp(std::move(timestamp)), type(type), category(std::move(category)), body(std::move(body))
     {
     }

@@ -1,5 +1,4 @@
 #include "messagemanager.h"
-#include <QMutexLocker>
 
 auto MessageManager::instance() -> MessageManager *
 {
@@ -11,23 +10,20 @@ auto MessageManager::instance() -> MessageManager *
     return single;
 }
 
+/// Thread safe
 void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category,
                                 const QString &body)
 {
-    addMessage(std::make_shared<Message>(timestamp, type, category, body));
+    auto message = std::make_shared<Message>(timestamp, type, category, body);
+
+    QMetaObject::invokeMethod(
+        instance(), [message = std::move(message)]() { instance()->addMessage(std::move(message)); },
+        Qt::ConnectionType::AutoConnection);
 }
 
+/// Not thread safe
 void MessageManager::addMessage(std::shared_ptr<Message> message)
 {
-    if (QThread::currentThread() != this->thread())
-    {
-        QTimer::singleShot(std::chrono::milliseconds::zero(), this,
-                           [this, message = std::move(message)]() { addMessage(std::move(message)); });
-        return;
-    }
-
-    QMutexLocker const lock(&m_mutex); // lock for messages from different threads
-
     // filter errors
     if (message->type > QtMsgType::QtDebugMsg && message->type < QtMsgType::QtInfoMsg)
     {
