@@ -80,7 +80,7 @@ jobs:
       - name: Upload debug symbols
         run: |
           cd build
-          sentry-cli upload-dif --org rophil --project gm-companion --include-sources app/
+          sentry-cli upload-dif --org rophil --project gm-companion --include-sources ./
 
       - name: Make Install
         run: |
@@ -101,8 +101,11 @@ jobs:
       - name: Deploy
         run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir app\ui -targetDir build\install\bin
 
-      - name: Remove debug info from install folder
-        run: rm .\build\install\**\*.pdb
+      - name: Remove debug and test info from install folder
+        run: |
+          rm .\build\install\gmock*
+          rm .\build\install\gtest*
+          rm .\build\install\**\*.pdb
 
       - name: Upload Build
         uses: actions/upload-artifact@v3
