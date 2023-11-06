@@ -50,7 +50,7 @@ private:
     auto getLibrespotInfo() -> LibrespotInfo;
     void printOutputAndUpdateStatus(const QString &line);
 
-    std::unique_ptr<QPromise<bool>> m_hasAuthenticated;
+    std::unique_ptr<QPromise<bool>> m_hasAuthenticated = nullptr;
 
 private slots:
     void onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus);

@@ -23,7 +23,6 @@ static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
 LibrespotController::LibrespotController(QObject *parent)
     : AbstractSpotifyClientController(parent, gmLibrespotController())
 {
-    m_hasAuthenticated = std::make_unique<QPromise<bool>>();
     initProcess();
 }
 
@@ -67,6 +66,7 @@ auto LibrespotController::start() -> QFuture<bool>
     }
 
     qCDebug(gmLibrespotController()) << QString(info);
+    m_hasAuthenticated = std::make_unique<QPromise<bool>>();
     m_hasAuthenticated->start();
 
     const auto args = getLibrespotArgs(username);
