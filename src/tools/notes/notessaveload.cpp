@@ -104,7 +104,7 @@ void NotesSaveLoad::savePage() const
  */
 void NotesSaveLoad::renameChapter(const QString &oldPath) const
 {
-    const auto *chapter = qobject_cast<NoteBookChapter *>(sender());
+    const QPointer chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter || oldPath == chapter->path()) return;
 
     const auto basePath = SettingsManager::getPath(u"notes"_s);
@@ -113,7 +113,17 @@ void NotesSaveLoad::renameChapter(const QString &oldPath) const
 
     qCDebug(gmNotesSaveLoad()) << "Renaming chapter or book" << chapter->path() << "to" << oldPath;
 
-    Files::File::moveAsync(old, newPath);
+    Files::File::moveAsync(old, newPath).then([chapter, oldPath](const Files::FileResult &result) {
+        if (!chapter) return;
+
+        if (!result.success())
+        {
+            qCDebug(gmNotesSaveLoad()) << "Could not rename chapter/book:" << result.errorMessage();
+
+            auto oldName = FileUtils::fileName(oldPath);
+            chapter->name(oldName);
+        }
+    });
 }
 
 /**
@@ -130,7 +140,17 @@ void NotesSaveLoad::renamePage(const QString &oldPath) const
 
     qCDebug(gmNotesSaveLoad()) << "Renaming page" << page->path() << "to" << oldPath;
 
-    Files::File::moveAsync(old, newPath);
+    Files::File::moveAsync(old, newPath).then([page, oldPath](const Files::FileResult &result) {
+        if (!page) return;
+
+        if (!result.success())
+        {
+            qCDebug(gmNotesSaveLoad()) << "Could not rename chapter/book:" << result.errorMessage();
+
+            auto oldName = FileUtils::fileName(oldPath);
+            page->name(oldName);
+        }
+    });
 }
 
 /**
