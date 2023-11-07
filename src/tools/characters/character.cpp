@@ -15,15 +15,13 @@ Character::Character(const QString &name, QObject *parent) : QObject(parent), a_
     qCDebug(gmCharactersCharacter()) << "Initializing new character:" << name << "...";
 }
 
-int Character::type() const
+Character::Type Character::type() const
 {
-    if (m_files.size() < 1) return -1;
+    if (m_files.isEmpty()) return Type::Unknown;
 
-    if (m_files.at(0)->name().endsWith("pdf"_L1)) return 1;
+    if (m_files.first()->name().endsWith("pdf"_L1)) return Type::Pdf;
 
-    if (m_files.at(0)->name().endsWith("json"_L1)) return 2;
-
-    return 0;
+    return Type::Image;
 }
 
 void Character::loadFiles()

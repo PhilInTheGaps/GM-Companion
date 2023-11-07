@@ -57,17 +57,17 @@ void CharacterImageViewer::onCharacterFileDataLoaded(qsizetype index, const QByt
 
     switch (m_currentCharacter->type())
     {
-    case 0: // Folder with images
+    case Character::Type::Image:
         loadImage(data);
         break;
 
-    case 1: // PDF
+    case Character::Type::Pdf:
         loadPDF(static_cast<int>(index), data);
         break;
 
     default:
-        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type() << "of character"
-                                              << m_currentCharacter->name() << "not implemented.";
+        qCCritical(gmCharactersImageViewer()) << "Character type" << static_cast<int>(m_currentCharacter->type())
+                                              << "of character" << m_currentCharacter->name() << "not implemented.";
     }
 }
 
@@ -153,7 +153,7 @@ void CharacterImageViewer::setCurrentCategory(qsizetype index)
 
     qCDebug(gmCharactersImageViewer()) << "Loading page data ...";
 
-    if ((m_currentCharacter->type() == 1) && (index > 0))
+    if ((m_currentCharacter->type() == Character::Type::Pdf) && (index > 0))
     {
         setPDFPage(static_cast<int>(index));
     }

@@ -26,9 +26,16 @@ class Character : public QObject
     AUTO_PROPERTY(QString, folder)
 
 public:
+    enum class Type
+    {
+        Image,
+        Pdf,
+        Unknown
+    };
+
     explicit Character(const QString &name, QObject *parent);
 
-    [[nodiscard]] auto type() const -> int;
+    [[nodiscard]] auto type() const -> Type;
 
     [[nodiscard]] auto files() const -> QList<CharacterFile *>
     {

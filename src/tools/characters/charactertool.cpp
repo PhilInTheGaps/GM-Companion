@@ -69,19 +69,23 @@ void CharacterTool::setCurrentCharacter(qsizetype index)
     const auto &name = characterNames.at(index);
     m_currentCharacter = nullptr;
 
-    for (int i = 0; i < m_characters.length(); i++)
+    foreach (auto *character, m_characters)
     {
-        const auto *character = m_characters.at(i);
-
-        if (character && (index >= i) && (character->name() == name))
+        if (character && (character->name() == name))
         {
-            m_currentCharacter = m_characters.at(i);
+            m_currentCharacter = character;
+            break;
         }
     }
 
     if (m_currentCharacter)
     {
-        if (m_currentCharacter->type() < 2) m_currentViewer = &m_imageViewer;
+        const auto type = m_currentCharacter->type();
+
+        if (type == Character::Type::Image || type == Character::Type::Pdf)
+        {
+            m_currentViewer = &m_imageViewer;
+        }
 
         m_currentViewer->setCharacter(m_currentCharacter);
     }
