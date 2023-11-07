@@ -51,7 +51,7 @@ ListView {
                 anchors.bottom: parent.bottom
 
                 Label {
-                    text: delegate_root.modelData.name
+                    text: delegate_root.modelData ? delegate_root.modelData.name : ""
                     color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
                     width: delay_indicator.visible ? parent.width - delay_indicator.width
                                                      - 5 : parent.width
@@ -82,7 +82,7 @@ ListView {
 
             // INI
             ListSpinBox {
-                value: delegate_root.modelData.ini
+                value: delegate_root.modelData ? delegate_root.modelData.ini : 0
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -96,7 +96,7 @@ ListView {
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                value: delegate_root.modelData.health
+                value: delegate_root.modelData ? delegate_root.modelData.health : 0
                 font_color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
                 onValueEdited: new_value => CombatTrackerTool.setHealth(delegate_root.index,
                                                                      new_value)
@@ -108,7 +108,7 @@ ListView {
                 width: list_view.width / 6
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                value: delegate_root.modelData.priority
+                value: delegate_root.modelData ? delegate_root.modelData.priority : 0
                 font_color: delegate_root.ListView.isCurrentItem ? palette.buttonText : palette.text
                 onValueEdited: new_value => CombatTrackerTool.setPriority(
                                    delegate_root.index, new_value)
@@ -120,7 +120,7 @@ ListView {
                 width: parent.width - x - parent.padding - parent.spacing
                        - delegate_button_row.width
                 onFieldTextChanged: CombatTrackerTool.setNotes(delegate_root.index, fieldText)
-                text: delegate_root.modelData.notes
+                text: delegate_root.modelData ? delegate_root.modelData.notes : ""
             }
 
             // Buttons
