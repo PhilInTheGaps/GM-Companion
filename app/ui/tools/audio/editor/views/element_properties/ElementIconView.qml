@@ -48,7 +48,7 @@ Item {
             id: element_icon_image
             anchors.fill: parent
             anchors.margins: 1
-            source: AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
+            source: AudioTool.editor.currentElement && AudioTool.editor.currentElement.thumbnail.absoluteUrl.length > 0 ? "file:" + AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
         }
 
         Text {

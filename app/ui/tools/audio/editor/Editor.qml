@@ -81,7 +81,7 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: AudioTool.editor.currentElement ? AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
+            source: AudioTool.editor.currentElement && AudioTool.editor.currentElement.thumbnail.absoluteUrl.length > 0 ? "file:" + AudioTool.editor.currentElement.thumbnail.absoluteUrl : ""
 
             fillMode: Image.PreserveAspectFit
         }
