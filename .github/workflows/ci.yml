@@ -99,7 +99,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSLv3\Win_x64\bin\*.dll .\build\install\bin
 
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir app\ui -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir app\ui -targetDir build\install\bin -enablePlugins multimedia
 
       - name: Remove debug and test info from install folder
         run: |
