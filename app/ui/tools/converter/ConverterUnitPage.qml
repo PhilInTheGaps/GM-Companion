@@ -138,12 +138,11 @@ Page {
                 height: Sizes.toolbarHeight * 1.5
                 font.pointSize: 12
                 readOnly: true
-                text: Number(
-                    ConverterTool.convert(
-                        ConverterTool.fromUnit,
-                        from_value_text_field.text,
-                        ConverterTool.toUnit)).toLocaleString(
-                            Qt.locale(SettingsManager.languageBcp47), 'G', 8)
+                text: ConverterTool.convert(
+                            ConverterTool.fromUnit,
+                            from_value_text_field.text,
+                            ConverterTool.toUnit)
+
             }
 
             Flickable {
@@ -179,8 +178,7 @@ Page {
 
                         CustomButton {
                             required property ConverterUnit modelData
-                            property string converted: ConverterTool.convert(
-                                                            ConverterTool.fromUnit, from_value_text_field.text,modelData)
+                            property string converted: ConverterTool.convert(ConverterTool.fromUnit, from_value_text_field.text, modelData)
 
                             buttonText: qsTranslate("Units", modelData.name)
                                         + (converted.length > 0 ? " (" + converted + ")" : "")

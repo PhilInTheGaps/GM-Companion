@@ -201,7 +201,7 @@ auto ConverterTool::convert(const ConverterUnit *fromUnit, const QString &fromVa
 
     const auto factor = fromUnit->value() / toUnit->value();
     const auto value = textToNumber(fromValue);
-    return QString::number(factor * value, 'g', 6);
+    return SettingsManager::getLanguage().toString(factor * value, 'g', 6);
 }
 
 auto ConverterTool::editor() -> ConverterEditor *
