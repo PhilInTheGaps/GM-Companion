@@ -54,7 +54,6 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
     }
 
     m_logStream << line << "\n";
-    m_logStream.flush();
 }
 
 /// If it does not exist yet, create the folder that will contain the log file
