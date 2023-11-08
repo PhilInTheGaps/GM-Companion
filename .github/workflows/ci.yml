@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        qt-version: ["6.5.2"]
+        qt-version: ["6.5.3"]
         compiler: ["msvc2019_64"]
     steps:
       - name: Install Qt
@@ -89,7 +89,7 @@ jobs:
 
       - name: Install CQtDeployer
         run: |
-          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2311/CQtDeployer_1.6.2311.76d1d20_Windows_AMD64.exe
+          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2323/CQtDeployer_1.6.2323.dd027b2_Windows_AMD64.exe
           .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
 
       - name: Download librespot
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        qt-version: ["6.5.2"]
+        qt-version: ["6.5.3"]
         compiler: ["gcc_64"]
     env:
       QT_QPA_PLATFORM: "offscreen"
@@ -242,7 +242,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        qt-version: ["6.5.2"]
+        qt-version: ["6.5.3"]
         compiler: ["gcc_64"]
     env:
       QT_QPA_PLATFORM: "offscreen"
