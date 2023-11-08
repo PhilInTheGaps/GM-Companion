@@ -13,16 +13,12 @@ Page {
     id: dice_page
 
     property bool combat_tracker_mode: false
-    property var diceSides: [4, 6, 8, 10, 12, 20]
+    readonly property var diceSides: [4, 6, 8, 10, 12, 20]
     property alias diceTypeSpinBox: dice_type_spin_box
     readonly property int minimalHeight: main_column.height
 
     Connections {
         target: DiceTool
-
-        function onCalculationStringChanged() {
-            calculation_text_edit.text = DiceTool.calculationString
-        }
 
         function onMixedCriticalResult() {
             roll_result.color = "orange"
@@ -82,7 +78,7 @@ Page {
                     anchors.margins: 5
 
                     sides: modelData
-                    isCurrentType: dice_type_spin_box.value == sides
+                    isCurrentType: dice_type_spin_box.value === sides
                     onClicked: dice_type_spin_box.value = sides
                 }
             }
@@ -108,6 +104,7 @@ Page {
         spacing: 10
         padding: 10
         topPadding: 0
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: dice_page.combat_tracker_mode ? parent.right : undefined
         width: dice_page.combat_tracker_mode ? 0 : 620
@@ -165,6 +162,7 @@ Page {
                 width: (parent.width - parent.spacing * 2) / 3
                 value: 1
                 from: 1
+                to: 9999
                 onValueChanged: DiceTool.setAmount(value)
                 editable: true
                 font.pixelSize: value_row.width / 25
@@ -173,10 +171,10 @@ Page {
             SpinBox {
                 id: dice_type_spin_box
                 value: 20
-                to: 1000
+                to: 9999
                 width: (parent.width - parent.spacing * 2) / 3
                 editable: true
-                onValueChanged: DiceTool.setSides(value)
+                onValueChanged: DiceTool.sides = value
                 font.pixelSize: value_row.width / 25
             }
 
@@ -184,8 +182,8 @@ Page {
                 id: modifier_spin_box
                 width: (parent.width - parent.spacing * 2) / 3
                 value: 0
-                from: -99
-                to: 99
+                from: -9999
+                to: 9999
                 onValueChanged: DiceTool.setModifier(value)
                 editable: true
                 font.pixelSize: value_row.width / 25
@@ -216,7 +214,7 @@ Page {
                 hoverEnabled: true
 
                 onClicked: {
-                    roll_result.text = DiceTool.roll
+                    DiceTool.roll()
                 }
             }
 
@@ -230,7 +228,7 @@ Page {
             Label {
                 id: roll_result
                 font.pixelSize: value_row.width / 20
-                text: "-"
+                text: DiceTool.result.length > 0 ? DiceTool.result : "-"
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
             }
@@ -243,24 +241,20 @@ Page {
         }
     }
 
-    ScrollView {
+    CustomTextEdit {
+        id: textedit
+
         anchors.top: main_column.bottom
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
 
-        clip: true
-        padding: 10
-        contentHeight: calculation_text_edit.implicitHeight
+        color: palette.base
+        border.width: 0
+        font.pointSize: 12
 
-        TextEdit {
-            id: calculation_text_edit
-            readOnly: true
-            color: palette.text
-            selectedTextColor: palette.highlightedText
-            selectionColor: palette.highlight
+        area.readOnly: true
 
-            font.pixelSize: value_row.width / 30
-        }
+        text: DiceTool.calculation
     }
 }

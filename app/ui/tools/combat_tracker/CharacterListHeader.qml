@@ -25,7 +25,7 @@ Rectangle {
             "text": qsTr("Priority"),
             "divisor": 6,
             "alignment": "center",
-            "helpText": qsTr("Characters with the same initiative value will be ordered by their priority.")
+            "helpText": qsTr("Characters with the same initiative value will be ordered by their priority (highest first).")
         }, {
             "text": qsTr("Notes"),
             "divisor": 6,

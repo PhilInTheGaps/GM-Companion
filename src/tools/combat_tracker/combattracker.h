@@ -4,7 +4,6 @@
 #include "abstracttool.h"
 #include "combatant.h"
 #include "combattrackerstate.h"
-#include "effecttool.h"
 #include <QFile>
 #include <QList>
 #include <QObject>
@@ -20,7 +19,7 @@ class CombatTracker : public AbstractTool
 
 public:
     CombatTracker() = delete;
-    explicit CombatTracker(const QQmlEngine *qmlEngine, QObject *parent = nullptr);
+    explicit CombatTracker(QObject *parent = nullptr);
     static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> CombatTracker *;
 
     Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
@@ -80,8 +79,6 @@ protected:
     static auto getCacheFile() -> QFile;
 
 private:
-    EffectTool m_effectTool;
-
     CombatTrackerState m_state;
 };
 

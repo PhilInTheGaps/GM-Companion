@@ -57,6 +57,7 @@ Item {
                 id: count_spinbox
                 value: 1
                 from: 1
+                to: 9999
                 onValueChanged: DiceTool.setAmount(value)
                 editable: true
                 font.pixelSize: parent.height * 0.4
@@ -73,9 +74,9 @@ Item {
             SpinBox {
                 id: dice_type_spin_box
                 value: 20
-                to: 1000
+                to: 9999
                 editable: true
-                onValueChanged: DiceTool.setSides(value)
+                onValueChanged: DiceTool.sides = value
                 font.pixelSize: parent.height * 0.4
             }
 
@@ -89,8 +90,8 @@ Item {
             // Modifier
             SpinBox {
                 value: 0
-                from: -99
-                to: 99
+                from: -9999
+                to: 9999
                 onValueChanged: DiceTool.setModifier(value)
                 editable: true
                 font.pixelSize: parent.height * 0.4
@@ -114,7 +115,7 @@ Item {
                 hoverEnabled: true
 
                 onClicked: {
-                    roll_result.text = DiceTool.roll
+                    DiceTool.roll()
                 }
             }
 
@@ -129,7 +130,7 @@ Item {
             // Result
             Label {
                 id: roll_result
-                text: "-"
+                text: DiceTool.result.length > 0 ? DiceTool.result : "-"
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: parent.height * 0.5

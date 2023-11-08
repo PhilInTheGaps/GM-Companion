@@ -65,7 +65,7 @@ void CombatTrackerTest::createTestData(AccessibleCombatTracker &combatTracker)
 
 TEST_F(CombatTrackerTest, TestNormalUse)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
 
     // No combatant added, so we should not be able to modify one
     EXPECT_FALSE(combatTracker.setIni(0, 5));
@@ -126,7 +126,7 @@ TEST_F(CombatTrackerTest, TestNormalUse)
 
 TEST_F(CombatTrackerTest, CanRemoveCombatants)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
 
     EXPECT_FALSE(combatTracker.remove(-1));
     EXPECT_FALSE(combatTracker.remove(0));
@@ -149,7 +149,7 @@ TEST_F(CombatTrackerTest, CanRemoveCombatants)
 
 TEST_F(CombatTrackerTest, CanRemoveLastAndActiveCombatant)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
     createTestData(combatTracker);
 
     combatTracker.reset();
@@ -169,7 +169,7 @@ TEST_F(CombatTrackerTest, CanRemoveLastAndActiveCombatant)
 
 TEST_F(CombatTrackerTest, CanRemoveSecondLastAndActiveCombatant)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
     createTestData(combatTracker);
 
     combatTracker.reset();
@@ -188,7 +188,7 @@ TEST_F(CombatTrackerTest, CanRemoveSecondLastAndActiveCombatant)
 
 TEST_F(CombatTrackerTest, TestSaveLoad)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
     createTestData(combatTracker);
 
     const auto index = combatTracker.currentIndex();
@@ -226,7 +226,7 @@ TEST_F(CombatTrackerTest, TestSaveLoad)
 
 TEST_F(CombatTrackerTest, CanAccessModel)
 {
-    AccessibleCombatTracker combatTracker(nullptr, nullptr);
+    AccessibleCombatTracker combatTracker(nullptr);
     createTestData(combatTracker);
 
     EXPECT_TRUE(combatTracker.model());

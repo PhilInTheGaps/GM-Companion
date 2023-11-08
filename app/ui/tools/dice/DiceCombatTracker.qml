@@ -1,4 +1,5 @@
 pragma ComponentBehavior: Bound
+
 import QtQuick
 import ".."
 import "../.."
@@ -32,7 +33,7 @@ Item {
                     anchors.left: dice_col.left
                     anchors.right: dice_col.right
 
-                    isCurrentType: dice.diceTypeSpinBox.value == sides
+                    isCurrentType: dice.diceTypeSpinBox.value === sides
                     onClicked: dice.diceTypeSpinBox.value = sides
                 }
             }
@@ -41,10 +42,10 @@ Item {
 
     Dice {
         id: dice
-        height: minimalHeight
         combat_tracker_mode: true
         anchors.left: parent.left
         anchors.right: sidebar.left
         anchors.top: parent.top
+        anchors.bottom: parent.bottom
     }
 }

@@ -20,12 +20,6 @@ auto DiceTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> DiceTool *
     return new DiceTool(qmlEngine);
 }
 
-void DiceTool::setSides(int sides)
-{
-    m_sides = sides;
-    emit sidesChanged();
-}
-
 void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax)
 {
     SettingsManager::instance()->set(ENABLE_CRITICALS_SETTING, enableCriticals, DICE_SETTINGS);
@@ -52,7 +46,7 @@ auto DiceTool::getFailure() -> int
 
 auto DiceTool::getMinMax() -> int
 {
-    return SettingsManager::instance()->get(USE_MIN_MAX_SETTING, false, DICE_SETTINGS);
+    return SettingsManager::instance()->get(USE_MIN_MAX_SETTING, true, DICE_SETTINGS);
 }
 
 auto DiceTool::getSuccessMax() -> int
@@ -60,9 +54,9 @@ auto DiceTool::getSuccessMax() -> int
     return SettingsManager::instance()->get(SUCCESS_MAX_SETTING, true, DICE_SETTINGS);
 }
 
-auto DiceTool::roll() -> int
+void DiceTool::roll()
 {
-    int result = 0;
+    int value = 0;
     int criticalSuccesses = 0;
     int criticalFailures = 0;
     int criticalSuccess = 0;
@@ -73,13 +67,13 @@ auto DiceTool::roll() -> int
     {
         if (getSuccessMax())
         {
-            criticalSuccess = m_sides;
+            criticalSuccess = a_sides;
             criticalFailure = 1;
         }
         else
         {
             criticalSuccess = 1;
-            criticalFailure = m_sides;
+            criticalFailure = a_sides;
         }
     }
     else
@@ -88,23 +82,13 @@ auto DiceTool::roll() -> int
         criticalFailure = getFailure();
     }
 
-    m_calculationString = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(m_sides);
-
-    qCDebug(gmDiceTool()) << m_calculationString;
-
-    if (m_modifier < 0)
-    {
-        m_calculationString.append(" " + QString::number(m_modifier) + "\n\n");
-    }
-    else
-    {
-        m_calculationString.append(" + " + QString::number(m_modifier) + "\n\n");
-    }
+    a_calculation = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(a_sides);
+    a_calculation.append((m_modifier < 0 ? " " : " + ") + QString::number(m_modifier) + "\n\n");
 
     for (int i = 0; i < m_amount; i++)
     {
         // Generate random integer
-        int temp = QRandomGenerator::system()->bounded(m_sides) + 1;
+        int temp = QRandomGenerator::system()->bounded(a_sides) + 1;
 
         // Check for critical successes or failures
         if (temp == criticalSuccess) criticalSuccesses++;
@@ -112,31 +96,32 @@ auto DiceTool::roll() -> int
             criticalFailures++;
 
         // Add the temporary result to the overall result
-        result += temp;
+        value += temp;
 
         // Add roll to calculation string
-        m_calculationString.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
+        a_calculation.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
     }
 
-    m_calculationString.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+    a_calculation.append(tr("\nTemporary Result: ") + QString::number(value) + "\n");
 
     // Remove bonus dice from calculation
     if (m_bonusDice > 0)
     {
-        m_calculationString.append(tr("Bonus Dice:\n"));
+        a_calculation.append(tr("Bonus Dice:\n"));
 
         // TODO for later, is currently not important
 
-        m_calculationString.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+        a_calculation.append(tr("\nTemporary Result: ") + QString::number(value) + "\n");
     }
 
     // Add modifier
-    result += m_modifier;
-    m_calculationString.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") +
-                               QString::number(result));
+    value += m_modifier;
+    a_calculation.append(tr("Modifier: ") + QString::number(m_modifier) + "\n" + tr("Result: ") +
+                         QString::number(value));
 
-    emit rollChanged();
-    emit calculationStringChanged();
+    result(QString::number(value));
+    emit calculationChanged(a_calculation);
+    qCDebug(gmDiceTool()) << "Result:" << result();
 
     // Evaluate Crits
     if (getCriticalEnabled())
@@ -153,8 +138,4 @@ auto DiceTool::roll() -> int
     {
         emit normalResult();
     }
-
-    qCDebug(gmDiceTool()) << "Result:" << result;
-
-    return result;
 }

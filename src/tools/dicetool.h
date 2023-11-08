@@ -1,5 +1,6 @@
 #pragma once
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QJSEngine>
 #include <QObject>
 #include <QQmlEngine>
@@ -11,9 +12,9 @@ class DiceTool : public QObject
     QML_ELEMENT
     QML_SINGLETON
 
-    Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
-    Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
-    Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
+    AUTO_PROPERTY_VAL2(int, sides, 20);
+    AUTO_PROPERTY2(QString, result, QStringLiteral("-"))
+    READ_PROPERTY(QString, calculation)
 
 public:
     DiceTool() = delete;
@@ -21,17 +22,8 @@ public:
 
     static auto create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> DiceTool *;
 
-    [[nodiscard]] auto sides() const -> int
-    {
-        return m_sides;
-    }
-    [[nodiscard]] auto roll() -> int;
-    [[nodiscard]] auto calculationString() const -> QString
-    {
-        return m_calculationString;
-    }
+    Q_INVOKABLE void roll();
 
-    Q_INVOKABLE void setSides(int sides);
     Q_INVOKABLE void setBonusDice(int count)
     {
         m_bonusDice = count;
@@ -47,6 +39,7 @@ public:
 
     Q_INVOKABLE static void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax,
                                             bool successMax);
+
     [[nodiscard]] Q_INVOKABLE static bool getCriticalEnabled();
     [[nodiscard]] Q_INVOKABLE static int getSuccess();
     [[nodiscard]] Q_INVOKABLE static int getFailure();
@@ -54,20 +47,13 @@ public:
     [[nodiscard]] Q_INVOKABLE static int getSuccessMax();
 
 signals:
-    void sidesChanged();
-    void rollChanged();
-    void calculationStringChanged();
-
     void mixedCriticalResult();
     void successfulCriticalResult();
     void failedCriticalResult();
     void normalResult();
 
 private:
-    int m_sides = 20;
     int m_bonusDice = 0;
     int m_modifier = 0;
     int m_amount = 1;
-
-    QString m_calculationString;
 };

@@ -10,7 +10,7 @@ Page {
     id: root
 
     readonly property bool inPortrait: width < height || width < 1200
-    property bool diceEnabled: false
+    property bool diceEnabled: true
 
     Component.onCompleted: CombatTrackerTool.loadData()
 

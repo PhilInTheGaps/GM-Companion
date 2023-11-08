@@ -157,10 +157,6 @@ set(SRC_GENERATORS
 set_source_files_properties(${SRC_GENERATORS} PROPERTIES UNITY_GROUP "generators")
 
 set(SRC_COMBAT
-    tools/combat_tracker/effect.h
-    tools/combat_tracker/effect.cpp
-    tools/combat_tracker/effecttool.h
-    tools/combat_tracker/effecttool.cpp
     tools/combat_tracker/combattracker.h
     tools/combat_tracker/combattracker.cpp
     tools/combat_tracker/combattrackerstate.h
