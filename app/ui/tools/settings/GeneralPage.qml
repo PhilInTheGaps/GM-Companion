@@ -63,13 +63,6 @@ Column {
             checked: SettingsManager.showToolNames
             onClicked: SettingsManager.showToolNames = checked
         }
-
-        // Classic Icons
-        CheckBox {
-            text: qsTr("Classic menu icons")
-            checked: SettingsManager.classicIcons
-            onClicked: SettingsManager.classicIcons = checked
-        }
     }
 
     // Telemetry

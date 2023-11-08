@@ -19,17 +19,7 @@ qt_add_resources(gm-companion-ui "ui-resources"
     PREFIX "/"
     FILES
         resources/splash.jpg
-        resources/icons/audio.png
-        resources/icons/characters.png
-        resources/icons/combat.png
-        resources/icons/converter.png
-        resources/icons/dice.png
-        resources/icons/generators.png
         resources/icons/icon.png
-        resources/icons/item-shop.png
-        resources/icons/maps.png
-        resources/icons/notes.png
-        resources/icons/settings.png
         resources/icons/dice/d4.png
         resources/icons/dice/d6.png
         resources/icons/dice/d8.png

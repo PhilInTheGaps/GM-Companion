@@ -38,7 +38,6 @@ class QuickSettingsManager : public QObject
 
     // General Settings
     SETTINGS_PROPERTY(bool, showToolNames, false)
-    SETTINGS_PROPERTY(bool, classicIcons, false)
     SETTINGS_PROPERTY(QString, cloudMode, QStringLiteral("local"))
     READ_PROPERTY2(QString, languageBcp47, SettingsManager::instance()->getLanguageBcp47())
 

@@ -23,47 +23,38 @@ ApplicationWindow {
     readonly property var tools: [{
             "name": qsTr("Audio"),
             "source": "tools/Audio.qml",
-            "classicIcon": "qrc:/resources/icons/audio.png",
             "faIcon": FontAwesome.music
         }, {
             "name": qsTr("Maps"),
             "source": "tools/Maps.qml",
-            "classicIcon": "qrc:/resources/icons/maps.png",
             "faIcon": FontAwesome.mapLocationDot
         }, {
             "name": qsTr("Dice"),
             "source": "tools/Dice.qml",
-            "classicIcon": "qrc:/resources/icons/dice.png",
             "faIcon": FontAwesome.diceD20
         }, {
             "name": qsTr("Combat Tracker"),
             "source": "tools/CombatTracker.qml",
-            "classicIcon": "qrc:/resources/icons/combat.png",
             "faIcon": FontAwesome.bookSkull
         }, {
             "name": qsTr("Item Shop"),
             "source": "tools/ItemShop.qml",
-            "classicIcon": "qrc:/resources/icons/item-shop.png",
             "faIcon": FontAwesome.cartShopping
         }, {
             "name": qsTr("Characters"),
             "source": "tools/Characters.qml",
-            "classicIcon": "qrc:/resources/icons/characters.png",
             "faIcon": FontAwesome.addressCard
         }, {
             "name": qsTr("Generators"),
             "source": "tools/Generators.qml",
-            "classicIcon": "qrc:/resources/icons/generators.png",
             "faIcon": FontAwesome.industry
         }, {
             "name": qsTr("Notes"),
             "source": "tools/Notes.qml",
-            "classicIcon": "qrc:/resources/icons/notes.png",
             "faIcon": FontAwesome.book
         }, {
             "name": qsTr("Converter"),
             "source": "tools/Converter.qml",
-            "classicIcon": "qrc:/resources/icons/converter.png",
             "faIcon": FontAwesome.scaleBalanced
         }]
 
@@ -141,7 +132,6 @@ ApplicationWindow {
                         required property int index
 
                         toolName: modelData.name
-                        iconSource: modelData.classicIcon
                         faIcon: modelData.faIcon
 
                         Shortcut {
@@ -186,7 +176,6 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
 
             toolName: qsTr("Settings")
-            iconSource: "qrc:/resources/icons/settings.png"
             faIcon: FontAwesome.gear
 
             onClicked: {
