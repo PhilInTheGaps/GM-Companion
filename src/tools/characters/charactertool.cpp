@@ -86,8 +86,15 @@ void CharacterTool::setCurrentCharacter(qsizetype index)
         {
             m_currentViewer = &m_imageViewer;
         }
+        else
+        {
+            m_currentViewer = nullptr;
+        }
 
-        m_currentViewer->setCharacter(m_currentCharacter);
+        if (m_currentViewer)
+        {
+            m_currentViewer->setCharacter(m_currentCharacter);
+        }
     }
 
     emit currentCharacterChanged();

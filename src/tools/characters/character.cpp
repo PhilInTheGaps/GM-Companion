@@ -17,7 +17,11 @@ Character::Character(const QString &name, QObject *parent) : QObject(parent), a_
 
 Character::Type Character::type() const
 {
-    if (m_files.isEmpty()) return Type::Unknown;
+    if (m_files.isEmpty())
+    {
+        // characters of type image might not have been loaded yet
+        return m_wasLoaded ? Type::Unknown : Type::Image;
+    }
 
     if (m_files.first()->name().endsWith("pdf"_L1)) return Type::Pdf;
 
