@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
-import IconFonts
 import src
 import "./buttons"
 import "../.."
+import "../../common"
 
 Rectangle {
     id: left_menu
@@ -12,46 +12,24 @@ Rectangle {
 
     signal editorButtonClicked
 
-    Item {
+    ProjectComboBoxWithEditorButton
+    {
         id: top_bar
-
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: Sizes.toolbarHeight
 
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
+        model: AudioTool.projects
+        textRole: "name"
 
-        // Project ComboBox
-        CustomToolBarComboBox {
-            id: audio_project_combo_box
+        emptyString: AudioTool.isLoading ? qsTr("Loading ...") : qsTr(
+                                                   "No Projects")
 
-            anchors.left: parent.left
-            anchors.right: editor_button.left
-
-            width: parent.width - editor_button.width
-            model: AudioTool.projects
-            textRole: "name"
-            emptyString: AudioTool.isLoading ? qsTr("Loading ...") : qsTr(
-                                                       "No Projects")
-
-            onCurrentTextChanged: {
-                AudioTool.setCurrentProject(currentIndex)
-            }
+        onCurrentTextChanged: {
+            AudioTool.setCurrentProject(projectIndex)
         }
 
-        // Open Editor Button
-        CustomToolBarButton {
-            id: editor_button
-            iconText: FontAwesome.penToSquare
-
-            anchors.right: parent.right
-            anchors.topMargin: 8
-            anchors.bottomMargin: 8
-
-            onClicked: left_menu.editorButtonClicked()
-        }
+        onEditorButtonClicked: left_menu.editorButtonClicked()
     }
 
     ScrollView {

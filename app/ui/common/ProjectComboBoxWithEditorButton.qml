@@ -9,8 +9,10 @@ Item {
     property alias model: project_combo_box.model
     property alias textRole: project_combo_box.textRole
     property alias emptyString: project_combo_box.emptyString
+    property alias projectIndex: project_combo_box.currentIndex
 
     signal currentIndexChanged(int index)
+    signal currentTextChanged(string text)
     signal editorButtonClicked
 
     height: Sizes.toolbarHeight
@@ -30,6 +32,7 @@ Item {
         emptyString: ""
 
         onCurrentIndexChanged: root.currentIndexChanged(currentIndex)
+        onCurrentTextChanged: root.currentTextChanged(currentText)
     }
 
     // Open Editor Button
@@ -42,5 +45,14 @@ Item {
         anchors.bottomMargin: 8
 
         onClicked: root.editorButtonClicked()
+    }
+
+    Rectangle {
+        id: bar
+        height: 1
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        color: palette.button
     }
 }
