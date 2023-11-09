@@ -62,31 +62,37 @@ Page {
         }
     }
 
-    // Left bar
-    CharacterList {
-        id: character_list
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: 175
-    }
+    contentItem: SplitView {
+        id: split_view
+        orientation: Qt.Horizontal
 
-    SwipeView {
-        anchors.left: character_list.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: 5
-        clip: true
+        // Left bar
+        CharacterList {
+            id: character_list
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: 175
+        }
 
-        currentIndex: CharacterTool.pageIndex
-        interactive: false
+        SwipeView {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        Loader {
-            id: classic_page
-            source: "characters/classic/ClassicPage.qml"
-            asynchronous: true
-            active: true
+            SplitView.minimumWidth: 300
+            SplitView.fillWidth: true
+
+            clip: true
+
+            currentIndex: CharacterTool.pageIndex
+            interactive: false
+
+            Loader {
+                id: classic_page
+                source: "characters/classic/ClassicPage.qml"
+                asynchronous: true
+                active: true
+            }
         }
     }
 }

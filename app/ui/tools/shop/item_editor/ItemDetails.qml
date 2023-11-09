@@ -28,11 +28,17 @@ Rectangle {
             text: qsTr("Add Category")
 
             onClicked: {
-                if (category_name_field.text != "") {
-                    ShopTool.editor.itemEditor.addCategory(
-                                category_name_field.text)
+                if (category_name_field.text !== "") {
+                    ShopTool.editor.itemEditor.addCategory(category_name_field.text);
                 }
             }
+        }
+
+        Rectangle {
+            color: palette.button
+            height: 1
+            anchors.left: parent.left
+            anchors.right: parent.right
         }
 
         TextField {
@@ -41,7 +47,7 @@ Rectangle {
             anchors.right: parent.right
             placeholderText: qsTr("Item Name")
             selectByMouse: true
-            enabled: category_combobox.currentText != ""
+            enabled: category_combobox.currentText !== ""
         }
 
         TextField {
@@ -50,24 +56,23 @@ Rectangle {
             anchors.right: parent.right
             placeholderText: qsTr("Price")
             selectByMouse: true
-            enabled: category_combobox.currentText != ""
+            enabled: category_combobox.currentText !== ""
         }
 
         ComboBox {
             id: category_combobox
             anchors.left: parent.left
             anchors.right: parent.right
-            model: ShopTool && ShopTool.editor
-                   && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor.categories : []
+            model: ShopTool && ShopTool.editor && ShopTool.editor.itemEditor ? ShopTool.editor.itemEditor.categories : []
         }
 
         CustomTextEdit {
             id: item_description_field
             anchors.left: parent.left
             anchors.right: parent.right
-            height: width
+            height: category_combobox.height * 3
 
-            enabled: category_combobox.currentText != ""
+            enabled: category_combobox.currentText !== ""
             placeholderText: qsTr("Item Description")
         }
 
@@ -75,12 +80,9 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             text: qsTr("Add Item")
-            enabled: category_combobox.currentText != ""
+            enabled: category_combobox.currentText !== ""
 
-            onClicked: ShopTool.editor.itemEditor.addItem(
-                           item_name_field.text, item_price_field.text,
-                           category_combobox.currentText,
-                           item_description_field.text)
+            onClicked: ShopTool.editor.itemEditor.addItem(item_name_field.text, item_price_field.text, category_combobox.currentText, item_description_field.text)
         }
     }
 }

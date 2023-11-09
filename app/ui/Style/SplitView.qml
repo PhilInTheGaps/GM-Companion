@@ -15,8 +15,15 @@ T.SplitView {
     hoverEnabled: true
 
     handle: Rectangle {
-        implicitWidth: control.orientation === Qt.Horizontal ? 5 : control.width
-        implicitHeight: control.orientation === Qt.Horizontal ? control.height : 5
+        implicitWidth: control.orientation === Qt.Horizontal ? 1 : control.width
+        implicitHeight: control.orientation === Qt.Horizontal ? control.height : 1
+
         color: T.SplitHandle.pressed ? StyleColors.splitViewHandlePressed : (T.SplitHandle.hovered ? StyleColors.splitViewHandleHighlight : StyleColors.splitViewHandle)
+
+        containmentMask: Item {
+            x: -width / 2
+            width: 10
+            height: control.height
+        }
     }
 }

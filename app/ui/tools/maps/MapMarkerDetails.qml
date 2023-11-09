@@ -20,13 +20,14 @@ Item {
         anchors.right: parent.right
 
         // Back
-        Row {
+        Item {
             height: Sizes.toolbarHeight
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 5
 
             CustomToolBarButton {
+                id: back_button
                 iconText: FontAwesome.chevronLeft
                 onClicked: root.back()
                 anchors.margins: 7
@@ -37,7 +38,13 @@ Item {
                 font.bold: true
                 font.pointSize: 16
                 verticalAlignment: Text.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
+
+                anchors.left: back_button.right
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
+                elide: Label.ElideRight
 
                 MouseArea {
                     anchors.fill: parent

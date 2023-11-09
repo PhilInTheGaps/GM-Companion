@@ -13,19 +13,19 @@ Page {
     signal backToTool
 
     enum Mode {
-        Project = 0,
-        Category = 1,
-        Unit = 2
+        Project,
+        Category,
+        Unit
     }
 
     function modeToString(mode) {
         switch (mode) {
         case ConverterEditorPage.Mode.Project:
-            return qsTr("project")
+            return qsTr("project");
         case ConverterEditorPage.Mode.Category:
-            return qsTr("category")
+            return qsTr("category");
         case ConverterEditorPage.Mode.Unit:
-            return qsTr("unit")
+            return qsTr("unit");
         }
     }
 
@@ -36,8 +36,7 @@ Page {
     Dialog {
         id: delete_dialog
         modal: true
-        title: qsTr("Delete ") + root.modeToString(delete_dialog.mode) + " "
-               + (delete_dialog.element ? delete_dialog.element.name : "") + "?"
+        title: qsTr("Delete ") + root.modeToString(delete_dialog.mode) + " " + (delete_dialog.element ? delete_dialog.element.name : "") + "?"
 
         property int mode: ConverterEditorPage.Mode.Project
         property var element: undefined
@@ -51,20 +50,20 @@ Page {
         onAccepted: {
             switch (delete_dialog.mode) {
             case ConverterEditorPage.Mode.Project:
-                ConverterTool.editor.deleteProject(element)
-                break
+                ConverterTool.editor.deleteProject(element);
+                break;
             case ConverterEditorPage.Mode.Category:
-                ConverterTool.editor.deleteCategory(element)
-                break
+                ConverterTool.editor.deleteCategory(element);
+                break;
             case ConverterEditorPage.Mode.Unit:
-                ConverterTool.editor.deleteUnit(element)
-                break
+                ConverterTool.editor.deleteUnit(element);
+                break;
             }
         }
 
         function center() {
-            x = (root.width - width) / 2
-            y = 0
+            x = (root.width - width) / 2;
+            y = 0;
         }
     }
 
@@ -92,22 +91,22 @@ Page {
         onAccepted: {
             switch (rename_dialog.mode) {
             case ConverterEditorPage.Mode.Project:
-                ConverterTool.editor.renameProject(element, rename_field.text)
-                break
+                ConverterTool.editor.renameProject(element, rename_field.text);
+                break;
             case ConverterEditorPage.Mode.Category:
-                ConverterTool.editor.renameCategory(element, rename_field.text)
-                break
+                ConverterTool.editor.renameCategory(element, rename_field.text);
+                break;
             case ConverterEditorPage.Mode.Unit:
-                ConverterTool.editor.renameUnit(element, rename_field.text)
-                break
+                ConverterTool.editor.renameUnit(element, rename_field.text);
+                break;
             default:
-                console.log("Error: Rename dialog in undefined mode")
+                console.log("Error: Rename dialog in undefined mode");
             }
         }
 
         function center() {
-            x = (root.width - width) / 2
-            y = 0
+            x = (root.width - width) / 2;
+            y = 0;
         }
     }
 
@@ -143,11 +142,9 @@ Page {
                 model: ConverterTool.editor ? ConverterTool.editor.projects : []
 
                 onCurrentIndexChanged: {
-                    if (!ConverterTool.editor
-                            || currentIndex >= ConverterTool.editor.projects.length)
-                        return
-
-                    ConverterTool.editor.currentProject = ConverterTool.editor.projects[currentIndex]
+                    if (!ConverterTool.editor || currentIndex >= ConverterTool.editor.projects.length || ConverterTool.editor.projects.length < 1)
+                        return;
+                    ConverterTool.editor.currentProject = ConverterTool.editor.projects[currentIndex];
                 }
             }
 
@@ -157,12 +154,12 @@ Page {
                 toolTipText: qsTr("Rename Project")
                 enabled: project_combo_box.model.length > 0
                 onClicked: {
-                    rename_dialog.mode = ConverterEditorPage.Mode.Project
-                    rename_dialog.title = qsTr("Rename Project")
-                    rename_dialog.element = ConverterTool.editor.currentProject
-                    rename_dialog.x = project_combo_box.x
-                    rename_dialog.y = 0
-                    rename_dialog.open()
+                    rename_dialog.mode = ConverterEditorPage.Mode.Project;
+                    rename_dialog.title = qsTr("Rename Project");
+                    rename_dialog.element = ConverterTool.editor.currentProject;
+                    rename_dialog.x = project_combo_box.x;
+                    rename_dialog.y = 0;
+                    rename_dialog.open();
                 }
             }
 
@@ -172,104 +169,109 @@ Page {
                 toolTipText: qsTr("Delete Project")
                 enabled: project_combo_box.model.length > 0
                 onClicked: {
-                    delete_dialog.x = project_combo_box.x
-                    delete_dialog.y = 0
-                    delete_dialog.element = ConverterTool.editor.currentProject
-                    delete_dialog.mode = ConverterEditorPage.Mode.Project
-                    delete_dialog.open()
+                    delete_dialog.x = project_combo_box.x;
+                    delete_dialog.y = 0;
+                    delete_dialog.element = ConverterTool.editor.currentProject;
+                    delete_dialog.mode = ConverterEditorPage.Mode.Project;
+                    delete_dialog.open();
                 }
             }
         }
     }
 
-    Rectangle {
-        id: side_bar
-        color: palette.dark
-        width: Sizes.sidebarWidth
+    contentItem: SplitView {
+        id: split_view
+        orientation: Qt.Horizontal
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        Rectangle {
+            id: side_bar
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        Flickable {
-            id: catetory_view
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: Sizes.sidebarWidth
 
-            anchors.fill: parent
-            anchors.margins: 5
+            color: palette.dark
 
-            clip: true
-            contentWidth: -1
-            contentHeight: category_column.implicitHeight
-            interactive: catetory_view_scroll_bar.visible
+            Flickable {
+                id: catetory_view
 
-            ScrollBar.vertical: ScrollBar {
-                id: catetory_view_scroll_bar
-                anchors.right: parent.right
-                visible: catetory_view.contentHeight > catetory_view.height
-            }
+                anchors.fill: parent
+                anchors.margins: 5
 
-            Column {
-                id: category_column
-                anchors.left: parent.left
-                anchors.right: parent.right
+                clip: true
+                contentWidth: -1
+                contentHeight: category_column.implicitHeight
+                interactive: catetory_view_scroll_bar.visible
 
-                anchors.rightMargin: catetory_view_scroll_bar.visible ? catetory_view_scroll_bar.width + 5 : 0
+                ScrollBar.vertical: ScrollBar {
+                    id: catetory_view_scroll_bar
+                    anchors.right: parent.right
+                    visible: catetory_view.contentHeight > catetory_view.height
+                }
 
-                Repeater {
-                    id: categories_repeater
+                Column {
+                    id: category_column
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                    model: ConverterTool.editor.currentProject ? ConverterTool.editor.currentProject.categories : []
+                    anchors.rightMargin: catetory_view_scroll_bar.visible ? catetory_view_scroll_bar.width + 5 : 0
 
-                    CustomButton {
-                        id: category_delegate
-                        required property ConverterCategory modelData
+                    Repeater {
+                        id: categories_repeater
 
-                        buttonText: modelData.name
+                        model: ConverterTool.editor.currentProject ? ConverterTool.editor.currentProject.categories : []
 
-                        anchors.left: parent ? parent.left : undefined
-                        anchors.right: parent ? parent.right : undefined
+                        CustomButton {
+                            id: category_delegate
+                            required property ConverterCategory modelData
 
-                        onClicked: {
-                            if (!ConverterTool.editor)
-                                return
+                            buttonText: modelData.name
 
-                            ConverterTool.editor.currentCategory = modelData
-                        }
+                            anchors.left: parent ? parent.left : undefined
+                            anchors.right: parent ? parent.right : undefined
 
-                        Row {
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.right: parent.right
-
-                            CustomButton {
-                                iconText: FontAwesome.pen
-                                transparentBackground: true
-
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-
-                                onClicked: {
-                                    rename_dialog.x = project_combo_box.x
-                                    rename_dialog.y = 0
-                                    rename_dialog.element = category_delegate.modelData
-                                    rename_dialog.mode = ConverterEditorPage.Mode.Category
-                                    rename_dialog.open()
-                                }
+                            onClicked: {
+                                if (!ConverterTool.editor)
+                                    return;
+                                ConverterTool.editor.currentCategory = modelData;
                             }
 
-                            CustomButton {
-                                iconText: FontAwesome.trash
-                                transparentBackground: true
-
+                            Row {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
+                                anchors.right: parent.right
 
-                                onClicked: {
-                                    delete_dialog.x = project_combo_box.x
-                                    delete_dialog.y = 0
-                                    delete_dialog.element = category_delegate.modelData
-                                    delete_dialog.mode = ConverterEditorPage.Mode.Category
-                                    delete_dialog.open()
+                                CustomButton {
+                                    iconText: FontAwesome.pen
+                                    transparentBackground: true
+
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+
+                                    onClicked: {
+                                        rename_dialog.x = project_combo_box.x;
+                                        rename_dialog.y = 0;
+                                        rename_dialog.element = category_delegate.modelData;
+                                        rename_dialog.mode = ConverterEditorPage.Mode.Category;
+                                        rename_dialog.open();
+                                    }
+                                }
+
+                                CustomButton {
+                                    iconText: FontAwesome.trash
+                                    transparentBackground: true
+
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+
+                                    onClicked: {
+                                        delete_dialog.x = project_combo_box.x;
+                                        delete_dialog.y = 0;
+                                        delete_dialog.element = category_delegate.modelData;
+                                        delete_dialog.mode = ConverterEditorPage.Mode.Category;
+                                        delete_dialog.open();
+                                    }
                                 }
                             }
                         }
@@ -277,126 +279,122 @@ Page {
                 }
             }
         }
-    }
 
-    Item {
-        id: main_view
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: side_bar.right
-        anchors.right: parent.right
-        anchors.margins: 5
-
-        Flickable {
-            id: item_view
-
+        Item {
+            id: main_view
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            width: Math.min(item_column.implicitWidth + 10, parent.width)
 
-            clip: true
-            contentHeight: item_column.implicitHeight
-            interactive: item_view_scroll_bar.visible
+            SplitView.minimumWidth: item_column.implicitWidth
+            SplitView.fillWidth: true
 
-            ScrollBar.vertical: ScrollBar {
-                id: item_view_scroll_bar
-                anchors.right: parent.right
-                visible: item_view.contentHeight > item_view.height
-            }
+            Flickable {
+                id: item_view
 
-            Column {
-                id: item_column
-                spacing: 10
-                padding: 10
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
-                Repeater {
-                    id: items_repeater
+                width: Math.min(item_column.implicitWidth + 10, parent.width)
 
-                    model: ConverterTool.editor
-                           && ConverterTool.editor.currentCategory ? ConverterTool.editor.currentCategory.units : []
+                clip: true
+                contentHeight: item_column.implicitHeight
+                interactive: item_view_scroll_bar.visible
 
-                    Rectangle {
-                        id: unit_delegate
+                ScrollBar.vertical: ScrollBar {
+                    id: item_view_scroll_bar
+                    anchors.right: parent.right
+                    visible: item_view.contentHeight > item_view.height
+                }
 
-                        required property ConverterUnit modelData
+                Column {
+                    id: item_column
+                    spacing: 10
+                    padding: 10
 
-                        color: palette.dark
-                        border.color: palette.button
-                        border.width: 1
+                    Repeater {
+                        id: items_repeater
 
-                        width: item_row.width
-                        height: Sizes.toolbarHeight
+                        model: ConverterTool.editor && ConverterTool.editor.currentCategory ? ConverterTool.editor.currentCategory.units : []
 
-                        Row {
-                            id: item_row
+                        Rectangle {
+                            id: unit_delegate
 
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
+                            required property ConverterUnit modelData
 
-                            spacing: 10
-                            padding: 10
+                            color: palette.dark
+                            border.color: palette.button
+                            border.width: 1
 
-                            Label {
-                                text: qsTr("Name:")
+                            width: item_row.width
+                            height: Sizes.toolbarHeight
+
+                            Row {
+                                id: item_row
 
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                verticalAlignment: Label.AlignVCenter
-                                horizontalAlignment: Label.AlignHCenter
-                            }
+                                spacing: 10
+                                padding: 10
 
-                            TextField {
-                                text: unit_delegate.modelData.name
-                                selectByMouse: true
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
+                                Label {
+                                    text: qsTr("Name:")
 
-                                onTextEdited: {
-                                    ConverterTool.editor.renameUnit(unit_delegate.modelData, text)
-                                }
-                            }
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
 
-                            Label {
-                                text: qsTr("Value:")
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                verticalAlignment: Label.AlignVCenter
-                                horizontalAlignment: Label.AlignLeft
-                            }
-
-                            TextField {
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                text: Number(unit_delegate.modelData.value).toLocaleString(
-                                          Qt.locale(
-                                              SettingsManager.languageBcp47),
-                                          'G', 8)
-
-                                selectByMouse: true
-
-                                validator: DoubleValidator {
-                                    notation: DoubleValidator.ScientificNotation
-                                    locale: SettingsManager.languageBcp47
+                                    verticalAlignment: Label.AlignVCenter
+                                    horizontalAlignment: Label.AlignHCenter
                                 }
 
-                                onEditingFinished: {
-                                    ConverterTool.editor.changeUnitValue(unit_delegate.modelData, text)
+                                TextField {
+                                    text: unit_delegate.modelData.name
+                                    selectByMouse: true
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+
+                                    onTextEdited: {
+                                        ConverterTool.editor.renameUnit(unit_delegate.modelData, text);
+                                    }
                                 }
-                            }
 
-                            CustomButton {
-                                iconText: FontAwesome.trash
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                transparentBackground: true
+                                Label {
+                                    text: qsTr("Value:")
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    verticalAlignment: Label.AlignVCenter
+                                    horizontalAlignment: Label.AlignLeft
+                                }
 
-                                onClicked: {
-                                    delete_dialog.center()
-                                    delete_dialog.element = unit_delegate.modelData
-                                    delete_dialog.mode = ConverterEditorPage.Mode.Unit
-                                    delete_dialog.open()
+                                TextField {
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    text: Number(unit_delegate.modelData.value).toLocaleString(Qt.locale(SettingsManager.languageBcp47), 'G', 8)
+
+                                    selectByMouse: true
+
+                                    validator: DoubleValidator {
+                                        notation: DoubleValidator.ScientificNotation
+                                        locale: SettingsManager.languageBcp47
+                                    }
+
+                                    onEditingFinished: {
+                                        ConverterTool.editor.changeUnitValue(unit_delegate.modelData, text);
+                                    }
+                                }
+
+                                CustomButton {
+                                    iconText: FontAwesome.trash
+                                    anchors.top: parent.top
+                                    anchors.bottom: parent.bottom
+                                    transparentBackground: true
+
+                                    onClicked: {
+                                        delete_dialog.center();
+                                        delete_dialog.element = unit_delegate.modelData;
+                                        delete_dialog.mode = ConverterEditorPage.Mode.Unit;
+                                        delete_dialog.open();
+                                    }
                                 }
                             }
                         }

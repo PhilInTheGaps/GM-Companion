@@ -8,40 +8,45 @@ Page {
 
     Component.onCompleted: NotesTool.loadData()
 
-    NotesControlView {
-        id: control_view
+    contentItem: SplitView {
+        id: split_view
+        orientation: Qt.Horizontal
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: 200
-    }
-
-    Item {
-        id: main_item
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: control_view.right
-        anchors.right: parent.right
-
-        NotesControlBar {
-            id: control_bar
-
+        NotesControlView {
+            id: control_view
             anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
-            textArea: page.textArea
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: 200
         }
 
-        NotesPage {
-            id: page
-
-            anchors.top: control_bar.bottom
+        Item {
+            id: main_item
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
+
+            SplitView.minimumWidth: 500
+            SplitView.fillWidth: true
+
+            NotesControlBar {
+                id: control_bar
+
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                textArea: page.textArea
+            }
+
+            NotesPage {
+                id: page
+
+                anchors.top: control_bar.bottom
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+            }
         }
     }
 }

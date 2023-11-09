@@ -11,7 +11,6 @@ Rectangle {
     signal openEditor
 
     color: palette.dark
-    width: Sizes.sidebarWidth
 
     ProjectComboBoxWithEditorButton {
         id: top_bar
@@ -21,14 +20,12 @@ Rectangle {
         anchors.right: parent.right
 
         model: ConverterTool.projects
-        emptyString: ConverterTool.isLoading ? qsTr("Loading ...") : qsTr(
-                                                       "No Units")
+        emptyString: ConverterTool.isLoading ? qsTr("Loading ...") : qsTr("No Units")
 
         onCurrentIndexChanged: function (index) {
             if (ConverterTool.projects.length < 1)
-                return
-
-            ConverterTool.currentProject = ConverterTool.projects[index]
+                return;
+            ConverterTool.currentProject = ConverterTool.projects[index];
         }
 
         onEditorButtonClicked: root.openEditor()
@@ -66,7 +63,7 @@ Rectangle {
                     anchors.right: parent.right
 
                     onClicked: {
-                        ConverterTool.currentCategory = modelData
+                        ConverterTool.currentCategory = modelData;
                     }
                 }
             }

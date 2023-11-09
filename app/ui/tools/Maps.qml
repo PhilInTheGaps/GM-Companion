@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import src
 import "./maps"
 
@@ -23,59 +24,71 @@ Item {
         }
     }
 
-    MapList {
-        id: map_list
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: 200
-    }
+    SplitView {
+        id: split_view
 
-    MapViewer {
-        id: map_viewer
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: map_list.visible ? map_list.right : parent.left
-        anchors.right: marker_menu.visible ? marker_menu.left : parent.right
+        orientation: Qt.Horizontal
+        anchors.fill: parent
 
-        markerNameLabel: marker_name_label
+        MapList {
+            id: map_list
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-        onToMarkerList: {
-            marker_menu.visible = true
-            marker_menu.openMarkerList()
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: 200
         }
 
-        onToMarkerDetails: {
-            marker_menu.visible = true
-            marker_menu.openMarkerDetails()
+        MapViewer {
+            id: map_viewer
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            SplitView.minimumWidth: 250
+            SplitView.fillWidth: true
+
+            markerNameLabel: marker_name_label
+
+            onToMarkerList: {
+                marker_menu.visible = true
+                marker_menu.openMarkerList()
+            }
+
+            onToMarkerDetails: {
+                marker_menu.visible = true
+                marker_menu.openMarkerDetails()
+            }
+
+            onMarkerMenuToggled: {
+                marker_menu.visible = !marker_menu.visible
+            }
+
+            MapMarkerLabel {
+                id: marker_name_label
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
 
-        onMarkerMenuToggled: {
-            marker_menu.visible = !marker_menu.visible
+        MapMarkerMenu {
+            id: marker_menu
+
+            visible: false
+
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: 250
+
+            markerEditor: marker_editor
+
+            onOpenDeleteDialog: map_viewer.openDeleteDialog()
         }
-    }
-
-    MapMarkerMenu {
-        id: marker_menu
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        width: 200
-        visible: false
-
-        markerEditor: marker_editor
-
-        onOpenDeleteDialog: map_viewer.openDeleteDialog()
     }
 
     MapMarkerEditor {
         id: marker_editor
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
-    }
-
-    MapMarkerLabel {
-        id: marker_name_label
-        anchors.horizontalCenter: parent.horizontalCenter
     }
 }

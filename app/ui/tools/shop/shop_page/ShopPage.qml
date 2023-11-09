@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import src
 import "../../.."
 
@@ -9,36 +10,45 @@ Item {
 
     Component.onCompleted: ShopTool.loadData()
 
-    CategoryList {
-        id: category_list
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: Sizes.sidebarWidth
+    SplitView {
+        id: split_view
 
-        onEditorButtonClicked: root.openEditor()
-    }
+        orientation: Qt.Horizontal
+        anchors.fill: parent
 
-    ShopView {
-        id: shop_view
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: category_list.right
-        anchors.right: shop_list.left
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
+        CategoryList {
+            id: category_list
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
 
-        visible: shop != undefined
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: Sizes.sidebarWidth
 
-        shop: ShopTool.currentProject
-              && ShopTool.currentProject.currentCategory ? ShopTool.currentProject.currentCategory.currentShop : undefined
-    }
+            onEditorButtonClicked: root.openEditor()
+        }
 
-    PageShopList {
-        id: shop_list
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        width: Sizes.sidebarWidth
+        ShopView {
+            id: shop_view
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            SplitView.minimumWidth: 250
+            SplitView.fillWidth: true
+
+            visible: shop != undefined
+
+            shop: ShopTool.currentProject
+                  && ShopTool.currentProject.currentCategory ? ShopTool.currentProject.currentCategory.currentShop : undefined
+        }
+
+        PageShopList {
+            id: shop_list
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: Sizes.sidebarWidth
+        }
     }
 }

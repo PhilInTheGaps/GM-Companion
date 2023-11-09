@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import src
@@ -21,7 +20,7 @@ Page {
         id: converter_page
 
         onOpenEditor: {
-            stack.push(converter_editor_component)
+            stack.push(converter_editor_component);
         }
     }
 
@@ -32,7 +31,7 @@ Page {
             id: converter_editor_page
 
             onBackToTool: {
-                stack.pop()
+                stack.pop();
             }
         }
     }

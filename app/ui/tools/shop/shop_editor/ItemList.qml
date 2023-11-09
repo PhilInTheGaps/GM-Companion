@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -59,31 +58,34 @@ Page {
 
             required property string name
             required property string price
+            required property string category
             required property string description
             required property int index
 
-            height: item_list_table.currentIndex
-                    === index ? Math.max(
-                                    item_delegate_text_column.height,
-                                    Sizes.toolbarHeight) : item_delegate_text_column.height
+            height: item_delegate_text_column.height
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
-            color: item_list_table.currentIndex === index ? palette.button : "transparent"
+
+            color: "transparent"
+            border.color: ListView.isCurrentItem ? palette.button : palette.dark
+            border.width: ListView.isCurrentItem || mouse_area.containsMouse ? 1 : 0
+
+            ToolTip.text: name + ", " + price + ", " + category + "\n" + description
+            ToolTip.delay: 1000
+            ToolTip.visible: mouse_area.containsMouse
 
             Column {
                 id: item_delegate_text_column
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: item_list_table.currentIndex
-                              === item_delegate_rect.index ? add_item_button.right : parent.left
+                anchors.left: item_list_table.currentIndex === item_delegate_rect.index ? add_item_button.right : parent.left
                 anchors.right: parent.right
                 anchors.margins: 5
 
                 Item {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: Math.max(30, item_name_text.height,
-                                     item_price_text.height)
+                    height: Math.max(30, item_name_text.height, item_price_text.height)
 
                     Label {
                         id: item_name_text
@@ -113,8 +115,7 @@ Page {
 
                         clip: true
                         elide: Text.ElideRight
-                        wrapMode: item_list_table.currentIndex
-                                  === item_delegate_rect.index ? Text.WordWrap : Text.NoWrap
+                        wrapMode: item_list_table.currentIndex === item_delegate_rect.index ? Text.WordWrap : Text.NoWrap
                     }
                 }
 
@@ -123,8 +124,7 @@ Page {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     verticalAlignment: Text.AlignTop
-                    visible: item_list_table.currentIndex === item_delegate_rect.index
-                             && item_delegate_rect.description !== ""
+                    visible: item_list_table.currentIndex === item_delegate_rect.index && item_delegate_rect.description !== ""
 
                     text: item_delegate_rect.description
                     font.pointSize: 12
@@ -143,10 +143,12 @@ Page {
             }
 
             MouseArea {
+                id: mouse_area
                 anchors.fill: parent
+                hoverEnabled: true
                 onClicked: {
-                    item_list_table.forceActiveFocus()
-                    item_list_table.currentIndex = item_delegate_rect.index
+                    item_list_table.forceActiveFocus();
+                    item_list_table.currentIndex = item_delegate_rect.index;
                 }
             }
 
@@ -154,7 +156,8 @@ Page {
                 id: add_item_button
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                background: Item {}
+                background: Item {
+                }
                 iconItem.font.pointSize: 14
 
                 visible: item_list_table.currentIndex === item_delegate_rect.index

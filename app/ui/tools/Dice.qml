@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -21,29 +20,26 @@ Page {
         target: DiceTool
 
         function onMixedCriticalResult() {
-            roll_result.color = "orange"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained both critical failures and successes")
+            roll_result.color = "orange";
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained both critical failures and successes");
         }
 
         function onSuccessfulCriticalResult() {
-            roll_result.color = "green"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained at least one critical success")
+            roll_result.color = "green";
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained at least one critical success");
         }
 
         function onFailedCriticalResult() {
-            roll_result.color = "red"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained at least one critical failure")
+            roll_result.color = "red";
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained at least one critical failure");
         }
 
         function onNormalResult() {
-            roll_result.color = dice_page.palette.text
-            roll_result_help.visible = false
+            roll_result.color = dice_page.palette.text;
+            roll_result_help.visible = false;
         }
     }
 
@@ -122,7 +118,7 @@ Page {
             Label {
                 id: dice_count_text
                 text: qsTr("Dice Count")
-                font.pointSize: 16
+                font.pointSize: 14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -132,7 +128,7 @@ Page {
             Label {
                 id: dice_sides_text
                 text: qsTr("Dice Sides")
-                font.pointSize: 16
+                font.pointSize: 14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -142,7 +138,7 @@ Page {
             Label {
                 id: dice_modifier_text
                 text: qsTr("Modifier")
-                font.pointSize: 16
+                font.pointSize: 14
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -165,7 +161,7 @@ Page {
                 to: 9999
                 onValueChanged: DiceTool.setAmount(value)
                 editable: true
-                font.pixelSize: value_row.width / 25
+                font.pointSize: 16
             }
 
             SpinBox {
@@ -175,7 +171,7 @@ Page {
                 width: (parent.width - parent.spacing * 2) / 3
                 editable: true
                 onValueChanged: DiceTool.sides = value
-                font.pixelSize: value_row.width / 25
+                font.pointSize: 16
             }
 
             SpinBox {
@@ -186,7 +182,7 @@ Page {
                 to: 9999
                 onValueChanged: DiceTool.setModifier(value)
                 editable: true
-                font.pixelSize: value_row.width / 25
+                font.pointSize: 16
             }
         }
 
@@ -214,20 +210,20 @@ Page {
                 hoverEnabled: true
 
                 onClicked: {
-                    DiceTool.roll()
+                    DiceTool.roll();
                 }
             }
 
             Label {
                 text: qsTr("Result:")
-                font.pixelSize: value_row.width / 20
+                font.pointSize: 16
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
             }
 
             Label {
                 id: roll_result
-                font.pixelSize: value_row.width / 20
+                font.pointSize: 16
                 text: DiceTool.result.length > 0 ? DiceTool.result : "-"
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true

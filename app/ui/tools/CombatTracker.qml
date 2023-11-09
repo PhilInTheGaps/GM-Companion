@@ -49,74 +49,83 @@ Page {
         }
     }
 
-    // Left Item
-    Item {
-        id: left_item
-        anchors.left: parent.left
-        anchors.right: right_item.visible ? right_item.left : parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+    SplitView {
+        id: split_view
 
-        // List Header
-        CharacterListHeader {
-            id: list_header
-            anchors.left: parent.left
-            anchors.right: parent.right
+        orientation: Qt.Horizontal
+        anchors.fill: parent
+
+        // Left Item
+        Item {
+            id: left_item
             anchors.top: parent.top
-            height: top_bar.height
-        }
-
-        AddCharacterDialog {
-            id: add_rect
-            visible: false
-            y: list_header.height
-            width: list_header.width
-
-            spinboxWidth: list_view.width / 6
-        }
-
-        // Combatant List
-        CharacterListView {
-            id: list_view
-
-            anchors.left: parent.left
-            anchors.top: list_header.bottom
-            anchors.topMargin: add_rect.visible ? add_rect.height + 5 : 5
             anchors.bottom: parent.bottom
-            anchors.right: parent.right
 
-            Behavior on anchors.topMargin {
-                NumberAnimation {
-                    duration: 200
-                    easing.type: Easing.OutQuint
+            SplitView.minimumWidth: 500
+            SplitView.fillWidth: true
+
+            // List Header
+            CharacterListHeader {
+                id: list_header
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: top_bar.height
+            }
+
+            AddCharacterDialog {
+                id: add_rect
+                visible: false
+                y: list_header.height
+                width: list_header.width
+
+                spinboxWidth: list_view.width / 6
+            }
+
+            // Combatant List
+            CharacterListView {
+                id: list_view
+
+                anchors.left: parent.left
+                anchors.top: list_header.bottom
+                anchors.topMargin: add_rect.visible ? add_rect.height + 5 : 5
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+
+                Behavior on anchors.topMargin {
+                    NumberAnimation {
+                        duration: 200
+                        easing.type: Easing.OutQuint
+                    }
                 }
             }
         }
-    }
 
-    // Right Item
-    Item {
-        id: right_item
-        visible: !root.inPortrait && root.diceEnabled
+        // Right Item
+        Item {
+            id: right_item
+            visible: !root.inPortrait && root.diceEnabled
 
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: parent.width / 3
-
-        Loader {
-            id: combat_dice
-            source: "dice/DiceCombatTracker.qml"
-            anchors.fill: right_item
-            asynchronous: true
-        }
-
-        Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: palette.dark
-            width: 1
+
+            SplitView.minimumWidth: 300
+            SplitView.preferredWidth: 512
+
+            Loader {
+                id: combat_dice
+                source: "dice/DiceCombatTracker.qml"
+                anchors.fill: right_item
+                asynchronous: true
+            }
+
+            Rectangle {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                color: palette.dark
+                width: 1
+            }
         }
     }
 

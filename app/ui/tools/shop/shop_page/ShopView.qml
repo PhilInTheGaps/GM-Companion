@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import src
@@ -10,7 +9,12 @@ Page {
 
     property var shop: undefined
 
+    leftPadding: 5
+    rightPadding: 5
+
     header: Row {
+        leftPadding: 5
+        rightPadding: 5
         spacing: 10
         height: Sizes.toolbarHeight
 
@@ -48,8 +52,7 @@ Page {
 
         readonly property int itemColumnWidth: width / 5
         readonly property int priceColumnWidth: width / 5
-        readonly property int descriptionColumnWidth: width - itemColumnWidth - priceColumnWidth
-                                                      - columnPadding * 2 - columnSpacing * 2
+        readonly property int descriptionColumnWidth: width - itemColumnWidth - priceColumnWidth - columnPadding * 2 - columnSpacing * 2
 
         // Header
         Rectangle {
@@ -122,8 +125,8 @@ Page {
                 anchors.right: parent ? parent.right : undefined
 
                 color: "transparent"
-                border.color: palette.button
-                border.width: ListView.isCurrentItem ? 2 : mouse_area.containsMouse ? 1 : 0
+                border.color: ListView.isCurrentItem ? palette.button : palette.dark
+                border.width: ListView.isCurrentItem || mouse_area.containsMouse ? 1 : 0
 
                 Row {
                     id: delegate_row
@@ -134,8 +137,7 @@ Page {
 
                     anchors.left: parent ? parent.left : undefined
                     anchors.right: parent ? parent.right : undefined
-                    height: description_label.height > Sizes.toolbarHeight
-                            - 10 ? description_label.height : Sizes.toolbarHeight - 10
+                    height: description_label.height > Sizes.toolbarHeight - 10 ? description_label.height : Sizes.toolbarHeight - 10
 
                     Label {
                         text: item_rect.name

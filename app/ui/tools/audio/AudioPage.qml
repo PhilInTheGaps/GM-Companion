@@ -8,40 +8,48 @@ Page {
     readonly property int sidebarWidth: 180
     signal openEditor
 
+    Component.onCompleted: AudioTool.loadData()
+
     footer: AudioControlBar {
         onTogglePlaylist: {
-            info_view.visible = !info_view.visible
+            info_view.visible = !info_view.visible;
         }
     }
 
-    Component.onCompleted: AudioTool.loadData()
+    contentItem: SplitView {
+        id: split_view
+        orientation: Qt.Horizontal
 
-    AudioCategoryView {
-        id: category_view
+        AudioCategoryView {
+            id: category_view
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: root.sidebarWidth
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: root.sidebarWidth
 
-        onEditorButtonClicked: root.openEditor()
-    }
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-    AudioElementView {
-        id: element_view
+            onEditorButtonClicked: root.openEditor()
+        }
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: category_view.right
-        anchors.right: info_view.visible ? info_view.left : parent.right
-    }
+        AudioElementView {
+            id: element_view
 
-    AudioInfoView {
-        id: info_view
+            SplitView.minimumWidth: 250
+            SplitView.fillWidth: true
 
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        width: root.sidebarWidth
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
+
+        AudioInfoView {
+            id: info_view
+
+            SplitView.minimumWidth: 160
+            SplitView.preferredWidth: root.sidebarWidth
+
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
     }
 }

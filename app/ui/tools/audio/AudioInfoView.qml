@@ -9,7 +9,7 @@ Item {
 
     Column {
         id: top_item
-        anchors.topMargin: 15
+        anchors.margins: 10
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -47,9 +47,7 @@ Item {
         anchors.bottom: bottom_item.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: 5
-        anchors.bottomMargin: volume_item.visible ? 5 : 0
-        anchors.rightMargin: 5
+        anchors.margins: 5
 
         clip: true
 
