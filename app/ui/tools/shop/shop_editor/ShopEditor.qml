@@ -24,8 +24,6 @@ Page {
 
     NewThingDialog {
         id: new_thing_dialog
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
     }
 
     header: ShopEditorHeader {

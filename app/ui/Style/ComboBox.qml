@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -12,19 +11,12 @@ T.ComboBox {
     hoverEnabled: true
     font.pixelSize: height - 28
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0, Math.max(
-                            contentItem.implicitHeight,
-                            indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + leftPadding + rightPadding + indicator.width)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, Math.max(contentItem.implicitHeight, indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    leftPadding: padding + (!control.mirrored || !indicator
-                            || !indicator.visible ? 0 : indicator.width + spacing)
-    rightPadding: padding + (control.mirrored || !indicator
-                             || !indicator.visible ? 0 : indicator.width + spacing)
+    leftPadding: padding + (!control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
+    rightPadding: padding + (control.mirrored || !indicator || !indicator.visible ? 0 : indicator.width + spacing)
 
     delegate: ItemDelegate {
         required property int index
@@ -51,10 +43,8 @@ T.ComboBox {
     }
 
     contentItem: TextField {
-        leftPadding: !control.mirrored ? 12 : control.editable
-                                         && activeFocus ? 3 : 1
-        rightPadding: control.mirrored ? 12 : control.editable
-                                         && activeFocus ? 3 : 1
+        leftPadding: !control.mirrored ? 12 : control.editable && activeFocus ? 3 : 1
+        rightPadding: control.mirrored ? 12 : control.editable && activeFocus ? 3 : 1
         topPadding: 6 - control.padding
         bottomPadding: 6 - control.padding
         text: control.editable ? control.editText : control.displayText
@@ -66,8 +56,7 @@ T.ComboBox {
         validator: control.validator
 
         font: control.font
-        color: !control.editable
-               && control.visualFocus ? StyleColors.focus : palette.text
+        color: !control.editable && control.visualFocus ? StyleColors.focus : palette.text
         selectionColor: StyleColors.focus
         selectedTextColor: palette.highlightedText
         verticalAlignment: Text.AlignVCenter
@@ -76,8 +65,7 @@ T.ComboBox {
         background: Rectangle {
             visible: control.editable && !control.flat
             border.width: parent && parent.activeFocus ? 2 : 1
-            border.color: parent
-                          && parent.activeFocus ? StyleColors.focus : StyleColors.border
+            border.color: parent && parent.activeFocus ? StyleColors.focus : StyleColors.border
             implicitHeight: 40
         }
     }
@@ -94,8 +82,7 @@ T.ComboBox {
     popup: Popup {
         y: control.height - 1
         width: control.width
-        height: Math.min(contentItem.implicitHeight,
-                         control.Window.height - topMargin - bottomMargin)
+        height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         topMargin: 5
         bottomMargin: 5
         padding: 0
@@ -154,7 +141,8 @@ T.ComboBox {
                 border.color: StyleColors.border
             }
 
-            T.ScrollIndicator.vertical: ScrollIndicator {}
+            T.ScrollIndicator.vertical: ScrollIndicator {
+            }
         }
 
         background: Rectangle {

@@ -2,6 +2,7 @@ import QtQuick
 import CustomComponents
 import IconFonts
 import src
+import "../../.."
 
 CustomToolBar {
     id: root
@@ -38,14 +39,12 @@ CustomToolBar {
             textRole: "name"
 
             model: ShopTool.editor ? ShopTool.editor.projects : []
-            emptyString: ShopTool.editor && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr(
-                                                             "No Projects")
+            emptyString: ShopTool.editor && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr("No Projects")
 
             onCurrentIndexChanged: {
                 if (!ShopTool.editor || ShopTool.editor.projects.length < 1)
-                    return
-
-                ShopTool.editor.currentProject = ShopTool.editor.projects[currentIndex]
+                    return;
+                ShopTool.editor.currentProject = ShopTool.editor.projects[currentIndex];
             }
         }
 
@@ -56,22 +55,15 @@ CustomToolBar {
             width: 150
             textRole: "name"
 
-            model: ShopTool.editor && ShopTool.editor.currentProject ?
-                       ShopTool.editor.currentProject.categories : []
-            emptyString: ShopTool.editor
-                         && ShopTool.editor.currentProject
-                         && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr(
-                                                             "No Categories")
+            model: ShopTool.editor && ShopTool.editor.currentProject ? ShopTool.editor.currentProject.categories : []
+            emptyString: ShopTool.editor && ShopTool.editor.currentProject && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr("No Categories")
 
             onCurrentIndexChanged: {
                 if (!ShopTool.editor || !ShopTool.editor.currentProject)
-                    return
-
+                    return;
                 if (ShopTool.editor.currentProject.categories.length < 1)
-                    return
-
-                ShopTool.editor.currentProject.currentCategory
-                        = ShopTool.editor.currentProject.categories[currentIndex]
+                    return;
+                ShopTool.editor.currentProject.currentCategory = ShopTool.editor.currentProject.categories[currentIndex];
             }
         }
     }
@@ -88,6 +80,7 @@ CustomToolBar {
 
         // Item Editor
         CustomToolBarButton {
+            id: item_editor_button
             iconText: FontAwesome.penToSquare
             onClicked: root.switchToItemEditor()
         }
@@ -96,18 +89,18 @@ CustomToolBar {
         CustomToolBarComboBox {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+
+            width: Sizes.sidebarWidth - item_editor_button.width - parent.spacing - parent.padding
+
             textRole: "name"
 
             model: ShopTool.editor ? ShopTool.editor.itemGroups : []
-            emptyString: ShopTool.editor
-                         && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr(
-                                                             "No Items")
+            emptyString: ShopTool.editor && ShopTool.editor.isLoading ? qsTr("Loading ...") : qsTr("No Items")
 
             onCurrentIndexChanged: {
                 if (!ShopTool.editor || ShopTool.editor.itemGroups.length < 1)
-                    return
-
-                ShopTool.editor.currentItemGroup = ShopTool.editor.itemGroups[currentIndex]
+                    return;
+                ShopTool.editor.currentItemGroup = ShopTool.editor.itemGroups[currentIndex];
             }
         }
     }
