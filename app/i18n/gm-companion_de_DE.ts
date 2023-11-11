@@ -264,7 +264,7 @@
     <message>
         <location filename="../ui/tools/combat_tracker/CharacterListHeader.qml" line="71"/>
         <source>Health</source>
-        <translation>Gesundheit</translation>
+        <translation>Leben</translation>
     </message>
     <message>
         <location filename="../ui/tools/combat_tracker/CharacterListHeader.qml" line="76"/>
@@ -1203,7 +1203,7 @@ Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager 
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="108"/>
         <source>Additional CMake functionality</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Module für CMake</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="115"/>
@@ -1223,12 +1223,12 @@ Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager 
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="129"/>
         <source>HTTP Status Codes and Reason Phrases for C, C++ and Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP Status Codes und Erklärungs-Phrasen für C, C++ und Qt</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="136"/>
         <source>Open Source Spotify client library</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Source Spotify Client-Bibliothek</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="143"/>
@@ -1258,12 +1258,12 @@ Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager 
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="164"/>
         <source>Makros for reducing boilerplate code related to Qt properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Makros zur Reduzierung von Boilerplate-Code bei der Verwendung von Qt Properties</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="170"/>
         <source>A Qt/C++ library for working with Zip files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Qt/C++ Bibliothek für Zip-Dateien.</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="177"/>
@@ -1428,7 +1428,7 @@ Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager 
     <message>
         <location filename="../ui/Main.qml" line="42"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="47"/>
@@ -1443,32 +1443,32 @@ Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager 
     <message>
         <location filename="../ui/Main.qml" line="57"/>
         <source>Combat Tracker</source>
-        <translation type="unfinished">Kampfrunden</translation>
+        <translation>Kampfrunden</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="62"/>
         <source>Item Shop</source>
-        <translation type="unfinished">Item Shop</translation>
+        <translation>Item Shop</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="67"/>
         <source>Characters</source>
-        <translation type="unfinished">Charaktere</translation>
+        <translation>Charaktere</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="72"/>
         <source>Generators</source>
-        <translation type="unfinished">Generatoren</translation>
+        <translation>Generatoren</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="77"/>
         <source>Notes</source>
-        <translation type="unfinished">Notizen</translation>
+        <translation>Notizen</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="82"/>
         <source>Converter</source>
-        <translation type="unfinished">Umrechner</translation>
+        <translation>Umrechner</translation>
     </message>
     <message>
         <location filename="../ui/Main.qml" line="189"/>
