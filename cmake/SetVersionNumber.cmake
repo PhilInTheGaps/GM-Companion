@@ -1,8 +1,8 @@
 set (APP_VERSION_MAJOR    1)
 set (APP_VERSION_MINOR    2)
-set (APP_VERSION_PATCH    0)
+set (APP_VERSION_PATCH    1)
 set (APP_VERSION_REVISION 0)
-set (APP_VERSION_TITLE    "Release 1.2")
+set (APP_VERSION_TITLE    "Release 1.2.1")
 
 # Windows header
 configure_file(
