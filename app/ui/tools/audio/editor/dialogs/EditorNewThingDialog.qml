@@ -17,30 +17,29 @@ Dialog {
     signal openAddonDialog
 
     function updateCanAccept() {
-        var project = AudioTool.editor.currentProject
-
+        var project = AudioTool.editor.currentProject;
         switch (combo_box.currentIndex) {
         case 0:
-            canAccept = true
-            break
+            canAccept = true;
+            break;
         case 1:
-            canAccept = project
-            error_label.text = qsTr("No Project!")
-            break
+            canAccept = project;
+            error_label.text = qsTr("No Project!");
+            break;
         case 2:
-            canAccept = project && project.currentCategory
-            error_label.text = qsTr("No Category!")
-            break
+            canAccept = project && project.currentCategory;
+            error_label.text = qsTr("No Category!");
+            break;
         case 3:
         case 4:
         case 5:
-            canAccept = project && project.currentScenario
-            error_label.text = qsTr("No Scenario!")
-            break
+            canAccept = project && project.currentScenario;
+            error_label.text = qsTr("No Scenario!");
+            break;
         default:
-            canAccept = false
-            error_label.text = qsTr("Unknown Error")
-            break
+            canAccept = false;
+            error_label.text = qsTr("Unknown Error");
+            break;
         }
     }
 
@@ -49,24 +48,25 @@ Dialog {
 
         Label {
             text: qsTr("Element Type")
+            anchors.left: parent.left
+            anchors.right: parent.right
         }
 
         ComboBox {
             id: combo_box
-            model: [qsTr("Project"), qsTr("Category"), qsTr("Scenario"), qsTr(
-                    "Music List"), qsTr("Sound List"), qsTr("Radio")]
-            width: textfield.width
+            model: [qsTr("Project"), qsTr("Category"), qsTr("Scenario"), qsTr("Music List"), qsTr("Sound List"), qsTr("Radio")]
+
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             onCurrentIndexChanged: {
-                root.updateCanAccept()
+                root.updateCanAccept();
             }
         }
 
         CheckBox {
             id: subscenario_check_box
-            text: (combo_box.currentIndex === 2 ? qsTr("As") : qsTr(
-                                                     "In")) + " " + qsTr(
-                      "Subscenario")
+            text: (combo_box.currentIndex === 2 ? qsTr("As") : qsTr("In")) + " " + qsTr("Subscenario")
             checked: false
             enabled: root.canAccept
             visible: root.canAccept && combo_box.currentIndex > 1
@@ -77,20 +77,16 @@ Dialog {
         CustomComboBox {
             id: subscenario_combo_box
             model: {
-                if (AudioTool.editor.currentProject
-                        && AudioTool.editor.currentProject.currentCategory
-                        && AudioTool.editor.currentProject.currentCategory.currentScenario) {
-
-                    AudioTool.editor.currentProject.currentCategory.currentScenario.scenarios
+                if (AudioTool.editor.currentProject && AudioTool.editor.currentProject.currentCategory && AudioTool.editor.currentProject.currentCategory.currentScenario) {
+                    AudioTool.editor.currentProject.currentCategory.currentScenario.scenarios;
                 } else {
-                    []
+                    [];
                 }
             }
 
             emptyString: qsTr("No Subscenario")
             textRole: "name"
-            visible: root.canAccept && combo_box.currentIndex > 2
-                     && subscenario_check_box.checked
+            visible: root.canAccept && combo_box.currentIndex > 2 && subscenario_check_box.checked
             anchors.left: parent.left
             anchors.right: parent.right
         }
@@ -115,11 +111,17 @@ Dialog {
             onAccepted: root.accept()
             enabled: root.canAccept
             visible: root.canAccept
+
+            anchors.left: parent.left
+            anchors.right: parent.right
         }
 
         Label {
             id: error_label
             visible: !root.canAccept
+
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             text: qsTr("Unknown Error")
             leftPadding: error_icon.width + 10
@@ -143,37 +145,34 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onOpened: {
-        textfield.forceActiveFocus()
-        AudioTool.editor.addons.loadData()
+        textfield.forceActiveFocus();
+        AudioTool.editor.addons.loadData();
     }
 
     onAccepted: {
         if (textfield.text !== "" && canAccept) {
-            var subscenario = subscenario_check_box.checked ? subscenario_combo_box.currentIndex : -1
-
+            var subscenario = subscenario_check_box.checked ? subscenario_combo_box.currentIndex : -1;
             switch (combo_box.currentIndex) {
             case 0:
-                AudioTool.editor.createProject(textfield.text)
-                break
+                AudioTool.editor.createProject(textfield.text);
+                break;
             case 1:
-                AudioTool.editor.createCategory(textfield.text)
-                break
+                AudioTool.editor.createCategory(textfield.text);
+                break;
             case 2:
-                AudioTool.editor.createScenario(textfield.text,
-                                            subscenario_check_box.checked)
-                break
+                AudioTool.editor.createScenario(textfield.text, subscenario_check_box.checked);
+                break;
             case 3:
-                AudioTool.editor.createElement(textfield.text, 0, subscenario)
-                break
+                AudioTool.editor.createElement(textfield.text, 0, subscenario);
+                break;
             case 4:
-                AudioTool.editor.createElement(textfield.text, 1, subscenario)
-                break
+                AudioTool.editor.createElement(textfield.text, 1, subscenario);
+                break;
             case 5:
-                AudioTool.editor.createElement(textfield.text, 2, subscenario)
-                break
+                AudioTool.editor.createElement(textfield.text, 2, subscenario);
+                break;
             }
         }
-
-        textfield.clear()
+        textfield.clear();
     }
 }
