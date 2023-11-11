@@ -6,7 +6,7 @@
   <i align="center">The digital toolbox for your analog RPGs. </i>
 </p>
 
-<p align="center">
+<h4 align="center">
   <a href="https://gm-companion.github.io/">
     <img src="https://img.shields.io/badge/website-grey" alt="website">
   </a>
