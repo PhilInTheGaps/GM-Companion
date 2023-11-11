@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-    <img src="https://gm-companion.github.io/images/audio-tool-01.png" alt="Audio Tool Screenshot"/>
+    <img src="https://gm-companion.github.io/images/audio-tool-01.webp" alt="Audio Tool Screenshot"/>
 </p>
 
 
