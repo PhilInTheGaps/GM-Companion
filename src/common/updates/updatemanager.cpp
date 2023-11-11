@@ -46,15 +46,15 @@ void UpdateManager::checkForUpdates()
         m_newestVersion = std::move(version);
         qCDebug(gmUpdateManager()) << "Newest available version:" << m_newestVersion;
 
-        if (compareVersions(CURRENT_VERSION, m_newestVersion))
-        {
-            qCDebug(gmUpdateManager()) << "Your version" << CURRENT_VERSION << "is the newest one.";
-            emit noUpdateAvailable();
-        }
-        else
+        if (compareVersions(m_newestVersion, CURRENT_VERSION))
         {
             qCDebug(gmUpdateManager()) << "Found a newer version:" << m_newestVersion;
             emit updateAvailable();
+        }
+        else
+        {
+            qCDebug(gmUpdateManager()) << "Your version" << CURRENT_VERSION << "is the newest one.";
+            emit noUpdateAvailable();
         }
     });
 }
