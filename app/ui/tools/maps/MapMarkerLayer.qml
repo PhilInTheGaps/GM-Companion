@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import src
@@ -8,9 +7,9 @@ Item {
     id: root
 
     required property Label markerNameLabel
-    required property Item markerDeleteDialog
 
     signal openMarkerDetails
+    signal openDeleteDialog
 
     anchors.fill: parent
 
@@ -29,7 +28,7 @@ Item {
             markerIndex: index
 
             markerNameLabel: root.markerNameLabel
-            markerDeleteDialog: root.markerDeleteDialog
+            onOpenDeleteDialog: root.openDeleteDialog()
 
             scale: 1 / root.parent.scale
 

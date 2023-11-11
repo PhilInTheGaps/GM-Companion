@@ -19,6 +19,7 @@ Rectangle {
 
     color: palette.dark
     border.color: root.enabled ? palette.button : palette.dark
+    border.width: root.enabled && area.activeFocus ? 2 : 1
 
     ScrollView {
         id: scrollview
@@ -38,7 +39,8 @@ Rectangle {
             onCursorPositionChanged: root.cursorPositionChanged(cursorPosition)
             onLinkActivated: link => root.linkClicked(link)
 
-            background: Item {}
+            background: Item {
+            }
 
             MouseArea {
                 anchors.fill: parent

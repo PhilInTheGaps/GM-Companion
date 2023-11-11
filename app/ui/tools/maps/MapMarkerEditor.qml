@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -19,18 +18,21 @@ Dialog {
 
     standardButtons: Dialog.Cancel | Dialog.Save
 
+    onOpened: {
+        marker_name_field.forceActiveFocus();
+        marker_name_field.selectAll();
+    }
+
     onAccepted: {
-        MapTool.setMarkerProperties(marker_name_field.text,
-                                     marker_description_edit.text,
-                                     icon_text.text, color_field.text)
+        MapTool.setMarkerProperties(marker_name_field.text, marker_description_edit.text, icon_text.text, color_field.text);
     }
 
     onVisibleChanged: {
         if (visible) {
-            marker_name_field.text = markerName
-            marker_description_edit.text = markerDescription
-            icon_text.text = markerIcon
-            color_field.text = markerColor
+            marker_name_field.text = markerName;
+            marker_description_edit.text = markerDescription;
+            icon_text.text = markerIcon;
+            color_field.text = markerColor;
         }
     }
 
@@ -49,6 +51,8 @@ Dialog {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 selectByMouse: true
+
+                placeholderText: qsTr("Enter name ...")
             }
 
             CustomTextEdit {
@@ -57,6 +61,7 @@ Dialog {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 300
+                placeholderText: qsTr("Enter description ...")
             }
         }
 
@@ -115,7 +120,7 @@ Dialog {
                             hoverEnabled: true
 
                             onClicked: {
-                                icon_text.text = icon_delegate.modelData
+                                icon_text.text = icon_delegate.modelData;
                             }
                         }
                     }
@@ -170,7 +175,7 @@ Dialog {
                             hoverEnabled: true
 
                             onClicked: {
-                                color_field.text = color_delegate.modelData
+                                color_field.text = color_delegate.modelData;
                             }
                         }
                     }

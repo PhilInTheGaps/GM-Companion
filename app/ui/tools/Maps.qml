@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import src
 import "./maps"
+import ".."
 
 Item {
     id: maps_page
@@ -12,14 +13,14 @@ Item {
         target: MapTool
 
         function onMapIndexChanged() {
-            marker_menu.visible = MapTool.currentMap ? MapTool.currentMap.hasMarkers : false
+            marker_menu.visible = MapTool.currentMap ? MapTool.currentMap.hasMarkers : false;
         }
 
         function onMarkerIndexChanged() {
             if (MapTool.markerIndex > -1) {
-                marker_menu.openMarkerDetails()
+                marker_menu.openMarkerDetails();
             } else {
-                marker_menu.openMarkerList()
+                marker_menu.openMarkerList();
             }
         }
     }
@@ -50,17 +51,23 @@ Item {
             markerNameLabel: marker_name_label
 
             onToMarkerList: {
-                marker_menu.visible = true
-                marker_menu.openMarkerList()
+                marker_menu.visible = true;
+                marker_menu.openMarkerList();
             }
 
             onToMarkerDetails: {
-                marker_menu.visible = true
-                marker_menu.openMarkerDetails()
+                marker_menu.visible = true;
+                marker_menu.openMarkerDetails();
             }
 
             onMarkerMenuToggled: {
-                marker_menu.visible = !marker_menu.visible
+                marker_menu.visible = !marker_menu.visible;
+            }
+
+            onOpenDeleteDialog: {
+                marker_menu.visible = true;
+                marker_menu.openMarkerDetails();
+                marker_delete_dialog.open();
             }
 
             MapMarkerLabel {
@@ -82,7 +89,7 @@ Item {
 
             markerEditor: marker_editor
 
-            onOpenDeleteDialog: map_viewer.openDeleteDialog()
+            onOpenDeleteDialog: marker_delete_dialog.open()
         }
     }
 
@@ -90,5 +97,15 @@ Item {
         id: marker_editor
         x: parent.width / 2 - width / 2
         y: parent.height / 2 - height / 2
+    }
+
+    MapMarkerDeleteDialog {
+        id: marker_delete_dialog
+        x: width > marker_menu.width ? parent.width - width : parent.width - marker_menu.width + (marker_menu.width - width) / 2
+        y: Sizes.toolbarHeight * 2
+
+        onAccepted: {
+            marker_menu.openMarkerList();
+        }
     }
 }

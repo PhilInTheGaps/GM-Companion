@@ -10,11 +10,11 @@ Rectangle {
     signal openDeleteDialog
 
     function openMarkerList() {
-        marker_menu_swipe.currentIndex = 0
+        marker_menu_swipe.currentIndex = 0;
     }
 
     function openMarkerDetails() {
-        marker_menu_swipe.currentIndex = 1
+        marker_menu_swipe.currentIndex = 1;
     }
 
     SwipeView {
@@ -28,7 +28,7 @@ Rectangle {
             id: marker_list_menu
 
             onMarkerSelected: {
-                marker_menu_swipe.currentIndex = 1
+                marker_menu_swipe.currentIndex = 1;
             }
         }
 
@@ -38,11 +38,11 @@ Rectangle {
 
             markerEditor: root.markerEditor // qmllint disable incompatible-type
 
-            onDeleteButtonClicked: root.openDeleteDialog()
-
             onBack: {
-                marker_menu_swipe.currentIndex = 0
+                marker_menu_swipe.currentIndex = 0;
             }
+
+            onOpenDeleteDialog: root.openDeleteDialog()
         }
     }
 }

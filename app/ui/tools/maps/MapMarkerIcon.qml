@@ -7,7 +7,6 @@ Item {
     id: root
 
     required property Label markerNameLabel
-    required property Item markerDeleteDialog
 
     property string name: qsTr("New Location")
     property string description
@@ -17,6 +16,7 @@ Item {
     property bool showDelete: false
 
     signal markerSelected
+    signal openDeleteDialog
 
     rotation: -parent.parent.rotation
 
@@ -51,36 +51,27 @@ Item {
             drag.target: root
             drag.smoothed: false
             preventStealing: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onContainsMouseChanged: {
                 if (containsMouse) {
-                    root.markerNameLabel.text = root.name
+                    root.markerNameLabel.text = root.name;
                 }
-
-                root.markerNameLabel.visible = containsMouse
+                root.markerNameLabel.visible = containsMouse;
             }
 
-            onClicked: {
-                MapTool.markerIndex = root.markerIndex
-                root.markerSelected()
+            onClicked: mouse => {
+                MapTool.markerIndex = root.markerIndex;
+                if (mouse.button === Qt.LeftButton) {
+                    root.markerSelected();
+                } else if (mouse.button === Qt.RightButton) {
+                    root.openDeleteDialog();
+                }
             }
 
             drag.onActiveChanged: {
                 if (!drag.active)
-                    MapTool.setMarkerPosition(root.markerIndex, root.x, root.y)
-            }
-        }
-
-        // For right-clicks
-        MouseArea {
-            id: mouse_area2
-            anchors.fill: parent
-            propagateComposedEvents: true
-            acceptedButtons: Qt.RightButton
-
-            onClicked: {
-                MapTool.markerIndex = root.markerIndex
-                root.markerDeleteDialog.visible = true
+                    MapTool.setMarkerPosition(root.markerIndex, root.x, root.y);
             }
         }
     }

@@ -12,6 +12,9 @@ Label {
 
     background: Rectangle {
         color: palette.dark
+        border.color: palette.dark
+        border.width: 1
+
         opacity: 0.8
     }
 }

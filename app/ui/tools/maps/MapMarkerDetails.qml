@@ -11,7 +11,7 @@ Item {
     required property MapMarkerEditor markerEditor
 
     signal back
-    signal deleteButtonClicked
+    signal openDeleteDialog
 
     Column {
         id: marker_menu_column
@@ -54,22 +54,24 @@ Item {
         }
 
         // Name and Icon
-        Row {
+        Item {
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: 5
-            spacing: 10
-            padding: 5
+            anchors.margins: 10
+            anchors.rightMargin: 0
+            height: Sizes.toolbarHeight
 
             Label {
                 id: marker_icon
+
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
-                width: height
-                font.pixelSize: parent.height - 15
+                font.pointSize: 14
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                anchors.verticalCenter: parent.verticalCenter
 
                 text: MapTool.currentMarker ? MapTool.currentMarker.icon : ""
                 color: MapTool.currentMarker ? MapTool.currentMarker.color : ""
@@ -78,30 +80,74 @@ Item {
             Label {
                 id: marker_name
                 font.pointSize: 14
-                width: parent.width - parent.padding - x
+
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: marker_icon.right
+                anchors.right: edit_button.left
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+
                 elide: Text.ElideRight
                 verticalAlignment: Text.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
                 text: MapTool.currentMarker ? MapTool.currentMarker.name : ""
+            }
+
+            CustomToolBarButton {
+                id: edit_button
+                iconText: FontAwesome.pen
+                anchors.right: delete_button.left
+                anchors.margins: 10
+                pointSize: 14
+
+                onClicked: {
+                    root.markerEditor.markerName = marker_name.text;
+                    root.markerEditor.markerDescription = marker_description.text;
+                    root.markerEditor.markerIcon = marker_icon.text;
+                    root.markerEditor.markerColor = marker_icon.color;
+                    root.markerEditor.open();
+                }
+            }
+
+            CustomToolBarButton {
+                id: delete_button
+                iconText: FontAwesome.trash
+                anchors.right: parent.right
+                anchors.margins: 10
+                pointSize: 14
+
+                onClicked: {
+                    root.openDeleteDialog();
+                }
             }
         }
     }
 
     // Description
     ScrollView {
+        id: description_scroll_view
         anchors.top: marker_menu_column.bottom
-        anchors.bottom: edit_marker_button.top
+        anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 10
+        anchors.rightMargin: 0
 
         contentWidth: -1
         clip: true
+
+        ScrollBar.vertical: ScrollBar {
+            anchors.right: parent.right
+            height: description_scroll_view.availableHeight
+            active: description_scroll_view.ScrollBar.horizontal.active
+            visible: description_scroll_view.contentHeight > description_scroll_view.height
+        }
 
         TextEdit {
             id: marker_description
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: 10
             text: MapTool.currentMarker ? MapTool.currentMarker.description : ""
 
             font.pointSize: 11
@@ -112,45 +158,6 @@ Item {
             color: palette.text
             selectionColor: palette.highlight
             selectedTextColor: palette.highlightedText
-        }
-    }
-
-    // Edit
-    CustomButton {
-        id: edit_marker_button
-
-        buttonText: qsTr("Edit")
-        iconText: FontAwesome.pen
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: delete_marker_button.top
-        anchors.margins: 10
-        anchors.bottomMargin: 0
-        padding: 10
-
-        onClicked: {
-            root.markerEditor.markerName = marker_name.text
-            root.markerEditor.markerDescription = marker_description.text
-            root.markerEditor.markerIcon = marker_icon.text
-            root.markerEditor.markerColor = marker_icon.color
-            root.markerEditor.open()
-        }
-    }
-
-    // Delete
-    CustomButton {
-        id: delete_marker_button
-
-        buttonText: qsTr("Delete")
-        iconText: FontAwesome.trash
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.margins: 10
-        padding: 10
-
-        onClicked: {
-            root.deleteButtonClicked()
         }
     }
 }

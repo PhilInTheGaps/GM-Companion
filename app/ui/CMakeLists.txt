@@ -121,6 +121,7 @@ qt_add_qml_module(gm-companion-ui
         tools/maps/MapListItem.qml
         tools/maps/MapMarkerIcon.qml
         tools/maps/MapMarkerDetails.qml
+        tools/maps/MapMarkerDeleteDialog.qml
         tools/maps/MapMarkerEditor.qml
         tools/maps/MapMarkerLabel.qml
         tools/maps/MapMarkerLayer.qml

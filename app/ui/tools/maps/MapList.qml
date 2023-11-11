@@ -12,11 +12,14 @@ Rectangle {
         id: flickable
         anchors.fill: parent
         anchors.margins: 5
+        anchors.rightMargin: 0
+
         clip: true
         contentHeight: flickable_column.height
         contentWidth: -1
 
         ScrollBar.vertical: ScrollBar {
+            id: scroll_bar
             anchors.right: parent.right
             visible: flickable.contentHeight > flickable.height
         }
@@ -25,6 +28,7 @@ Rectangle {
             id: flickable_column
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: 5
 
             Repeater {
                 model: MapTool.categories
@@ -46,7 +50,7 @@ Rectangle {
                         buttonText: category_delegate.modelData
 
                         onClicked: {
-                            MapTool.setCurrentCategory(category_delegate.index)
+                            MapTool.setCurrentCategory(category_delegate.index);
                         }
                     }
 
