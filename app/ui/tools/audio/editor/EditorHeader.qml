@@ -59,8 +59,8 @@ CustomToolBar {
             // change the current index accordingly.
             onProjectIndexChanged: {
                 var project = AudioTool.editor.currentProject;
+                // qmllint disable missing-property
                 if (project && project.name !== project_box.currentText) {
-                    // qmllint disable missing-property
                     project_box.currentIndex = AudioTool.editor.projectIndex;
                 }
             }
