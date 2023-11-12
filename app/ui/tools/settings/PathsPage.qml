@@ -53,19 +53,20 @@ Item {
         anchors.margins: 5
 
         Repeater {
-//            {
-//                "name": "GoogleDrive",
-//                "setting": "GoogleDrive",
-//                "icon": FontAwesome.googleDrive,
-//                "iconFont": FontAwesome.fontBrands
-//            },
+
+            //            {
+            //                "name": "GoogleDrive",
+            //                "setting": "GoogleDrive",
+            //                "icon": FontAwesome.googleDrive,
+            //                "iconFont": FontAwesome.fontBrands
+            //            },
 
             model: [{
                     "name": "Local",
                     "setting": "local",
                     "icon": FontAwesome.hardDrive,
                     "iconFont": FontAwesome.fontSolid
-                },  {
+                }, {
                     "name": "NextCloud",
                     "setting": "NextCloud",
                     "icon": FontAwesome.cloud,
@@ -82,8 +83,8 @@ Item {
 
                 onClicked: {
                     if (checked) {
-                        SettingsManager.cloudMode = modelData.setting
-                        fileModeChanged()
+                        SettingsManager.cloudMode = modelData.setting;
+                        fileModeChanged();
                     }
                 }
             }
@@ -96,7 +97,6 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: type_list.right
         anchors.right: parent.right
-        anchors.margins: 10
 
         clip: true
         contentWidth: -1
@@ -109,10 +109,11 @@ Item {
 
         Column {
             id: main_column
+            anchors.margins: 10
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.rightMargin: scroll_bar.visible ? scroll_bar.width + 5 : 0
-
+            anchors.rightMargin: scroll_bar.visible ? scroll_bar.width + 5 : 10
+            topPadding: 10
             spacing: 5
 
             Repeater {
@@ -143,12 +144,11 @@ Item {
                             anchors.rightMargin: 5
 
                             function loadPath() {
-                                text = SettingsManager.getPath(
-                                            path_box.modelData.setting)
+                                text = SettingsManager.getPath(path_box.modelData.setting);
                             }
 
                             function savePath() {
-                                SettingsManager.setPath(path_box.modelData.setting, text)
+                                SettingsManager.setPath(path_box.modelData.setting, text);
                             }
 
                             Component.onCompleted: loadPath()
@@ -158,7 +158,7 @@ Item {
                                 target: root
 
                                 function onFileModeChanged() {
-                                    path_text_field.loadPath()
+                                    path_text_field.loadPath();
                                 }
                             }
                         }
@@ -172,11 +172,11 @@ Item {
                             centering: true
 
                             onClicked: {
-                                root.fileDialog.title = path_box.modelData.name
-                                root.fileDialog.foldersOnly = true
-                                root.fileDialog.folder = path_text_field.text
-                                root.fileDialog.textField = path_text_field
-                                root.fileDialog.open()
+                                root.fileDialog.title = path_box.modelData.name;
+                                root.fileDialog.foldersOnly = true;
+                                root.fileDialog.folder = path_text_field.text;
+                                root.fileDialog.textField = path_text_field;
+                                root.fileDialog.open();
                             }
                         }
                     }

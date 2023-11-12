@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -18,7 +17,7 @@ Item {
 
         foldersOnly: true
         onAccepted: {
-            AudioTool.editor.replaceFileFolder(index, selectedPath)
+            AudioTool.editor.replaceFileFolder(index, selectedPath);
         }
     }
 
@@ -57,10 +56,9 @@ Item {
             // Background
             Rectangle {
                 anchors.fill: parent
-                color: delegate_root.modelData
-                       && delegate_root.modelData.missing ? "darkred" : palette.window
-                border.color: parent.ListView.isCurrentItem ? palette.alternateBase : palette.dark
-                border.width: parent.ListView.isCurrentItem ? 2 : mouse_area.containsMouse ? 1 : 0
+                color: "transparent"
+                border.color: parent.ListView.isCurrentItem ? palette.button : palette.dark
+                border.width: parent.ListView.isCurrentItem ? 2 : mouse_area.containsMouse || (delegate_root.modelData && delegate_root.modelData.missing) ? 1 : 0
             }
 
             // File path label
@@ -99,15 +97,14 @@ Item {
 
                 // Folder
                 CustomToolBarButton {
-                    visible: delegate_root.modelData && delegate_root.modelData.missing
-                             && delegate_root.modelData.source === 0
+                    visible: delegate_root.modelData && delegate_root.modelData.missing && delegate_root.modelData.source === 0
                     iconText: FontAwesome.folder
                     toolTipText: qsTr("Select folder for file")
 
                     onClicked: {
-                        file_dialog.index = delegate_root.index
-                        file_dialog.folder = AudioTool.editor.basePath()
-                        file_dialog.open()
+                        file_dialog.index = delegate_root.index;
+                        file_dialog.folder = AudioTool.editor.basePath();
+                        file_dialog.open();
                     }
                 }
 
@@ -139,18 +136,11 @@ Item {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.lastIndex
-                                    = delegate_root.ListView.view.currentIndex
-
-                            AudioTool.editor.moveFile(index, -1)
-
+                            delegate_root.ListView.view.lastIndex = delegate_root.ListView.view.currentIndex;
+                            AudioTool.editor.moveFile(index, -1);
                             if (delegate_root.ListView.view.lastIndex > 0)
-                                delegate_root.ListView.view.currentIndex
-                                        = delegate_root.ListView.view.lastIndex - 1
-
-                            delegate_root.ListView.view.positionViewAtIndex(
-                                        delegate_root.ListView.view.currentIndex,
-                                        ListView.Center)
+                                delegate_root.ListView.view.currentIndex = delegate_root.ListView.view.lastIndex - 1;
+                            delegate_root.ListView.view.positionViewAtIndex(delegate_root.ListView.view.currentIndex, ListView.Center);
                         }
                     }
 
@@ -175,18 +165,12 @@ Item {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.lastIndex = delegate_root.index
-                            AudioTool.editor.moveFile(index, 1)
-
-                            if (delegate_root.ListView.view.currentIndex
-                                    < delegate_root.ListView.view.lastIndex) {
-                                delegate_root.ListView.view.currentIndex
-                                        = delegate_root.ListView.view.lastIndex + 1
+                            delegate_root.ListView.view.lastIndex = delegate_root.index;
+                            AudioTool.editor.moveFile(index, 1);
+                            if (delegate_root.ListView.view.currentIndex < delegate_root.ListView.view.lastIndex) {
+                                delegate_root.ListView.view.currentIndex = delegate_root.ListView.view.lastIndex + 1;
                             }
-
-                            delegate_root.ListView.view.positionViewAtIndex(
-                                        delegate_root.ListView.view.currentIndex,
-                                        ListView.Center)
+                            delegate_root.ListView.view.positionViewAtIndex(delegate_root.ListView.view.currentIndex, ListView.Center);
                         }
                     }
                 }
@@ -197,14 +181,12 @@ Item {
                     toolTipText: qsTr("Remove file from list")
 
                     onClicked: {
-                        var modelLength = AudioTool.editor.files.rowCount() // qmllint disable missing-property
-                        var lastIndex = index < (modelLength - 1) ? index : (modelLength - 2)
-
-                        delegate_root.ListView.view.lastIndex = lastIndex
-                        AudioTool.editor.removeFile(index, false)
-                        delegate_root.ListView.view.currentIndex = lastIndex
-                        delegate_root.ListView.view.positionViewAtIndex(
-                                    lastIndex, ListView.Contain)
+                        var modelLength = AudioTool.editor.files.rowCount(); // qmllint disable missing-property
+                        var lastIndex = index < (modelLength - 1) ? index : (modelLength - 2);
+                        delegate_root.ListView.view.lastIndex = lastIndex;
+                        AudioTool.editor.removeFile(index, false);
+                        delegate_root.ListView.view.currentIndex = lastIndex;
+                        delegate_root.ListView.view.positionViewAtIndex(lastIndex, ListView.Contain);
                     }
                 }
             }

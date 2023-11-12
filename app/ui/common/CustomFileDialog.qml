@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -31,14 +30,12 @@ Dialog {
     onAccepted: {
         if (textField) {
             if (replacePath) {
-                textField.text = selection_text_field.text.replace(replacePath,
-                                                                   "")
+                textField.text = selection_text_field.text.replace(replacePath, "");
             } else {
-                textField.text = selection_text_field.text
+                textField.text = selection_text_field.text;
             }
-
             if (textField.savePath) {
-                textField.savePath()
+                textField.savePath();
             }
         }
     }
@@ -86,7 +83,7 @@ Dialog {
                 iconText: FontAwesome.folderPlus
 
                 onClicked: {
-                    new_folder_form.visible = !new_folder_form.visible
+                    new_folder_form.visible = !new_folder_form.visible;
                 }
             }
         }
@@ -125,11 +122,10 @@ Dialog {
 
                 onEditingFinished: {
                     if (text.length > 0) {
-                        backend.createFolder(text)
+                        backend.createFolder(text);
                     }
-
-                    new_folder_form.visible = false
-                    clear()
+                    new_folder_form.visible = false;
+                    clear();
                 }
             }
         }
@@ -152,12 +148,12 @@ Dialog {
             }
 
             onCurrentIndexChanged: {
-                selection_text_field.text = backend.getSelected(currentIndex)
+                selection_text_field.text = backend.getSelected(currentIndex);
             }
 
             model: backend.entries
 
-            delegate: Item {
+            delegate: Rectangle {
                 id: delegate_item
 
                 required property int index
@@ -165,8 +161,13 @@ Dialog {
 
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
+                anchors.leftMargin: 1
                 anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
                 height: delegate_row.height
+
+                color: "transparent"
+                border.color: delegate_mouse_area.pressed ? Colors.buttonPressed : palette.button
+                border.width: delegate_mouse_area.containsMouse ? 1 : 0
 
                 Row {
                     id: delegate_row
@@ -235,11 +236,10 @@ Dialog {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
-                width: Math.max(open_button.implicitWidth,
-                                cancel_button.implicitWidth)
+                width: Math.max(open_button.implicitWidth, cancel_button.implicitWidth)
 
                 onClicked: {
-                    root.accept()
+                    root.accept();
                 }
             }
 
@@ -249,8 +249,7 @@ Dialog {
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                width: Math.max(open_button.implicitWidth,
-                                cancel_button.implicitWidth)
+                width: Math.max(open_button.implicitWidth, cancel_button.implicitWidth)
 
                 onClicked: root.close()
             }

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import "../.."
 
 TextField {
     property string fieldText: ""
@@ -13,13 +12,14 @@ TextField {
 
     text: fieldText
     onTextEdited: {
-        fieldText = text
+        fieldText = text;
     }
 
-    background: Item {}
+    background: Item {
+    }
 
     Rectangle {
-        color: Colors.border
+        color: palette.button
         height: 1
         anchors.left: parent.left
         anchors.right: parent.right

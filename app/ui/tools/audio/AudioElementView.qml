@@ -20,8 +20,7 @@ Item {
         Repeater {
             id: scenario_repeater
 
-            model: AudioTool.currentProject && AudioTool.currentProject.currentCategory ?
-                       AudioTool.currentProject.currentCategory.scenarios : []
+            model: AudioTool.currentProject && AudioTool.currentProject.currentCategory ? AudioTool.currentProject.currentCategory.scenarios : []
 
             CustomButton {
                 required property AudioScenario modelData
@@ -31,9 +30,9 @@ Item {
                 backgroundColor: "transparent"
                 usesFixedWidth: false
                 onClicked: {
-                    var project = AudioTool.currentProject
+                    var project = AudioTool.currentProject;
                     if (project && project.currentCategory) {
-                        project.currentCategory.currentScenario = modelData
+                        project.currentCategory.currentScenario = modelData;
                     }
                 }
             }
@@ -45,8 +44,7 @@ Item {
         id: list
 
         readonly property int min_width: 170
-        readonly property int count_per_row: parent ? Math.floor(
-                                                          width / min_width) : 1
+        readonly property int count_per_row: parent ? Math.floor(width / min_width) : 1
         readonly property int button_width: (width - verticalScrollBar.width) / count_per_row
 
         anchors.top: scenario_flow.bottom
@@ -57,8 +55,7 @@ Item {
         spacing: 10
 
         clip: true
-        model: (AudioTool.currentProject && AudioTool.currentProject.currentScenario) ?
-                   AudioTool.currentProject.currentScenario.model : []
+        model: (AudioTool.currentProject && AudioTool.currentProject.currentScenario) ? AudioTool.currentProject.currentScenario.model : []
 
         ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
@@ -126,11 +123,11 @@ Item {
     }
 
     // Search
-    Rectangle {
+    Item {
         height: Sizes.toolbarHeight
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.margins: 5
+        anchors.margins: 10
 
         // Search Button
         Rectangle {
@@ -141,14 +138,17 @@ Item {
             width: height
             radius: search_field.visible ? 0 : width / 2
 
-            color: palette.button
+            color: palette.dark
+            border.color: palette.button
+            border.width: 1
 
             Label {
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
                 text: search_field.visible ? FontAwesome.xmark : FontAwesome.magnifyingGlass
                 anchors.centerIn: parent
-                color: search_mouse_area.containsMouse ? "grey" : palette.buttonText
+                opacity: search_mouse_area.pressed ? 0.5 : search_mouse_area.containsMouse ? 0.75 : 1
+                color: palette.buttonText
                 font.pixelSize: parent.height / 2
             }
 
@@ -158,11 +158,10 @@ Item {
                 hoverEnabled: true
 
                 onClicked: {
-                    search_field.visible = !search_field.visible
-                    search_field.clear()
-
+                    search_field.visible = !search_field.visible;
+                    search_field.clear();
                     if (search_field.visible) {
-                        search_field.forceActiveFocus()
+                        search_field.forceActiveFocus();
                     }
                 }
             }
@@ -191,8 +190,8 @@ Item {
 
             Keys.onEscapePressed: {
                 if (search_field.activeFocus) {
-                    search_field.clear()
-                    search_field.visible = false
+                    search_field.clear();
+                    search_field.visible = false;
                 }
             }
         }

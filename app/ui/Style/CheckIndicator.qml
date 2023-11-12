@@ -10,10 +10,9 @@ Label {
     required property int checkState
 
     font.pixelSize: control.height > 26 ? 26 : control.height
-    x: root.control.text ? (root.control.mirrored ? root.control.width - width - root.control.rightPadding : root.control.leftPadding) : root.control.leftPadding
-                           + (root.control.availableWidth - width) / 2
+    x: root.control.text ? (root.control.mirrored ? root.control.width - width - root.control.rightPadding : root.control.leftPadding) : root.control.leftPadding + (root.control.availableWidth - width) / 2
     y: parent.height / 2 - height / 2
-    color: StyleColors.border
+    color: root.control.down ? StyleColors.buttonPressed : palette.button
 
     text: FontAwesome.square
     font.family: FontAwesome.fontRegular.family

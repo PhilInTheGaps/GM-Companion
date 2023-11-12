@@ -11,7 +11,7 @@ Page {
 
     header: Rectangle {
         height: Sizes.toolbarHeight
-        color: palette.button
+        color: palette.alternateBase
 
         Label {
             text: qsTr("Item")

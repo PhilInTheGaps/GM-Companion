@@ -18,7 +18,7 @@ Rectangle {
     signal linkClicked(string link)
 
     color: palette.dark
-    border.color: root.enabled ? palette.button : palette.dark
+    border.color: root.enabled ? (area.activeFocus ? CCColors.borderFocus : palette.button) : palette.dark
     border.width: root.enabled && area.activeFocus ? 2 : 1
 
     ScrollView {

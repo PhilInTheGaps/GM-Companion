@@ -75,7 +75,7 @@ void setPalette()
     palette.setColor(QPalette::ColorRole::AlternateBase, "#343a43"_L1);
     palette.setColor(QPalette::ColorRole::Window, "#2e2e2e"_L1);
     palette.setColor(QPalette::ColorRole::WindowText, "#f6f7f8"_L1);
-    palette.setColor(QPalette::ColorRole::Button, "#3f4957"_L1);
+    palette.setColor(QPalette::ColorRole::Button, "#8f9aa9"_L1); // 3f4957
     palette.setColor(QPalette::ColorRole::ButtonText, "#f6f7f8"_L1);
     palette.setColor(QPalette::ColorRole::Light, "#ebedef"_L1);
     palette.setColor(QPalette::ColorRole::Midlight, "#d5dade"_L1);

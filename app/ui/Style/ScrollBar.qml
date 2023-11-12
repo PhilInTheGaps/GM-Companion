@@ -4,12 +4,8 @@ import QtQuick.Templates as T
 T.ScrollBar {
     id: control
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0,
-                        contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentItem.implicitHeight + topPadding + bottomPadding)
 
     padding: 2
     visible: policy !== T.ScrollBar.AlwaysOff
@@ -19,15 +15,12 @@ T.ScrollBar {
         implicitHeight: control.interactive ? 6 : 2
 
         radius: width / 2
-        color: control.pressed ? palette.dark : palette.button
-        border.color: StyleColors.border
-        border.width: control.pressed ? 1 : 0
+        color: control.pressed ? StyleColors.buttonPressed : palette.button
         opacity: control.size < 1.0 ? 0.5 : 0.0
 
         states: State {
             name: "active"
-            when: control.policy === T.ScrollBar.AlwaysOn
-                  || (control.active && control.size < 1.0)
+            when: control.policy === T.ScrollBar.AlwaysOn || (control.active && control.size < 1.0)
 
             PropertyChanges {
                 control.contentItem.opacity: 0.75

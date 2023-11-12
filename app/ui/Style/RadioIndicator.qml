@@ -9,10 +9,9 @@ Label {
     property T.RadioButton control
 
     font.pixelSize: 26
-    x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding
-                      + (control.availableWidth - width) / 2
+    x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
     y: parent.height / 2 - height / 2
-    color: StyleColors.border
+    color: control.down ? StyleColors.buttonPressed : palette.button
 
     text: FontAwesome.circle
     font.family: FontAwesome.fontRegular.family

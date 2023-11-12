@@ -4,12 +4,8 @@ import QtQuick.Templates as T
 T.ProgressBar {
     id: control
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0,
-                        contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentItem.implicitHeight + topPadding + bottomPadding)
 
     contentItem: Item {
         implicitHeight: StyleSizes.progressBarHeight
@@ -35,7 +31,7 @@ T.ProgressBar {
         height: StyleSizes.progressBarHeight
 
         color: palette.window
-        border.color: StyleColors.border
+        border.color: palette.button
         border.width: 1
     }
 }

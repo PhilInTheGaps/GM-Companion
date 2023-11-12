@@ -5,13 +5,8 @@ import QtQuick.Templates as T
 T.ItemDelegate {
     id: control
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0, Math.max(
-                            contentItem.implicitHeight,
-                            indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, Math.max(contentItem.implicitHeight, indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 12
@@ -21,10 +16,8 @@ T.ItemDelegate {
     font.pointSize: 12
 
     contentItem: Label {
-        leftPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0)
-                                        + control.spacing : 0
-        rightPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0)
-                                          + control.spacing : 0
+        leftPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
+        rightPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
 
         text: control.text
         font: control.font
@@ -39,7 +32,7 @@ T.ItemDelegate {
         implicitHeight: StyleSizes.delegateHeight
         visible: control.down || control.highlighted || control.visualFocus
         color: palette.dark
-        border.color: StyleColors.border
+        border.color: control.down ? StyleColors.buttonPressed : palette.button
         border.width: control.hovered ? 1 : 0
     }
 }

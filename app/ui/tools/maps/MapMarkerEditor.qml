@@ -4,6 +4,7 @@ import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import "../.."
 
 Dialog {
     id: root
@@ -112,7 +113,7 @@ Dialog {
 
                         color: "transparent"
                         border.width: icon_mouse_area.containsMouse ? 2 : 0
-                        border.color: palette.button
+                        border.color: icon_mouse_area.pressed ? Colors.buttonPressed : palette.button
 
                         MouseArea {
                             id: icon_mouse_area
@@ -167,7 +168,7 @@ Dialog {
 
                         color: modelData
                         border.width: color_mouse_area.containsMouse ? 2 : 0
-                        border.color: palette.button
+                        border.color: color_mouse_area.pressed ? Colors.buttonPressed : palette.button
 
                         MouseArea {
                             id: color_mouse_area

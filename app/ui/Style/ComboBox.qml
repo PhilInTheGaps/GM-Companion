@@ -56,8 +56,8 @@ T.ComboBox {
         validator: control.validator
 
         font: control.font
-        color: !control.editable && control.visualFocus ? StyleColors.focus : palette.text
-        selectionColor: StyleColors.focus
+        color: !control.editable && control.visualFocus ? palette.button : palette.text
+        selectionColor: palette.button
         selectedTextColor: palette.highlightedText
         verticalAlignment: Text.AlignVCenter
         opacity: control.enabled ? 1 : 0.3
@@ -65,7 +65,7 @@ T.ComboBox {
         background: Rectangle {
             visible: control.editable && !control.flat
             border.width: parent && parent.activeFocus ? 2 : 1
-            border.color: parent && parent.activeFocus ? StyleColors.focus : StyleColors.border
+            border.color: palette.button
             implicitHeight: 40
         }
     }
@@ -75,7 +75,7 @@ T.ComboBox {
         implicitHeight: StyleSizes.comboBoxHeight
 
         color: palette.dark
-        border.color: StyleColors.border
+        border.color: control.down ? StyleColors.buttonPressed : palette.button
         border.width: 1
     }
 
@@ -138,7 +138,7 @@ T.ComboBox {
                 width: parent.width
                 height: parent.height
                 color: "transparent"
-                border.color: StyleColors.border
+                border.color: palette.button
             }
 
             T.ScrollIndicator.vertical: ScrollIndicator {

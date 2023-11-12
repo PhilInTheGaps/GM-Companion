@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import IconFonts
@@ -12,7 +11,7 @@ Page {
     id: page
 
     Component.onCompleted: {
-        from_value_text_field.forceActiveFocus()
+        from_value_text_field.forceActiveFocus();
     }
 
     Item {
@@ -71,8 +70,7 @@ Page {
                     id: left_column
                     spacing: 10
 
-                    width: left_scroll_bar.visible ? parent.width - left_scroll_bar.width
-                                                     - 5 : parent.width
+                    width: left_scroll_bar.visible ? parent.width - left_scroll_bar.width - 5 : parent.width
 
                     Repeater {
                         id: from_unit_repeater
@@ -88,10 +86,12 @@ Page {
                             hoverEnabled: true
                             font.pointSize: 12
 
-                            backgroundColor: ConverterTool.fromUnit === modelData ? palette.button : palette.dark
+                            forceBorderVisible: ConverterTool.fromUnit === modelData
+                            borderWidth: forceBorderVisible ? 2 : 1
+                            backgroundColor: palette.dark
 
                             onClicked: {
-                                ConverterTool.fromUnit = modelData
+                                ConverterTool.fromUnit = modelData;
                             }
                         }
                     }
@@ -138,11 +138,7 @@ Page {
                 height: Sizes.toolbarHeight * 1.5
                 font.pointSize: 12
                 readOnly: true
-                text: ConverterTool.convert(
-                            ConverterTool.fromUnit,
-                            from_value_text_field.text,
-                            ConverterTool.toUnit)
-
+                text: ConverterTool.convert(ConverterTool.fromUnit, from_value_text_field.text, ConverterTool.toUnit)
             }
 
             Flickable {
@@ -168,8 +164,7 @@ Page {
                     id: right_column
                     spacing: 10
 
-                    width: right_scroll_bar.visible ? parent.width - right_scroll_bar.width
-                                                      - 5 : parent.width
+                    width: right_scroll_bar.visible ? parent.width - right_scroll_bar.width - 5 : parent.width
 
                     Repeater {
                         id: to_unit_repeater
@@ -180,17 +175,18 @@ Page {
                             required property ConverterUnit modelData
                             property string converted: ConverterTool.convert(ConverterTool.fromUnit, from_value_text_field.text, modelData)
 
-                            buttonText: qsTranslate("Units", modelData.name)
-                                        + (converted.length > 0 ? " (" + converted + ")" : "")
+                            buttonText: qsTranslate("Units", modelData.name) + (converted.length > 0 ? " (" + converted + ")" : "")
                             anchors.left: parent ? parent.left : undefined
                             anchors.right: parent ? parent.right : undefined
                             hoverEnabled: true
                             font.pointSize: 12
 
-                            backgroundColor: ConverterTool.toUnit === modelData ? palette.button : palette.dark
+                            forceBorderVisible: ConverterTool.toUnit === modelData
+                            borderWidth: forceBorderVisible ? 2 : 1
+                            backgroundColor: palette.dark
 
                             onClicked: {
-                                ConverterTool.toUnit = modelData
+                                ConverterTool.toUnit = modelData;
                             }
                         }
                     }

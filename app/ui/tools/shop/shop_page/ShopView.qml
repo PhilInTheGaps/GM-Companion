@@ -61,7 +61,7 @@ Page {
             anchors.right: parent.right
             anchors.top: parent.top
             height: Sizes.toolbarHeight - 10
-            color: palette.button
+            color: palette.alternateBase
 
             Row {
                 anchors.fill: parent

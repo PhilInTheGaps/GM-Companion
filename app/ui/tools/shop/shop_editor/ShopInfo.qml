@@ -132,7 +132,7 @@ Column {
                 width: height
 
                 background: Rectangle {
-                    color: palette.button
+                    color: palette.alternateBase
                 }
 
                 Text {
@@ -282,7 +282,7 @@ Column {
         anchors.margins: 5
 
         height: Sizes.toolbarHeight
-        color: palette.button
+        color: palette.alternateBase
 
         Row {
             anchors.fill: parent

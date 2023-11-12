@@ -24,6 +24,7 @@ Control {
     property color backgroundColor: palette.dark
     property bool transparentBackground: false
     property int borderWidth: 1
+    property bool forceBorderVisible: false
 
     // Layout
     property bool usesFixedWidth: true
@@ -42,10 +43,8 @@ Control {
         id: main_row
         spacing: 10
 
-        property int spacingCount: icon_item.visible
-                                   && text_item.visible ? 1 : 0
-        property int contentWidth: (icon_item.visible ? icon_item.width : 0)
-                                   + (text_item.visible ? text_item.width : 0) + spacingCount
+        property int spacingCount: icon_item.visible && text_item.visible ? 1 : 0
+        property int contentWidth: (icon_item.visible ? icon_item.width : 0) + (text_item.visible ? text_item.width : 0) + spacingCount
 
         padding: root.centering ? (width - contentWidth) / 2 : 0
 
@@ -90,8 +89,8 @@ Control {
     background: Rectangle {
         visible: !root.transparentBackground
         color: root.backgroundColor
-        border.color: palette.button
-        border.width: mouse_area.containsMouse ? root.borderWidth : 0
+        border.color: root.pressed ? CCColors.buttonPressed : palette.button
+        border.width: mouse_area.containsMouse || root.forceBorderVisible ? root.borderWidth : 0
     }
 
     ToolTip.text: root.toolTipText
@@ -107,9 +106,9 @@ Control {
 
         onClicked: function (mouse) {
             if (mouse.button === Qt.LeftButton) {
-                root.clicked(root.buttonText)
+                root.clicked(root.buttonText);
             } else if (mouse.button === Qt.RightButton) {
-                root.rightClicked(root.buttonText)
+                root.rightClicked(root.buttonText);
             }
         }
     }

@@ -44,6 +44,7 @@ qt_add_qml_module(gm-companion-ui-style
         RadioIndicator.qml
         ScrollBar.qml
         ScrollIndicator.qml
+        ScrollView.qml
         Slider.qml
         SpinBox.qml
         SplitView.qml

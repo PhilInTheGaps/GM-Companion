@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import IconFonts
+import "../.."
 
 Item {
     id: root
@@ -33,11 +34,11 @@ Item {
         padding: 0
 
         onClosed: {
-            root.edit_mode = false
+            root.edit_mode = false;
         }
 
         onAccepted: {
-            root.valueEdited(textfield.text)
+            root.valueEdited(textfield.text);
         }
 
         TextField {
@@ -94,7 +95,7 @@ Item {
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
-            color: left_area.pressed ? "black" : left_area.containsMouse ? "grey" : root.font_color
+            color: left_area.pressed ? Colors.buttonPressed : left_area.containsMouse ? palette.button : root.font_color
             anchors.centerIn: parent
         }
 
@@ -121,7 +122,7 @@ Item {
             font.family: FontAwesome.fontSolid.family
             font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
-            color: right_area.pressed ? "black" : right_area.containsMouse ? "grey" : root.font_color
+            color: right_area.pressed ? Colors.buttonPressed : right_area.containsMouse ? palette.button : root.font_color
             anchors.centerIn: parent
         }
 
@@ -144,8 +145,8 @@ Item {
         cursorShape: Qt.IBeamCursor
 
         onClicked: {
-            root.edit_mode = true
-            textfield.forceActiveFocus()
+            root.edit_mode = true;
+            textfield.forceActiveFocus();
         }
     }
 }

@@ -5,16 +5,8 @@ import IconFonts
 T.SpinBox {
     id: control
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + 2 * padding
-                       + (up.indicator ? up.indicator.implicitWidth : 0)
-                       + (down.indicator ? down.indicator.implicitWidth : 0))
-    implicitHeight: Math.max(
-                        contentItem.implicitHeight + topPadding + bottomPadding,
-                        background ? background.implicitHeight : 0,
-                        up.indicator ? up.indicator.implicitHeight : 0,
-                        down.indicator ? down.indicator.implicitHeight : 0)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + 2 * padding + (up.indicator ? up.indicator.implicitWidth : 0) + (down.indicator ? down.indicator.implicitWidth : 0))
+    implicitHeight: Math.max(contentItem.implicitHeight + topPadding + bottomPadding, background ? background.implicitHeight : 0, up.indicator ? up.indicator.implicitHeight : 0, down.indicator ? down.indicator.implicitHeight : 0)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 6
@@ -49,11 +41,10 @@ T.SpinBox {
         Rectangle {
             x: -6 - (control.down.indicator ? 1 : 0)
             y: -6
-            width: control.width - (control.up.indicator ? control.up.indicator.width - 1 : 0)
-                   - (control.down.indicator ? control.down.indicator.width - 1 : 0)
+            width: control.width - (control.up.indicator ? control.up.indicator.width - 1 : 0) - (control.down.indicator ? control.down.indicator.width - 1 : 0)
             height: control.height
             color: "transparent"
-            border.color: control.activeFocus ? StyleColors.borderFocus : StyleColors.border
+            border.color: control.activeFocus ? StyleColors.borderFocus : palette.button
             border.width: control.activeFocus ? 2 : 1
         }
     }
@@ -64,7 +55,7 @@ T.SpinBox {
         implicitWidth: height
         implicitHeight: StyleSizes.spinBoxHeight
         color: palette.dark
-        border.color: StyleColors.border
+        border.color: control.up.pressed ? StyleColors.buttonPressed : palette.button
         border.width: control.up.hovered ? 1 : 0
 
         Label {
@@ -82,7 +73,7 @@ T.SpinBox {
         implicitWidth: height
         implicitHeight: StyleSizes.spinBoxHeight
         color: palette.dark
-        border.color: StyleColors.border
+        border.color: control.down.pressed ? StyleColors.buttonPressed : palette.button
         border.width: control.down.hovered ? 1 : 0
 
         Label {
@@ -96,6 +87,6 @@ T.SpinBox {
     background: Rectangle {
         implicitWidth: 140
         color: "transparent"
-        border.color: StyleColors.border
+        border.color: palette.button
     }
 }

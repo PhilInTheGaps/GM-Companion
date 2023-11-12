@@ -5,23 +5,16 @@ import QtQuick.Templates as T
 T.MenuItem {
     id: control
 
-    implicitWidth: Math.max(
-                       background ? background.implicitWidth : 0,
-                       contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0, Math.max(
-                            contentItem.implicitHeight,
-                            indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, Math.max(contentItem.implicitHeight, indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 6
     hoverEnabled: true
 
     contentItem: Label {
-        leftPadding: control.checkable
-                     && !control.mirrored ? control.indicator.width + control.spacing : 0
-        rightPadding: control.checkable
-                      && control.mirrored ? control.indicator.width + control.spacing : 0
+        leftPadding: control.checkable && !control.mirrored ? control.indicator.width + control.spacing : 0
+        rightPadding: control.checkable && control.mirrored ? control.indicator.width + control.spacing : 0
 
         text: control.text
         font: control.font
@@ -39,7 +32,7 @@ T.MenuItem {
         height: parent.height - 2
         color: "transparent"
         opacity: enabled ? 1 : 0.3
-        border.color: StyleColors.border
+        border.color: control.down ? StyleColors.buttonPressed : palette.button
         border.width: control.hovered ? 1 : 0
     }
 }
