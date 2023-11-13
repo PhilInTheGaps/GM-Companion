@@ -97,6 +97,14 @@ if (WIN32)
   execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${CGET_PREFIX}/lib ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
 endif()
 
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/src)
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/app/ui)
+list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/qml-icon-fonts)
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
+
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(tests)

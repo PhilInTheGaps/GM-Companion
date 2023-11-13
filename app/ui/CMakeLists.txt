@@ -1,14 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
 
-list(APPEND QML_IMPORT_PATH ${CMAKE_BINARY_DIR}/thirdparty/qml-icon-fonts)
-list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-list(APPEND QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml)
-list(APPEND QML_IMPORT_PATH ${CMAKE_BINARY_DIR}/imports)
-list(APPEND QML_IMPORT_PATH ${CMAKE_BINARY_DIR})
-list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
-
 add_subdirectory(Style)
 add_subdirectory(CustomComponents)
 add_subdirectory(FileDialog)
