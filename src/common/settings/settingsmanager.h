@@ -1,14 +1,16 @@
 #pragma once
 
 #include "abstractsettingsmanager.h"
-#include "utils/stringutils.h"
 #include <QFuture>
 #include <QLocale>
 #include <QObject>
 #include <QPointer>
 #include <QStringList>
 
-constexpr ConstQString PATHS_GROUP = "Paths";
+namespace Common::Settings
+{
+
+constexpr auto PATHS_GROUP = QLatin1StringView("Paths");
 
 class SettingsManager : public AbstractSettingsManager
 {
@@ -17,8 +19,8 @@ class SettingsManager : public AbstractSettingsManager
 public:
     static auto instance() -> QPointer<SettingsManager>;
 
-    static auto getPath(const QString &setting, QString group = QLatin1String()) -> QString;
-    static void setPath(const QString &setting, const QString &value, QString group = QLatin1String());
+    static auto getPath(QAnyStringView setting, QAnyStringView group = QLatin1StringView()) -> QString;
+    static void setPath(QAnyStringView setting, const QString &value, QAnyStringView group = QLatin1StringView());
 
     static auto getLanguage() -> QLocale;
     static auto getLanguageBcp47() -> QString;
@@ -26,21 +28,23 @@ public:
     static auto getLanguages() -> QStringList;
     static auto getLanguageNames() -> QStringList;
 
-    static auto getServerUrl(const QString &service, bool hasDefault = true) -> QString;
-    static void setServerUrl(const QString &url, const QString &service);
+    static auto getServerUrl(QAnyStringView service, bool hasDefault = true) -> QString;
+    static void setServerUrl(const QString &url, QAnyStringView service);
 
     static auto getPassword(const QString &username, const QString &service) -> QString;
     static auto setPassword(const QString &username, const QString &password, const QString &service) -> bool;
 
-    void setAddonEnabled(const QString &addon, bool enabled);
-    auto getIsAddonEnabled(const QString &addon) -> bool;
+    void setAddonEnabled(QAnyStringView addon, bool enabled);
+    auto getIsAddonEnabled(QAnyStringView addon) -> bool;
 
 private:
     using AbstractSettingsManager::AbstractSettingsManager;
     inline static QPointer<SettingsManager> m_instance = nullptr;
 
-    static auto getDefaultPath(const QString &setting, const QString &group = PATHS_GROUP) -> QString;
+    static auto getDefaultPath(QAnyStringView setting, QAnyStringView group = PATHS_GROUP) -> QString;
     static auto getActivePathGroup() -> QString;
 
     void updateSettings();
 };
+
+} // namespace Common::Settings

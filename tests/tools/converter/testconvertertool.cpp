@@ -4,6 +4,8 @@
 #include "tests/testhelper/staticabstracttest.h"
 #include <gtest/gtest.h>
 
+using namespace Common::Settings;
+
 class ConverterToolTest : public StaticAbstractTest
 {
 public:

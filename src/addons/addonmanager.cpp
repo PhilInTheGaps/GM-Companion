@@ -13,6 +13,7 @@
 #include <quazipfile.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAddonManager, "gm.addons.manager")
 

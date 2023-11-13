@@ -11,6 +11,7 @@
 #include <algorithm>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmShopsEditor, "gm.shops.editor")
 

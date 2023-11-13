@@ -2,6 +2,7 @@
 #include "filesystem/file.h"
 #include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
+#include "utils/stringutils.h"
 #include "utils/utils.h"
 #include <QImage>
 #include <QJsonArray>
@@ -10,6 +11,7 @@
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 static constexpr auto DEFAULT_COLOR = "red";
 static constexpr auto DEFAULT_ICON = "\uf3c5";

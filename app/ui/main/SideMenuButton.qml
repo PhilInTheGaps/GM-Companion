@@ -9,7 +9,7 @@ Button {
 
     property string toolName
     property string faIcon
-    property string altColor
+    property color altColor
     property bool currentTool: false
     property bool useAltColor: false
 
@@ -18,7 +18,8 @@ Button {
     height: Sizes.toolbarHeight
     hoverEnabled: true
 
-    background: Item {}
+    background: Item {
+    }
 
     font.bold: false
 

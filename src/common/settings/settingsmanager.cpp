@@ -4,11 +4,12 @@
 #include <qt6keychain/keychain.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmSettings, "gm.settings")
 
-constexpr ConstQString ADDONS_GROUP = "Addons";
-constexpr ConstQString DEFAULT_SERVER_URL = "https://gm-companion.rophil.lol";
+constexpr auto ADDONS_GROUP = "Addons";
+constexpr auto DEFAULT_SERVER_URL = "https://gm-companion.rophil.lol";
 
 auto SettingsManager::instance() -> QPointer<SettingsManager>
 {
@@ -20,7 +21,7 @@ auto SettingsManager::instance() -> QPointer<SettingsManager>
     return m_instance;
 }
 
-auto SettingsManager::getPath(const QString &setting, QString group) -> QString
+auto SettingsManager::getPath(QAnyStringView setting, QAnyStringView group) -> QString
 {
     if (group.isEmpty()) group = getActivePathGroup();
     auto value = instance()->get<QString>(setting, ""_L1, group);
@@ -29,7 +30,7 @@ auto SettingsManager::getPath(const QString &setting, QString group) -> QString
     return value;
 }
 
-void SettingsManager::setPath(const QString &setting, const QString &value, QString group)
+void SettingsManager::setPath(QAnyStringView setting, const QString &value, QAnyStringView group)
 {
     if (group.isEmpty()) group = getActivePathGroup();
     instance()->set(setting, value, group);
@@ -97,7 +98,7 @@ auto SettingsManager::getLanguageNames() -> QStringList
     return strings;
 }
 
-auto SettingsManager::getServerUrl(const QString &service, bool hasDefault) -> QString
+auto SettingsManager::getServerUrl(QAnyStringView service, bool hasDefault) -> QString
 {
     if (hasDefault && instance()->get(u"connection"_s, u"default"_s, service) == "default"_L1)
     {
@@ -112,7 +113,7 @@ auto SettingsManager::getServerUrl(const QString &service, bool hasDefault) -> Q
     return url;
 }
 
-void SettingsManager::setServerUrl(const QString &url, const QString &service)
+void SettingsManager::setServerUrl(const QString &url, QAnyStringView service)
 {
     instance()->set(u"server"_s, url, service);
 }
@@ -164,13 +165,13 @@ auto SettingsManager::setPassword(const QString &username, const QString &passwo
     return true;
 }
 
-auto SettingsManager::getDefaultPath(const QString &setting, const QString &group) -> QString
+auto SettingsManager::getDefaultPath(QAnyStringView setting, QAnyStringView group) -> QString
 {
     if (setting.isEmpty()) return u""_s;
 
-    if (group != PATHS_GROUP) return u"/gm-companion/%1"_s.arg(setting);
+    if (group != PATHS_GROUP) return u"/gm-companion/%1"_s.arg(setting.toString());
 
-    return u"%1/.gm-companion/%2"_s.arg(QDir::homePath(), setting);
+    return u"%1/.gm-companion/%2"_s.arg(QDir::homePath(), setting.toString());
 }
 
 /// Get the ini group for the currently set cloud mode.
@@ -185,7 +186,7 @@ auto SettingsManager::getActivePathGroup() -> QString
 }
 
 /// Set addon disabled or enabled
-void SettingsManager::setAddonEnabled(const QString &addon, bool enabled)
+void SettingsManager::setAddonEnabled(QAnyStringView addon, bool enabled)
 {
     if (addon.isEmpty())
     {
@@ -197,7 +198,7 @@ void SettingsManager::setAddonEnabled(const QString &addon, bool enabled)
 }
 
 /// Returns if addon is enabled
-auto SettingsManager::getIsAddonEnabled(const QString &addon) -> bool
+auto SettingsManager::getIsAddonEnabled(QAnyStringView addon) -> bool
 {
     return get(addon, false, ADDONS_GROUP);
 }

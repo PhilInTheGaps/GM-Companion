@@ -4,6 +4,7 @@ import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import common
 import "./dialogs"
 import "../audio_exporter"
 
@@ -214,7 +215,7 @@ CustomToolBar {
 
         CustomToolBarButton {
             iconText: FontAwesome.fileAudio
-            iconColor: "darkred"
+            iconColor: SettingsManager.colors.error
 
             toolTipText: qsTr("Remove missing files")
 

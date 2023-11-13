@@ -11,13 +11,14 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
 Spotify::Spotify(QObject *parent) : Service(u"Spotify"_s, parent)
 {
     m_networkManager = new QNetworkAccessManager(this);
-    username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
+    username(SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s));
 
     connect(m_librespotController.status(), &Status::messageChanged, this, &Spotify::forwardClientStatus);
 
@@ -146,7 +147,7 @@ auto Spotify::clientStatus() const -> Status *
 
 void Spotify::connectService()
 {
-    username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
+    username(SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s));
 
     m_librespotController.start().then([this](bool success) {
         qCDebug(gmSpotify()) << "Client has started:" << success;
@@ -164,9 +165,9 @@ void Spotify::disconnectService()
     connected(false);
     if (m_connector) m_connector->disconnectService();
     SettingsManager::setPassword(username(), u""_s, u"Spotify"_s);
-    SettingsManager::instance()->set(u"spotifyUsername"_s, u""_s, u"Spotify"_s);
-    SettingsManager::instance()->set(u"spotifyID"_s, u""_s, u"Spotify"_s);
-    SettingsManager::instance()->set(u"spotifySecret"_s, u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"username"_s, u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"clientId"_s, u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"clientSecret"_s, u""_s, u"Spotify"_s);
     m_librespotController.stop();
 }
 

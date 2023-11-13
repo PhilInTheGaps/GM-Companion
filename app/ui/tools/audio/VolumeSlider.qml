@@ -21,7 +21,7 @@ Slider {
         implicitWidth: 26
         implicitHeight: 26
         radius: 13
-        color: slider.pressed ? palette.light : palette.midlight
+        color: slider.pressed ? palette.text : palette.midlight
         border.color: palette.dark
 
         Text {

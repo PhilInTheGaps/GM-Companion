@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
@@ -17,8 +16,7 @@ CustomButton {
 
     anchors.right: parent ? parent.right : undefined
     anchors.left: parent ? parent.left : undefined
-    anchors.leftMargin: modelData ? modelData.depth * 5 + (!modelData.canToggle
-                                               && itemIcon === "" ? 22 : 0) : 0
+    anchors.leftMargin: modelData ? modelData.depth * 5 + (!modelData.canToggle && itemIcon === "" ? 22 : 0) : 0
 
     iconText: modelData && modelData.canToggle ? (modelData.isOpen ? FontAwesome.caretDown : FontAwesome.caretRight) : itemIcon
 
@@ -27,12 +25,12 @@ CustomButton {
     mainRow.spacing: checkbox.visible ? checkbox.width + 10 : 10
 
     onClicked: {
-        modelData.toggle()
+        modelData.toggle();
     }
 
     onRightClicked: {
         if (contextMenu) {
-            contextMenu.open()
+            contextMenu.open();
         }
     }
 
@@ -49,14 +47,14 @@ CustomButton {
         checkState: {
             switch (root.modelData ? root.modelData.isChecked : 0) {
             case 0:
-                Qt.Unchecked
-                break
+                Qt.Unchecked;
+                break;
             case 1:
-                Qt.PartiallyChecked
-                break
+                Qt.PartiallyChecked;
+                break;
             case 2:
-                Qt.Checked
-                break
+                Qt.Checked;
+                break;
             }
         }
 
@@ -67,7 +65,7 @@ CustomButton {
             anchors.fill: parent
 
             onClicked: {
-                root.modelData.isChecked = root.modelData.isChecked < 2 ? 2 : 0
+                root.modelData.isChecked = root.modelData.isChecked < 2 ? 2 : 0;
             }
         }
     }
@@ -81,12 +79,12 @@ CustomButton {
         modal: true
 
         onOpened: {
-            rename_field.selectAll()
-            rename_field.forceActiveFocus()
+            rename_field.selectAll();
+            rename_field.forceActiveFocus();
         }
 
         onAccepted: {
-            root.modelData.rename(rename_field.text)
+            root.modelData.rename(rename_field.text);
         }
 
         contentItem: TextField {
@@ -96,7 +94,7 @@ CustomButton {
             padding: 0
 
             onAccepted: {
-                rename_dialog.accept()
+                rename_dialog.accept();
             }
         }
     }
@@ -111,12 +109,12 @@ CustomButton {
         modal: true
 
         onOpened: {
-            name_field.selectAll()
-            name_field.forceActiveFocus()
+            name_field.selectAll();
+            name_field.forceActiveFocus();
         }
 
         onAccepted: {
-            root.modelData.create(new_thing_dialog.type, name_field.text)
+            root.modelData.create(new_thing_dialog.type, name_field.text);
         }
 
         contentItem: TextField {
@@ -125,7 +123,7 @@ CustomButton {
             placeholderText: qsTr("Name")
 
             onAccepted: {
-                new_thing_dialog.accept()
+                new_thing_dialog.accept();
             }
         }
     }
@@ -140,7 +138,7 @@ CustomButton {
         modal: true
 
         onAccepted: {
-            root.modelData.remove()
+            root.modelData.remove();
         }
 
         contentItem: Item {
@@ -156,7 +154,7 @@ CustomButton {
                 width: parent.width / 2 - 5
 
                 onClicked: {
-                    delete_dialog.accept()
+                    delete_dialog.accept();
                 }
             }
 
@@ -198,10 +196,10 @@ CustomButton {
                 text: qsTr("New") + " " + modelData + " ..."
 
                 onTriggered: {
-                    new_thing_dialog.title = text
-                    new_thing_dialog.type = modelData
-                    new_thing_dialog.y = y
-                    new_thing_dialog.open()
+                    new_thing_dialog.title = text;
+                    new_thing_dialog.type = modelData;
+                    new_thing_dialog.y = y;
+                    new_thing_dialog.open();
                 }
             }
         }
@@ -209,10 +207,10 @@ CustomButton {
         CustomMenuItem {
             id: delete_item
             text: qsTr("Delete")
-            textColor: "darkred"
+            textColor: SettingsManager.colors.error
 
             onTriggered: {
-                delete_dialog.open()
+                delete_dialog.open();
             }
         }
     }

@@ -4,6 +4,7 @@ import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import common
 import "../../.."
 
 Column {
@@ -43,7 +44,7 @@ Column {
                     text: shop_name_field.editMode ? FontAwesome.circleCheck : FontAwesome.chevronUp
                     font.family: FontAwesome.fontSolid.family
                     font.styleName: FontAwesome.fontSolid.styleName
-                    color: shop_name_field.editMode ? "limegreen" : palette.buttonText
+                    color: shop_name_field.editMode ? SettingsManager.colors.success : palette.buttonText
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -75,7 +76,7 @@ Column {
                     text: shop_name_field.editMode ? FontAwesome.circleXmark : FontAwesome.chevronDown
                     font.family: FontAwesome.fontSolid.family
                     font.styleName: FontAwesome.fontSolid.styleName
-                    color: shop_name_field.editMode ? "red" : palette.buttonText
+                    color: shop_name_field.editMode ? SettingsManager.colors.error : palette.buttonText
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -144,7 +145,7 @@ Column {
                     anchors.margins: 10
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    color: "red"
+                    color: SettingsManager.colors.error
                 }
 
                 onClicked: shop_delete_overlay.visible = true
@@ -185,7 +186,7 @@ Column {
                             text: FontAwesome.circleCheck
                             font.family: FontAwesome.fontSolid.family
                             font.styleName: FontAwesome.fontSolid.styleName
-                            color: "limegreen"
+                            color: SettingsManager.colors.success
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -212,7 +213,7 @@ Column {
                             text: FontAwesome.circleXmark
                             font.family: FontAwesome.fontSolid.family
                             font.styleName: FontAwesome.fontSolid.styleName
-                            color: "red"
+                            color: SettingsManager.colors.error
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter

@@ -1,5 +1,4 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import IconFonts
@@ -62,7 +61,7 @@ ApplicationWindow {
         target: UpdateManager
 
         function onUpdateAvailable() {
-            update_dialog.open()
+            update_dialog.open();
         }
     }
 
@@ -76,12 +75,11 @@ ApplicationWindow {
 
     Component.onCompleted: {
         if (SettingsManager.checkForUpdates) {
-            UpdateManager.checkForUpdates()
+            UpdateManager.checkForUpdates();
         }
-
         if (!SettingsManager.has("crashReports", "Telemetry")) {
-            console.debug("CrashReports preference has not been set.")
-            new_settings_dialog.open()
+            console.debug("CrashReports preference has not been set.");
+            new_settings_dialog.open();
         }
     }
 
@@ -143,7 +141,7 @@ ApplicationWindow {
                         onClicked: setTool()
 
                         function setTool() {
-                            root.currentToolIndex = index
+                            root.currentToolIndex = index;
                         }
                     }
                 }
@@ -156,17 +154,17 @@ ApplicationWindow {
 
             toolName: qsTr("Messages")
             faIcon: FontAwesome.circleExclamation
-            altColor: "orange"
+            altColor: SettingsManager.colors.warning
             useAltColor: MessageManager.hasNewErrors
 
             visible: message_dialog.hasMessages
 
             onClicked: {
                 if (message_dialog.opened) {
-                    message_dialog.close()
+                    message_dialog.close();
                 } else {
-                    message_dialog.open()
-                    MessageManager.markAllAsRead()
+                    message_dialog.open();
+                    MessageManager.markAllAsRead();
                 }
             }
         }
@@ -179,7 +177,7 @@ ApplicationWindow {
             faIcon: FontAwesome.gear
 
             onClicked: {
-                root.currentToolIndex = -1
+                root.currentToolIndex = -1;
             }
         }
     }
@@ -191,8 +189,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         asynchronous: true
-        source: root.currentToolIndex
-                < 0 ? "tools/Settings.qml" : root.tools[root.currentToolIndex].source
+        source: root.currentToolIndex < 0 ? "tools/Settings.qml" : root.tools[root.currentToolIndex].source
         active: true
 
         onLoaded: splash.close()

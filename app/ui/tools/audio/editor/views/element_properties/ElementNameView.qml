@@ -1,10 +1,10 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import common
 import "../../../../.."
 
 Item {
@@ -23,7 +23,7 @@ Item {
         target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : "" // qmllint disable missing-property
+            element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : ""; // qmllint disable missing-property
         }
     }
 
@@ -48,18 +48,17 @@ Item {
                 text: qsTr("No Subscenario")
 
                 onClicked: {
-                    AudioTool.editor.setSubscenario(-1)
-                    subscenario_dialog.accept()
+                    AudioTool.editor.setSubscenario(-1);
+                    subscenario_dialog.accept();
                 }
             }
 
             Repeater {
                 model: {
-                    if (AudioTool.editor.currentProject
-                            && AudioTool.editor.currentProject.currentScenario) {
-                        AudioTool.editor.currentProject.currentScenario.scenarios
+                    if (AudioTool.editor.currentProject && AudioTool.editor.currentProject.currentScenario) {
+                        AudioTool.editor.currentProject.currentScenario.scenarios;
                     } else {
-                        []
+                        [];
                     }
                 }
 
@@ -73,8 +72,8 @@ Item {
                     text: modelData.name // qmllint disable missing-property
 
                     onClicked: {
-                        AudioTool.editor.setSubscenario(index)
-                        subscenario_dialog.accept()
+                        AudioTool.editor.setSubscenario(index);
+                        subscenario_dialog.accept();
                     }
                 }
             }
@@ -104,7 +103,7 @@ Item {
                 text: element_name_field.edit_mode ? FontAwesome.circleCheck : FontAwesome.chevronUp
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
-                color: element_name_field.edit_mode ? "limegreen" : palette.text
+                color: element_name_field.edit_mode ? SettingsManager.colors.success : palette.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -112,15 +111,13 @@ Item {
 
             onClicked: {
                 if (element_name_field.edit_mode) {
-                    element_name_field.edit_mode = false
-
+                    element_name_field.edit_mode = false;
                     if (AudioTool.editor.currentElement) {
-                        AudioTool.editor.currentElement.name = element_name_field.text
+                        AudioTool.editor.currentElement.name = element_name_field.text;
                     }
-
-                    element_up_down.visible = enableMoveButtons
+                    element_up_down.visible = enableMoveButtons;
                 } else {
-                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, -1)
+                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, -1);
                 }
             }
         }
@@ -140,7 +137,7 @@ Item {
                 text: element_name_field.edit_mode ? FontAwesome.circleXmark : FontAwesome.chevronDown
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
-                color: element_name_field.edit_mode ? "red" : palette.text
+                color: element_name_field.edit_mode ? SettingsManager.colors.error : palette.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -148,11 +145,11 @@ Item {
 
             onClicked: {
                 if (element_name_field.edit_mode) {
-                    element_name_field.edit_mode = false
-                    element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : "" // qmllint disable missing-property
-                    element_up_down.visible = root.enableMoveButtons
+                    element_name_field.edit_mode = false;
+                    element_name_field.text = AudioTool.editor.currentElement ? AudioTool.editor.currentElement.name : ""; // qmllint disable missing-property
+                    element_up_down.visible = root.enableMoveButtons;
                 } else {
-                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, 1)
+                    AudioTool.editor.moveElement(AudioTool.editor.currentElement, 1);
                 }
             }
         }
@@ -188,9 +185,7 @@ Item {
         activeFocusOnPress: edit_mode
         focus: edit_mode
 
-        rightPadding: leftPadding
-                      + (element_delete_button.visible ? element_delete_button.width : 0)
-                      + (element_edit_name_button.visible ? element_edit_name_button.width : 0)
+        rightPadding: leftPadding + (element_delete_button.visible ? element_delete_button.width : 0) + (element_edit_name_button.visible ? element_edit_name_button.width : 0)
 
         CustomToolBarButton {
             id: element_edit_name_button
@@ -203,8 +198,8 @@ Item {
             pointSize: 12
 
             onClicked: {
-                element_up_down.visible = true
-                element_name_field.edit_mode = true
+                element_up_down.visible = true;
+                element_name_field.edit_mode = true;
             }
         }
 
@@ -266,17 +261,16 @@ Item {
                         text: FontAwesome.circleCheck
                         font.family: FontAwesome.fontSolid.family
                         font.styleName: FontAwesome.fontSolid.styleName
-                        color: "limegreen"
+                        color: SettingsManager.colors.success
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                     }
 
                     onClicked: {
-                        root.deleteClicked()
-                        element_delete_overlay.visible = false
-
-                        AudioTool.editor.deleteCurrentElement()
+                        root.deleteClicked();
+                        element_delete_overlay.visible = false;
+                        AudioTool.editor.deleteCurrentElement();
                     }
                 }
 
@@ -294,14 +288,14 @@ Item {
                         text: FontAwesome.circleXmark
                         font.family: FontAwesome.fontSolid.family
                         font.styleName: FontAwesome.fontSolid.styleName
-                        color: "red"
+                        color: SettingsManager.colors.error
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                     }
 
                     onClicked: {
-                        element_delete_overlay.visible = false
+                        element_delete_overlay.visible = false;
                     }
                 }
             }

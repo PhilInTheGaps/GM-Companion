@@ -7,6 +7,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 constexpr auto LOCAL_PORT = 59993;
 constexpr auto MAX_CONCURRENT_REQUESTS = 5;
@@ -24,8 +25,8 @@ GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(const QString &serviceName,
     config.port = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_CONCURRENT_REQUESTS;
     config.authHeaderFormat = u"Bearer %1"_s;
-    config.idRequest = SettingRequest<QString>(u"googleID"_s, u""_s, serviceName);
-    config.secretRequest = SettingRequest<QString>(u"googleSecret"_s, u""_s, serviceName);
+    config.idRequest = Request<QString>(u"clientId"_s, u""_s, serviceName);
+    config.secretRequest = Request<QString>(u"clientSecret"_s, u""_s, serviceName);
 
     setConfig(config);
 

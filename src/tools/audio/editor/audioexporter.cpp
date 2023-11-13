@@ -6,6 +6,7 @@
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioExporter, "gm.audio.exporter")
 

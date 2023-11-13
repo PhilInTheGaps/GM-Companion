@@ -12,6 +12,7 @@
 #endif
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 class PlaylistMockNetworkManager : public AbstractMockNetworkManager
 {

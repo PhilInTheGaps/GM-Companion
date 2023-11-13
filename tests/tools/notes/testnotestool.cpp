@@ -18,6 +18,7 @@
 #endif
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 class MockNetworkManager : public AbstractMockNetworkManager
 {

@@ -1,7 +1,7 @@
 #include "filesystem/file.h"
 #include "logger.h"
 #include "services/nextcloud/nextcloud.h"
-#include "settings/quicksettingsmanager.h"
+#include "settings/quick/settingsmanager.h"
 #include "tools/audio/thumbnails/audiothumbnailprovider.h"
 #include "updates/version.h"
 #include <QFontDatabase>
@@ -20,6 +20,7 @@
 #include <thirdparty/sentry-native/include/sentry.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmMain, "gm.main")
 
@@ -54,7 +55,7 @@ void initTranslations(QTranslator &translator, QQmlEngine &engine)
 
     updateTranslation(translator);
 
-    QObject::connect(QuickSettingsManager::instance(), &QuickSettingsManager::languageChanged, &translator,
+    QObject::connect(Quick::SettingsManager::instance(), &Quick::SettingsManager::languageChanged, &translator,
                      [&translator, &engine]() {
                          updateTranslation(translator);
                          engine.retranslate();
@@ -75,9 +76,10 @@ void setPalette()
     palette.setColor(QPalette::ColorRole::AlternateBase, "#343a43"_L1);
     palette.setColor(QPalette::ColorRole::Window, "#2e2e2e"_L1);
     palette.setColor(QPalette::ColorRole::WindowText, "#f6f7f8"_L1);
-    palette.setColor(QPalette::ColorRole::Button, "#8f9aa9"_L1); // 3f4957
+    palette.setColor(QPalette::ColorRole::Button, "#8f9aa9"_L1);
     palette.setColor(QPalette::ColorRole::ButtonText, "#f6f7f8"_L1);
-    palette.setColor(QPalette::ColorRole::Light, "#ebedef"_L1);
+    palette.setColor(QPalette::ColorRole::Light,
+                     "#1f1f1f"_L1); // same a dark so that qt dialogs still look ok, was #ebedef before
     palette.setColor(QPalette::ColorRole::Midlight, "#d5dade"_L1);
     palette.setColor(QPalette::ColorRole::Mid, "#bfc6cd"_L1);
     palette.setColor(QPalette::ColorRole::Dark, "#1f1f1f"_L1);

@@ -4,6 +4,7 @@
 #include "utils/networkutils.h"
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 AudioThumbnail::AudioThumbnail(const QString &imageId, AudioElement *parent)
     : QObject(parent), element(parent), m_imageId(imageId)

@@ -33,8 +33,14 @@ set(SRC_SETTINGS
     settings/settingsmanager.cpp
     settings/abstractsettingsmanager.h
     settings/abstractsettingsmanager.cpp
-    settings/quicksettingsmanager.h
-    settings/quicksettingsmanager.cpp)
+    settings/quick/settingsmanager.h
+    settings/quick/settingsmanager.cpp
+    settings/quick/services.h
+    settings/quick/colors.h
+    settings/quick/macros.h
+    settings/quick/spotify.h
+    settings/quick/google.h
+    settings/quick/nextcloud.h)
 
 set(SRC_UPDATES
     updates/updatemanager.h
@@ -66,6 +72,8 @@ qt_add_library(common STATIC)
 qt_add_qml_module(common
     URI common
     SOURCES ${SOURCES}
+    DEPENDENCIES
+        QtQuick
 )
 
 target_precompile_headers(common PRIVATE
@@ -132,7 +140,7 @@ target_include_directories(common
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/models
         ${CMAKE_CURRENT_SOURCE_DIR}/updates
-        ${CMAKE_CURRENT_SOURCE_DIR}/settings)
+        ${CMAKE_CURRENT_SOURCE_DIR}/settings/quick)
 
 target_link_libraries(common
     PUBLIC
@@ -140,6 +148,7 @@ target_link_libraries(common
     Qt6::Core
     Qt6::Gui
     Qt6::Qml
+    Qt6::Quick
     Qt6::Network
     PRIVATE
     ${MARKDOWN_LIBRARY}

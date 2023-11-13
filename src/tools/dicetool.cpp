@@ -1,16 +1,16 @@
 #include "dicetool.h"
 #include "settings/settingsmanager.h"
-#include "utils/stringutils.h"
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
-constexpr ConstQString DICE_SETTINGS = "Dice";
-constexpr ConstQString ENABLE_CRITICALS_SETTING = "enableCriticals";
-constexpr ConstQString SUCCESS_SETTING = "success";
-constexpr ConstQString FAILURE_SETTING = "failure";
-constexpr ConstQString USE_MIN_MAX_SETTING = "useMinMax";
-constexpr ConstQString SUCCESS_MAX_SETTING = "successMax";
+constexpr auto DICE_SETTINGS = "Dice";
+constexpr auto ENABLE_CRITICALS_SETTING = "enableCriticals";
+constexpr auto SUCCESS_SETTING = "success";
+constexpr auto FAILURE_SETTING = "failure";
+constexpr auto USE_MIN_MAX_SETTING = "useMinMax";
+constexpr auto SUCCESS_MAX_SETTING = "successMax";
 
 Q_LOGGING_CATEGORY(gmDiceTool, "gm.dice.tool")
 

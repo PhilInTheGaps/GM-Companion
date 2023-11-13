@@ -21,8 +21,8 @@ struct RESTServiceLocalConfig
     int port;
     int maxConcurrentRequests;
     QString authHeaderFormat;
-    SettingRequest<QString> idRequest;
-    SettingRequest<QString> secretRequest;
+    Common::Settings::Request<QString> idRequest;
+    Common::Settings::Request<QString> secretRequest;
 };
 
 class RESTServiceConnectorLocal : public RESTServiceConnector

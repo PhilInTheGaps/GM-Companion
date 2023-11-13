@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 TEST(SettingsManagerTest, CanReadWritePassword)
 {

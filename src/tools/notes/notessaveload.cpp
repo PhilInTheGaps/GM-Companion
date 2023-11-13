@@ -10,6 +10,7 @@
 #include <QPdfWriter>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmNotesSaveLoad, "gm.notes.saveload")
 

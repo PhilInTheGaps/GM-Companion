@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import IconFonts
-import common
-import services
+import common as Common
+import services as Services
 
 BaseAccountPage {
     id: root
@@ -11,14 +11,14 @@ BaseAccountPage {
     name: "NextCloud"
     icon: FontAwesome.cloud
     iconFont: FontAwesome.fontSolid
-    statuses: [NextCloud.status]
+    statuses: [Services.NextCloud.status]
 
     leftPanel: Column {
         spacing: 10
 
         // Login to new server
         Column {
-            visible: !NextCloud.connected
+            visible: !Services.NextCloud.connected
             spacing: 10
             anchors.left: parent.left
             anchors.right: parent.right
@@ -39,24 +39,22 @@ BaseAccountPage {
                     selectByMouse: true
                     Layout.fillWidth: true
                     placeholderText: "https://"
-                    Component.onCompleted: text = SettingsManager.getServerUrl(
-                                               "NextCloud", false)
+                    Component.onCompleted: text = Common.SettingsManager.services.nextcloud.getServerUrl()
                 }
             }
 
             Button {
                 text: qsTr("Login")
                 onClicked: {
-                    SettingsManager.setServerUrl(server_textfield.text,
-                                                 "NextCloud")
-                    NextCloud.connectService()
+                    Common.SettingsManager.services.nextcloud.setServerUrl(server_textfield.text);
+                    Services.NextCloud.connectService();
                 }
             }
         }
 
         // Logged in
         Column {
-            visible: NextCloud.connected
+            visible: Services.NextCloud.connected
             spacing: 10
             anchors.left: parent.left
             anchors.right: parent.right
@@ -74,7 +72,7 @@ BaseAccountPage {
                 }
 
                 Label {
-                    text: NextCloud.loginName
+                    text: Services.NextCloud.loginName
                     Layout.alignment: Qt.AlignTop
                     Layout.fillWidth: true
                     wrapMode: Label.WrapAnywhere
@@ -86,7 +84,7 @@ BaseAccountPage {
                 }
 
                 Label {
-                    text: NextCloud.serverUrl
+                    text: Services.NextCloud.serverUrl
                     Layout.alignment: Qt.AlignTop
                     Layout.fillWidth: true
                     wrapMode: Label.WrapAnywhere
@@ -95,7 +93,7 @@ BaseAccountPage {
 
             Button {
                 text: qsTr("Logout")
-                onClicked: NextCloud.disconnectService()
+                onClicked: Services.NextCloud.disconnectService()
             }
         }
     }

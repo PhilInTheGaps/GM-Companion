@@ -7,6 +7,7 @@
 #include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
 

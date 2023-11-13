@@ -7,6 +7,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
+using namespace Common::Settings;
 
 AbstractTest::AbstractTest() : StaticAbstractTest()
 {

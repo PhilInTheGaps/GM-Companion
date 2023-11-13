@@ -6,6 +6,8 @@
 #include <QSignalSpy>
 #include <gtest/gtest.h>
 
+using namespace Common::Settings;
+
 class ShopEditorTest : public StaticAbstractTest
 {
 public:

@@ -55,17 +55,6 @@ Column {
 
         onMoved: root.setScale(value)
 
-        handle: Rectangle {
-            x: scale_slider.leftPadding + scale_slider.availableWidth / 2 - width / 2
-            y: scale_slider.bottomPadding + scale_slider.visualPosition
-               * (scale_slider.availableHeight - height)
-            implicitWidth: 26
-            implicitHeight: 26
-            radius: 13
-            color: scale_slider.pressed ? palette.light : palette.midlight
-            border.color: palette.dark
-        }
-
         background: Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             y: scale_slider.topPadding

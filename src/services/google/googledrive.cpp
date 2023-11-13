@@ -6,6 +6,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 constexpr auto AUTH_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 constexpr auto AUTH_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
@@ -25,7 +26,7 @@ GoogleDrive::GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent)
 GoogleDrive::GoogleDrive(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent)
     : Service(serviceName, parent), m_networkManager(networkManager)
 {
-    clientId(SettingsManager::instance()->get<QString>(u"googleID"_s, u""_s, serviceName));
+    clientId(SettingsManager::instance()->get<QString>(u"clientId"_s, u""_s, serviceName));
     updateConnector();
 }
 
@@ -98,7 +99,7 @@ void GoogleDrive::updateConnector()
 void GoogleDrive::connectService()
 {
     qCDebug(gmGoogleDrive()) << "Connecting GoogleDrive ...";
-    clientId(SettingsManager::instance()->get<QString>(u"googleID"_s, u""_s, serviceName()));
+    clientId(SettingsManager::instance()->get<QString>(u"clientId"_s, u""_s, serviceName()));
     updateConnector();
     grant();
 }
@@ -107,8 +108,8 @@ void GoogleDrive::disconnectService()
 {
     connected(false);
     m_connector->disconnectService();
-    SettingsManager::instance()->set(u"googleID"_s, u""_s, serviceName());
-    SettingsManager::instance()->set(u"googleSecret"_s, u""_s, serviceName());
+    SettingsManager::instance()->set(u"clientId"_s, u""_s, serviceName());
+    SettingsManager::instance()->set(u"clientSecret"_s, u""_s, serviceName());
 }
 
 void GoogleDrive::grant()

@@ -1,14 +1,13 @@
 #include "updatemanager.h"
-#include "utils/stringutils.h"
 #include "version.h"
 #include <QLoggingCategory>
 #include <QXmlStreamReader>
 
 Q_LOGGING_CATEGORY(gmUpdateManager, "gm.updates.manager")
 
-constexpr ConstQString DEFAULT_FEED_URL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
-
 using namespace Qt::Literals::StringLiterals;
+
+constexpr auto DEFAULT_FEED_URL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom"_L1;
 
 UpdateManager::UpdateManager(QObject *parent) : QObject(parent)
 {

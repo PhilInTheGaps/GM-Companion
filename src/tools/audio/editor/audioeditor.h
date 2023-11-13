@@ -128,7 +128,7 @@ public:
     Q_INVOKABLE void loadElement(QObject *element);
     [[nodiscard]] Q_INVOKABLE QString resourcesPath() const
     {
-        return SettingsManager::getPath(QStringLiteral("resources"));
+        return Common::Settings::SettingsManager::getPath(QStringLiteral("resources"));
     }
     [[nodiscard]] Q_INVOKABLE QString basePath() const;
 

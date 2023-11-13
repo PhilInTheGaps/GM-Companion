@@ -159,25 +159,15 @@ Dialog {
                 Repeater {
                     model: ["orange", "red", "crimson", "darkred", "blueviolet", "blue", "cornflowerblue", "dodgerblue", "deepskyblue", "cadetblue", "green", "limegreen", "yellowgreen", "chartreuse", "gold", "yellow", "khaki", "moccasin", "darkslategray", "slategrey", "grey", "silver", "lightsteelblue", "lightgrey"]
 
-                    Rectangle {
-                        id: color_delegate
+                    CustomColorButton {
                         required property string modelData
+                        color: modelData
 
                         width: (parent.width - color_grid.spacing * 3) / 4
                         height: width
 
-                        color: modelData
-                        border.width: color_mouse_area.containsMouse ? 2 : 0
-                        border.color: color_mouse_area.pressed ? Colors.buttonPressed : palette.button
-
-                        MouseArea {
-                            id: color_mouse_area
-                            anchors.fill: parent
-                            hoverEnabled: true
-
-                            onClicked: {
-                                color_field.text = color_delegate.modelData;
-                            }
+                        onClicked: {
+                            color_field.text = modelData;
                         }
                     }
                 }

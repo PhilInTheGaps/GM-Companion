@@ -38,8 +38,5 @@ private:
     static auto findAndReadAllFiles(const QString &path) -> QByteArrayList;
     static auto findAndReadAllAddonFiles() -> QByteArrayList;
 
-    static constexpr ConstQString internalNamesPath = ":/names";
-    static constexpr ConstQString addonNamesPath = "names";
-
     QList<QList<AbstractNameGenerator *>> m_generatorLists;
 };

@@ -14,6 +14,7 @@
 #include <QPixmap>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmMapsMap, "gm.maps.map")
 

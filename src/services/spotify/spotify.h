@@ -23,7 +23,7 @@ class Spotify : public Services::Service
     Q_OBJECT
     QML_ELEMENT
     QML_SINGLETON
-    QML_SINGLETON_FACTORY(Spotify)
+    QML_SINGLETON_FACTORY(Services::Spotify)
 
     Q_PROPERTY(Services::Status *clientStatus READ clientStatus NOTIFY clientStatusChanged)
 

@@ -10,6 +10,7 @@
 #include <filesystem/file.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmShopsItemEditor, "gm.shops.items.editor")
 

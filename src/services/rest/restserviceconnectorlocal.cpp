@@ -9,6 +9,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager &networkManager, O2 *o2,
                                                      const QLoggingCategory &loggingCategory, QObject *parent = nullptr)

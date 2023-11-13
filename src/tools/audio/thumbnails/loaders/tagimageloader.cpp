@@ -12,10 +12,10 @@
 #include <taglib/taglib.h>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
+using namespace TagLib;
 
 Q_LOGGING_CATEGORY(gmAudioTagImageLoader, "gm.audio.thumbnails.loaders.tag")
-
-using namespace TagLib;
 
 auto TagImageLoader::loadImageAsync(const AudioElement *element, const AudioFile *audioFile) -> QFuture<QPixmap>
 {

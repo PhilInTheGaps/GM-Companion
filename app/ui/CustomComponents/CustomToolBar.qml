@@ -1,5 +1,6 @@
 import QtQuick
 import IconFonts
+import common
 
 Rectangle {
     id: root
@@ -62,7 +63,7 @@ Rectangle {
             Text {
                 visible: !root.isSaved
                 text: FontAwesome.asterisk
-                color: "darkred"
+                color: SettingsManager.colors.error
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
                 anchors.right: parent.right

@@ -13,6 +13,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioSaveLoad, "gm.audio.saveload")
 

@@ -1,14 +1,15 @@
 import QtQuick
 import QtQuick.Controls
 import IconFonts
-import services
+import services as Services
+import common as Common
 import "../../.."
 
 Rectangle {
     id: root
     height: Sizes.toolbarHeight
 
-    property Status status: undefined
+    property Services.Status status: undefined
 
     visible: status.message !== ""
 
@@ -30,32 +31,32 @@ Rectangle {
             text: {
                 switch (root.status.type) {
                 case 1:
-                    FontAwesome.circleCheck
-                    break
+                    FontAwesome.circleCheck;
+                    break;
                 case 2:
-                    FontAwesome.triangleExclamation
-                    break
+                    FontAwesome.triangleExclamation;
+                    break;
                 case 3:
-                    FontAwesome.circleExclamation
-                    break
+                    FontAwesome.circleExclamation;
+                    break;
                 default:
-                    FontAwesome.circleInfo
+                    FontAwesome.circleInfo;
                 }
             }
 
             color: {
                 switch (root.status.type) {
                 case 1:
-                    "green"
-                    break
+                    Common.SettingsManager.colors.success;
+                    break;
                 case 2:
-                    "orange"
-                    break
+                    Common.SettingsManager.colors.warning;
+                    break;
                 case 3:
-                    "red"
-                    break
+                    Common.SettingsManager.colors.error;
+                    break;
                 default:
-                    "deepskyblue"
+                    Common.SettingsManager.colors.info;
                 }
             }
         }
@@ -72,13 +73,13 @@ Rectangle {
     border.color: {
         switch (root.status.type) {
         case 2:
-            "orange"
-            break
+            Common.SettingsManager.colors.warning;
+            break;
         case 3:
-            "red"
-            break
+            Common.SettingsManager.colors.error;
+            break;
         default:
-            palette.highlight
+            palette.highlight;
         }
     }
 

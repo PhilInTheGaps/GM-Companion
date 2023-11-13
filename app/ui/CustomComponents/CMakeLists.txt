@@ -16,6 +16,7 @@ qt_add_qml_module(gm-companion-ui-cc
     QML_FILES
         CustomButton.qml
         CustomComboBox.qml
+        CustomColorButton.qml
         CustomMenuItem.qml
         CustomRadioButton.qml
         CustomScrollLabel.qml

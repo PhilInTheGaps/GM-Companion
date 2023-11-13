@@ -38,6 +38,8 @@ qt_add_qml_module(gm-companion-ui
         src
     OPTIONAL_IMPORTS
         Style
+    DEPENDENCIES
+        QtQuick
     QML_FILES
         Main.qml
         Sizes.qml
@@ -168,4 +170,6 @@ target_link_libraries(gm-companion-ui
     common
     commonplugin
     qml-icon-fonts
-    qml-icon-fontsplugin)
+    qml-icon-fontsplugin
+    Qt6::Qml
+    Qt6::Quick)

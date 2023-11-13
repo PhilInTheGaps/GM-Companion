@@ -4,6 +4,8 @@
 #include "utils/fileutils.h"
 #include <gtest/gtest.h>
 
+using namespace Common::Settings;
+
 class ShopToolTest : public StaticAbstractTest
 {
 public:

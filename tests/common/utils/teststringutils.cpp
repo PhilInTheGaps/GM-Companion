@@ -47,13 +47,6 @@ TEST(StringUtilsTest, HasWildcardMatch)
     }
 }
 
-constexpr ConstQString constString = "Test String";
-
-TEST(StringUtilsTest, CanConstructCompileTimeString)
-{
-    EXPECT_EQ(constString.toString().toStdString(), "Test String");
-}
-
 TEST(StringUtilsTest, CanConvertJpgToStringAndBack)
 {
     QImage image(64, 64, QImage::Format_RGB32);

@@ -3,6 +3,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 Service::Service(const QString &name, QObject *parent)
     : QObject(parent), a_status(new Status(this)), a_serviceName(name)

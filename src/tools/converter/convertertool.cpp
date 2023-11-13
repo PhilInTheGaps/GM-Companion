@@ -10,6 +10,7 @@
 #include <QSettings>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmConverter, "gm.converter")
 

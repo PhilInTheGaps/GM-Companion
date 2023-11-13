@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import IconFonts
+import common
 import "../.."
 
 Item {
@@ -67,7 +68,7 @@ Item {
             anchors.right: parent.right
             anchors.margins: 10
             font.pixelSize: parent.height - 30
-            color: "green"
+            color: SettingsManager.colors.success
         }
 
         MouseArea {

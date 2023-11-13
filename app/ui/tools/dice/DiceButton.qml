@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
+import common
 
 Button {
     id: root
@@ -12,7 +13,8 @@ Button {
 
     width: height
 
-    background: Item {}
+    background: Item {
+    }
 
     Image {
         id: image
@@ -27,7 +29,7 @@ Button {
         anchors.fill: image
         source: image
         colorization: 1
-        colorizationColor: parent.pressed ? "grey" : root.isCurrentType ? "tomato" : "white"
+        colorizationColor: parent.pressed ? "grey" : root.isCurrentType ? SettingsManager.colors.error : "white"
     }
 
     ToolTip.text: toolTipText

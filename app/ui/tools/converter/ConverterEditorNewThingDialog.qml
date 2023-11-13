@@ -10,9 +10,9 @@ Dialog {
     modal: true
 
     enum Mode {
-        Project = 0,
-        Category = 1,
-        Unit = 2
+        Project,
+        Category,
+        Unit
     }
 
     property bool canAccept: true
@@ -21,26 +21,25 @@ Dialog {
 
     function updateCanAccept() {
         if (!ConverterTool.editor) {
-            canAccept = false
-            return
+            canAccept = false;
+            return;
         }
-
         switch (currentMode) {
         case ConverterEditorNewThingDialog.Mode.Project:
-            canAccept = true
-            break
+            canAccept = true;
+            break;
         case ConverterEditorNewThingDialog.Mode.Category:
-            canAccept = ConverterTool.editor.currentProject
-            error_label.text = qsTr("No Project!")
-            break
+            canAccept = ConverterTool.editor.currentProject;
+            error_label.text = qsTr("No Project!");
+            break;
         case ConverterEditorNewThingDialog.Mode.Unit:
-            canAccept = ConverterTool.editor.currentCategory
-            error_label.text = qsTr("No Category!")
-            break
+            canAccept = ConverterTool.editor.currentCategory;
+            error_label.text = qsTr("No Category!");
+            break;
         default:
-            canAccept = false
-            error_label.text = qsTr("Unknown Error")
-            break
+            canAccept = false;
+            error_label.text = qsTr("Unknown Error");
+            break;
         }
     }
 
@@ -53,8 +52,8 @@ Dialog {
             width: name_field.width
 
             onCurrentIndexChanged: {
-                root.updateCanAccept()
-                name_field.forceActiveFocus()
+                root.updateCanAccept();
+                name_field.forceActiveFocus();
             }
         }
 
@@ -66,12 +65,11 @@ Dialog {
             visible: root.canAccept
             onAccepted: {
                 if (root.currentMode !== ConverterEditorNewThingDialog.Mode.Unit) {
-                    root.accept()
-                    return
+                    root.accept();
+                    return;
                 }
-
                 if (value_field.acceptableInput) {
-                    root.accept()
+                    root.accept();
                 }
             }
         }
@@ -83,8 +81,7 @@ Dialog {
             selectByMouse: true
             onAccepted: root.accept()
             enabled: root.canAccept
-            visible: root.canAccept
-                     && root.currentMode === ConverterEditorNewThingDialog.Mode.Unit
+            visible: root.canAccept && root.currentMode === ConverterEditorNewThingDialog.Mode.Unit
 
             validator: DoubleValidator {
                 notation: DoubleValidator.ScientificNotation
@@ -110,7 +107,7 @@ Dialog {
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 12
-                color: "red"
+                color: SettingsManager.colors.error
             }
         }
     }
@@ -118,31 +115,28 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onOpened: {
-        type_combo_box.currentIndex = lastMode
-
-        name_field.forceActiveFocus()
+        type_combo_box.currentIndex = lastMode;
+        name_field.forceActiveFocus();
     }
 
     onAccepted: {
         if (name_field.text !== "" && canAccept) {
-
             switch (currentMode) {
             case ConverterEditorNewThingDialog.Mode.Project:
-                ConverterTool.editor.createProject(name_field.text)
-                break
+                ConverterTool.editor.createProject(name_field.text);
+                break;
             case ConverterEditorNewThingDialog.Mode.Category:
-                ConverterTool.editor.createCategory(name_field.text)
-                break
+                ConverterTool.editor.createCategory(name_field.text);
+                break;
             case ConverterEditorNewThingDialog.Mode.Unit:
-                ConverterTool.editor.createUnit(name_field.text, value_field.text)
-                break
+                ConverterTool.editor.createUnit(name_field.text, value_field.text);
+                break;
             }
         }
-
-        name_field.clear()
+        name_field.clear();
     }
 
     onClosed: {
-        lastMode = currentMode
+        lastMode = currentMode;
     }
 }

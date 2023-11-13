@@ -44,7 +44,7 @@ T.ComboBox {
 
     contentItem: TextField {
         leftPadding: !control.mirrored ? 12 : control.editable && activeFocus ? 3 : 1
-        rightPadding: control.mirrored ? 12 : control.editable && activeFocus ? 3 : 1
+        rightPadding: control.mirrored ? 12 : control.editable && activeFocus ? 3 : 12
         topPadding: 6 - control.padding
         bottomPadding: 6 - control.padding
         text: control.editable ? control.editText : control.displayText
@@ -86,7 +86,7 @@ T.ComboBox {
         topMargin: 5
         bottomMargin: 5
         padding: 0
-        modal: control && control.model && control.model.length
+        modal: control && control.model && control.model.length > 0
         transformOrigin: Item.Top
 
         enter: Transition {

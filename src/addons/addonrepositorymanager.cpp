@@ -3,7 +3,6 @@
 #include "settings/settingsmanager.h"
 #include "updates/updatemanager.h"
 #include "utils/networkutils.h"
-#include "utils/stringutils.h"
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -16,8 +15,9 @@
 Q_LOGGING_CATEGORY(gmAddonRepoManager, "gm.addons.repositories")
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
-constexpr ConstQString REPOSITORY_SETTING = "addonRepositories";
+constexpr auto REPOSITORY_SETTING = "addonRepositories";
 constexpr int MINIMAL_COMPATIBLE_VERSION = 1;
 
 AddonRepositoryManager::AddonRepositoryManager(QObject *parent) : QObject{parent}

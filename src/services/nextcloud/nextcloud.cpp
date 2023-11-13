@@ -10,6 +10,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 constexpr auto AUTH_URL = "/index.php/login/v2";
 constexpr auto DAV_ENDPOINT = "/remote.php/dav/files";

@@ -7,6 +7,7 @@
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Common::Settings;
 
 static constexpr auto PROJECT_FILE_GLOB = "*.shop";
 

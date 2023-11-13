@@ -8,8 +8,9 @@
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 
-using namespace Services;
 using namespace Qt::Literals::StringLiterals;
+using namespace Services;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioPlaylistResolving, "gm.audio.playlist.resolving")
 

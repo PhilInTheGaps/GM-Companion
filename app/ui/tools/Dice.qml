@@ -4,6 +4,7 @@ import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import common
 import ".."
 import "./dice"
 import "../common"
@@ -20,19 +21,19 @@ Page {
         target: DiceTool
 
         function onMixedCriticalResult() {
-            roll_result.color = "orange";
+            roll_result.color = SettingsManager.colors.warning;
             roll_result_help.visible = true;
             roll_result_help.helpText = qsTr("Result contained both critical failures and successes");
         }
 
         function onSuccessfulCriticalResult() {
-            roll_result.color = "green";
+            roll_result.color = SettingsManager.colors.success;
             roll_result_help.visible = true;
             roll_result_help.helpText = qsTr("Result contained at least one critical success");
         }
 
         function onFailedCriticalResult() {
-            roll_result.color = "red";
+            roll_result.color = SettingsManager.colors.error;
             roll_result_help.visible = true;
             roll_result_help.helpText = qsTr("Result contained at least one critical failure");
         }

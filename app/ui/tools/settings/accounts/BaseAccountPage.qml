@@ -1,7 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import IconFonts
-import services
+import services as Services
+import common as Common
 import "./../../.."
 
 Item {
@@ -54,7 +55,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
             visible: root.isExperimental
-            color: "orange"
+            color: Common.SettingsManager.colors.warning
         }
     }
 
@@ -73,8 +74,7 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.left: parent.left
-            width: root.rightPanel
-                   || parent.width > 1200 ? parent.width / 2 - 10 : parent.width
+            width: root.rightPanel || parent.width > 1200 ? parent.width / 2 - 10 : parent.width
         }
 
         Rectangle {
@@ -111,7 +111,7 @@ Item {
             StatusBar {
                 id: status_label
 
-                required property Status modelData
+                required property Services.Status modelData
 
                 anchors.left: parent.left
                 anchors.right: parent.right

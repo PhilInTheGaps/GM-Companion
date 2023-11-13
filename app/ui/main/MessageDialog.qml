@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import IconFonts
 import src
+import common
 
 Dialog {
     id: root
@@ -72,16 +73,16 @@ Dialog {
 
                     color: "transparent"
                     border.color: switch (type) {
-                                  case 1:
-                                      "orange"
-                                      break
-                                  case 2:
-                                  case 3:
-                                      "red"
-                                      break
-                                  default:
-                                      palette.button
-                                  }
+                    case 1:
+                        SettingsManager.colors.warning;
+                        break;
+                    case 2:
+                    case 3:
+                        SettingsManager.colors.error;
+                        break;
+                    default:
+                        palette.button;
+                    }
 
                     border.width: 1
                     height: header.height + text_field.height
@@ -124,9 +125,7 @@ Dialog {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
 
-                                text: message_box.timestamp.toLocaleString(
-                                          Qt.locale("en_US"),
-                                          Locale.ShortFormat)
+                                text: message_box.timestamp.toLocaleString(Qt.locale("en_US"), Locale.ShortFormat)
                                 font.pointSize: 10
                                 wrapMode: Label.NoWrap
                                 verticalAlignment: Text.AlignVCenter
@@ -157,7 +156,8 @@ Dialog {
                         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
                         readOnly: true
                         selectByMouse: true
-                        background: Item {}
+                        background: Item {
+                        }
                     }
                 }
             }

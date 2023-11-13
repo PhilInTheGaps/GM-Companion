@@ -1,17 +1,19 @@
 #pragma once
 
-#include "utils/stringutils.h"
 #include <QDir>
 #include <QObject>
 #include <QSettings>
 #include <QVariant>
 
-constexpr ConstQString DEFAULT_GROUP = "";
-
-template <typename T> struct SettingRequest
+namespace Common::Settings
 {
-    SettingRequest() = default;
-    SettingRequest(const QString &identifier, const T &defaultValue, const QString &group = DEFAULT_GROUP)
+
+constexpr auto DEFAULT_GROUP = QLatin1StringView();
+
+template <typename T> struct Request
+{
+    Request() = default;
+    Request(const QString &identifier, const T &defaultValue, const QString &group = DEFAULT_GROUP)
         : identifier(identifier), defaultValue(defaultValue), group(group)
     {
     }
@@ -25,32 +27,29 @@ class AbstractSettingsManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractSettingsManager(QObject *parent = nullptr);
+    using QObject::QObject;
 
-    template <typename T>
-    T get(const QString &setting, const T &defaultValue, const QString &group = DEFAULT_GROUP);
+    template <typename T> T get(QAnyStringView setting, const T &defaultValue, QAnyStringView group = DEFAULT_GROUP);
 
-    template <typename T> T
-    get(const SettingRequest<T> &request);
+    template <typename T> T get(const Request<T> &request);
 
-    template <typename T>
-    void set(const QString &setting, const T &value, const QString &group = DEFAULT_GROUP);
+    template <typename T> void set(QAnyStringView setting, const T &value, QAnyStringView group = DEFAULT_GROUP);
 
-    Q_INVOKABLE bool has(const QString &setting, const QString &group = DEFAULT_GROUP);
+    Q_INVOKABLE bool has(QAnyStringView setting, QAnyStringView group = DEFAULT_GROUP);
 
     void forceSync();
 
 protected:
-    template <typename T> void rename(const QString &currentName, const QString &newName, const QString &group);
+    template <typename T> void rename(QAnyStringView currentName, QAnyStringView newName, QAnyStringView group);
 
-    void remove(const QString &setting, const QString &group);
+    void remove(QAnyStringView setting, QAnyStringView group);
 
 private:
     QSettings m_settings = QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 };
 
 template <typename T>
-auto AbstractSettingsManager::get(const QString &setting, const T &defaultValue, const QString &group) -> T
+auto AbstractSettingsManager::get(QAnyStringView setting, const T &defaultValue, QAnyStringView group) -> T
 {
     m_settings.beginGroup(group);
     QVariant variant = m_settings.value(setting, defaultValue);
@@ -58,14 +57,12 @@ auto AbstractSettingsManager::get(const QString &setting, const T &defaultValue,
     return variant.value<T>();
 }
 
-template <typename T>
-auto AbstractSettingsManager::get(const SettingRequest<T> &request) -> T
+template <typename T> auto AbstractSettingsManager::get(const Request<T> &request) -> T
 {
     return get(request.identifier, request.defaultValue, request.group);
 }
 
-template <typename T>
-void AbstractSettingsManager::set(const QString &setting, const T &value, const QString &group)
+template <typename T> void AbstractSettingsManager::set(QAnyStringView setting, const T &value, QAnyStringView group)
 {
     m_settings.beginGroup(group);
     m_settings.setValue(setting, value);
@@ -73,7 +70,7 @@ void AbstractSettingsManager::set(const QString &setting, const T &value, const 
 }
 
 template <typename T>
-void AbstractSettingsManager::rename(const QString &currentName, const QString &newName, const QString &group)
+void AbstractSettingsManager::rename(QAnyStringView currentName, QAnyStringView newName, QAnyStringView group)
 {
     if (const auto value = get<T>(currentName, T(), group); !value.isEmpty())
     {
@@ -81,3 +78,5 @@ void AbstractSettingsManager::rename(const QString &currentName, const QString &
     }
     remove(currentName, group);
 }
+
+} // namespace Common::Settings

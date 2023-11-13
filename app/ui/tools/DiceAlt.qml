@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import IconFonts
 import src
+import common
 import "../common"
 
 Item {
@@ -12,29 +13,26 @@ Item {
         target: DiceTool
 
         function onMixedCriticalResult() {
-            roll_result.color = "orange"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained both critical failures and successes")
+            roll_result.color = SettingsManager.colors.warning;
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained both critical failures and successes");
         }
 
         function onSuccessfulCriticalResult() {
-            roll_result.color = "green"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained at least one critical success")
+            roll_result.color = SettingsManager.colors.success;
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained at least one critical success");
         }
 
         function onFailedCriticalResult() {
-            roll_result.color = "red"
-            roll_result_help.visible = true
-            roll_result_help.helpText = qsTr(
-                        "Result contained at least one critical failure")
+            roll_result.color = SettingsManager.colors.error;
+            roll_result_help.visible = true;
+            roll_result_help.helpText = qsTr("Result contained at least one critical failure");
         }
 
         function onNormalResult() {
-            roll_result.color = dice_page.palette.text
-            roll_result_help.visible = false
+            roll_result.color = dice_page.palette.text;
+            roll_result_help.visible = false;
         }
     }
 
@@ -115,7 +113,7 @@ Item {
                 hoverEnabled: true
 
                 onClicked: {
-                    DiceTool.roll()
+                    DiceTool.roll();
                 }
             }
 

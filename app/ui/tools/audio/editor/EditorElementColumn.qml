@@ -24,8 +24,7 @@ Pane {
 
         clip: true
         spacing: 10
-        model: (AudioTool.editor.currentProject
-                && AudioTool.editor.currentProject.currentScenario) ? AudioTool.editor.currentProject.currentScenario.model : []
+        model: (AudioTool.editor.currentProject && AudioTool.editor.currentProject.currentScenario) ? AudioTool.editor.currentProject.currentScenario.model : []
 
         ScrollBar.vertical: ScrollBar {
             id: scroll_bar
@@ -48,7 +47,9 @@ Pane {
                 anchors.right: parent.right
                 height: subscenario_text.height + 4
                 visible: elements_column.modelData.isSubscenario
-                color: palette.button
+                color: palette.dark
+                border.color: palette.button
+                border.width: 1
 
                 Label {
                     id: subscenario_text
@@ -94,11 +95,11 @@ Pane {
                         anchors.margins: 0
                         pointSize: 10
                         onClicked: {
-                            root.deleteDialog.x = root.width
-                            root.deleteDialog.y = Sizes.toolbarHeight
-                            root.deleteDialog.mode = 3
-                            root.deleteDialog.element = elements_column.modelData
-                            root.deleteDialog.open()
+                            root.deleteDialog.x = root.width;
+                            root.deleteDialog.y = Sizes.toolbarHeight;
+                            root.deleteDialog.mode = 3;
+                            root.deleteDialog.element = elements_column.modelData;
+                            root.deleteDialog.open();
                         }
                     }
                 }
@@ -123,7 +124,7 @@ Pane {
                     anchors.right: elements_column.right
 
                     onClicked: {
-                        AudioTool.editor.loadElement(modelData)
+                        AudioTool.editor.loadElement(modelData);
                     }
                 }
             }

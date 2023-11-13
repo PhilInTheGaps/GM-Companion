@@ -16,6 +16,7 @@ Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot"
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 static constexpr int TRY_AGAIN_TIMEOUT_MS = 3000;
 static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
@@ -39,7 +40,7 @@ auto LibrespotController::start() -> QFuture<bool>
 
     m_isExitExpected = false;
 
-    const auto username = SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s);
+    const auto username = SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s);
     auto password = SettingsManager::getPassword(username, u"Spotify"_s);
 
     if (username.isEmpty())

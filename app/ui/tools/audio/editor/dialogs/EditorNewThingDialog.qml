@@ -3,6 +3,7 @@ import QtQuick.Controls
 import CustomComponents
 import IconFonts
 import src
+import common
 
 Dialog {
     id: root
@@ -137,7 +138,7 @@ Dialog {
                 font.family: FontAwesome.fontSolid.family
                 font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 12
-                color: "red"
+                color: SettingsManager.colors.error
             }
         }
     }

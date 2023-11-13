@@ -16,8 +16,8 @@ SpotifyConnectorLocal::SpotifyConnectorLocal(QNetworkAccessManager &networkManag
     config.scope = SCOPE;
     config.port = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_REQUESTS;
-    config.idRequest = SettingRequest<QString>(u"spotifyID"_s, u""_s, u"Spotify"_s);
-    config.secretRequest = SettingRequest<QString>(u"spotifySecret"_s, u""_s, u"Spotify"_s);
+    config.idRequest = Common::Settings::Request<QString>(u"clientId"_s, u""_s, u"Spotify"_s);
+    config.secretRequest = Common::Settings::Request<QString>(u"clientSecret"_s, u""_s, u"Spotify"_s);
 
     setConfig(config);
 }

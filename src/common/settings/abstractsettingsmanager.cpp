@@ -1,10 +1,8 @@
 #include "abstractsettingsmanager.h"
 
-AbstractSettingsManager::AbstractSettingsManager(QObject *parent) : QObject{parent}
-{
-}
+using namespace Common::Settings;
 
-auto AbstractSettingsManager::has(const QString &setting, const QString &group) -> bool
+auto AbstractSettingsManager::has(QAnyStringView setting, QAnyStringView group) -> bool
 {
     m_settings.beginGroup(group);
     const auto result = m_settings.contains(setting);
@@ -18,7 +16,7 @@ void AbstractSettingsManager::forceSync()
     m_settings.sync();
 }
 
-void AbstractSettingsManager::remove(const QString &setting, const QString &group)
+void AbstractSettingsManager::remove(QAnyStringView setting, QAnyStringView group)
 {
     m_settings.beginGroup(group);
     m_settings.remove(setting);

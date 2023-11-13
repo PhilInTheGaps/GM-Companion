@@ -13,6 +13,9 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmNameGenerator, "gm.generators.names")
 
+static constexpr auto internalNamesPath = ":/names"_L1;
+static constexpr auto addonNamesPath = "names"_L1;
+
 auto NameGenerator::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> NameGenerator *
 {
     Q_UNUSED(jsEngine)
