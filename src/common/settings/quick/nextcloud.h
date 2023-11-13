@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    inline static constexpr auto GROUP = "NextCloud";
+    static constexpr auto GROUP = "NextCloud";
 };
 
 } // namespace Common::Settings::Quick

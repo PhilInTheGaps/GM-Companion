@@ -41,7 +41,7 @@ public:
     }
 
 private:
-    inline static constexpr auto GROUP = "Spotify";
+    static constexpr auto GROUP = "Spotify";
 };
 
 } // namespace Common::Settings::Quick

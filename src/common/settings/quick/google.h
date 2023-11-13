@@ -21,7 +21,7 @@ public:
     using QObject::QObject;
 
 private:
-    inline static constexpr auto GROUP = "Google";
+    static constexpr auto GROUP = "Google";
 };
 
 } // namespace Common::Settings::Quick

@@ -44,11 +44,11 @@ public:
     using QObject::QObject;
 
 private:
-    inline static constexpr auto GROUP = "Colors";
-    inline static constexpr auto INFO_DEFAULT = "#00bfff";
-    inline static constexpr auto SUCCESS_DEFAULT = "#48b749";
-    inline static constexpr auto WARNING_DEFAULT = "#fce208";
-    inline static constexpr auto ERROR_DEFAULT = "#ef2426";
+    static constexpr auto GROUP = "Colors";
+    static constexpr auto INFO_DEFAULT = "#00bfff";
+    static constexpr auto SUCCESS_DEFAULT = "#48b749";
+    static constexpr auto WARNING_DEFAULT = "#fce208";
+    static constexpr auto ERROR_DEFAULT = "#ef2426";
 };
 
 } // namespace Common::Settings::Quick
