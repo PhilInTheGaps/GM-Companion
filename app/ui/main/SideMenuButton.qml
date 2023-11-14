@@ -24,7 +24,7 @@ Button {
     font.bold: false
 
     ToolTip.delay: 1000
-    ToolTip.visible: root.hovered && !SettingsManager.showToolNames
+    ToolTip.visible: root.hovered && !SettingsManager.window.showToolNames
     ToolTip.text: root.toolName
 
     Row {
@@ -50,7 +50,7 @@ Button {
         Text {
             text: root.toolName
             font.pixelSize: 16
-            visible: SettingsManager.showToolNames
+            visible: SettingsManager.window.showToolNames
 
             width: parent.width - parent.spacing - parent.padding * 2 - parent.iconWidth
             clip: true

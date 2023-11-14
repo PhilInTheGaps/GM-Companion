@@ -6,6 +6,7 @@
 #include "qmlsingletonfactory.h"
 #include "services.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include "window.h"
 #include <QJSEngine>
 #include <QObject>
 #include <QQmlEngine>
@@ -26,9 +27,9 @@ class SettingsManager : public QObject
 
     Q_PROPERTY(Common::Settings::Quick::Services *services READ services CONSTANT FINAL)
     Q_PROPERTY(Common::Settings::Quick::Colors *colors READ colors CONSTANT FINAL)
+    Q_PROPERTY(Common::Settings::Quick::Window *window READ window CONSTANT FINAL)
 
     // General Settings
-    SETTINGS_PROPERTY_VAL(bool, showToolNames, false)
     SETTINGS_PROPERTY(QString, cloudMode, QStringLiteral("local"))
     READ_PROPERTY2(QString, languageBcp47, Common::Settings::SettingsManager::instance()->getLanguageBcp47())
 
@@ -64,6 +65,11 @@ public:
         return &m_colors;
     }
 
+    auto window() -> Window *
+    {
+        return &m_window;
+    }
+
     static auto instance() -> SettingsManager *;
 
 signals:
@@ -74,6 +80,7 @@ private:
 
     Services m_services;
     Colors m_colors;
+    Window m_window;
 
     inline static SettingsManager *m_instance = nullptr;
 };

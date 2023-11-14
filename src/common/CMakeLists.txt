@@ -37,6 +37,7 @@ set(SRC_SETTINGS
     settings/quick/settingsmanager.cpp
     settings/quick/services.h
     settings/quick/colors.h
+    settings/quick/window.h
     settings/quick/macros.h
     settings/quick/spotify.h
     settings/quick/google.h

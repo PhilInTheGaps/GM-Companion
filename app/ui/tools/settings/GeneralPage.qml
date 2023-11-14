@@ -63,8 +63,8 @@ SplitView {
             // Show Tool Names
             CheckBox {
                 text: qsTr("Show tool names in menu")
-                checked: SettingsManager.showToolNames
-                onClicked: SettingsManager.showToolNames = checked
+                checked: SettingsManager.window.showToolNames
+                onClicked: SettingsManager.window.showToolNames = checked
             }
 
             Row {

@@ -11,8 +11,8 @@ ApplicationWindow {
     title: qsTr("GM-Companion")
     visible: true
 
-    width: 1280
-    height: 720
+    width: SettingsManager.window.width
+    height: SettingsManager.window.height
 
     minimumWidth: 640
     minimumHeight: 480
@@ -83,6 +83,11 @@ ApplicationWindow {
         }
     }
 
+    onClosing: {
+        SettingsManager.window.width = root.width;
+        SettingsManager.window.height = root.height;
+    }
+
     MessageDialog {
         id: message_dialog
         width: root.width - 100
@@ -96,7 +101,7 @@ ApplicationWindow {
 
     Drawer {
         id: drawer
-        width: SettingsManager.showToolNames ? Sizes.sidebarWidth : Sizes.toolbarWidth
+        width: SettingsManager.window.showToolNames ? Sizes.sidebarWidth : Sizes.toolbarWidth
         height: parent.height
         modal: false
         interactive: false
