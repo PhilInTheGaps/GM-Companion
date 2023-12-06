@@ -1,6 +1,7 @@
 #include "audiotool.h"
 #include "audiosaveload.h"
 #include "services/spotify/spotify.h"
+#include "settings/settingsmanager.h"
 #include "thumbnails/audiothumbnailgenerator.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
@@ -11,6 +12,7 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
+using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
@@ -48,8 +50,11 @@ AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
     connect(&mprisManager, &MprisManager::next, this, [this]() { next(); });
     connect(&mprisManager, &MprisManager::previous, this, [this]() { again(); });
     connect(&mprisManager, &MprisManager::changeVolume, this,
-            [this](double volume) { setMusicVolume(static_cast<int>(volume)); });
+            [this](double volume) { setMusicVolume(static_cast<float>(volume)); });
 #endif
+
+    setMusicVolume(SettingsManager::instance()->get("musicVolume"_L1, DEFAULT_MUSIC_VOLUME));
+    setSoundVolume(SettingsManager::instance()->get("soundVolume"_L1, DEFAULT_SOUND_VOLUME));
 }
 
 auto AudioTool::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine) -> AudioTool *
@@ -261,6 +266,8 @@ void AudioTool::setMusicVolume(float volume)
 #ifndef NO_DBUS
     mprisManager.setVolume(logarithmicVolume);
 #endif
+
+    SettingsManager::instance()->set("musicVolume"_L1, volume);
 }
 
 /**
@@ -274,6 +281,8 @@ void AudioTool::setSoundVolume(float volume)
     m_soundVolume = volume;
 
     soundPlayerController.setVolume(linearVolume, logarithmicVolume);
+
+    SettingsManager::instance()->set("soundVolume"_L1, volume);
 }
 
 auto AudioTool::makeLinearVolume(float linearVolume) -> int
