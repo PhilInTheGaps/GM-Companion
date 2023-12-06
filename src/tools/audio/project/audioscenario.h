@@ -54,12 +54,6 @@ public:
     auto moveScenario(AudioScenario *scenario, int steps) -> bool;
     [[nodiscard]] auto containsScenario(const QString &name) const -> bool;
 
-    static void setFilterString(const QString &filter)
-    {
-        filterString = filter;
-    }
-    void refreshElements();
-
     READ_LIST_PROPERTY(AudioScenario, scenarios)
     READ_LIST_PROPERTY(AudioScenario, model)
     AUTO_PROPERTY_VAL2(bool, isSubscenario, false)
@@ -75,8 +69,6 @@ private:
     explicit AudioScenario(const QString &name, const QString &path, const QList<AudioElement *> &elements,
                            const QList<AudioScenario *> &scenarios, bool isSubscenario, QObject *parent);
     explicit AudioScenario(const QJsonObject &object, const QString &path, bool isSubscenario, QObject *parent);
-
-    inline static QString filterString = QLatin1String();
 
     QString m_path;
 

@@ -82,8 +82,6 @@ public:
     }
     void stop();
 
-    Q_INVOKABLE void findElement(const QString &term) const;
-
     // Meta Data
     [[nodiscard]] auto metaData() -> AudioMetaData *
     {

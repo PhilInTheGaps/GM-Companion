@@ -50,10 +50,6 @@ public:
     auto deleteScenario(AudioScenario *scenario) -> bool;
 
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
-    void refreshElements()
-    {
-        if (m_currentScenario) m_currentScenario->refreshElements();
-    }
 
     READ_LIST_PROPERTY(AudioScenario, scenarios)
 

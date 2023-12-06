@@ -332,13 +332,3 @@ void AudioTool::setMusicIndex(int index)
         musicPlayer.setIndex(index);
     }
 }
-
-void AudioTool::findElement(const QString &term) const
-{
-    AudioScenario::setFilterString(term);
-
-    if (currentProject() && currentProject()->currentCategory())
-    {
-        currentProject()->currentCategory()->refreshElements();
-    }
-}

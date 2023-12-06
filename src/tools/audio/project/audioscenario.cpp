@@ -143,16 +143,6 @@ auto AudioScenario::toJson() const -> QJsonObject
     return object;
 }
 
-void AudioScenario::refreshElements()
-{
-    emit elementsChanged();
-
-    foreach (auto *scenario, a_scenarios)
-    {
-        scenario->refreshElements();
-    }
-}
-
 void AudioScenario::onScenariosChanged()
 {
     updateModel();
@@ -166,25 +156,12 @@ auto AudioScenario::elements(bool recursive) const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    if (filterString.isEmpty())
+    if (!recursive)
     {
-        if (!recursive)
-        {
-            return m_elements;
-        }
+        return m_elements;
+    }
 
-        list.append(m_elements);
-    }
-    else
-    {
-        foreach (auto *element, m_elements)
-        {
-            if (element->name().contains(filterString, Qt::CaseInsensitive))
-            {
-                list.push_back(element);
-            }
-        }
-    }
+    list.append(m_elements);
 
     if (recursive)
     {

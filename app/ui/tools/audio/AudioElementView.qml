@@ -124,6 +124,7 @@ Item {
 
     // Search
     Item {
+        visible: false // TODO: reimplement when element filter proxy model is implemented
         height: Sizes.toolbarHeight
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -186,7 +187,7 @@ Item {
                 }
             }
 
-            onTextChanged: AudioTool.findElement(text)
+            // onTextChanged: AudioTool.findElement(text)
 
             Keys.onEscapePressed: {
                 if (search_field.activeFocus) {
