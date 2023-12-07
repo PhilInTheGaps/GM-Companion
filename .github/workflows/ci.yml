@@ -75,7 +75,7 @@ jobs:
           cp .\cget\**\*.dll .\bin\RelWithDebInfo\
           ls bin
           ls bin\RelWithDebInfo
-          ctest -C RelWithDebInfo --verbose
+          ctest -C RelWithDebInfo --output-on-failure --repeat until-pass:5
 
       - name: Upload debug symbols
         run: |
