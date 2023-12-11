@@ -72,8 +72,7 @@ Item {
 
         Label {
             id: credits_label
-            text: qsTr(
-                      "Credits - Open Source projects and other resources used by this application")
+            text: qsTr("Credits - Open Source projects and other resources used by this application")
             font.pointSize: 12
             anchors.top: parent.top
             anchors.left: parent.left
@@ -120,17 +119,17 @@ Item {
                 }
 
                 CreditsItem {
-                    title: "QML IconFonts"
-                    description: qsTr("Use icon fonts in QML")
-                    license: [["Font Awesome: SIL OFL 1.1", "https://scripts.sil.org/OFL"], ["Library: GPLv3", "https://www.gnu.org/licenses/gpl-3.0.en.html"]]
-                    links: [[qsTr("qml-icon-fonts"), "https://github.com/PhilInTheGaps/qml-icon-fonts"], ["FontAwesome", "https://fontawesome.com"]]
-                }
-
-                CreditsItem {
                     title: "http-status-codes-cpp"
                     description: qsTr("HTTP Status Codes and Reason Phrases for C, C++ and Qt")
                     license: [["CC0 1.0 Universal", "https://github.com/j-ulrich/http-status-codes-cpp/blob/main/LICENSE"]]
                     links: [["j-ulrich/http-status-codes-cpp", "https://github.com/j-ulrich/http-status-codes-cpp"]]
+                }
+
+                CreditsItem {
+                    title: "Inter"
+                    description: qsTr("The Inter font family")
+                    license: [["SIL OFL 1.1", "https://github.com/rsms/inter/blob/master/LICENSE.txt"]]
+                    links: [["Website", "https://rsms.me/inter/"], ["GitHub", "https://github.com/rsms/inter"]]
                 }
 
                 CreditsItem {
@@ -152,6 +151,20 @@ Item {
                     description: qsTr("A library for OAuth2 authentication by pipacs.")
                     license: [["BSD 2-Clause", "https://github.com/pipacs/o2/blob/master/LICENSE"]]
                     links: [["GitHub", "https://github.com/pipacs/o2"], ["pipacs", "https://github.com/pipacs"]]
+                }
+
+                CreditsItem {
+                    title: "OpenDyslexic"
+                    description: qsTr("A typeface for Dyslexia")
+                    license: [["SIL OFL 1.1", "https://github.com/antijingoist/opendyslexic/blob/master/OFL.txt"]]
+                    links: [["Website", "https://opendyslexic.org/"], ["GitHub", "https://github.com/antijingoist/opendyslexic"]]
+                }
+
+                CreditsItem {
+                    title: "QML IconFonts"
+                    description: qsTr("Use icon fonts in QML")
+                    license: [["Font Awesome: SIL OFL 1.1", "https://scripts.sil.org/OFL"], ["Library: GPLv3", "https://www.gnu.org/licenses/gpl-3.0.en.html"]]
+                    links: [[qsTr("qml-icon-fonts"), "https://github.com/PhilInTheGaps/qml-icon-fonts"], ["FontAwesome", "https://fontawesome.com"]]
                 }
 
                 CreditsItem {

@@ -101,9 +101,11 @@ auto main(int argc, char *argv[]) -> int
     QGuiApplication::setWindowIcon(QIcon(u":/resources/icons/icon.png"_s));
     setPalette();
 
-#if defined(Q_OS_WIN)
-    QGuiApplication::setFont(QFont("Segoe UI"));
-#endif // if defined(Q_OS_WIN)
+    QFontDatabase::addApplicationFont(u":/resources/fonts/Inter-Regular.ttf"_s);
+    QFontDatabase::addApplicationFont(u":/resources/fonts/OpenDyslexic3-Regular.ttf"_s);
+    QGuiApplication::setFont(QFont(SettingsManager::instance()->get("font", u"Inter"_s)));
+    QObject::connect(Quick::SettingsManager::instance(), &Quick::SettingsManager::fontChanged, &app,
+                     [](const QString &font) { QGuiApplication::setFont(QFont(font)); });
 
     const Logger logger;
 

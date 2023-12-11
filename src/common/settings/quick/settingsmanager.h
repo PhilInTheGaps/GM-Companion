@@ -33,6 +33,9 @@ class SettingsManager : public QObject
     SETTINGS_PROPERTY(QString, cloudMode, QStringLiteral("local"))
     READ_PROPERTY2(QString, languageBcp47, Common::Settings::SettingsManager::instance()->getLanguageBcp47())
 
+    SETTINGS_PROPERTY(QString, font, QStringLiteral("Inter"))
+    READONLY_PROPERTY2(QStringList, availableFonts, QStringList({"Inter", "OpenDyslexic3"}))
+
 #ifdef NO_UPDATE_CHECK
     SETTINGS_PROPERTY_VAL2(bool, checkForUpdates, false, "Updates")
 #else

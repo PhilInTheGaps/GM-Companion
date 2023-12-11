@@ -65,6 +65,14 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: SettingsManager
+
+        function onFontChanged() {
+            loader.reload();
+        }
+    }
+
     UpdateDialog {
         id: update_dialog
     }
@@ -198,5 +206,10 @@ ApplicationWindow {
         active: true
 
         onLoaded: splash.close()
+
+        function reload() {
+            active = false;
+            active = true;
+        }
     }
 }

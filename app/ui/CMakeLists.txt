@@ -10,6 +10,8 @@ qt_add_resources(gm-companion-ui "ui-resources"
     PREFIX "/"
     FILES
         resources/splash.jpg
+        resources/fonts/Inter-Regular.ttf
+        resources/fonts/OpenDyslexic3-Regular.ttf
         resources/icons/icon.png
         resources/icons/dice/d4.png
         resources/icons/dice/d6.png

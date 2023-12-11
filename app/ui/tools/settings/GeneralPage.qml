@@ -35,6 +35,7 @@ SplitView {
                 spacing: 10
 
                 Label {
+                    id: language_label
                     text: qsTr("Select Language")
                     width: Math.max(implicitWidth, language_box.width)
                     anchors.verticalCenter: parent.verticalCenter
@@ -55,6 +56,35 @@ SplitView {
 
                     Component.onCompleted: {
                         currentIndex = SettingsManager.getLanguageIndex();
+                        loaded = true;
+                    }
+                }
+            }
+
+            Row {
+                spacing: 10
+
+                Label {
+                    text: qsTr("Select Font")
+                    width: language_label.width
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                ComboBox {
+                    id: font_box
+
+                    property bool loaded: false
+
+                    model: SettingsManager.availableFonts
+
+                    onCurrentTextChanged: {
+                        if (loaded) {
+                            SettingsManager.font = currentText;
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        currentIndex = SettingsManager.availableFonts.indexOf(SettingsManager.font);
                         loaded = true;
                     }
                 }
