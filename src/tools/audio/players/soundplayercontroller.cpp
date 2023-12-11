@@ -5,7 +5,7 @@
 
 Q_LOGGING_CATEGORY(gmAudioSoundController, "gm.audio.sounds.controller")
 
-SoundPlayerController::SoundPlayerController(QNetworkAccessManager &networkManager, QObject *parent)
+SoundPlayerController::SoundPlayerController(QNetworkAccessManager *networkManager, QObject *parent)
     : AudioPlayer(parent), m_networkManager(networkManager)
 {
     connect(this, &SoundPlayerController::soundsChanged, this, &SoundPlayerController::onSoundsChanged);

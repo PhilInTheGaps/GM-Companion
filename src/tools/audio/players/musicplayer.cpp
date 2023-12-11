@@ -5,7 +5,7 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioMusic, "gm.audio.music")
 
-MusicPlayer::MusicPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader, QObject *parent)
+MusicPlayer::MusicPlayer(QNetworkAccessManager *networkManager, MetaDataReader &metaDataReader, QObject *parent)
     : BufferedAudioPlayer(u"music"_s, networkManager, parent), m_spotifyPlayer(metaDataReader)
 {
     connect(&m_spotifyPlayer, &SpotifyPlayer::songEnded, this, &MusicPlayer::onSpotifySongEnded);
@@ -14,6 +14,8 @@ MusicPlayer::MusicPlayer(QNetworkAccessManager &networkManager, MetaDataReader &
     connect(
         this, &MusicPlayer::currentFileChanged, this,
         [&metaDataReader](const QString &path, const QByteArray &data) { metaDataReader.loadMetaData(path, data); });
+    connect(this, &MusicPlayer::metaDataChanged, this,
+            [&metaDataReader](const QMediaMetaData &metaData) { metaDataReader.setMetaData(metaData); });
 }
 
 void MusicPlayer::play(AudioElement *element)
@@ -77,9 +79,6 @@ void MusicPlayer::handleUnsupportedMediaSource(const AudioFile &file)
     case AudioFile::Source::Spotify:
         loadSpotifyFile(file);
         break;
-    case AudioFile::Source::Youtube:
-        loadYoutubeFile(file);
-        break;
     default:
         qCCritical(gmAudioMusic()) << "loadMedia() is not implemented for type" << file.source();
         next();
@@ -91,13 +90,6 @@ void MusicPlayer::loadSpotifyFile(const AudioFile &file)
 {
     m_spotifyPlayer.play(file.url());
     state(State::Playing);
-}
-
-void MusicPlayer::loadYoutubeFile(const AudioFile &file) const
-{
-    Q_UNUSED(file)
-    qCDebug(gmAudioMusic) << "Media is a youtube video ...";
-    qCCritical(gmAudioMusic()) << "Youtube integration is currently broken";
 }
 
 void MusicPlayer::onSpotifySongEnded()

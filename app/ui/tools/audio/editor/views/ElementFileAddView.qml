@@ -13,17 +13,16 @@ Item {
 
     function setMode(mode) {
         if (root.mode !== mode) {
-            url_text_field.clear()
+            url_text_field.clear();
         }
-
-        root.mode = mode
+        root.mode = mode;
     }
 
     Connections {
         target: AudioTool.editor
 
         function onCurrentElementChanged() {
-            root.setMode(0)
+            root.setMode(0);
         }
     }
 
@@ -54,8 +53,7 @@ Item {
 
             CustomButton {
                 id: spotify_button
-                visible: AudioTool.editor.currentElement
-                         && AudioTool.editor.currentElement.type === 0
+                visible: AudioTool.editor.currentElement && AudioTool.editor.currentElement.type === 0
 
                 iconText: FontAwesome.spotify
                 iconFont: FontAwesome.fontBrands
@@ -142,56 +140,55 @@ Item {
             iconText: FontAwesome.plus
 
             onClicked: {
-                AudioTool.editor.addUrl(url_text_field.text, root.mode)
+                AudioTool.editor.addUrl(url_text_field.text, root.mode);
             }
         }
     }
 
-//    Rectangle {
-//        id: youtube_adder
-//        visible: root.mode > 1 && AudioTool.editor.currentElement
-//                 && AudioTool.editor.currentElement.type < 2
-//        anchors.topMargin: 5
-//        anchors.top: url_adder.bottom
-//        anchors.right: parent.right
-//        anchors.left: parent.left
+    Rectangle {
+        id: youtube_adder
+        visible: root.mode > 1 && AudioTool.editor.currentElement && AudioTool.editor.currentElement.type < 2
+        anchors.topMargin: 5
+        anchors.top: url_adder.bottom
+        anchors.right: parent.right
+        anchors.left: parent.left
 
-//        height: Sizes.toolbarHeight
-//        color: palette.alternateBase
+        height: Sizes.toolbarHeight
+        color: palette.alternateBase
 
-//        CustomToolBarButton {
-//            id: youtube_adder_icon
-//            anchors.left: parent.left
-//            anchors.leftMargin: 10
-//            enabled: false
+        CustomToolBarButton {
+            id: youtube_adder_icon
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            enabled: false
 
-//            iconText: FontAwesome.youtube
-//            iconFont: FontAwesome.fontBrands
-//        }
+            iconText: FontAwesome.youtube
+            iconFont: FontAwesome.fontBrands
+        }
 
-//        TextField {
-//            id: youtube_text_field
-//            anchors.left: youtube_adder_icon.right
-//            anchors.right: youtube_adder_button.left
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            anchors.leftMargin: 10
-//            anchors.rightMargin: 10
+        TextField {
+            id: youtube_text_field
+            anchors.left: youtube_adder_icon.right
+            anchors.right: youtube_adder_button.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
 
-//            selectByMouse: true
-//            placeholderText: qsTr("YouTube URL")
-//        }
+            selectByMouse: true
+            placeholderText: qsTr("YouTube URL")
+        }
 
-//        CustomToolBarButton {
-//            id: youtube_adder_button
-//            anchors.right: parent.right
-//            anchors.rightMargin: 10
+        CustomToolBarButton {
+            id: youtube_adder_button
+            anchors.right: parent.right
+            anchors.rightMargin: 10
 
-//            iconText: FontAwesome.plus
+            iconText: FontAwesome.plus
 
-//            onClicked: {
-//                AudioTool.editor.addYtUrl(youtube_text_field.text)
-//            }
-//        }
-//    }
+            onClicked: {
+                AudioTool.editor.addYtUrl(youtube_text_field.text);
+            }
+        }
+    }
 }

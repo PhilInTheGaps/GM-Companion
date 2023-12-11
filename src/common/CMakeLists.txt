@@ -151,6 +151,7 @@ target_link_libraries(common
     Qt6::Qml
     Qt6::Quick
     Qt6::Network
+    Qt6::Multimedia
     PRIVATE
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY})

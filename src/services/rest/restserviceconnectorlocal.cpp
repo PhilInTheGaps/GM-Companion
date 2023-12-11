@@ -11,7 +11,7 @@ using namespace Qt::Literals::StringLiterals;
 using namespace Services;
 using namespace Common::Settings;
 
-RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager &networkManager, O2 *o2,
+RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager *networkManager, O2 *o2,
                                                      const QLoggingCategory &loggingCategory, QObject *parent = nullptr)
     : RESTServiceConnector(networkManager, loggingCategory, {}, parent), m_o2(o2)
 {
@@ -207,7 +207,7 @@ auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest &request, co
 
 auto RESTServiceConnectorLocal::makeRequestor() -> O2Requestor *
 {
-    auto *requestor = new O2Requestor(&m_networkManager, m_o2, this);
+    auto *requestor = new O2Requestor(networkManager(), m_o2, this);
 
     connect(requestor,
             QOverload<int, QNetworkReply::NetworkError, QString, QByteArray, QList<QNetworkReply::RawHeaderPair>>::of(

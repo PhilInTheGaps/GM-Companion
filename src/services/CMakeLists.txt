@@ -78,6 +78,17 @@ set(SRC_GOOGLEDRIVE
     google/googledrivereply.h
 )
 
+set(SRC_YOUTUBE
+    youtube/youtube.h
+    youtube/youtube.cpp
+    youtube/pipedconnector.h
+    youtube/pipedconnector.cpp
+    youtube/videoid.h
+    youtube/videoid.cpp
+    youtube/playlistid.h
+    youtube/playlistid.cpp
+)
+
 qt_add_library(services STATIC)
 
 qt_add_qml_module(services
@@ -87,6 +98,7 @@ qt_add_qml_module(services
         ${SRC_REST}
         ${SRC_SPOTIFY}
         ${SRC_NEXTCLOUD}
+        ${SRC_YOUTUBE}
         # GoogleDrive support is disabled, see comment in googledrive.h
         # ${SRC_GOOGLEDRIVE}
 )
@@ -105,7 +117,8 @@ target_include_directories(services
         ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/spotify
-        ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud)
+        ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud
+        ${CMAKE_CURRENT_SOURCE_DIR}/youtube)
         # ${CMAKE_CURRENT_SOURCE_DIR}/google
 
 target_link_libraries(services

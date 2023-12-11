@@ -29,7 +29,7 @@ class RESTServiceConnectorLocal : public RESTServiceConnector
 {
     Q_OBJECT
 public:
-    RESTServiceConnectorLocal(QNetworkAccessManager &networkManager, O2 *o2, const QLoggingCategory &loggingCategory,
+    RESTServiceConnectorLocal(QNetworkAccessManager *networkManager, O2 *o2, const QLoggingCategory &loggingCategory,
                               QObject *parent);
 
     void grantAccess() override;

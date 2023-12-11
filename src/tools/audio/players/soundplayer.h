@@ -13,7 +13,7 @@ class SoundPlayer : public BufferedAudioPlayer
     QML_UNCREATABLE("")
 
 public:
-    explicit SoundPlayer(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    explicit SoundPlayer(QNetworkAccessManager *networkManager, QObject *parent = nullptr);
 
 public slots:
     void stopElement(const QString &name);

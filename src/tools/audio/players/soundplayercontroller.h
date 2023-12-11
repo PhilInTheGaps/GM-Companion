@@ -16,7 +16,7 @@ class SoundPlayerController : public AudioPlayer
     READ_LIST_PROPERTY(AudioElement, activeElements)
 
 public:
-    explicit SoundPlayerController(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    explicit SoundPlayerController(QNetworkAccessManager *networkManager, QObject *parent = nullptr);
 
     void play(AudioElement *elements);
     void stop(const QString &element);
@@ -41,7 +41,7 @@ public slots:
     }
 
 private:
-    QNetworkAccessManager &m_networkManager;
+    QPointer<QNetworkAccessManager> m_networkManager = nullptr;
     QList<SoundPlayer *> m_players;
     int m_linearVolume = 0;
     int m_logarithmicVolume = 0;

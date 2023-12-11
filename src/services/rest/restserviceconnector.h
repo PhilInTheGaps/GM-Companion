@@ -22,7 +22,7 @@ class RESTServiceConnector : public QObject
 {
     Q_OBJECT
 public:
-    RESTServiceConnector(QNetworkAccessManager &networkManager, const QLoggingCategory &loggingCategory,
+    RESTServiceConnector(QNetworkAccessManager *networkManager, const QLoggingCategory &loggingCategory,
                          QStringList &&recoverableErrors, QObject *parent = nullptr);
 
     virtual void grantAccess() = 0;
@@ -34,6 +34,9 @@ public:
     virtual auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply> = 0;
     virtual auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data)
         -> QFuture<RestReply> = 0;
+
+    [[nodiscard]] auto networkManager() const -> QNetworkAccessManager *;
+    void setNetworkManager(QNetworkAccessManager *networkManager);
 
 signals:
     void accessGranted();
@@ -68,7 +71,6 @@ protected:
     void updateTokenExpireTime(std::chrono::seconds expiresIn);
     [[nodiscard]] auto isTokenExpired() const -> bool;
 
-    QNetworkAccessManager &m_networkManager;
     const QLoggingCategory &m_loggingCategory;
     bool m_wasConfigured = false;
 
@@ -79,6 +81,7 @@ private:
     void handleRateLimit(std::pair<QPromise<RestReply>, RestRequest> &&pair,
                          const QList<QNetworkReply::RawHeaderPair> &headers);
 
+    QNetworkAccessManager *m_networkManager = nullptr;
     bool m_isOnCooldown = false;
     size_t m_maxConcurrentRequests = 1;
     int m_nextQueueId = 1;

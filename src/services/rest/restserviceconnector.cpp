@@ -7,12 +7,22 @@ using namespace Services;
 
 constexpr auto RATELIMIT_TIMEOUT = std::chrono::seconds(2);
 
-RESTServiceConnector::RESTServiceConnector(QNetworkAccessManager &networkManager,
+RESTServiceConnector::RESTServiceConnector(QNetworkAccessManager *networkManager,
                                            const QLoggingCategory &loggingCategory, QStringList &&recoverableErrors,
                                            QObject *parent)
-    : QObject(parent), m_networkManager(networkManager), m_loggingCategory(loggingCategory),
+    : QObject(parent), m_loggingCategory(loggingCategory), m_networkManager(networkManager),
       m_recoverableErrors(std::move(recoverableErrors))
 {
+}
+
+auto RESTServiceConnector::networkManager() const -> QNetworkAccessManager *
+{
+    return m_networkManager;
+}
+
+void RESTServiceConnector::setNetworkManager(QNetworkAccessManager *networkManager)
+{
+    m_networkManager = networkManager;
 }
 
 auto RESTServiceConnector::isOnCooldown() const -> bool

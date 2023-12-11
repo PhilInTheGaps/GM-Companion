@@ -15,7 +15,7 @@ class MusicPlayer : public BufferedAudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader,
+    explicit MusicPlayer(QNetworkAccessManager *networkManager, MetaDataReader &metaDataReader,
                          QObject *parent = nullptr);
 
 public slots:
@@ -29,7 +29,6 @@ public slots:
 private:
     void handleUnsupportedMediaSource(const AudioFile &file) override;
     void loadSpotifyFile(const AudioFile &file);
-    void loadYoutubeFile(const AudioFile &file) const;
 
     SpotifyPlayer m_spotifyPlayer;
 

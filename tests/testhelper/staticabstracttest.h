@@ -18,11 +18,11 @@ public:
         ASSERT_TRUE(spy.isValid());
 
         watcher.setFuture(future);
-        EXPECT_FALSE(future.isCanceled()) << "The QFuture object returned by " << funcName << " has been canceled.";
+        ASSERT_FALSE(future.isCanceled()) << "The QFuture object returned by " << funcName << " has been canceled.";
 
         auto waitTime = cached ? WAIT_TIME_IN_MS_CACHED : WAIT_TIME_IN_MS;
         auto isReady = spy.wait(waitTime);
-        EXPECT_TRUE(isReady) << funcName << " took longer than " << waitTime << " ms to respond.";
+        ASSERT_TRUE(isReady) << funcName << " took longer than " << waitTime << " ms to respond.";
 
         testFunc();
     }
@@ -41,7 +41,7 @@ protected:
     [[nodiscard]] static auto backupUserFolder(const QString &userFolder, QTemporaryDir &tempDir) -> QString;
     static void restoreUserFolder(const QString &backupFolder, const QString &destination);
 
-    static constexpr int WAIT_TIME_IN_MS = 10000;
+    static constexpr int WAIT_TIME_IN_MS = 20000;
     static constexpr int WAIT_TIME_IN_MS_CACHED = 10;
     static constexpr int WAIT_TIME_IN_MS_WITH_AUTH = 120000;
 

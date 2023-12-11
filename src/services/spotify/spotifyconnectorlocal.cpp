@@ -7,7 +7,7 @@ using namespace Services;
 
 Q_LOGGING_CATEGORY(gmSpotifyLocal, "gm.service.spotify.local")
 
-SpotifyConnectorLocal::SpotifyConnectorLocal(QNetworkAccessManager &networkManager, O2Spotify *o2Spotify,
+SpotifyConnectorLocal::SpotifyConnectorLocal(QNetworkAccessManager *networkManager, O2Spotify *o2Spotify,
                                              QObject *parent)
     : RESTServiceConnectorLocal(networkManager, o2Spotify, gmSpotifyLocal(), parent)
 {

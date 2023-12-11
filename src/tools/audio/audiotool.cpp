@@ -17,9 +17,8 @@ using namespace Common::Settings;
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
 AudioTool::AudioTool(QQmlEngine *engine, QObject *parent)
-    : AbstractTool(parent), m_editor(engine), musicPlayer(*engine->networkAccessManager(), metaDataReader),
-      soundPlayerController(*engine->networkAccessManager()),
-      radioPlayer(*engine->networkAccessManager(), metaDataReader)
+    : AbstractTool(parent), m_editor(engine), musicPlayer(engine->networkAccessManager(), metaDataReader),
+      soundPlayerController(engine->networkAccessManager()), radioPlayer(engine->networkAccessManager(), metaDataReader)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 

@@ -44,8 +44,8 @@ void AudioThumbnailGenerator::receivedImage(QPointer<AudioElement> element, cons
     if (pixmap.isNull() && makeFallbackCollage)
     {
         qCDebug(gmAudioThumbnailGenerator()) << "Received pixmap is null, making collage as fallback ...";
-        AudioThumbnailCollageGenerator::makeCollageAsync(element).then(
-            [element](const QPixmap &collage) { receivedImage(element, collage, false); });
+        AudioThumbnailCollageGenerator::makeCollageAsync(element, networkManager)
+            .then([element](const QPixmap &collage) { receivedImage(element, collage, false); });
         return;
     }
 
@@ -80,7 +80,7 @@ void AudioThumbnailGenerator::generateThumbnail(QPointer<AudioElement> element)
     // If no explicit thumbnail has been specified, generate collage
     const auto callbackWithoutFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); };
 
-    AudioThumbnailCollageGenerator::makeCollageAsync(element).then(callbackWithoutFallback);
+    AudioThumbnailCollageGenerator::makeCollageAsync(element, networkManager).then(callbackWithoutFallback);
 }
 
 auto AudioThumbnailGenerator::getPlaceholderImage(QPointer<AudioElement> element) -> QPixmap

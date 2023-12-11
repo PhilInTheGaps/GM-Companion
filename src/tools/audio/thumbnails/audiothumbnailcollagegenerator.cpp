@@ -3,9 +3,11 @@
 #include "audiothumbnailgenerator.h"
 #include "loaders/spotifyimageloader.h"
 #include "loaders/tagimageloader.h"
+#include "loaders/youtubeimageloader.h"
 #include <QPainter>
 
-auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> element) -> QFuture<QPixmap>
+auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> element,
+                                                      QNetworkAccessManager *networkManager) -> QFuture<QPixmap>
 {
     // Check if collage can be generated
     if (!canMakeCollage(element))
@@ -14,20 +16,21 @@ auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> ele
     }
 
     // Get pixmaps to use in the collage
-    auto future = findPixmapsForCollageAsync(element, 0, 0, 0);
+    auto future = findPixmapsForCollageAsync(element, 0, 0, 0, networkManager);
 
     return future.then([element]() { return generateCollageImage(element); });
 }
 
 auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioElement> element, qsizetype index,
-                                                                int fileCount, int failCount) -> QFuture<void>
+                                                                int fileCount, int failCount,
+                                                                QNetworkAccessManager *networkManager) -> QFuture<void>
 {
     if (!element) return QtFuture::makeReadyFuture();
 
     QPointer<AudioFile> audioFile = element->files().at(index);
     if (!audioFile) return QtFuture::makeReadyFuture();
 
-    const auto callback = [element, audioFile, index, fileCount, failCount](const QPixmap &pixmap) {
+    const auto callback = [element, audioFile, index, fileCount, failCount, networkManager](const QPixmap &pixmap) {
         if (!element) return QtFuture::makeReadyFuture(); // element has possibly been deleted by now
 
         const auto audioFileCount = element->files().length();
@@ -44,7 +47,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
 
             if (newIndex < audioFileCount && newIndex > index)
             {
-                return findPixmapsForCollageAsync(element, newIndex, fileCount, failCount + 1);
+                return findPixmapsForCollageAsync(element, newIndex, fileCount, failCount + 1, networkManager);
             }
         }
         else
@@ -55,14 +58,14 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
 
             if (fileCount + 1 < 4 && index + 1 < audioFileCount)
             {
-                return findPixmapsForCollageAsync(element, index + 1, fileCount + 1, 0);
+                return findPixmapsForCollageAsync(element, index + 1, fileCount + 1, 0, networkManager);
             }
         }
 
         return QtFuture::makeReadyFuture();
     };
 
-    return getCoverArtAsync(element, audioFile).then(callback).unwrap();
+    return getCoverArtAsync(element, audioFile, networkManager).then(callback).unwrap();
 }
 
 /**
@@ -77,8 +80,8 @@ auto AudioThumbnailCollageGenerator::canMakeCollage(QPointer<AudioElement> eleme
 /**
  * @brief Get the cover art of an audio file.
  */
-auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile)
-    -> QFuture<QPixmap>
+auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile,
+                                                      QNetworkAccessManager *networkManager) -> QFuture<QPixmap>
 {
     if (!element || !audioFile) return QtFuture::makeReadyFuture(QPixmap());
 
@@ -88,8 +91,15 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> ele
         return TagImageLoader::loadImageAsync(element, audioFile);
     case AudioFile::Source::Spotify:
         return SpotifyImageLoader::loadImageAsync(audioFile);
-    case AudioFile::Source::Youtube:
-        // TODO: implement
+    case AudioFile::Source::Youtube: {
+        if (const auto id = Services::VideoId(audioFile->url()); id.isValid())
+            return YouTubeImageLoader::loadImageAsync(id, networkManager);
+
+        if (const auto id = Services::PlaylistId(audioFile->url()); id.isValid())
+            return YouTubeImageLoader::loadImageAsync(id, networkManager);
+
+        return QtFuture::makeReadyFuture(QPixmap());
+    }
     default:
         return QtFuture::makeReadyFuture(QPixmap());
     }

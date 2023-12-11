@@ -542,15 +542,6 @@ void AudioEditor::loadElement(QObject *element)
     m_fileModel.setElements(m_currentElement->files());
     emit currentElementChanged();
 
-    foreach (const auto *file, m_currentElement->files())
-    {
-        // Fetch video info
-        if (file->source() == AudioFile::Source::Youtube && file->title().isEmpty())
-        {
-            qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
-        }
-    }
-
     // Tell AudioSaveLoad to find out if files are missing
     AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
 }
@@ -806,8 +797,6 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
     if (auto *audioFile = new AudioFile(videoUrl, AudioFile::Source::Youtube, u""_s, m_currentElement);
         !addAudioFile(audioFile))
         return false;
-
-    qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
 
     return true;
 }

@@ -1,6 +1,7 @@
 #include "filesystem/file.h"
 #include "logger.h"
 #include "services/nextcloud/nextcloud.h"
+#include "services/youtube/youtube.h"
 #include "settings/quick/settingsmanager.h"
 #include "tools/audio/thumbnails/audiothumbnailprovider.h"
 #include "updates/version.h"
@@ -140,6 +141,7 @@ auto main(int argc, char *argv[]) -> int
 
     // Misc
     Files::File::init(Services::NextCloud::qmlInstance(&engine));
+    Services::YouTube::instance()->setNetworkManager(engine.networkAccessManager());
 
     engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider());
     engine.loadFromModule("ui"_L1, "Main"_L1);

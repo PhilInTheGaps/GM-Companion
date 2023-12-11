@@ -1,6 +1,8 @@
 #include "bufferedaudioplayer.h"
+#include "../thumbnails/loaders/youtubeimageloader.h"
 #include "filesystem/file.h"
 #include "filesystem/results/filedataresult.h"
+#include "services/youtube/youtube.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
@@ -11,9 +13,9 @@ using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioBufferedPlayer, "gm.audio.buffered")
 
-BufferedAudioPlayer::BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager &networkManager,
+BufferedAudioPlayer::BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager *networkManager,
                                          QObject *parent)
-    : AudioPlayer(parent), m_settingsId(settingsId),
+    : AudioPlayer(parent), m_networkManager(networkManager), m_settingsId(settingsId),
       m_playlist(std::make_unique<ResolvingAudioPlaylist>(settingsId, networkManager))
 {
     m_mediaPlayer.setAudioOutput(&m_audioOutput);
@@ -22,8 +24,6 @@ BufferedAudioPlayer::BufferedAudioPlayer(const QString &settingsId, QNetworkAcce
             &BufferedAudioPlayer::onMediaPlayerPlaybackStateChanged);
     connect(&m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &BufferedAudioPlayer::onMediaStatusChanged);
     connect(&m_mediaPlayer, &QMediaPlayer::errorOccurred, this, &BufferedAudioPlayer::onMediaPlayerErrorOccurred);
-    connect(&m_mediaPlayer, &QMediaPlayer::metaDataChanged, this,
-            [this]() { emit metaDataChanged(m_mediaPlayer.metaData()); });
 
     connect(this, &BufferedAudioPlayer::playlistIndexChanged, this,
             [](int index) { qCDebug(gmAudioBufferedPlayer()) << index; });
@@ -45,7 +45,7 @@ void BufferedAudioPlayer::setIndex(qsizetype index)
 
     if (Utils::isInBounds(m_playlist->files(), index))
     {
-        const auto *file = m_playlist->at(index);
+        auto *file = m_playlist->at(index);
 
         if (file)
         {
@@ -226,6 +226,12 @@ void BufferedAudioPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, 
 {
     qCWarning(gmAudioBufferedPlayer()) << error << errorString;
 
+    if (error == QMediaPlayer::ResourceError && m_currentFileSource == AudioFile::Source::Youtube)
+    {
+        // if the stream can not be read, change the piped instance
+        Services::YouTube::instance()->selectNewPipedInstance();
+    }
+
     if (error != QMediaPlayer::NoError)
     {
         next();
@@ -245,7 +251,7 @@ void BufferedAudioPlayer::startPlaying()
     setIndex(0);
 }
 
-void BufferedAudioPlayer::loadMedia(const AudioFile &file)
+void BufferedAudioPlayer::loadMedia(AudioFile &file)
 {
     qCDebug(gmAudioBufferedPlayer()) << "Loading media (" << file.url() << ") ...";
 
@@ -262,6 +268,9 @@ void BufferedAudioPlayer::loadMedia(const AudioFile &file)
     case AudioFile::Source::Web:
         loadWebFile(file);
         break;
+    case AudioFile::Source::Youtube:
+        loadYouTubeFile(file);
+        break;
     default:
         handleUnsupportedMediaSource(file);
         break;
@@ -271,16 +280,60 @@ void BufferedAudioPlayer::loadMedia(const AudioFile &file)
 void BufferedAudioPlayer::loadLocalFile(const AudioFile &file)
 {
     const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
-    const auto callback = [this](Files::FileDataResult &&result) { onFileReceived(std::move(result)); };
+    const auto callback = [this](const Files::FileDataResult &result) { onFileReceived(result); };
 
     Files::File::getDataAsync(path).then(callback);
 }
 
 void BufferedAudioPlayer::loadWebFile(const AudioFile &file)
 {
-    m_mediaPlayer.setSource(QUrl(file.url()));
+    loadWebFile(file.url());
+}
+
+void BufferedAudioPlayer::loadWebFile(const QString &url)
+{
+    m_mediaPlayer.stop();
+    m_mediaPlayer.setPosition(0);
+    m_mediaPlayer.setSource(QUrl()); // set null url to reset state
+    m_mediaPlayer.setSource(QUrl(url));
     m_mediaPlayer.play();
     m_audioOutput.setMuted(false);
+}
+
+void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
+{
+    const Services::VideoId id(file.url());
+    if (!id.isValid())
+    {
+        next();
+        return;
+    }
+
+    Services::YouTube::instance()
+        ->getStreamInfoAsync(id)
+        .then([this, &file](const Services::YouTubeVideo &video) {
+            if (video.audioStreamUrl.isEmpty())
+            {
+                next();
+                return;
+            }
+
+            loadWebFile(video.audioStreamUrl);
+
+            file.title(video.title);
+
+            QMediaMetaData metaData;
+            metaData.insert(QMediaMetaData::Key::Title, video.title);
+            metaData.insert(QMediaMetaData::Key::Author, video.uploader);
+            emit metaDataChanged(metaData);
+
+            YouTubeImageLoader::loadImageAsync(video, m_networkManager)
+                .then([this, metaData](const QPixmap &thumbnail) mutable {
+                    metaData.insert(QMediaMetaData::Key::ThumbnailImage, thumbnail.toImage());
+                    emit metaDataChanged(metaData);
+                });
+        })
+        .onCanceled([this]() { next(); });
 }
 
 void BufferedAudioPlayer::applyShuffleMode()

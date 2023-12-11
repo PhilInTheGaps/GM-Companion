@@ -8,16 +8,16 @@
 class AudioThumbnailCollageGenerator
 {
 public:
-    static auto makeCollageAsync(QPointer<AudioElement> element) -> QFuture<QPixmap>;
+    static auto makeCollageAsync(QPointer<AudioElement> element, QNetworkAccessManager *networkManager) -> QFuture<QPixmap>;
 
 private:
     static auto canMakeCollage(QPointer<AudioElement> element) -> bool;
-    static auto getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile) -> QFuture<QPixmap>;
+    static auto getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile, QNetworkAccessManager *networkManager) -> QFuture<QPixmap>;
     static auto generateCollageImage(QPointer<AudioElement> element) -> QPixmap;
     static auto getUniquePixmaps(QPointer<AudioThumbnail> thumbnail) -> QList<QPixmap>;
 
     static auto findPixmapsForCollageAsync(QPointer<AudioElement> element, qsizetype index, int fileCount,
-                                           int failCount) -> QFuture<void>;
+                                           int failCount, QNetworkAccessManager *networkManager) -> QFuture<void>;
 
     static auto getTargetRect(QSize imageSize, int imageCount, int index) -> QRectF;
     static auto getSourceRect(QRect imageRect, int imageCount, int index) -> QRectF;

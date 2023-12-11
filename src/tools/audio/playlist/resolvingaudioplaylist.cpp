@@ -4,6 +4,9 @@
 #include "filesystem/results/filedataresult.h"
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
+#include "services/youtube/playlistid.h"
+#include "services/youtube/videoid.h"
+#include "services/youtube/youtube.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
@@ -14,7 +17,7 @@ using namespace Common::Settings;
 
 Q_LOGGING_CATEGORY(gmAudioPlaylistResolving, "gm.audio.playlist.resolving")
 
-ResolvingAudioPlaylist::ResolvingAudioPlaylist(const QString &settingsId, QNetworkAccessManager &networkManager,
+ResolvingAudioPlaylist::ResolvingAudioPlaylist(const QString &settingsId, QNetworkAccessManager *networkManager,
                                                Type type)
     : AudioPlaylist(type), m_networkManager(networkManager), m_settingsId(settingsId)
 {
@@ -54,6 +57,12 @@ auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
                 futures << unwrapPlaylistFile(i, *audioFile);
             }
             break;
+        case AudioFile::Source::Youtube:
+            if (!VideoId(audioFile->url()).isValid() && PlaylistId(audioFile->url()).isValid())
+            {
+                futures << unwrapYouTube(i, *audioFile);
+            }
+
         default:
             break;
         }
@@ -92,7 +101,7 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
         break;
     }
     case AudioFile::Source::Web: {
-        auto *reply = m_networkManager.get(QNetworkRequest(QUrl(file.url())));
+        auto *reply = m_networkManager->get(QNetworkRequest(QUrl(file.url())));
         return QtFuture::connect(reply, &QNetworkReply::finished).then([reply, callback]() {
             const auto &data = reply->readAll();
             reply->deleteLater();
@@ -151,6 +160,24 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
     }
 }
 
+auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, const AudioFile &file) -> QFuture<void>
+{
+    const PlaylistId id(file.url());
+    if (!id.isValid()) return QtFuture::makeReadyFuture();
+
+    return YouTube::instance()->getPlaylistInfoAsync(id).then([this, index](const YouTubePlaylist &playlist) {
+        QList<AudioFile *> files;
+        files.reserve(playlist.streams.size());
+        foreach (const auto &video, playlist.streams)
+        {
+            if (!video.id.isValid()) continue;
+
+            files << new AudioFile(video.id.toUrl(), AudioFile::Source::Youtube, video.title, &m_fileParent);
+        }
+        replace(index, files);
+    });
+}
+
 void ResolvingAudioPlaylist::loadTitles()
 {
     QList<AudioFile *> spotifyTracks;
@@ -166,7 +193,9 @@ void ResolvingAudioPlaylist::loadTitles()
                 spotifyTracks.append(audioFile);
             break;
         case AudioFile::Source::Youtube:
-            audioFile->title(QObject::tr("[BROKEN] %1").arg(audioFile->url()));
+            // piped does not offer a way to send a batch request for meta data
+            // so we just display the video id and update the title when we receive the meta data with the stream
+            audioFile->title(QObject::tr("YouTube: %1").arg(VideoId(audioFile->url()).toString()));
             break;
         default:
             break;

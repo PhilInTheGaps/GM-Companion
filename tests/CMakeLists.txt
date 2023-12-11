@@ -16,6 +16,7 @@ set(AUDIO_THUMBNAILS
     tools/audio/thumbnails/testaudiothumbnail.cpp
     tools/audio/thumbnails/loaders/testtagimageloader.cpp
     tools/audio/thumbnails/loaders/testfileimageloader.cpp
+    tools/audio/thumbnails/loaders/testyoutubeimageloader.cpp
 )
 
 # web loader

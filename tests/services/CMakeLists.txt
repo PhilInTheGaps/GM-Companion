@@ -4,6 +4,10 @@ qt_add_executable(test_services
     main.cpp
     rest/testcallbackserver.cpp
     spotify/testspotifyutils.cpp
+    youtube/testyoutube.cpp
+    youtube/testpipedconnector.cpp
+    youtube/testvideoid.cpp
+    youtube/testplaylistid.cpp
 )
 
 target_link_libraries(test_services PRIVATE

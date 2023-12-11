@@ -50,7 +50,7 @@ public:
         QDesktopServices::setUrlHandler(u"http"_s, networkManager.get(), "simulateBrowser");
         QDesktopServices::setUrlHandler(u"https"_s, networkManager.get(), "simulateBrowser");
 
-        m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, *networkManager);
+        m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, networkManager.get());
 
         auto testingDir = SettingsManager::getPath(u"testing"_s);
         backupDir = backupUserFolder(testingDir);

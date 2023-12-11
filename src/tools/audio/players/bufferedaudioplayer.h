@@ -28,7 +28,7 @@ class BufferedAudioPlayer : public AudioPlayer
     AUTO_PROPERTY_VAL2(qsizetype, playlistIndex, 0);
 
 public:
-    explicit BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager &networkManager, QObject *parent);
+    explicit BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager *networkManager, QObject *parent);
 
     [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
     [[nodiscard]] auto element() const -> QPointer<AudioElement>;
@@ -58,9 +58,11 @@ protected:
     [[nodiscard]] auto fileSource() const -> AudioFile::Source;
     void setPlaylist(std::unique_ptr<ResolvingAudioPlaylist> playlist);
 
-    void loadMedia(const AudioFile &file);
+    void loadMedia(AudioFile &file);
     void loadLocalFile(const AudioFile &file);
     void loadWebFile(const AudioFile &file);
+    void loadWebFile(const QString &url);
+    void loadYouTubeFile(AudioFile &file);
 
 private slots:
     void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
@@ -70,6 +72,8 @@ private slots:
 private:
     void startPlaying();
     void applyShuffleMode();
+
+    QPointer<QNetworkAccessManager> m_networkManager = nullptr;
 
     QString m_settingsId;
     QMediaPlayer m_mediaPlayer;

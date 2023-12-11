@@ -8,7 +8,7 @@ class RadioPlayer : public BufferedAudioPlayer
 {
     Q_OBJECT
 public:
-    explicit RadioPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader,
+    explicit RadioPlayer(QNetworkAccessManager *networkManager, MetaDataReader &metaDataReader,
                          QObject *parent = nullptr);
 
 private slots:

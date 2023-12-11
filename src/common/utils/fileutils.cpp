@@ -145,10 +145,30 @@ auto FileUtils::getMimeType(const QString &filename) -> FileUtils::MimeType
 {
     if (const auto extension = FileUtils::suffix(filename); extensionToMimeType.contains(extension))
     {
-        return extensionToMimeType[extension];
+        return extensionToMimeType.value(extension);
     }
 
     return MimeType::Unknown;
+}
+
+auto FileUtils::mimeTypeStringToFileFormat(const QString &string) -> QMediaFormat::FileFormat
+{
+    if (mimeTypeToFileQtFormat.contains(string))
+    {
+        return mimeTypeToFileQtFormat.value(string);
+    }
+
+    return QMediaFormat::FileFormat::UnspecifiedFormat;
+}
+
+auto FileUtils::audioCodecNameToEnum(const QString &string) -> QMediaFormat::AudioCodec
+{
+    if (audioCodecToQtCodec.contains(string))
+    {
+        return audioCodecToQtCodec.value(string);
+    }
+
+    return QMediaFormat::AudioCodec::Unspecified;
 }
 
 auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> std::pair<QString, QString>

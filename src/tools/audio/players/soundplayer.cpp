@@ -6,7 +6,7 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioSounds, "gm.audio.sounds")
 
-SoundPlayer::SoundPlayer(QNetworkAccessManager &networkManager, QObject *parent)
+SoundPlayer::SoundPlayer(QNetworkAccessManager *networkManager, QObject *parent)
     : BufferedAudioPlayer(u"sounds"_s, networkManager, parent)
 {
 }

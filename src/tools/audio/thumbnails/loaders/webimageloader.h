@@ -5,8 +5,6 @@
 #include <QNetworkReply>
 #include <QPixmap>
 #include <QString>
-#include "../../project/audiofile.h"
-#include "../../project/audioelement.h"
 
 class WebImageLoader
 {
