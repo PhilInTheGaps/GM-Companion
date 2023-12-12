@@ -18,7 +18,8 @@ public:
 
 TEST_F(YouTubeTest, CanGetStreamInfos)
 {
-    auto future = YouTube::instance()->getStreamInfoAsync(VideoId(u"https://www.youtube.com/watch?v=dQw4w9WgXcQ"_s));
+    auto future =
+        YouTube::instance()->getStreamInfoAsync(VideoId(u"https://www.youtube.com/watch?v=dQw4w9WgXcQ"_s), false);
     StaticAbstractTest::testFutureNoAuth(future, "getAudioStreamAsync", [future]() {
         const auto res = future.result();
         EXPECT_EQ(res.id.toString().toStdString(), "dQw4w9WgXcQ");
@@ -32,7 +33,7 @@ TEST_F(YouTubeTest, CanGetStreamInfos)
 TEST_F(YouTubeTest, CanGetPlaylistInfos)
 {
     auto future = YouTube::instance()->getPlaylistInfoAsync(
-        PlaylistId(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s));
+        PlaylistId(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s), false);
 
     StaticAbstractTest::testFutureNoAuth(future, "getPlaylistInfoAsync", [future]() {
         const auto res = future.result();
@@ -47,7 +48,7 @@ TEST_F(YouTubeTest, CanGetPlaylistInfos)
 TEST_F(YouTubeTest, CanGetLongPlaylistInfos)
 {
     auto future = YouTube::instance()->getPlaylistInfoAsync(
-        PlaylistId(u"https://www.youtube.com/playlist?list=PLUckL1YFRK3tiL676pRCURVuZ8RHgu974"_s));
+        PlaylistId(u"https://www.youtube.com/playlist?list=PLUckL1YFRK3tiL676pRCURVuZ8RHgu974"_s), false);
 
     StaticAbstractTest::testFutureNoAuth(future, "getPlaylistInfoAsync", [future]() {
         const auto res = future.result();

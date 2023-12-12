@@ -34,11 +34,11 @@ public:
     void grant();
     [[nodiscard]] auto isGranted() const -> bool;
 
-    auto get(const QNetworkRequest &request, bool isAuthRequired = true) -> QFuture<RestReply>;
-    auto get(const QUrl &url, bool isAuthRequired = true) -> QFuture<RestReply>;
-    auto put(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<RestReply>;
-    auto put(const QUrl &url, const QByteArray &data = "") -> QFuture<RestReply>;
-    auto post(const QNetworkRequest &request, const QByteArray &data = "") -> QFuture<RestReply>;
+    auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>;
+    auto get(const QUrl &url, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>;
+    auto put(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
+    auto put(const QUrl &url, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
+    auto post(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
 
     [[nodiscard]] auto clientStatus() const -> Status *;
 

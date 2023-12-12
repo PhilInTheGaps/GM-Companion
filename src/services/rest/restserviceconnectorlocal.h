@@ -36,11 +36,11 @@ public:
     void disconnectService() override;
     [[nodiscard]] auto isAccessGranted() const -> bool override;
 
-    auto get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply> override;
-    auto put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply> override;
-    auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply> override;
-    auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data)
-        -> QFuture<RestReply> override;
+    auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> override;
+    auto put(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> override;
+    auto post(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> override;
+    auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, bool isAuthRequired,
+                       bool lowPriority) -> QFuture<RestReply> override;
 
 protected:
     O2 *m_o2 = nullptr;

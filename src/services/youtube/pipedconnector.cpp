@@ -89,36 +89,40 @@ auto PipedConnector::isAccessGranted() const -> bool
     return true;
 }
 
-auto PipedConnector::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
+auto PipedConnector::get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
     RestRequest container(request, RestRequest::Type::GET);
     container.isAuthRequired(isAuthRequired);
-    return enqueueRequest(std::move(container), std::move(promise));
+    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
 }
 
-auto PipedConnector::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+auto PipedConnector::put(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>
 {
     Q_UNUSED(request)
     Q_UNUSED(data)
+    Q_UNUSED(lowPriority)
     throw NotImplementedException();
 }
 
-auto PipedConnector::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+auto PipedConnector::post(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>
 {
     Q_UNUSED(request)
     Q_UNUSED(data)
+    Q_UNUSED(lowPriority)
     throw NotImplementedException();
 }
 
-auto PipedConnector::customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
-    -> QFuture<RestReply>
+auto PipedConnector::customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data,
+                                   bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>
 {
     Q_UNUSED(request)
     Q_UNUSED(verb)
     Q_UNUSED(data)
+    Q_UNUSED(isAuthRequired)
+    Q_UNUSED(lowPriority)
     throw NotImplementedException();
 }
 

@@ -83,45 +83,51 @@ void SpotifyConnectorServer::sendRequest(RestRequest &&container, QPromise<RestR
     markRequestActive(std::move(container), std::move(promise));
 }
 
-auto SpotifyConnectorServer::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
+auto SpotifyConnectorServer::get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority)
+    -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
     RestRequest container(request, RestRequest::Type::GET);
     container.isAuthRequired(isAuthRequired);
-    return enqueueRequest(std::move(container), std::move(promise));
+    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
 }
 
-auto SpotifyConnectorServer::get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>
+auto SpotifyConnectorServer::get(const QUrl &url, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>
 {
-    return get(QNetworkRequest(url), isAuthRequired);
+    return get(QNetworkRequest(url), isAuthRequired, lowPriority);
 }
 
-auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data, bool lowPriority)
+    -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
     RestRequest container(request, RestRequest::Type::PUT, data);
-    return enqueueRequest(std::move(container), std::move(promise));
+    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
 }
 
-auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestReply>
+auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data, bool lowPriority)
+    -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
     RestRequest container(request, RestRequest::Type::POST, data);
-    return enqueueRequest(std::move(container), std::move(promise));
+    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
 }
 
 auto SpotifyConnectorServer::customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                           const QByteArray &data) -> QFuture<RestReply>
+                                           const QByteArray &data, bool isAuthRequired, bool lowPriority)
+    -> QFuture<RestReply>
 {
     Q_UNUSED(request)
     Q_UNUSED(verb)
     Q_UNUSED(data)
+    Q_UNUSED(isAuthRequired)
+    Q_UNUSED(lowPriority);
     throw NotImplementedException();
 }
 

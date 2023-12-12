@@ -21,7 +21,7 @@ PlayerAPI::PlayerAPI(Spotify *parent) : m_spotify(parent)
 
 auto PlayerAPI::play() const -> QFuture<RestReply>
 {
-    return m_spotify->put(QUrl(u"https://api.spotify.com/v1/me/player/play"_s));
+    return m_spotify->put(QUrl(u"https://api.spotify.com/v1/me/player/play"_s), {}, false);
 }
 
 auto PlayerAPI::play(const QString &deviceId, const QJsonObject &body) const -> QFuture<RestReply>
@@ -35,7 +35,8 @@ auto PlayerAPI::play(const QString &deviceId, const QJsonObject &body) const -> 
     }
 
     const QJsonDocument content(body);
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url), content.toJson(QJsonDocument::JsonFormat::Compact));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), content.toJson(QJsonDocument::JsonFormat::Compact),
+                          false);
 }
 
 auto PlayerAPI::play(const QString &uri) const -> QFuture<RestReply>
@@ -98,7 +99,7 @@ auto PlayerAPI::pause(const QString &deviceId) const -> QFuture<RestReply>
         url.setQuery(query);
     }
 
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::next() const -> QFuture<RestReply>
@@ -116,7 +117,7 @@ auto PlayerAPI::next(const QString &deviceId) const -> QFuture<RestReply>
         url.setQuery(query);
     }
 
-    return m_spotify->post(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->post(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::previous() const -> QFuture<RestReply>
@@ -134,7 +135,7 @@ auto PlayerAPI::previous(const QString &deviceId) const -> QFuture<RestReply>
         url.setQuery(query);
     }
 
-    return m_spotify->post(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->post(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::seek(int positionMs) const -> QFuture<RestReply>
@@ -154,7 +155,7 @@ auto PlayerAPI::seek(int positionMs, const QString &deviceId) const -> QFuture<R
 
     url.setQuery(query);
 
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::getState() -> QFuture<SpotifyPlaybackState>
@@ -189,7 +190,7 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
         return QtFuture::makeReadyFuture(SpotifyPlaybackState::fromJson(QJsonDocument::fromJson(reply.data())));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, false).then(callback).unwrap();
 }
 
 auto PlayerAPI::getCurrentlyPlaying() -> QFuture<SpotifyCurrentTrack>
@@ -226,7 +227,7 @@ auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QS
         return QtFuture::makeReadyFuture(SpotifyCurrentTrack::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, false).then(callback).unwrap();
 }
 
 auto PlayerAPI::transfer(const QStringList &deviceIds) const -> QFuture<RestReply>
@@ -241,7 +242,7 @@ auto PlayerAPI::transfer(const QStringList &deviceIds, bool play) const -> QFutu
     const QJsonObject body{{u"device_ids"_s, QJsonArray::fromStringList(deviceIds)}, {u"play"_s, play}};
 
     const auto doc = QJsonDocument(body);
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url), doc.toJson(QJsonDocument::Compact));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), doc.toJson(QJsonDocument::Compact), false);
 }
 
 auto PlayerAPI::devices() -> QFuture<SpotifyDeviceList>
@@ -254,7 +255,7 @@ auto PlayerAPI::devices() -> QFuture<SpotifyDeviceList>
         return SpotifyDevice::fromJson(devices);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(callback);
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, false).then(callback);
 }
 
 auto PlayerAPI::repeat(SpotifyRepeatMode mode) const -> QFuture<RestReply>
@@ -289,7 +290,7 @@ auto PlayerAPI::repeat(const QString &state, const QString &deviceId) const -> Q
     }
 
     url.setQuery(query);
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::volume(int volumePercent) const -> QFuture<RestReply>
@@ -308,7 +309,7 @@ auto PlayerAPI::volume(int volumePercent, const QString &deviceId) const -> QFut
     }
 
     url.setQuery(query);
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::shuffle(bool state) const -> QFuture<RestReply>
@@ -327,7 +328,7 @@ auto PlayerAPI::shuffle(bool state, const QString &deviceId) const -> QFuture<Re
     }
 
     url.setQuery(query);
-    return m_spotify->put(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->put(NetworkUtils::makeJsonRequest(url), {}, false);
 }
 
 auto PlayerAPI::getRecentlyPlayed(int limit) const -> QFuture<RestReply>
@@ -362,7 +363,7 @@ auto PlayerAPI::getRecentlyPlayed(const QDateTime &after, const QDateTime &befor
     query.addQueryItem(u"limit"_s, QString::number(std::clamp(limit, 0, MAX_RECENTLY_PLAYED)));
 
     url.setQuery(query);
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, true);
 }
 
 auto PlayerAPI::addToQueue(const QString &uri) const -> QFuture<RestReply>
@@ -388,5 +389,5 @@ auto PlayerAPI::addToQueue(const QString &uri, const QString &deviceId) const ->
     }
 
     url.setQuery(query);
-    return m_spotify->post(NetworkUtils::makeJsonRequest(url));
+    return m_spotify->post(NetworkUtils::makeJsonRequest(url), {}, false);
 }

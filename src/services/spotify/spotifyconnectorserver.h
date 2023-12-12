@@ -27,12 +27,14 @@ public:
         return m_isAccessGranted;
     }
 
-    auto get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>;
-    auto get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply> override;
-    auto put(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestReply> override;
-    auto post(QNetworkRequest request, const QByteArray &data = "") -> QFuture<RestReply> override;
-    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data)
+    auto get(const QUrl &url, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>;
+    auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> override;
+    auto put(QNetworkRequest request, const QByteArray &data = "", bool lowPriority = false)
         -> QFuture<RestReply> override;
+    auto post(QNetworkRequest request, const QByteArray &data = "", bool lowPriority = false)
+        -> QFuture<RestReply> override;
+    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data,
+                       bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> override;
 
 private:
     O0SettingsStore m_settingsStore = O0SettingsStore(QStringLiteral("gm-companion"));

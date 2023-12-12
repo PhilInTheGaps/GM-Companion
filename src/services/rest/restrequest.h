@@ -25,6 +25,23 @@ public:
     explicit RestRequest(int id, const QNetworkRequest &request, Type type, QByteArray data, QByteArray verb)
         : m_id(id), m_type(type), m_request(request), m_data(std::move(data)), m_verb(std::move(verb))
     {
+        if (verb.isEmpty())
+        {
+            switch (type)
+            {
+            case Type::GET:
+                m_verb = "GET";
+                break;
+            case Type::PUT:
+                m_verb = "PUT";
+                break;
+            case Type::POST:
+                m_verb = "POST";
+                break;
+            default:
+                break;
+            }
+        }
     }
 
     [[nodiscard]] auto id() const -> int

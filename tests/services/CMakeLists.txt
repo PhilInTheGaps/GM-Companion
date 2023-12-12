@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.19)
 qt_add_executable(test_services
     main.cpp
     rest/testcallbackserver.cpp
+    rest/testrestreply.cpp
+    rest/testrestrequest.cpp
     spotify/testspotifyutils.cpp
     youtube/testyoutube.cpp
     youtube/testpipedconnector.cpp

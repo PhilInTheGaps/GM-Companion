@@ -106,13 +106,23 @@ void RESTServiceConnector::setStatus(Status::Type type, const QString &message)
 
 void RESTServiceConnector::dequeueRequests()
 {
-    qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueue.size();
+    qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueueHighPriority.size()
+                               << m_requestQueueLowPriority.size();
 
     QString reason;
-    while (canSendRequest(reason) && !m_requestQueue.empty())
+
+    while (canSendRequest(reason) && !m_requestQueueHighPriority.empty())
     {
-        auto [reply, request] = std::move(m_requestQueue.front());
-        m_requestQueue.pop();
+        auto [reply, request] = std::move(m_requestQueueHighPriority.front());
+        m_requestQueueHighPriority.pop();
+
+        sendRequest(std::move(request), std::move(reply));
+    }
+
+    while (canSendRequest(reason) && !m_requestQueueLowPriority.empty())
+    {
+        auto [reply, request] = std::move(m_requestQueueLowPriority.front());
+        m_requestQueueLowPriority.pop();
 
         sendRequest(std::move(request), std::move(reply));
     }
@@ -148,12 +158,21 @@ auto RESTServiceConnector::canSendRequest(QString &reason) -> bool
     return true;
 }
 
-auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>
+auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply, bool lowPriority)
+    -> QFuture<RestReply>
 {
     auto future = reply.future();
     request.id(m_nextQueueId);
     m_nextQueueId++;
-    m_requestQueue.emplace(std::move(reply), std::move(request));
+
+    if (lowPriority)
+    {
+        m_requestQueueLowPriority.emplace(std::move(reply), std::move(request));
+    }
+    else
+    {
+        m_requestQueueHighPriority.emplace(std::move(reply), std::move(request));
+    }
 
     // try to dispatch request
     dequeueRequests();
@@ -245,5 +264,5 @@ void RESTServiceConnector::handleRateLimit(std::pair<QPromise<RestReply>, RestRe
     }
 
     startCooldown(timeout);
-    m_requestQueue.push(std::move(pair));
+    m_requestQueueHighPriority.push(std::move(pair));
 }

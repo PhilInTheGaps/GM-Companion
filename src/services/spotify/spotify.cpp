@@ -94,7 +94,7 @@ auto Spotify::isGranted() const -> bool
     return m_connector->isAccessGranted();
 }
 
-auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired) -> QFuture<RestReply>
+auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>
 {
     if (!connected() || !m_connector) return {};
 
@@ -103,32 +103,15 @@ auto Spotify::get(const QNetworkRequest &request, bool isAuthRequired) -> QFutur
         return std::move(reply);
     };
 
-    return m_connector->get(request, isAuthRequired).then(callback);
+    return m_connector->get(request, isAuthRequired, lowPriority).then(callback);
 }
 
-auto Spotify::get(const QUrl &url, bool isAuthRequired) -> QFuture<RestReply>
+auto Spotify::get(const QUrl &url, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>
 {
-    return get(QNetworkRequest(url), isAuthRequired);
+    return get(QNetworkRequest(url), isAuthRequired, lowPriority);
 }
 
-auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
-{
-    if (!connected() || !m_connector) return {};
-
-    const auto callback = [this](RestReply &&reply) {
-        handleNetworkError(reply);
-        return std::move(reply);
-    };
-
-    return m_connector->put(request, data).then(callback);
-}
-
-auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestReply>
-{
-    return put(QNetworkRequest(url), data);
-}
-
-auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<RestReply>
+auto Spotify::put(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>
 {
     if (!connected() || !m_connector) return {};
 
@@ -137,7 +120,24 @@ auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QF
         return std::move(reply);
     };
 
-    return m_connector->post(request, data).then(callback);
+    return m_connector->put(request, data, lowPriority).then(callback);
+}
+
+auto Spotify::put(const QUrl &url, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>
+{
+    return put(QNetworkRequest(url), data, lowPriority);
+}
+
+auto Spotify::post(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>
+{
+    if (!connected() || !m_connector) return {};
+
+    const auto callback = [this](RestReply &&reply) {
+        handleNetworkError(reply);
+        return std::move(reply);
+    };
+
+    return m_connector->post(request, data, lowPriority).then(callback);
 }
 
 auto Spotify::clientStatus() const -> Status *

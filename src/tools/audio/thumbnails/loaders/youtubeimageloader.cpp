@@ -22,7 +22,7 @@ auto YouTubeImageLoader::loadImageAsync(const VideoId &id, QNetworkAccessManager
 
     // Get video info
     return YouTube::instance()
-        ->getStreamInfoAsync(id)
+        ->getStreamInfoAsync(id, true)
         .then([networkManager](const YouTubeVideo &video) { return loadImageAsync(video, networkManager); })
         .unwrap();
 }
@@ -61,7 +61,7 @@ auto YouTubeImageLoader::loadImageAsync(const PlaylistId &id, QNetworkAccessMana
 
     // Get video info
     return YouTube::instance()
-        ->getPlaylistInfoAsync(id)
+        ->getPlaylistInfoAsync(id, true)
         .then([networkManager](const YouTubePlaylist &playlist) { return loadImageAsync(playlist, networkManager); })
         .unwrap();
 

@@ -310,7 +310,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
     }
 
     Services::YouTube::instance()
-        ->getStreamInfoAsync(id)
+        ->getStreamInfoAsync(id, false)
         .then([this, &file](const Services::YouTubeVideo &video) {
             if (video.audioStreamUrl.isEmpty())
             {
