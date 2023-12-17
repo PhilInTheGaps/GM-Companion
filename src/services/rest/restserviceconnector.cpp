@@ -119,6 +119,8 @@ void RESTServiceConnector::dequeueRequests()
         sendRequest(std::move(request), std::move(reply));
     }
 
+    if (!reason.isEmpty()) qCDebug(m_loggingCategory) << "Could not dequeue high priority requests:" << reason;
+
     while (canSendRequest(reason) && !m_requestQueueLowPriority.empty())
     {
         auto [reply, request] = std::move(m_requestQueueLowPriority.front());
@@ -126,6 +128,8 @@ void RESTServiceConnector::dequeueRequests()
 
         sendRequest(std::move(request), std::move(reply));
     }
+
+    if (!reason.isEmpty()) qCDebug(m_loggingCategory) << "Could not dequeue low priority requests:" << reason;
 }
 
 auto RESTServiceConnector::canSendRequest(QString &reason) -> bool
@@ -158,14 +162,13 @@ auto RESTServiceConnector::canSendRequest(QString &reason) -> bool
     return true;
 }
 
-auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply, bool lowPriority)
-    -> QFuture<RestReply>
+auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>
 {
     auto future = reply.future();
     request.id(m_nextQueueId);
     m_nextQueueId++;
 
-    if (lowPriority)
+    if (request.options().testFlag(Option::LowPriority))
     {
         m_requestQueueLowPriority.emplace(std::move(reply), std::move(request));
     }
@@ -249,7 +252,7 @@ void RESTServiceConnector::handleRateLimit(std::pair<QPromise<RestReply>, RestRe
         if (header.first == "Retry-After")
         {
             // try to interpret retry-after as seconds first
-            bool ok;
+            bool ok = false;
             timeout = std::chrono::seconds(header.second.toInt(&ok));
 
             // if that did not work, it is probably a datetime string

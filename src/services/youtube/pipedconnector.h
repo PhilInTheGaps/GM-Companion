@@ -31,11 +31,11 @@ public:
     void disconnectService() override;
     [[nodiscard]] auto isAccessGranted() const -> bool override;
 
-    auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> override;
-    auto put(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> override;
-    auto post(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> override;
-    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data,
-                       bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> override;
+    auto get(const QNetworkRequest &request, Options options) -> QFuture<RestReply> override;
+    auto put(QNetworkRequest request, const QByteArray &data, Options options) -> QFuture<RestReply> override;
+    auto post(QNetworkRequest request, const QByteArray &data, Options options) -> QFuture<RestReply> override;
+    auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data, Options options)
+        -> QFuture<RestReply> override;
 
 protected:
     void sendRequest(RestRequest &&request, QPromise<RestReply> &&reply) override;

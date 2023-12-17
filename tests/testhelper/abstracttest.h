@@ -54,7 +54,8 @@ protected:
         testFunc();
     }
 
-    void verifyFileContent(const QString &path, const QByteArray &content, bool cached = false);
+    void verifyFileContent(const QString &path, const QByteArray &content,
+                           Files::Options options = Files::Option::None);
     void verifyThatFileExists(const QString &path, bool shouldExist = true);
 
     [[nodiscard]] virtual auto getFilePath(const QString &filename = QLatin1String()) const -> QString;

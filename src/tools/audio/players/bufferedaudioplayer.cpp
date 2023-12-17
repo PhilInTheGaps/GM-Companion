@@ -282,7 +282,7 @@ void BufferedAudioPlayer::loadLocalFile(const AudioFile &file)
     const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
     const auto callback = [this](const Files::FileDataResult &result) { onFileReceived(result); };
 
-    Files::File::getDataAsync(path).then(callback);
+    Files::File::getDataAsync(path, Files::Option::AllowCache).then(callback);
 }
 
 void BufferedAudioPlayer::loadWebFile(const AudioFile &file)
@@ -310,7 +310,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
     }
 
     Services::YouTube::instance()
-        ->getStreamInfoAsync(id, false)
+        ->getStreamInfoAsync(id, Services::Option::None)
         .then([this, &file](const Services::YouTubeVideo &video) {
             if (video.audioStreamUrl.isEmpty())
             {

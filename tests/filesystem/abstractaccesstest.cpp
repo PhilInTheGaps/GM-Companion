@@ -61,20 +61,20 @@ void AbstractAccessTest::runAllTests()
 void AbstractAccessTest::getDataAsync()
 {
     // File that exists
-    verifyFileContent(getFilePath(u"test1"_s), QByteArray("This is test 1."), false);
+    verifyFileContent(getFilePath(u"test1"_s), QByteArray("This is test 1."), Option::None);
 
     // Test file one again, this time it should be in cache
-    verifyFileContent(getFilePath(u"test1"_s), QByteArray("This is test 1."), true);
+    verifyFileContent(getFilePath(u"test1"_s), QByteArray("This is test 1."), Option::AllowCache);
 
 #ifndef Q_OS_WIN
     // File with special characters in name and content
     verifyFileContent(getFilePath(u"file&with\"special characters"_s), QByteArray("file&with\"special characters"),
-                      false);
+                      Option::None);
 #endif
 
     // File that does not exist
     expectWarning();
-    const auto future2 = File::getDataAsync(getFilePath(u"missing-file"_s), false, fileAccess);
+    const auto future2 = File::getDataAsync(getFilePath(u"missing-file"_s), Option::None, fileAccess);
     testFuture(future2, "File::getDataAsync", [future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
 
@@ -84,7 +84,7 @@ void AbstractAccessTest::getDataAsync()
 
     // Multiple files
     const auto future3 = File::getDataAsync({getFilePath(u"test1"_s), getFilePath(u"test2"_s), getFilePath(u"test3"_s)},
-                                            false, fileAccess);
+                                            Option::None, fileAccess);
     const QList<QByteArray> expectedData = {QByteArray("This is test 1."), QByteArray("This is test 2."),
                                             QByteArray("This is test 3.")};
 
@@ -348,7 +348,7 @@ void AbstractAccessTest::checkAsync()
     verifyThatFileExists(getFilePath(u"test1"_s));
 
     // Check single file that does not exist
-    auto future2 = File::checkAsync(getFilePath(u"test1-missing"_s), false, fileAccess);
+    auto future2 = File::checkAsync(getFilePath(u"test1-missing"_s), Option::None, fileAccess);
     testFuture(future2, "File::checkAsync", [future2]() {
         EXPECT_FALSE(future2.isCanceled()) << "QFuture is canceled!";
         EXPECT_FALSE(future2.result().exists()) << "Apparently the file exists when it should not.";
@@ -358,7 +358,7 @@ void AbstractAccessTest::checkAsync()
     auto files = QStringList{getFilePath(u"test1"_s), getFilePath(u"test2"_s), getFilePath(u"test3"_s),
                              getFilePath(u"missing-file"_s)};
 
-    auto future3 = File::checkAsync(files, false, fileAccess);
+    auto future3 = File::checkAsync(files, Option::None, fileAccess);
     testFuture(future3, "File::checkAsync", [future3]() {
         EXPECT_FALSE(future3.isCanceled()) << "QFuture is canceled!";
         EXPECT_EQ(future3.result().existing().length(), 3) << "Incorrect number of files found.";

@@ -11,10 +11,8 @@ using namespace Files;
 Q_LOGGING_CATEGORY(gmFileAccessLocal, "gm.files.access.local")
 
 /// Read data from one file
-auto FileAccessLocal::getData(const QString &path, bool allowCache) -> FileDataResult
+auto FileAccessLocal::getData(const QString &path) -> FileDataResult
 {
-    Q_UNUSED(allowCache)
-
     QFile f(path);
 
     if (f.open(QIODevice::ReadOnly))
@@ -29,27 +27,31 @@ auto FileAccessLocal::getData(const QString &path, bool allowCache) -> FileDataR
 }
 
 /// Read data from one file async
-auto FileAccessLocal::getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult>
+auto FileAccessLocal::getDataAsync(const QString &path, Options options) -> QFuture<FileDataResult>
 {
+    Q_UNUSED(options)
+
     qCDebug(gmFileAccessLocal()) << "Getting data from file:" << path << "...";
 
-    return QtConcurrent::run(&FileAccessLocal::getData, path, allowCache).then(&m_context, [](FileDataResult &&result) {
+    return QtConcurrent::run(&FileAccessLocal::getData, path).then(&m_context, [](FileDataResult &&result) {
         return std::move(result);
     });
 }
 
 /// Read data from multiple files
-auto FileAccessLocal::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<std::vector<FileDataResult>>
+auto FileAccessLocal::getDataAsync(const QStringList &paths, Options options) -> QFuture<std::vector<FileDataResult>>
 {
+    Q_UNUSED(options)
+
     qCDebug(gmFileAccessLocal()) << "Getting data from multiple files:" << paths << "...";
 
-    return QtConcurrent::run([paths, allowCache]() {
+    return QtConcurrent::run([paths]() {
                std::vector<FileDataResult> results;
                results.reserve(paths.size());
 
                foreach (const auto &path, paths)
                {
-                   results.push_back(getData(path, allowCache));
+                   results.push_back(getData(path));
                }
 
                return results;
@@ -246,30 +248,32 @@ auto FileAccessLocal::listAsync(const QString &path, bool files, bool folders) -
 }
 
 /// Check if a file exists
-auto FileAccessLocal::check(const QString &path, bool allowCache) -> FileCheckResult
+auto FileAccessLocal::check(const QString &path) -> FileCheckResult
 {
-    Q_UNUSED(allowCache)
-
     QFile const f(path);
     return FileCheckResult(path, f.exists());
 }
 
 /// Check if a file exists async
-auto FileAccessLocal::checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult>
+auto FileAccessLocal::checkAsync(const QString &path, Options options) -> QFuture<FileCheckResult>
 {
-    return QtConcurrent::run(&FileAccessLocal::check, path, allowCache).then(&m_context, [](FileCheckResult &&result) {
+    Q_UNUSED(options)
+
+    return QtConcurrent::run(&FileAccessLocal::check, path).then(&m_context, [](FileCheckResult &&result) {
         return std::move(result);
     });
 }
 
 /// Check which files exist
-auto FileAccessLocal::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult>
+auto FileAccessLocal::checkAsync(const QStringList &paths, Options options) -> QFuture<FileMultiCheckResult>
 {
-    return QtConcurrent::run([paths, allowCache]() {
+    Q_UNUSED(options)
+
+    return QtConcurrent::run([paths]() {
                FileMultiCheckResult result(true);
                for (const auto &path : paths)
                {
-                   result.add(check(path, allowCache));
+                   result.add(check(path));
                }
                return result;
            })

@@ -4,6 +4,7 @@ set(SRC_COMMON
     service.h
     service.cpp
     servicestatus.h
+    options.h
 )
 
 set(SRC_REST
@@ -68,6 +69,8 @@ set(SRC_SPOTIFY
 set(SRC_NEXTCLOUD
     nextcloud/nextcloud.h
     nextcloud/nextcloud.cpp
+    nextcloud/nextcloudconnector.h
+    nextcloud/nextcloudconnector.cpp
 )
 
 set(SRC_GOOGLEDRIVE

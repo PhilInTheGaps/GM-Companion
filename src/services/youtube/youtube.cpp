@@ -37,15 +37,15 @@ void YouTube::selectNewPipedInstance()
     m_connector.selectBestInstance();
 }
 
-auto YouTube::getStreamInfoAsync(const VideoId &id, bool lowPriority) -> QFuture<YouTubeVideo>
+auto YouTube::getStreamInfoAsync(const VideoId &id, Options options) -> QFuture<YouTubeVideo>
 {
     if (!id.isValid()) return {};
 
     const auto path = u"/streams/%1"_s.arg(id.toString());
     const auto request = QNetworkRequest(path);
 
-    return m_connector.get(request, false, lowPriority)
-        .then([this, id, lowPriority](const RestReply &reply) {
+    return m_connector.get(request, options)
+        .then([this, id, options](const RestReply &reply) {
             bool ok = false;
 
             if (!reply.hasError())
@@ -59,35 +59,34 @@ auto YouTube::getStreamInfoAsync(const VideoId &id, bool lowPriority) -> QFuture
             }
 
             m_connector.selectBestInstance();
-            return getStreamInfoAsync(id, lowPriority);
+            return getStreamInfoAsync(id, options);
         })
         .unwrap();
 }
 
-auto YouTube::getPlaylistInfoAsync(const PlaylistId &id, bool lowPriority) -> QFuture<YouTubePlaylist>
+auto YouTube::getPlaylistInfoAsync(const PlaylistId &id, Options options) -> QFuture<YouTubePlaylist>
 {
     if (!id.isValid()) return {};
 
     const auto path = u"/playlists/%1"_s.arg(id.toString());
     const auto request = QNetworkRequest(path);
 
-    return m_connector.get(request, false, lowPriority)
-        .then([this, id, lowPriority](const RestReply &reply) {
+    return m_connector.get(request, options)
+        .then([this, id, options](const RestReply &reply) {
             bool ok = false;
 
             if (!reply.hasError())
             {
-                auto playlist = parsePlaylistResponse(reply.data(), id, lowPriority, ok);
+                auto playlist = parsePlaylistResponse(reply.data(), id, options, ok);
 
                 if (ok)
                 {
                     return playlist;
-                    // return QtFuture::makeReadyFuture(std::move(playlist));
                 }
             }
 
             m_connector.selectBestInstance();
-            return getPlaylistInfoAsync(id, lowPriority);
+            return getPlaylistInfoAsync(id, options);
         })
         .unwrap();
 }
@@ -146,7 +145,7 @@ auto YouTube::parseStreamResponse(const QByteArray &data, const VideoId &id, boo
     return video;
 }
 
-auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id, bool lowPriority, bool &ok)
+auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id, Options options, bool &ok)
     -> QFuture<YouTubePlaylist>
 {
     QJsonParseError parseError;
@@ -177,20 +176,20 @@ auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id
     const auto nextpage = QUrl::toPercentEncoding(doc["nextpage"_L1].toString(), "", ":");
     if (!nextpage.isEmpty())
     {
-        return continueLoadingOfPlaylist(std::move(playlist), nextpage, lowPriority);
+        return continueLoadingOfPlaylist(std::move(playlist), nextpage, options);
     }
 
     return QtFuture::makeReadyFuture(std::move(playlist));
 }
 
-auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QString &nextpage, bool lowPriority)
+auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QString &nextpage, Options options)
     -> QFuture<YouTubePlaylist>
 {
     const auto path = u"/nextpage/playlists/%1?nextpage=%2"_s.arg(playlist.id.toString(), nextpage);
     const auto request = QNetworkRequest(path);
 
-    return m_connector.get(request, false, lowPriority)
-        .then([this, playlist = std::move(playlist), lowPriority](const RestReply &reply) mutable {
+    return m_connector.get(request, options)
+        .then([this, playlist = std::move(playlist), options](const RestReply &reply) mutable {
             if (reply.hasError())
             {
                 qCDebug(gmYouTube()) << "Error while retrieving next page of playlist:" << reply.errorText();
@@ -208,7 +207,7 @@ auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QStrin
             const auto nextpage = QUrl::toPercentEncoding(doc["nextpage"_L1].toString(), "", ":");
             if (!nextpage.isEmpty())
             {
-                return continueLoadingOfPlaylist(std::move(playlist), nextpage, lowPriority);
+                return continueLoadingOfPlaylist(std::move(playlist), nextpage, options);
             }
 
             return QtFuture::makeReadyFuture(std::move(playlist));

@@ -72,20 +72,21 @@ void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
         return;
     }
 
-    Files::File::getDataAsync(files).then([this](const std::vector<Files::FileDataResult> &results) {
-        QList<ItemGroup *> groups = {};
-        groups.reserve(results.size());
+    Files::File::getDataAsync(files, Files::Option::AllowCache)
+        .then([this](const std::vector<Files::FileDataResult> &results) {
+            QList<ItemGroup *> groups = {};
+            groups.reserve(results.size());
 
-        foreach (const auto &result, results)
-        {
-            if (!result.success()) continue;
+            foreach (const auto &result, results)
+            {
+                if (!result.success()) continue;
 
-            groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result.data()).object(), this));
-        }
+                groups.append(new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result.data()).object(), this));
+            }
 
-        itemGroups(groups);
-        currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
-    });
+            itemGroups(groups);
+            currentItemGroup(a_itemGroups.isEmpty() ? nullptr : a_itemGroups.constFirst());
+        });
 }
 
 /// Create a project, category or shop

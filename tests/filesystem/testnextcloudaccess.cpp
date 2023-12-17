@@ -26,7 +26,7 @@ public:
         QDesktopServices::setUrlHandler(u"https"_s, networkManager.get(), "simulateBrowser");
 
         mock = networkManager.get();
-        nc = new NextCloud(MOCK_SERVICE, *mock, nullptr);
+        nc = new NextCloud(MOCK_SERVICE, mock, nullptr);
         nc->disconnectService();
         EXPECT_FALSE(nc->connected());
 

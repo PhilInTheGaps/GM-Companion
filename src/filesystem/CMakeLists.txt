@@ -7,6 +7,7 @@ set(SRC_COMMON
     fileaccess.cpp
     fileaccessswitcher.h
     multigethelper.h
+    options.h
     cache/filecache.h
     cache/filecache.cpp
     cache/filecacheentry.h

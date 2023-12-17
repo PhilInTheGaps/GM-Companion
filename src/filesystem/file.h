@@ -1,5 +1,6 @@
 #pragma once
 
+#include "options.h"
 #include <QByteArray>
 #include <QFuture>
 #include <QString>
@@ -27,10 +28,10 @@ class File
 public:
     static void init(Services::NextCloud *nc);
 
-    static auto getDataAsync(const QString &path, bool allowCache = true,
+    static auto getDataAsync(const QString &path, Options options = Option::AllowCache,
                              std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<FileDataResult>;
 
-    static auto getDataAsync(const QStringList &paths, bool allowCache = true,
+    static auto getDataAsync(const QStringList &paths, Options options = Option::AllowCache,
                              std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<std::vector<FileDataResult>>;
 
     static auto saveAsync(const QString &path, const QByteArray &data, std::shared_ptr<FileAccess> fileAccess = nullptr)
@@ -51,10 +52,10 @@ public:
     static auto createDirAsync(const QString &path, std::shared_ptr<FileAccess> fileAccess = nullptr)
         -> QFuture<FileResult>;
 
-    static auto checkAsync(const QString &path, bool allowCache = true,
+    static auto checkAsync(const QString &path, Options options = Option::AllowCache,
                            std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<FileCheckResult>;
 
-    static auto checkAsync(const QStringList &paths, bool allowCache = true,
+    static auto checkAsync(const QStringList &paths, Options options = Option::AllowCache,
                            std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<FileMultiCheckResult>;
 
     static void updateFileAccess();

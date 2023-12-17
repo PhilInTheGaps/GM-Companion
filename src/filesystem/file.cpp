@@ -17,18 +17,18 @@ void File::init(Services::NextCloud *nc)
     s_nc = nc;
 }
 
-auto File::getDataAsync(const QString &path, bool allowCache, std::shared_ptr<FileAccess> fileAccess)
+auto File::getDataAsync(const QString &path, Options options, std::shared_ptr<FileAccess> fileAccess)
     -> QFuture<FileDataResult>
 {
     auto access = getFileAccess(fileAccess);
-    return access ? access->getDataAsync(path, allowCache) : QFuture<FileDataResult>();
+    return access ? access->getDataAsync(path, options) : QFuture<FileDataResult>();
 }
 
-auto File::getDataAsync(const QStringList &paths, bool allowCache, std::shared_ptr<FileAccess> fileAccess)
+auto File::getDataAsync(const QStringList &paths, Options options, std::shared_ptr<FileAccess> fileAccess)
     -> QFuture<std::vector<FileDataResult>>
 {
     auto access = getFileAccess(fileAccess);
-    return access ? access->getDataAsync(paths, allowCache) : QFuture<std::vector<FileDataResult>>();
+    return access ? access->getDataAsync(paths, options) : QFuture<std::vector<FileDataResult>>();
 }
 
 auto File::saveAsync(const QString &path, const QByteArray &data, std::shared_ptr<FileAccess> fileAccess)
@@ -71,18 +71,18 @@ auto File::createDirAsync(const QString &path, std::shared_ptr<FileAccess> fileA
     return access ? access->createDirAsync(path) : QFuture<FileResult>();
 }
 
-auto File::checkAsync(const QString &path, bool allowCache, std::shared_ptr<FileAccess> fileAccess)
+auto File::checkAsync(const QString &path, Options options, std::shared_ptr<FileAccess> fileAccess)
     -> QFuture<FileCheckResult>
 {
     auto access = getFileAccess(fileAccess);
-    return access ? access->checkAsync(path, allowCache) : QFuture<FileCheckResult>();
+    return access ? access->checkAsync(path, options) : QFuture<FileCheckResult>();
 }
 
-auto File::checkAsync(const QStringList &paths, bool allowCache, std::shared_ptr<FileAccess> fileAccess)
+auto File::checkAsync(const QStringList &paths, Options options, std::shared_ptr<FileAccess> fileAccess)
     -> QFuture<FileMultiCheckResult>
 {
     auto access = getFileAccess(fileAccess);
-    return access ? access->checkAsync(paths, allowCache) : QFuture<FileMultiCheckResult>();
+    return access ? access->checkAsync(paths, options) : QFuture<FileMultiCheckResult>();
 }
 
 void File::updateFileAccess()

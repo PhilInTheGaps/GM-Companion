@@ -22,13 +22,13 @@ AbstractTest::~AbstractTest()
     SettingsManager::instance()->set(u"cloudMode"_s, cloudMode);
 }
 
-void AbstractTest::verifyFileContent(const QString &path, const QByteArray &content, bool cached)
+void AbstractTest::verifyFileContent(const QString &path, const QByteArray &content, Options options)
 {
     checkOrCreateFileAccess();
 
-    qDebug() << "Verifying content of file" << path << "(cached:" << cached << ")";
+    qDebug() << "Verifying content of file" << path << "(cached:" << options << ")";
 
-    const auto future = File::getDataAsync(path, cached, fileAccess);
+    const auto future = File::getDataAsync(path, options, fileAccess);
     testFuture(
         future, "File::getDataAsync",
         [future, content]() {
@@ -39,7 +39,7 @@ void AbstractTest::verifyFileContent(const QString &path, const QByteArray &cont
                 << "File::getDataAsync did not return a valid result: " << result.errorMessage().toStdString();
             EXPECT_EQ(result.data(), content);
         },
-        cached);
+        options);
 }
 
 void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
@@ -48,7 +48,7 @@ void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
 
     qDebug() << "Verifying that file" << path << (shouldExist ? "exists" : "does not exist") << "...";
 
-    auto future = File::checkAsync(path, false, fileAccess);
+    auto future = File::checkAsync(path, Option::None, fileAccess);
     testFuture(future, "File::checkAsync", [future, path, shouldExist]() {
         EXPECT_FALSE(future.isCanceled()) << "QFuture is canceled!";
         EXPECT_EQ(shouldExist, future.result().exists())

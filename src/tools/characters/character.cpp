@@ -67,10 +67,11 @@ void Character::loadFileData(qsizetype index)
         return;
     }
 
-    Files::File::getDataAsync(m_files.at(index)->path()).then([this, index](const Files::FileDataResult &result) {
-        if (!result.success()) return;
+    Files::File::getDataAsync(m_files.at(index)->path(), Files::Option::AllowCache)
+        .then([this, index](const Files::FileDataResult &result) {
+            if (!result.success()) return;
 
-        m_files.at(index)->data(result.data());
-        emit fileDataLoaded(index, result.data());
-    });
+            m_files.at(index)->data(result.data());
+            emit fileDataLoaded(index, result.data());
+        });
 }

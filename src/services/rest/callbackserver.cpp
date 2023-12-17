@@ -64,10 +64,10 @@ auto CallbackServer::parseQueryParams(const QByteArray &data) -> QMap<QString, Q
     splitGetLine.remove("HTTP/1.1"_L1);
     splitGetLine.remove("\r\n"_L1);
     splitGetLine.prepend("http://localhost"_L1);
-    QUrl getTokenUrl(splitGetLine);
+    QUrl const getTokenUrl(splitGetLine);
 
     QList<std::pair<QString, QString>> tokens;
-    QUrlQuery query(getTokenUrl);
+    QUrlQuery const query(getTokenUrl);
     tokens = query.queryItems();
 
     QMap<QString, QString> queryParams;
@@ -128,7 +128,7 @@ void CallbackServer::onBytesReady()
 void CallbackServer::closeServer(QTcpSocket *socket, bool hasParameters)
 {
     qCDebug(gmCallbackServer()) << "closeServer: Initiating";
-    int port = m_server.serverPort();
+    int const port = m_server.serverPort();
 
     if (socket)
     {

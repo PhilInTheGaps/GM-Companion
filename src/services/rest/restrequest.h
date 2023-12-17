@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../options.h"
 #include <QByteArray>
 #include <QNetworkRequest>
 
@@ -17,15 +18,18 @@ public:
         CUSTOM
     };
 
-    explicit RestRequest(const QNetworkRequest &request, Type type, QByteArray data = {}, QByteArray verb = {})
-        : RestRequest(-1, request, type, std::move(data), std::move(verb))
+    explicit RestRequest(const QNetworkRequest &request, Type type, Options options, QByteArray data = {},
+                         QByteArray verb = {})
+        : RestRequest(-1, request, type, options, std::move(data), std::move(verb))
     {
     }
 
-    explicit RestRequest(int id, const QNetworkRequest &request, Type type, QByteArray data, QByteArray verb)
-        : m_id(id), m_type(type), m_request(request), m_data(std::move(data)), m_verb(std::move(verb))
+    explicit RestRequest(int id, const QNetworkRequest &request, Type type, Options options, QByteArray data,
+                         QByteArray verb)
+        : m_id(id), m_type(type), m_options(options), m_request(request), m_data(std::move(data)),
+          m_verb(std::move(verb))
     {
-        if (verb.isEmpty())
+        if (m_verb.isEmpty())
         {
             switch (type)
             {
@@ -73,22 +77,22 @@ public:
         return m_verb;
     }
 
-    [[nodiscard]] auto isAuthRequired() const -> bool
+    [[nodiscard]] auto options() const -> Options
     {
-        return m_isAuthRequired;
+        return m_options;
     }
-    void isAuthRequired(int required)
+    void options(Options options)
     {
-        m_isAuthRequired = required;
+        m_options = options;
     }
 
 private:
     int m_id = -1;
     Type m_type;
+    Options m_options;
     QNetworkRequest m_request;
     QByteArray m_data;
     QByteArray m_verb;
-    bool m_isAuthRequired = true;
 };
 
 } // namespace Services

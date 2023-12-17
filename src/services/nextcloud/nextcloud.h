@@ -1,12 +1,12 @@
 #pragma once
 
+#include "../options.h"
+#include "nextcloudconnector.h"
 #include "qmlsingletonfactory.h"
 #include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QFuture>
 #include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
 #include <QObject>
 #include <QQmlEngine>
 #include <QtQml/qqmlregistration.h>
@@ -22,13 +22,13 @@ class NextCloud : public Services::Service
 
 public:
     explicit NextCloud(const QQmlEngine &engine, QObject *parent);
-    explicit NextCloud(QNetworkAccessManager &networkManager, QObject *parent);
-    explicit NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent);
+    explicit NextCloud(QNetworkAccessManager *networkManager, QObject *parent);
+    explicit NextCloud(const QString &serviceName, QNetworkAccessManager *networkManager, QObject *parent);
 
     static auto qmlInstance(QQmlEngine *engine) -> NextCloud *;
 
     auto sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
-                        const QList<std::pair<QByteArray, QByteArray>> &headers = {}) -> QFuture<QNetworkReply *>;
+                        const QList<std::pair<QByteArray, QByteArray>> &headers, Options options) -> QFuture<RestReply>;
 
     [[nodiscard]] auto getPathUrl(const QString &path) const -> QString;
 
@@ -42,19 +42,12 @@ public slots:
 signals:
     void loggedIn();
 
+private slots:
+    void onConnectorStateChanged(NextCloudConnector::State state);
+
 private:
     inline static NextCloud *s_qmlInstance = nullptr;
 
-    QNetworkAccessManager &m_networkManager;
-    int m_authPolls = 0;
-    bool m_loggingIn = false;
-
-    QString m_appPassword = QLatin1String("");
-
-    void startLoginFlow();
-    void pollAuthPoint(const QUrl &url, const QString &token);
-    void handleAuthPointReply(QNetworkReply *reply, const QUrl &url, const QString &token);
-    void handleAuthPointNotFound(const QUrl &url, const QString &token);
-    void handleAuthPointSuccess(QNetworkReply &reply);
+    NextCloudConnector m_connector;
 };
 } // namespace Services

@@ -254,7 +254,7 @@ void testGetRequest(PipedConnector &connector, int currentFailCount)
         testGetRequest(connector, currentFailCount + 1);
     };
 
-    auto future = connector.get(QNetworkRequest(QUrl(u"/streams/9bZkp7q19f0"_s)), false, false);
+    auto future = connector.get(QNetworkRequest(QUrl(u"/streams/9bZkp7q19f0"_s)), Option::None);
     StaticAbstractTest::testFutureNoAuth(future, "get stream", [tryAgain, future, currentFailCount]() {
         auto reply = future.result();
 
@@ -295,9 +295,9 @@ TEST(PipedConnectorTest, ThrowOnNonGetRequests)
     PipedConnector connector;
     connector.setNetworkManager(makeNetworkManager());
 
-    EXPECT_THROW(connector.put(QNetworkRequest(), {}, false), NotImplementedException);
-    EXPECT_THROW(connector.post(QNetworkRequest(), {}, false), NotImplementedException);
-    EXPECT_THROW(connector.customRequest(QNetworkRequest(), "", {}, false, false), NotImplementedException);
+    EXPECT_THROW(connector.put(QNetworkRequest(), {}, Option::None), NotImplementedException);
+    EXPECT_THROW(connector.post(QNetworkRequest(), {}, Option::None), NotImplementedException);
+    EXPECT_THROW(connector.customRequest(QNetworkRequest(), {}, {}, Option::None), NotImplementedException);
 }
 
 #include "testpipedconnector.moc"

@@ -96,7 +96,7 @@ void RESTServiceConnectorLocal::sendRequest(RestRequest &&container, QPromise<Re
     auto *requestor = makeRequestor();
     auto request = container.request();
 
-    if (container.isAuthRequired())
+    if (container.options().testFlag(Option::Authenticated))
     {
         // Workaround for google drive requests
         if (!m_config.authHeaderFormat.isEmpty())
@@ -167,47 +167,43 @@ void RESTServiceConnectorLocal::refreshAccessToken(bool /*updateAuthentication*/
     m_o2->refresh();
 }
 
-auto RESTServiceConnectorLocal::get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority)
-    -> QFuture<RestReply>
+auto RESTServiceConnectorLocal::get(const QNetworkRequest &request, Options options) -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
-    RestRequest container(request, RestRequest::Type::GET);
-    container.isAuthRequired(isAuthRequired);
-    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
+    RestRequest container(request, RestRequest::Type::GET, options);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
-auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data, bool lowPriority)
+auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data, Options options)
     -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
-    RestRequest container(request, RestRequest::Type::PUT, data);
-    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
+    RestRequest container(request, RestRequest::Type::PUT, options, data);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
-auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data, bool lowPriority)
+auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data, Options options)
     -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
-    RestRequest container(request, RestRequest::Type::POST, data);
-    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
+    RestRequest container(request, RestRequest::Type::POST, options, data);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
 auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest &request, const QByteArray &verb,
-                                              const QByteArray &data, bool isAuthRequired, bool lowPriority)
-    -> QFuture<RestReply>
+                                              const QByteArray &data, Options options) -> QFuture<RestReply>
 {
     QPromise<RestReply> promise;
     promise.start();
 
-    RestRequest container(request, RestRequest::Type::CUSTOM, data, verb);
-    container.isAuthRequired(isAuthRequired);
-    return enqueueRequest(std::move(container), std::move(promise), lowPriority);
+    RestRequest container(request, RestRequest::Type::CUSTOM, options, data, verb);
+    return enqueueRequest(std::move(container), std::move(promise));
 }
 
 auto RESTServiceConnectorLocal::makeRequestor() -> O2Requestor *

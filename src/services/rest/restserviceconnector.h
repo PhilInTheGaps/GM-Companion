@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../options.h"
 #include "restreply.h"
 #include "restrequest.h"
 #include "servicestatus.h"
@@ -29,11 +30,11 @@ public:
     virtual void disconnectService() = 0;
     [[nodiscard]] virtual auto isAccessGranted() const -> bool = 0;
 
-    virtual auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> = 0;
-    virtual auto put(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> = 0;
-    virtual auto post(QNetworkRequest request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply> = 0;
+    virtual auto get(const QNetworkRequest &request, Options options) -> QFuture<RestReply> = 0;
+    virtual auto put(QNetworkRequest request, const QByteArray &data, Options options) -> QFuture<RestReply> = 0;
+    virtual auto post(QNetworkRequest request, const QByteArray &data, Options options) -> QFuture<RestReply> = 0;
     virtual auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data,
-                               bool isAuthRequired, bool lowPriority) -> QFuture<RestReply> = 0;
+                               Options options) -> QFuture<RestReply> = 0;
 
     [[nodiscard]] auto networkManager() const -> QNetworkAccessManager *;
     void setNetworkManager(QNetworkAccessManager *networkManager);
@@ -56,7 +57,7 @@ protected:
 
     void dequeueRequests();
     [[nodiscard]] auto canSendRequest(QString &reason) -> bool;
-    auto enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply, bool lowPriority) -> QFuture<RestReply>;
+    auto enqueueRequest(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>;
     auto markRequestActive(RestRequest &&request, QPromise<RestReply> &&reply) -> QFuture<RestReply>;
     virtual void sendRequest(RestRequest &&request, QPromise<RestReply> &&reply) = 0;
 

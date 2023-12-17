@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../options.h"
 #include "api/albumapi.h"
 #include "api/playerapi.h"
 #include "api/playlistsapi.h"
@@ -34,11 +35,11 @@ public:
     void grant();
     [[nodiscard]] auto isGranted() const -> bool;
 
-    auto get(const QNetworkRequest &request, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>;
-    auto get(const QUrl &url, bool isAuthRequired, bool lowPriority) -> QFuture<RestReply>;
-    auto put(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
-    auto put(const QUrl &url, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
-    auto post(const QNetworkRequest &request, const QByteArray &data, bool lowPriority) -> QFuture<RestReply>;
+    auto get(const QNetworkRequest &request, Options options) -> QFuture<RestReply>;
+    auto get(const QUrl &url, Options options) -> QFuture<RestReply>;
+    auto put(const QNetworkRequest &request, const QByteArray &data, Options options) -> QFuture<RestReply>;
+    auto put(const QUrl &url, const QByteArray &data, Options options) -> QFuture<RestReply>;
+    auto post(const QNetworkRequest &request, const QByteArray &data, Options options) -> QFuture<RestReply>;
 
     [[nodiscard]] auto clientStatus() const -> Status *;
 

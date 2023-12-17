@@ -96,8 +96,8 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
     {
     case AudioFile::Source::File: {
         const auto path = FileUtils::fileInDir(file.url(), SettingsManager::getPath(m_settingsId));
-        return Files::File::getDataAsync(path).then(
-            [callback](const Files::FileDataResult &result) { callback(result.data()); });
+        return Files::File::getDataAsync(path, Files::Option::AllowCache)
+            .then([callback](const Files::FileDataResult &result) { callback(result.data()); });
         break;
     }
     case AudioFile::Source::Web: {
@@ -150,9 +150,9 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
     switch (type)
     {
     case SpotifyUtils::SpotifyType::Playlist:
-        return Spotify::instance()->playlists.getPlaylistTracks(id, false).then(callback);
+        return Spotify::instance()->playlists.getPlaylistTracks(id, Option::None).then(callback);
     case SpotifyUtils::SpotifyType::Album:
-        return Spotify::instance()->albums.getAlbumTracks(id, false).then(callback);
+        return Spotify::instance()->albums.getAlbumTracks(id, Option::None).then(callback);
     default:
         qCCritical(gmAudioPlaylistResolving())
             << "loadPlaylistRecursiveSpotify(): not implemented for container type" << (int)type;
@@ -165,17 +165,19 @@ auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, const AudioFile &fil
     const PlaylistId id(file.url());
     if (!id.isValid()) return QtFuture::makeReadyFuture();
 
-    return YouTube::instance()->getPlaylistInfoAsync(id, false).then([this, index](const YouTubePlaylist &playlist) {
-        QList<AudioFile *> files;
-        files.reserve(playlist.streams.size());
-        foreach (const auto &video, playlist.streams)
-        {
-            if (!video.id.isValid()) continue;
+    return YouTube::instance()
+        ->getPlaylistInfoAsync(id, Option::None)
+        .then([this, index](const YouTubePlaylist &playlist) {
+            QList<AudioFile *> files;
+            files.reserve(playlist.streams.size());
+            foreach (const auto &video, playlist.streams)
+            {
+                if (!video.id.isValid()) continue;
 
-            files << new AudioFile(video.id.toUrl(), AudioFile::Source::Youtube, video.title, &m_fileParent);
-        }
-        replace(index, files);
-    });
+                files << new AudioFile(video.id.toUrl(), AudioFile::Source::Youtube, video.title, &m_fileParent);
+            }
+            replace(index, files);
+        });
 }
 
 void ResolvingAudioPlaylist::loadTitles()
@@ -224,7 +226,7 @@ void ResolvingAudioPlaylist::loadSpotifyTitles(const QList<AudioFile *> &tracks)
         }
     };
 
-    Spotify::instance()->tracks.getTracks(trackIds, true).then(callback);
+    Spotify::instance()->tracks.getTracks(trackIds, Option::LowPriority).then(callback);
 }
 
 auto ResolvingAudioPlaylist::isPlaylist(const QString &file) -> bool

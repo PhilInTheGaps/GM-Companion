@@ -15,7 +15,7 @@ auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
         return QtFuture::makeReadyFuture(pixmap);
     }
 
-    auto future = File::getDataAsync(path);
+    auto future = File::getDataAsync(path, Option::AllowCache | Option::LowPriority);
 
     const auto callback = [path](const FileDataResult &result) {
         return QtConcurrent::run(loadFromFileResult, path, result);

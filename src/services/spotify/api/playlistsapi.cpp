@@ -17,7 +17,7 @@ PlaylistsAPI::PlaylistsAPI(Spotify *parent) : m_spotify(parent)
 {
 }
 
-auto PlaylistsAPI::getPlaylist(const QString &id, bool lowPriority) -> QFuture<SpotifyPlaylist>
+auto PlaylistsAPI::getPlaylist(const QString &id, Options options) -> QFuture<SpotifyPlaylist>
 {
     if (id.isEmpty())
     {
@@ -40,10 +40,10 @@ auto PlaylistsAPI::getPlaylist(const QString &id, bool lowPriority) -> QFuture<S
         return QtFuture::makeReadyFuture(SpotifyPlaylist::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto PlaylistsAPI::getPlaylistTracks(const QString &id, bool lowPriority) -> QFuture<SpotifyTrackList>
+auto PlaylistsAPI::getPlaylistTracks(const QString &id, Options options) -> QFuture<SpotifyTrackList>
 {
     if (id.isEmpty())
     {
@@ -58,7 +58,7 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id, bool lowPriority) -> QFu
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this, lowPriority](const RestReply &reply) -> QFuture<SpotifyTrackList> {
+    const auto callback = [this, options](const RestReply &reply) -> QFuture<SpotifyTrackList> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -68,19 +68,19 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id, bool lowPriority) -> QFu
         auto tracklist = SpotifyTrackList::fromJson(reply.data());
         if (!tracklist.next.isEmpty())
         {
-            return getPlaylistTracks(std::move(tracklist), lowPriority);
+            return getPlaylistTracks(std::move(tracklist), options);
         }
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, bool lowPriority) -> QFuture<SpotifyTrackList>
+auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, Options options) -> QFuture<SpotifyTrackList>
 {
     const QUrl url(tracklist.next);
 
-    const auto callback = [this, lowPriority, tracklist = std::move(tracklist)](const RestReply &reply) mutable {
+    const auto callback = [this, options, tracklist = std::move(tracklist)](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
@@ -90,15 +90,15 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, bool lowPrior
         tracklist.append(SpotifyTrackList::fromJson(reply.data()));
         if (!tracklist.next.isEmpty())
         {
-            return getPlaylistTracks(std::move(tracklist), lowPriority);
+            return getPlaylistTracks(std::move(tracklist), options);
         }
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config, bool lowPriority) const -> QFuture<RestReply>
+auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config, Options options) const -> QFuture<RestReply>
 {
     QUrl url(u"https://api.spotify.com/v1/playlists/%1"_s.arg(config.id));
 
@@ -115,5 +115,5 @@ auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config, bool lowPriority
     const QJsonDocument content(body);
 
     return m_spotify->put(NetworkUtils::makeJsonRequest(url), content.toJson(QJsonDocument::JsonFormat::Compact),
-                          lowPriority);
+                          options);
 }

@@ -115,8 +115,9 @@ void CharacterTool::loadData()
     setIsDataLoaded(true);
 
     const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
-    Files::File::getDataAsync(filePath).then(
-        [this](const Files::FileDataResult &result) { loadInactiveCharacters(result.data()); });
+    Files::File::getDataAsync(filePath, Files::Option::AllowCache).then([this](const Files::FileDataResult &result) {
+        loadInactiveCharacters(result.data());
+    });
 }
 
 void CharacterTool::setCurrentCategory(int index)
@@ -157,8 +158,8 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
             << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
 
         const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
-        Files::File::getDataAsync(filePath).then(
-            [this](const Files::FileDataResult &result) { convertSettingsFile(result.data()); });
+        Files::File::getDataAsync(filePath, Files::Option::AllowCache)
+            .then([this](const Files::FileDataResult &result) { convertSettingsFile(result.data()); });
         return;
     }
 

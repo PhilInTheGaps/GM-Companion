@@ -1,6 +1,7 @@
 #pragma once
 
 #include "multigethelper.h"
+#include "options.h"
 #include "results/filecheckresult.h"
 #include "results/filedataresult.h"
 #include "results/filelistresult.h"
@@ -20,16 +21,16 @@ public:
     virtual ~FileAccess() = default;
     Q_DISABLE_COPY_MOVE(FileAccess);
 
-    virtual auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult> = 0;
-    virtual auto getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<std::vector<FileDataResult>> = 0;
+    virtual auto getDataAsync(const QString &path, Options options) -> QFuture<FileDataResult> = 0;
+    virtual auto getDataAsync(const QStringList &paths, Options options) -> QFuture<std::vector<FileDataResult>> = 0;
     virtual auto saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult> = 0;
     virtual auto moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<FileResult> = 0;
     virtual auto deleteAsync(const QString &path) -> QFuture<FileResult> = 0;
     virtual auto copyAsync(const QString &path, const QString &copy) -> QFuture<FileResult> = 0;
     virtual auto listAsync(const QString &path, bool files, bool folders) -> QFuture<FileListResult> = 0;
     virtual auto createDirAsync(const QString &path) -> QFuture<FileResult> = 0;
-    virtual auto checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult> = 0;
-    virtual auto checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult> = 0;
+    virtual auto checkAsync(const QString &path, Options options) -> QFuture<FileCheckResult> = 0;
+    virtual auto checkAsync(const QStringList &paths, Options options) -> QFuture<FileMultiCheckResult> = 0;
 
     static auto getInstance() -> std::shared_ptr<FileAccess>
     {
@@ -42,9 +43,9 @@ public:
     }
 
 protected:
-    auto multiGetDataAsync(MultiGetHelper<FileDataResult> &&helper, bool allowCache)
+    auto multiGetDataAsync(MultiGetHelper<FileDataResult> &&helper, Options options)
         -> QFuture<std::vector<FileDataResult>>;
-    auto multiCheckAsync(MultiGetHelper<FileCheckResult> &&helper, bool allowCache) -> QFuture<FileMultiCheckResult>;
+    auto multiCheckAsync(MultiGetHelper<FileCheckResult> &&helper, Options options) -> QFuture<FileMultiCheckResult>;
 
 private:
     inline static std::shared_ptr<FileAccess> instance = nullptr;

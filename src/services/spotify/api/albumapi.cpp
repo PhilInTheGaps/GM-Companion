@@ -16,7 +16,7 @@ AlbumAPI::AlbumAPI(Spotify *parent) : m_spotify(parent)
 {
 }
 
-auto AlbumAPI::getAlbum(const QString &id, bool lowPriority) -> QFuture<SpotifyAlbum>
+auto AlbumAPI::getAlbum(const QString &id, Options options) -> QFuture<SpotifyAlbum>
 {
     if (id.isEmpty())
     {
@@ -30,7 +30,7 @@ auto AlbumAPI::getAlbum(const QString &id, bool lowPriority) -> QFuture<SpotifyA
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this, lowPriority](const RestReply &reply) {
+    const auto callback = [this, options](const RestReply &reply) {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << "getAlbum():" << reply.errorText();
@@ -41,16 +41,16 @@ auto AlbumAPI::getAlbum(const QString &id, bool lowPriority) -> QFuture<SpotifyA
 
         if (!album.tracks.next.isEmpty())
         {
-            return getAlbumTracks(std::move(album), lowPriority);
+            return getAlbumTracks(std::move(album), options);
         }
 
         return QtFuture::makeReadyFuture(album);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto AlbumAPI::getAlbumTracks(const QString &id, bool lowPriority) -> QFuture<SpotifyTrackList>
+auto AlbumAPI::getAlbumTracks(const QString &id, Options options) -> QFuture<SpotifyTrackList>
 {
     if (id.isEmpty())
     {
@@ -65,7 +65,7 @@ auto AlbumAPI::getAlbumTracks(const QString &id, bool lowPriority) -> QFuture<Sp
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    auto callback = [this, lowPriority](const RestReply &reply) -> QFuture<SpotifyTrackList> {
+    auto callback = [this, options](const RestReply &reply) -> QFuture<SpotifyTrackList> {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
@@ -75,21 +75,21 @@ auto AlbumAPI::getAlbumTracks(const QString &id, bool lowPriority) -> QFuture<Sp
         auto tracklist = SpotifyTrackList::fromJson(reply.data());
         if (!tracklist.next.isEmpty())
         {
-            return getAlbumTracks(std::move(tracklist), lowPriority);
+            return getAlbumTracks(std::move(tracklist), options);
         }
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, bool lowPriority) -> QFuture<SpotifyAlbum>
+auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<SpotifyAlbum>
 {
     if (album.tracks.next.isEmpty()) return QtFuture::makeReadyFuture(album);
 
     const QUrl url(album.tracks.next);
 
-    const auto callback = [this, lowPriority, album = std::move(album)](const RestReply &reply) mutable {
+    const auto callback = [this, options, album = std::move(album)](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
@@ -99,19 +99,19 @@ auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, bool lowPriority) -> QFuture
         album.tracks.append(SpotifyTrackList::fromJson(reply.data()));
         if (!album.tracks.next.isEmpty())
         {
-            return getAlbumTracks(std::move(album), lowPriority);
+            return getAlbumTracks(std::move(album), options);
         }
         return QtFuture::makeReadyFuture(album);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }
 
-auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, bool lowPriority) -> QFuture<SpotifyTrackList>
+auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, Options options) -> QFuture<SpotifyTrackList>
 {
     const QUrl url(tracklist.next);
 
-    const auto callback = [this, tracklist = std::move(tracklist), lowPriority](const RestReply &reply) mutable {
+    const auto callback = [this, tracklist = std::move(tracklist), options](const RestReply &reply) mutable {
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
@@ -121,10 +121,10 @@ auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, bool lowPriority) ->
         tracklist.append(SpotifyTrackList::fromJson(reply.data()));
         if (!tracklist.next.isEmpty())
         {
-            return getAlbumTracks(std::move(tracklist), lowPriority);
+            return getAlbumTracks(std::move(tracklist), options);
         }
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), true, lowPriority).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
 }

@@ -158,7 +158,7 @@ void ItemEditor::onFileCheckReceived(const Files::FileCheckResult &checkResult)
         return;
     }
 
-    Files::File::getDataAsync(path)
+    Files::File::getDataAsync(path, Files::Option::AllowCache)
         .then([this](const Files::FileDataResult &dataResult) { onDataReceived(dataResult); })
         .onCanceled([this]() { isLoading(false); });
 }

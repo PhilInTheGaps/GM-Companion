@@ -76,7 +76,7 @@ void NotesSaveLoad::loadPageContent() const
 
     qCDebug(gmNotesSaveLoad()) << "Loading page content of" << fileName;
 
-    Files::File::getDataAsync(fileName).then([page](const Files::FileDataResult &result) {
+    Files::File::getDataAsync(fileName, Files::Option::AllowCache).then([page](const Files::FileDataResult &result) {
         if (!page) return;
         page->onContentLoaded(result.data());
     });

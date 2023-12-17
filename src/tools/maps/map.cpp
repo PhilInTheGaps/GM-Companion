@@ -25,7 +25,7 @@ Map::Map(QObject *parent) : QObject(parent), m_markers(this)
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    Files::File::getDataAsync(path).then([this](const Files::FileDataResult &result) {
+    Files::File::getDataAsync(path, Files::Option::AllowCache).then([this](const Files::FileDataResult &result) {
         if (!result.success()) return;
 
         QPixmap pixmap;
@@ -56,17 +56,18 @@ void Map::loadMarkers()
     Files::File::checkAsync(filePath).then([this, filePath](const Files::FileCheckResult &checkResult) {
         if (!checkResult.success() || !checkResult.exists()) return;
 
-        Files::File::getDataAsync(filePath).then([this](const Files::FileDataResult &dataResult) {
-            if (!dataResult.success()) return;
+        Files::File::getDataAsync(filePath, Files::Option::AllowCache)
+            .then([this](const Files::FileDataResult &dataResult) {
+                if (!dataResult.success()) return;
 
-            auto markers = QJsonDocument::fromJson(dataResult.data()).object()["markers"_L1].toArray();
+                auto markers = QJsonDocument::fromJson(dataResult.data()).object()["markers"_L1].toArray();
 
-            foreach (const auto &marker, markers)
-            {
-                addMarker(new MapMarker(marker.toObject(), this));
-            }
-            emit markersChanged();
-        });
+                foreach (const auto &marker, markers)
+                {
+                    addMarker(new MapMarker(marker.toObject(), this));
+                }
+                emit markersChanged();
+            });
     });
 }
 

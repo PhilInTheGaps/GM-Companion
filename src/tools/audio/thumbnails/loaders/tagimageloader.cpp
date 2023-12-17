@@ -95,7 +95,7 @@ auto TagImageLoader::loadFromData(const QString &path, std::unique_ptr<ByteVecto
 
 auto TagImageLoader::loadViaTempFileAsync(const QString &path) -> QFuture<QPixmap>
 {
-    auto future = Files::File::getDataAsync(path);
+    auto future = Files::File::getDataAsync(path, Files::Option::AllowCache | Files::Option::LowPriority);
 
     return future.then(QtFuture::Launch::Async, [path](const Files::FileDataResult &result) {
         auto fileName = FileUtils::fileName(path);

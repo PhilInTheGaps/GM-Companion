@@ -35,8 +35,8 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult &&result)
         return;
     }
 
-    Files::File::getDataAsync(files).then(
-        [this](const std::vector<Files::FileDataResult> &results) { onShopFileDataReceived(results); });
+    Files::File::getDataAsync(files, Files::Option::AllowCache)
+        .then([this](const std::vector<Files::FileDataResult> &results) { onShopFileDataReceived(results); });
 }
 
 void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResult> &results)
