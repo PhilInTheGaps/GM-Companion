@@ -40,7 +40,9 @@ auto PlaylistsAPI::getPlaylist(const QString &id, Options options) -> QFuture<Sp
         return QtFuture::makeReadyFuture(SpotifyPlaylist::fromJson(reply.data()));
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto PlaylistsAPI::getPlaylistTracks(const QString &id, Options options) -> QFuture<SpotifyTrackList>
@@ -73,7 +75,9 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id, Options options) -> QFut
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, Options options) -> QFuture<SpotifyTrackList>
@@ -95,7 +99,9 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, Options optio
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config, Options options) const -> QFuture<RestReply>

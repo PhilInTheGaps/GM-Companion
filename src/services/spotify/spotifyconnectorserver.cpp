@@ -53,8 +53,8 @@ void SpotifyConnectorServer::disconnectService()
 
 void SpotifyConnectorServer::sendRequest(RestRequest &&container, QPromise<RestReply> &&promise)
 {
-    auto request =
-        container.options().testFlag(Option::Authenticated) ? addAuthHeader(container.request()) : container.request();
+    auto request = container.options().testFlag(Services::Option::Authenticated) ? addAuthHeader(container.request())
+                                                                                 : container.request();
     QNetworkReply *reply = nullptr;
 
     switch (container.type())

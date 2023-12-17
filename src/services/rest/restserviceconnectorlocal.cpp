@@ -96,7 +96,7 @@ void RESTServiceConnectorLocal::sendRequest(RestRequest &&container, QPromise<Re
     auto *requestor = makeRequestor();
     auto request = container.request();
 
-    if (container.options().testFlag(Option::Authenticated))
+    if (container.options().testFlag(Services::Option::Authenticated))
     {
         // Workaround for google drive requests
         if (!m_config.authHeaderFormat.isEmpty())

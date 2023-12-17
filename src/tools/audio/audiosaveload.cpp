@@ -54,7 +54,7 @@ auto AudioSaveLoad::loadProjects(const QObject *context, FileListResult &&files)
         }
     }
 
-    auto futureContents = File::getDataAsync(fileNames, Option::AllowCache);
+    auto futureContents = File::getDataAsync(fileNames, Files::Option::AllowCache);
 
     return futureContents.then([context](const std::vector<FileDataResult> &contents) {
         qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
@@ -79,7 +79,7 @@ auto AudioSaveLoad::findMissingFilesAsync(const QList<AudioFile *> &audioFiles, 
 
     const auto filePaths = getFilePathsToCheck(audioFiles, basePath);
 
-    auto futureCheckResult = File::checkAsync(filePaths, Option::AllowCache);
+    auto futureCheckResult = File::checkAsync(filePaths, Files::Option::AllowCache);
     return futureCheckResult
         .then([audioFiles, basePath](const FileMultiCheckResult &multiResult) {
             const auto foundPaths = multiResult.existing();

@@ -47,7 +47,9 @@ auto AlbumAPI::getAlbum(const QString &id, Options options) -> QFuture<SpotifyAl
         return QtFuture::makeReadyFuture(album);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto AlbumAPI::getAlbumTracks(const QString &id, Options options) -> QFuture<SpotifyTrackList>
@@ -80,7 +82,9 @@ auto AlbumAPI::getAlbumTracks(const QString &id, Options options) -> QFuture<Spo
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<SpotifyAlbum>
@@ -104,7 +108,9 @@ auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<
         return QtFuture::makeReadyFuture(album);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }
 
 auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, Options options) -> QFuture<SpotifyTrackList>
@@ -126,5 +132,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, Options options) -> 
         return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Option::Authenticated | options).then(callback).unwrap();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
+        .then(callback)
+        .unwrap();
 }

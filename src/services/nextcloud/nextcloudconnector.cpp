@@ -129,7 +129,7 @@ void NextCloudConnector::sendRequest(RestRequest &&container, QPromise<RestReply
         request.setUrl(url);
     }
 
-    if (container.options().testFlag(Option::Authenticated))
+    if (container.options().testFlag(Services::Option::Authenticated))
     {
         request.setRawHeader("Authorization", NetworkUtils::basicAuthHeader(m_nc->loginName(), m_appPassword));
     }

@@ -82,7 +82,7 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
 {
     const auto playlistCallback = [id](const SpotifyPlaylist &playlist) {
         const auto url = playlist.images.front().url;
-        auto future = Services::Spotify::instance()->get(url, Option::LowPriority);
+        auto future = Services::Spotify::instance()->get(url, Services::Option::LowPriority);
 
         const auto imageCallback = [id, url](const RestReply &reply) {
             QPixmap image;
@@ -99,7 +99,7 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
         return future.then(imageCallback);
     };
 
-    auto future = Spotify::instance()->playlists.getPlaylist(id, Option::LowPriority);
+    auto future = Spotify::instance()->playlists.getPlaylist(id, Services::Option::LowPriority);
     return future.then(playlistCallback).unwrap();
 }
 
@@ -114,7 +114,7 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
 
     qCDebug(gmAudioSpotifyImageLoader()) << "Sending batch request:" << url;
 
-    auto future = Spotify::instance()->get(url, Option::Authenticated | Option::LowPriority);
+    auto future = Spotify::instance()->get(url, Services::Option::Authenticated | Services::Option::LowPriority);
     future.then([type](RestReply &&reply) { receivedRequest(std::move(reply), type); });
 
     // Start timer again if there still are ids in the queue
@@ -158,7 +158,7 @@ void SpotifyImageLoader::receivedRequest(RestReply &&reply, SpotifyUtils::Spotif
         }
 
         const auto request = QNetworkRequest(url);
-        auto future = Spotify::instance()->get(request, Option::LowPriority);
+        auto future = Spotify::instance()->get(request, Services::Option::LowPriority);
 
         const auto callback = [id, url](const RestReply &imageReply) {
             QPixmap image;

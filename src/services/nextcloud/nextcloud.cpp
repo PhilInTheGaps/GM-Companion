@@ -94,7 +94,7 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
         }
     }
 
-    return m_connector.customRequest(request, method, data, Option::Authenticated | options);
+    return m_connector.customRequest(request, method, data, Services::Option::Authenticated | options);
 }
 
 auto NextCloud::getPathUrl(const QString &path) const -> QString

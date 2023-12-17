@@ -168,7 +168,7 @@ auto RESTServiceConnector::enqueueRequest(RestRequest &&request, QPromise<RestRe
     request.id(m_nextQueueId);
     m_nextQueueId++;
 
-    if (request.options().testFlag(Option::LowPriority))
+    if (request.options().testFlag(Services::Option::LowPriority))
     {
         m_requestQueueLowPriority.emplace(std::move(reply), std::move(request));
     }
