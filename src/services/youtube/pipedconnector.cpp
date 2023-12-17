@@ -16,13 +16,13 @@ constexpr auto PIPED_INSTANCES_WIKI_URL =
 constexpr auto PIPED_PARSER_TABLE_COLUMNS = 5;
 constexpr auto PIPED_PARSER_TABLE_HEADER_SIZE = 2;
 constexpr auto PIPED_INSTANCE_SELECTION_TIME = std::chrono::hours(1);
-constexpr auto MAX_CONCURRENT_REQUESTS = 1;
+constexpr auto PIPED_MAX_CONCURRENT_REQUESTS = 1;
 
 Q_LOGGING_CATEGORY(gmPiped, "gm.service.youtube.piped")
 
 PipedConnector::PipedConnector(QObject *parent) : RESTServiceConnector{nullptr, gmPiped(), {}, parent}
 {
-    setMaxConcurrentRequests(MAX_CONCURRENT_REQUESTS);
+    setMaxConcurrentRequests(PIPED_MAX_CONCURRENT_REQUESTS);
 }
 
 auto PipedConnector::instances() const -> std::vector<PipedInstance>

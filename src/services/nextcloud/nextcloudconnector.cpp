@@ -15,7 +15,7 @@ using namespace Qt::Literals::StringLiterals;
 using namespace Services;
 using namespace Common::Settings;
 
-constexpr auto MAX_CONCURRENT_REQUESTS = 3;
+constexpr auto NEXTCLOUD_MAX_CONCURRENT_REQUESTS = 3;
 constexpr auto AUTH_URL = "/index.php/login/v2";
 constexpr auto AUTH_POLL_DELAY = 3000;
 constexpr auto MAX_AUTH_POLLS = 20;
@@ -26,7 +26,7 @@ Q_LOGGING_CATEGORY(gmNcConnector, "gm.service.nextcloud.connector")
 NextCloudConnector::NextCloudConnector(NextCloud *nc, QObject *parent)
     : RESTServiceConnector{nullptr, gmNcConnector(), {}, parent}, m_nc(nc)
 {
-    setMaxConcurrentRequests(MAX_CONCURRENT_REQUESTS);
+    setMaxConcurrentRequests(NEXTCLOUD_MAX_CONCURRENT_REQUESTS);
     updateTokenExpireTime(TOKEN_VALIDITY_TIME);
 
     connect(this, &NextCloudConnector::stateChanged, this, &NextCloudConnector::onStateChanged);

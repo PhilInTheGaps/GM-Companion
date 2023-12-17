@@ -10,7 +10,7 @@ using namespace Services;
 using namespace Common::Settings;
 
 constexpr auto LOCAL_PORT = 59993;
-constexpr auto MAX_CONCURRENT_REQUESTS = 5;
+constexpr auto GOOGLE_DRIVE_MAX_CONCURRENT_REQUESTS = 5;
 constexpr auto SCOPE = "https://www.googleapis.com/auth/drive.file"; //"https://www.googleapis.com/auth/drive.appdata "
 
 Q_LOGGING_CATEGORY(gmGoogleDriveLocal, "gm.service.google.drive.local")
@@ -23,7 +23,7 @@ GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(const QString &serviceName,
 
     config.scope = SCOPE;
     config.port = LOCAL_PORT;
-    config.maxConcurrentRequests = MAX_CONCURRENT_REQUESTS;
+    config.maxConcurrentRequests = GOOGLE_DRIVE_MAX_CONCURRENT_REQUESTS;
     config.authHeaderFormat = u"Bearer %1"_s;
     config.idRequest = Request<QString>(u"clientId"_s, u""_s, serviceName);
     config.secretRequest = Request<QString>(u"clientSecret"_s, u""_s, serviceName);
