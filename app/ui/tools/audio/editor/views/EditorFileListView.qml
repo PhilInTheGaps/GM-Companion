@@ -17,7 +17,7 @@ Item {
 
         foldersOnly: true
         onAccepted: {
-            AudioTool.editor.replaceFileFolder(index, selectedPath);
+            AudioTool.editor.replaceFileFolder(index, getSelectedPath());
         }
     }
 

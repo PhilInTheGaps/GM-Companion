@@ -38,6 +38,7 @@ public slots:
     void forward();
     void back();
     void createFolder(const QString &folderName);
+    void updateFileList();
 
 signals:
     void currentDirChanged(const QString &dir);
@@ -50,7 +51,6 @@ private:
 
     QFuture<FileListResult> m_currentFuture;
 
-    void updateFileList();
     void clearFileList();
     void stopCurrentRequest();
     void clearForward();

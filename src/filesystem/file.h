@@ -58,6 +58,8 @@ public:
     static auto checkAsync(const QStringList &paths, Options options = Option::AllowCache,
                            std::shared_ptr<FileAccess> fileAccess = nullptr) -> QFuture<FileMultiCheckResult>;
 
+    static auto getHomeDir(std::shared_ptr<FileAccess> fileAccess = nullptr) -> QString;
+
     static void updateFileAccess();
 
 private:

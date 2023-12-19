@@ -17,22 +17,48 @@ Dialog {
 
     modal: true
 
-    property alias selectedPath: selection_text_field.text
+    enum Mode {
+        OpenOne,
+        Save
+    }
+
+    function getSelectedPath() {
+        if (main_list_view.currentIndex >= 0) {
+            return backend.getSelected(main_list_view.currentIndex);
+        }
+        let result = backend.getSelected(main_list_view.currentIndex);
+        if (root.mode === CustomFileDialog.Mode.Save) {
+            result += "/" + selectedEntryName;
+        }
+        return result;
+    }
+
+    property alias selectedEntryName: selection_text_field.text
     property alias folder: backend.currentDir
     property alias foldersOnly: backend.folderMode
     property var textField: undefined
     property string replacePath: ""
+    property int mode: CustomFileDialog.Mode.OpenOne
 
     FileDialogBackend {
         id: backend
     }
 
+    onOpened: {
+        backend.updateFileList();
+        if (root.mode === CustomFileDialog.Mode.Save) {
+            selection_text_field.forceActiveFocus();
+            selection_text_field.selectAll();
+        }
+        main_list_view.currentIndex = -1;
+    }
+
     onAccepted: {
         if (textField) {
             if (replacePath) {
-                textField.text = selection_text_field.text.replace(replacePath, "");
+                textField.text = root.getSelectedPath().replace(replacePath, "");
             } else {
-                textField.text = selection_text_field.text;
+                textField.text = root.getSelectedPath();
             }
             if (textField.savePath) {
                 textField.savePath();
@@ -84,6 +110,8 @@ Dialog {
 
                 onClicked: {
                     new_folder_form.visible = !new_folder_form.visible;
+                    new_folder_form_row_text_field.forceActiveFocus();
+                    new_folder_form_row_text_field.selectAll();
                 }
             }
         }
@@ -114,6 +142,7 @@ Dialog {
             }
 
             TextField {
+                id: new_folder_form_row_text_field
                 placeholderText: qsTr("New Folder")
                 height: parent.height
                 anchors.verticalCenter: parent.verticalCenter
@@ -147,8 +176,8 @@ Dialog {
                 visible: main_list_view.contentHeight > main_list_view.height
             }
 
-            onCurrentIndexChanged: {
-                selection_text_field.text = backend.getSelected(currentIndex);
+            onModelChanged: {
+                currentIndex = -1;
             }
 
             model: backend.entries
@@ -197,8 +226,25 @@ Dialog {
                     id: delegate_mouse_area
                     anchors.fill: delegate_item
                     hoverEnabled: true
-                    onClicked: main_list_view.currentIndex = delegate_item.index
-                    onDoubleClicked: backend.enterFolder(delegate_item.index)
+
+                    onClicked: {
+                        main_list_view.currentIndex = delegate_item.index;
+                        if (root.mode === CustomFileDialog.Mode.Save) {
+                            selection_text_field.text = delegate_item.modelData.name;
+                        }
+                    }
+
+                    onDoubleClicked: {
+                        if (delegate_item.modelData.isFolder) {
+                            backend.enterFolder(delegate_item.index);
+                            return;
+                        }
+                        main_list_view.currentIndex = delegate_item.index;
+                        if (root.mode === CustomFileDialog.Mode.Save) {
+                            selection_text_field.text = delegate_item.modelData.name;
+                        }
+                        root.accept();
+                    }
                 }
             }
 
@@ -219,6 +265,12 @@ Dialog {
             anchors.left: parent.left
             anchors.right: buttons.left
             anchors.margins: 5
+
+            visible: root.mode === CustomFileDialog.Mode.Save
+
+            onAccepted: {
+                root.accept();
+            }
         }
 
         Row {
@@ -231,7 +283,7 @@ Dialog {
 
             Button {
                 id: open_button
-                text: qsTr("Open")
+                text: root.mode === CustomFileDialog.Mode.Save ? qsTr("Save") : qsTr("Open")
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom

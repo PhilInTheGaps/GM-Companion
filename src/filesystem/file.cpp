@@ -85,6 +85,12 @@ auto File::checkAsync(const QStringList &paths, Options options, std::shared_ptr
     return access ? access->checkAsync(paths, options) : QFuture<FileMultiCheckResult>();
 }
 
+auto File::getHomeDir(std::shared_ptr<FileAccess> fileAccess) -> QString
+{
+    auto access = getFileAccess(fileAccess);
+    return access ? access->getHomeDir() : u"/"_s;
+}
+
 void File::updateFileAccess()
 {
     const auto cloudMode = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s);

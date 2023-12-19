@@ -24,6 +24,7 @@ public:
     auto createDirAsync(const QString &path) -> QFuture<FileResult> override;
     auto checkAsync(const QString &path, Options options) -> QFuture<FileCheckResult> override;
     auto checkAsync(const QStringList &paths, Options options) -> QFuture<FileMultiCheckResult> override;
+    auto getHomeDir() -> QString override;
 
 private:
     static auto getData(const QString &path) -> FileDataResult;

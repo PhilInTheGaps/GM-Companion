@@ -1,7 +1,9 @@
 #include "app/ui/FileDialog/filedialogbackend.h"
 #include "app/ui/FileDialog/fileobject.h"
+#include "src/common/settings/settingsmanager.h"
 #include "src/filesystem/file.h"
 #include "src/filesystem/fileaccess.h"
+#include "tests/testhelper/staticabstracttest.h"
 #include <QList>
 #include <QSignalSpy>
 #include <functional>
@@ -9,6 +11,7 @@
 #include <memory>
 
 using namespace Files;
+using namespace Common::Settings;
 using namespace Qt::Literals::StringLiterals;
 
 class FileDialogTest : public ::testing::Test
@@ -16,23 +19,24 @@ class FileDialogTest : public ::testing::Test
 public:
     FileDialogTest()
     {
+        cloudMode = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s);
+        File::init(nullptr);
+
         createTestFiles();
         dialog = std::make_unique<FileDialogBackend>(nullptr);
     }
 
-    ~FileDialogTest()
+    ~FileDialogTest() override
     {
         tempDir.remove();
+
+        SettingsManager::instance()->set(u"cloudMode"_s, cloudMode);
     }
 
 protected:
-    void enterAndGetTopLevel();
-    void enterTopLevelFoldersOnly();
-    void moveThroughStructure();
-
-private:
     QTemporaryDir tempDir;
     std::unique_ptr<FileDialogBackend> dialog = nullptr;
+    std::shared_ptr<FileAccess> fileAccess = nullptr;
 
     static constexpr int WAIT_TIME_MS = 1000;
     const QStringList topLevelFiles = {"file1", "file2", "file3", "file4"};
@@ -59,18 +63,21 @@ private:
 
     void goBack(const QString &dir, bool canGoForward, bool canGoBack, const QStringList &expectedFiles,
                 const QStringList &expectedFolders);
+
+private:
+    QString cloudMode;
 };
 
 void FileDialogTest::createFile(const QString &file)
 {
     auto future = File::saveAsync(tempDir.filePath(file), QByteArray());
-    future.waitForFinished();
+    StaticAbstractTest::testFutureNoAuth(future, "saveAsync", []() {});
 }
 
 void FileDialogTest::createDir(const QString &directory)
 {
     auto future = File::createDirAsync(tempDir.filePath(directory));
-    future.waitForFinished();
+    StaticAbstractTest::testFutureNoAuth(future, "createDir", []() {});
 }
 
 void FileDialogTest::createTestFiles()
@@ -183,19 +190,19 @@ void FileDialogTest::goBack(const QString &dir, bool canGoForward, bool canGoBac
     enterDir(enter, dir, canGoForward, canGoBack, expectedFiles, expectedFolders);
 }
 
-void FileDialogTest::enterAndGetTopLevel()
+TEST_F(FileDialogTest, CanEnterAndGetTopLevel)
 {
     dialog->folderMode(false);
     enterDir(tempDir.path(), false, true, topLevelFiles, topLevelFolders);
 }
 
-void FileDialogTest::enterTopLevelFoldersOnly()
+TEST_F(FileDialogTest, CanEnterTopLevelFoldersOnly)
 {
     dialog->folderMode(true);
     enterDir(tempDir.path(), false, true, {}, topLevelFolders);
 }
 
-void FileDialogTest::moveThroughStructure()
+TEST_F(FileDialogTest, MoveThroughStructure)
 {
     dialog->folderMode(false);
     enterDir(tempDir.path(), false, true, topLevelFiles, topLevelFolders);

@@ -34,6 +34,7 @@ void AbstractAccessTest::createTestFiles()
     createTestFile(u"test5"_s, "To be moved.");
     createTestFile(u"test6"_s, "To be deleted.");
     createTestFile(u"test7"_s, "To be copied.");
+    createTestFile(u".test8"_s, "This is test 8.");
 
 #ifndef Q_OS_WIN
     // windows can't handle filenames with special characters
@@ -262,6 +263,8 @@ void AbstractAccessTest::listAsync()
         EXPECT_GT(future.result().files().length(), 2) << "Could not list files.";
         EXPECT_TRUE(future.result().files().contains("test1")) << "List does not include test file 1.";
         EXPECT_TRUE(future.result().files().contains("test2")) << "List does not include test file 2.";
+        EXPECT_TRUE(future.result().files().contains(".test8"))
+            << "List does not include test file 8 that starts with a dot.";
 #ifndef Q_OS_WIN
         EXPECT_TRUE(future.result().files().contains("file&with\"special characters"))
             << "List does not include file with special characters in it's name.";

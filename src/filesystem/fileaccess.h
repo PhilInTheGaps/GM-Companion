@@ -31,6 +31,7 @@ public:
     virtual auto createDirAsync(const QString &path) -> QFuture<FileResult> = 0;
     virtual auto checkAsync(const QString &path, Options options) -> QFuture<FileCheckResult> = 0;
     virtual auto checkAsync(const QStringList &paths, Options options) -> QFuture<FileMultiCheckResult> = 0;
+    virtual auto getHomeDir() -> QString = 0;
 
     static auto getInstance() -> std::shared_ptr<FileAccess>
     {

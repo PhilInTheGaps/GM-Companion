@@ -1,4 +1,6 @@
 #include "combattracker.h"
+#include "filesystem/file.h"
+#include "filesystem/results/filedataresult.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QDir>
@@ -10,6 +12,7 @@
 #include <algorithm>
 
 using namespace Qt::Literals::StringLiterals;
+using namespace Files;
 
 Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
@@ -32,7 +35,7 @@ void CombatTracker::reset()
 {
     sortByIni(false);
     m_state.reset();
-    saveToDisk();
+    saveToTempFile();
 }
 
 /**
@@ -44,7 +47,7 @@ void CombatTracker::clear(bool saveAfterClear)
 
     if (saveAfterClear)
     {
-        saveToDisk();
+        saveToTempFile();
     }
 }
 
@@ -64,7 +67,7 @@ void CombatTracker::next()
     }
 
     qCDebug(gmCombatTracker()) << "New index:" << currentIndex();
-    saveToDisk();
+    saveToTempFile();
 }
 
 /**
@@ -88,7 +91,7 @@ auto CombatTracker::add(const QString &name, int ini, int health, int priority, 
             m_state.currentIndex(0);
         }
 
-        saveToDisk();
+        saveToTempFile();
         return true;
     }
 
@@ -97,7 +100,7 @@ auto CombatTracker::add(const QString &name, int ini, int health, int priority, 
         sortByIni();
     }
 
-    saveToDisk();
+    saveToTempFile();
     return false;
 }
 
@@ -110,7 +113,7 @@ auto CombatTracker::remove(int index) -> bool
     if (Q_UNLIKELY(!Utils::isInBounds(combatants(), index))) return false;
 
     m_state.removeCombatant(index);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -141,7 +144,7 @@ auto CombatTracker::setIni(Combatant *combatant, int ini) -> bool
     combatant->ini(ini);
     sortByIni(true);
 
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -180,7 +183,7 @@ auto CombatTracker::setHealth(int index, int health) -> bool
     if (Q_UNLIKELY(!combatant)) return false;
 
     combatant->health(health);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -197,7 +200,7 @@ auto CombatTracker::modifyHealth(int index, int steps) -> bool
     auto health = combatant->health();
     health += steps;
     combatant->health(health);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -209,7 +212,7 @@ auto CombatTracker::setPriority(Combatant *combatant, int priority) -> bool
 
     combatant->priority(priority);
     sortByIni(true);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -240,7 +243,7 @@ auto CombatTracker::setNotes(int index, const QString &notes) -> bool
     if (Q_UNLIKELY(!combatant)) return false;
 
     combatant->notes(notes);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -252,7 +255,7 @@ auto CombatTracker::delayTurn(int index) -> bool
     combatant->delay(true);
 
     m_state.moveCombatantToBack(index);
-    saveToDisk();
+    saveToTempFile();
     return true;
 }
 
@@ -265,7 +268,7 @@ auto CombatTracker::getCombatant(int index) -> Combatant *
 {
     if (Q_LIKELY(Utils::isInBounds(combatants(), index)))
     {
-        return combatants()[index];
+        return combatants().at(index);
     }
 
     return nullptr;
@@ -278,7 +281,7 @@ void CombatTracker::resetDelayForAll() const
         if (Q_LIKELY(combatant)) combatant->delay(false);
     }
 
-    saveToDisk();
+    saveToTempFile();
 }
 
 void CombatTracker::loadData()
@@ -297,7 +300,29 @@ void CombatTracker::loadData()
     setIsDataLoaded(true);
 }
 
-void CombatTracker::saveToDisk() const
+auto CombatTracker::loadFile(const QString &file) -> QFuture<void>
+{
+    return File::getDataAsync(file).then([this](const FileDataResult &result) {
+        if (!result.success())
+        {
+            qCWarning(gmCombatTracker()) << "Could not load file:" << result.errorMessage();
+            return;
+        }
+
+        const auto json = QJsonDocument::fromJson(result.data());
+        m_state.load(json);
+
+        setIsDataLoaded(true);
+    });
+}
+
+auto CombatTracker::saveFile(const QString &file) -> QFuture<FileResult>
+{
+    const auto data = m_state.serialize().toJson();
+    return File::saveAsync(file, data);
+}
+
+void CombatTracker::saveToTempFile() const
 {
     auto json = m_state.serialize();
     auto tempFile = getCacheFile();

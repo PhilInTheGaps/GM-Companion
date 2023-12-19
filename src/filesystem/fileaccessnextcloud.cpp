@@ -318,6 +318,11 @@ auto FileAccessNextcloud::checkAsync(const QStringList &paths, Options options) 
     return FileAccess::multiCheckAsync(MultiGetHelper<FileCheckResult>(paths), options);
 }
 
+auto FileAccessNextcloud::getHomeDir() -> QString
+{
+    return u"/"_s;
+}
+
 auto FileAccessNextcloud::encodePath(const QString &data) -> QByteArray
 {
     return QUrl::toPercentEncoding(data, "/");

@@ -1,4 +1,6 @@
+#include "src/filesystem/results/fileresult.h"
 #include "src/tools/combat_tracker/combattracker.h"
+#include "tests/testhelper/staticabstracttest.h"
 #include <gtest/gtest.h>
 
 using namespace Qt::Literals::StringLiterals;
@@ -28,9 +30,9 @@ protected:
         return combatTracker.combatants();
     }
 
-    static void saveToDisk(AccessibleCombatTracker &combatTracker)
+    static void saveToTempFile(AccessibleCombatTracker &combatTracker)
     {
-        combatTracker.saveToDisk();
+        combatTracker.saveToTempFile();
     }
 
     static void resetDelayForAll(AccessibleCombatTracker &combatTracker)
@@ -186,7 +188,7 @@ TEST_F(CombatTrackerTest, CanRemoveSecondLastAndActiveCombatant)
     EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 4);
 }
 
-TEST_F(CombatTrackerTest, TestSaveLoad)
+TEST_F(CombatTrackerTest, TestSaveLoadToTempFile)
 {
     AccessibleCombatTracker combatTracker(nullptr);
     createTestData(combatTracker);
@@ -202,7 +204,7 @@ TEST_F(CombatTrackerTest, TestSaveLoad)
     const auto priority = combatant->priority();
     const auto delay = combatant->delay();
 
-    saveToDisk(combatTracker);
+    saveToTempFile(combatTracker);
     combatTracker.clear(false);
 
     EXPECT_EQ(combatTracker.currentIndex(), 0);
@@ -222,6 +224,27 @@ TEST_F(CombatTrackerTest, TestSaveLoad)
     EXPECT_EQ(loadedCombatant->health(), health);
     EXPECT_EQ(loadedCombatant->priority(), priority);
     EXPECT_EQ(loadedCombatant->delay(), delay);
+}
+
+TEST_F(CombatTrackerTest, TestSaveLoadToFile)
+{
+    AccessibleCombatTracker combatTracker(nullptr);
+    createTestData(combatTracker);
+
+    QTemporaryFile file;
+    file.open();
+    file.close();
+
+    auto future = combatTracker.saveFile(file.fileName());
+    StaticAbstractTest::testFutureNoAuth(future, "saveFile", [future]() { EXPECT_TRUE(future.result().success()); });
+
+    combatTracker.clear(false);
+
+    EXPECT_EQ(combatTracker.model()->rowCount(QModelIndex()), 0);
+
+    auto future2 = combatTracker.loadFile(file.fileName());
+    StaticAbstractTest::testFutureNoAuth(future2, "loadFile", []() {});
+    EXPECT_GT(combatTracker.model()->rowCount(QModelIndex()), 0);
 }
 
 TEST_F(CombatTrackerTest, CanAccessModel)

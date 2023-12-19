@@ -1,4 +1,5 @@
 #include "abstractaccesstest.h"
+#include "src/filesystem/file.h"
 #include "src/filesystem/fileaccesslocal.h"
 #include <gtest/gtest.h>
 
@@ -27,4 +28,10 @@ private slots:
 TEST_F(LocalAccessTest, TestFileAccess)
 {
     runAllTests();
+}
+
+TEST_F(LocalAccessTest, VerifyHomeDir)
+{
+    const auto homeDir = File::getHomeDir(fileAccess);
+    EXPECT_FALSE(homeDir.isEmpty());
 }

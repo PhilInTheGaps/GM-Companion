@@ -280,13 +280,18 @@ auto FileAccessLocal::checkAsync(const QStringList &paths, Options options) -> Q
         .then(&m_context, [](FileMultiCheckResult &&result) { return std::move(result); });
 }
 
+auto FileAccessLocal::getHomeDir() -> QString
+{
+    return QDir::homePath();
+}
+
 auto FileAccessLocal::getDirFilter(bool files, bool folders) -> QFlags<QDir::Filter>
 {
-    if (files && folders) return QDir::NoDotAndDotDot | QDir::AllEntries;
+    if (files && folders) return QDir::NoDotAndDotDot | QDir::AllEntries | QDir::Hidden;
 
-    if (files) return QDir::NoDotAndDotDot | QDir::Files;
+    if (files) return QDir::NoDotAndDotDot | QDir::Files | QDir::Hidden;
 
-    if (folders) return QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Drives;
+    if (folders) return QDir::NoDotAndDotDot | QDir::AllDirs | QDir::Drives | QDir::Hidden;
 
     return QDir::NoDotAndDotDot;
 }

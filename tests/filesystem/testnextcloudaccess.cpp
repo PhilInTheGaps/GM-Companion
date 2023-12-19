@@ -1,6 +1,7 @@
 #include "abstractaccesstest.h"
 #include "mocknextcloud.h"
 #include "settings/settingsmanager.h"
+#include "src/filesystem/file.h"
 #include "src/filesystem/fileaccessnextcloud.h"
 #include "src/services/nextcloud/nextcloud.h"
 #include <QDesktopServices>
@@ -85,4 +86,10 @@ private:
 TEST_F(NextcloudAccessTest, TestFileAccess)
 {
     runAllTests();
+}
+
+TEST_F(NextcloudAccessTest, VerifyHomeDir)
+{
+    const auto homeDir = File::getHomeDir(fileAccess);
+    EXPECT_EQ(homeDir.toStdString(), "/");
 }

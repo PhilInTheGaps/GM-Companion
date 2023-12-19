@@ -11,6 +11,8 @@ Q_LOGGING_CATEGORY(gmFileDialog, "gm.files.dialog")
 
 FileDialogBackend::FileDialogBackend(QObject *parent) : QObject(parent)
 {
+    setCurrentDir(File::getHomeDir());
+
     connect(this, &FileDialogBackend::currentDirChanged, &FileDialogBackend::onCurrentDirChanged);
 }
 

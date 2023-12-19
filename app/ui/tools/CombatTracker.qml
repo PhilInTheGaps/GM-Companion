@@ -4,6 +4,7 @@ import CustomComponents
 import IconFonts
 import src
 import ".."
+import "../common"
 import "./combat_tracker"
 
 Page {
@@ -13,6 +14,23 @@ Page {
     property bool diceEnabled: true
 
     Component.onCompleted: CombatTrackerTool.loadData()
+
+    CustomFileDialog {
+        id: file_dialog
+
+        onAccepted: {
+            switch (file_dialog.mode) {
+            case CustomFileDialog.Mode.OpenOne:
+                CombatTrackerTool.loadFile(file_dialog.getSelectedPath());
+                break;
+            case CustomFileDialog.Mode.Save:
+                CombatTrackerTool.saveFile(file_dialog.getSelectedPath());
+                break;
+            default:
+                break;
+            }
+        }
+    }
 
     // Top Bar
     header: ToolBar {
@@ -36,7 +54,28 @@ Page {
                 buttonText: qsTr("Add")
                 usesFixedWidth: false
                 onClicked: {
-                    add_rect.visible = !add_rect.visible
+                    add_rect.visible = !add_rect.visible;
+                }
+            }
+
+            CustomToolBarButton {
+                iconText: FontAwesome.fileArrowUp
+                buttonText: qsTr("Load")
+                usesFixedWidth: false
+                onClicked: {
+                    file_dialog.mode = CustomFileDialog.Mode.OpenOne;
+                    file_dialog.open();
+                }
+            }
+
+            CustomToolBarButton {
+                iconText: FontAwesome.fileArrowDown
+                buttonText: qsTr("Save")
+                usesFixedWidth: false
+                onClicked: {
+                    file_dialog.mode = CustomFileDialog.Mode.Save;
+                    file_dialog.selectedEntryName = "combat-state.json";
+                    file_dialog.open();
                 }
             }
 

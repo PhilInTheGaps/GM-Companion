@@ -1,9 +1,9 @@
-#ifndef COMBATTRACKER_H
-#define COMBATTRACKER_H
+#pragma once
 
 #include "abstracttool.h"
 #include "combatant.h"
 #include "combattrackerstate.h"
+#include "filesystem/results/fileresult.h"
 #include <QFile>
 #include <QList>
 #include <QObject>
@@ -62,6 +62,9 @@ public:
     Q_INVOKABLE void sortByIni(bool keepDelay = false);
     Q_INVOKABLE bool delayTurn(int index);
 
+    Q_INVOKABLE QFuture<void> loadFile(const QString &file);
+    Q_INVOKABLE QFuture<Files::FileResult> saveFile(const QString &file);
+
 public slots:
     void loadData() override;
 
@@ -74,12 +77,10 @@ protected:
     [[nodiscard]] auto getCombatant(int index) -> Combatant *;
 
     void resetDelayForAll() const;
-    void saveToDisk() const;
+    void saveToTempFile() const;
 
     static auto getCacheFile() -> QFile;
 
 private:
     CombatTrackerState m_state;
 };
-
-#endif // COMBATTRACKER_H
