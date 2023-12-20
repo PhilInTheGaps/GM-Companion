@@ -1,4 +1,5 @@
 #include "settings/settingsmanager.h"
+#include "src/services/youtube/youtube.h"
 #include "src/tools/audio/playlist/resolvingaudioplaylist.h"
 #include "testhelper/abstractmocknetworkmanager.h"
 #include "testhelper/abstracttest.h"
@@ -49,6 +50,8 @@ public:
         networkManager = std::make_unique<PlaylistMockNetworkManager>(u"fileserver.mock"_s);
         QDesktopServices::setUrlHandler(u"http"_s, networkManager.get(), "simulateBrowser");
         QDesktopServices::setUrlHandler(u"https"_s, networkManager.get(), "simulateBrowser");
+
+        Services::YouTube::instance()->setNetworkManager(networkManager.get());
 
         m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, networkManager.get());
 
@@ -107,6 +110,36 @@ TEST_F(ResolvingAudioPlaylistTest, CanResolveWebPlaylists)
         EXPECT_FALSE(future.isCanceled());
         EXPECT_FALSE(m_playlist->isEmpty());
         EXPECT_EQ(m_playlist->length(), 6);
+    });
+}
+
+TEST_F(ResolvingAudioPlaylistTest, CanResolveYouTubePlaylist)
+{
+    auto *yt = new AudioFile(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s,
+                             AudioFile::Source::Youtube, u""_s, nullptr);
+    m_playlist->setFiles({yt});
+
+    auto future = m_playlist->resolve();
+    testFuture(future, "resolve()", [this, future]() {
+        EXPECT_FALSE(future.isCanceled());
+        EXPECT_FALSE(m_playlist->isEmpty());
+        EXPECT_GT(m_playlist->length(), 1);
+    });
+}
+
+TEST_F(ResolvingAudioPlaylistTest, CanResolveMixedPlaylist)
+{
+    auto *m3u = new AudioFile(u"/test.m3u"_s, AudioFile::Source::File, u""_s, nullptr);
+    auto *pls = new AudioFile(u"/test.pls"_s, AudioFile::Source::File, u""_s, nullptr);
+    auto *yt = new AudioFile(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s,
+                             AudioFile::Source::Youtube, u""_s, nullptr);
+    m_playlist->setFiles({m3u, pls, yt});
+
+    auto future = m_playlist->resolve();
+    testFuture(future, "resolve()", [this, future]() {
+        EXPECT_FALSE(future.isCanceled());
+        EXPECT_FALSE(m_playlist->isEmpty());
+        EXPECT_GT(m_playlist->length(), 7);
     });
 }
 

@@ -340,8 +340,10 @@ void BufferedAudioPlayer::applyShuffleMode()
 {
     qCDebug(gmAudioBufferedPlayer()) << "Applying shuffle mode" << m_element->mode();
 
-    if (m_element->mode() != AudioElement::Mode::RandomList) return;
+    if (m_element->mode() == AudioElement::Mode::RandomList)
+    {
+        m_playlist->shuffle();
+    }
 
-    m_playlist->shuffle();
     emit playlistChanged();
 }
