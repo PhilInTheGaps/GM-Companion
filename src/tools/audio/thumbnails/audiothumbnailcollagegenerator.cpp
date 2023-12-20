@@ -27,7 +27,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
 {
     if (!element) return QtFuture::makeReadyFuture();
 
-    QPointer<AudioFile> audioFile = element->files().at(index);
+    const QPointer<AudioFile> audioFile = element->files().at(index);
     if (!audioFile) return QtFuture::makeReadyFuture();
 
     const auto callback = [element, audioFile, index, fileCount, failCount, networkManager](const QPixmap &pixmap) {
@@ -107,9 +107,9 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> ele
 
 auto AudioThumbnailCollageGenerator::generateCollageImage(QPointer<AudioElement> element) -> QPixmap
 {
-    if (!element) return QPixmap();
+    if (!element) return {};
 
-    auto thumbnail = element->thumbnail();
+    auto *thumbnail = element->thumbnail();
 
     if (!thumbnail || thumbnail->collageImages().isEmpty()) return {};
 
@@ -125,8 +125,8 @@ auto AudioThumbnailCollageGenerator::generateCollageImage(QPointer<AudioElement>
     {
         if (i > 3) break;
 
-        QRectF target = getTargetRect(thumbnailSize(), static_cast<int>(images.count()), i);
-        QRectF source = getSourceRect(images.at(i).rect(), static_cast<int>(images.count()), i);
+        const QRectF target = getTargetRect(thumbnailSize(), static_cast<int>(images.count()), i);
+        const QRectF source = getSourceRect(images.at(i).rect(), static_cast<int>(images.count()), i);
         painter.drawPixmap(target, images.at(i), source);
     }
     painter.end();
@@ -171,14 +171,23 @@ auto AudioThumbnailCollageGenerator::getTargetRect(QSize imageSize, int imageCou
     return {left, top, width, height};
 }
 
+/**
+ * Calculate which part of the image should be used for the collage.
+ * For non-square images a square is cut out from the center.
+ * If there are more than one and less than 4 images in the collage,
+ * only a vertical bar is taken from the image.
+ */
 auto AudioThumbnailCollageGenerator::getSourceRect(QRect imageRect, int imageCount, int index) -> QRectF
 {
-    if (imageCount > 3) return imageRect;
+    const auto widthHeightDiff = imageRect.width() - imageRect.height();
+    const qreal squareSideLength = imageRect.width() > imageRect.height() ? imageRect.height() : imageRect.width();
 
-    const qreal width = imageRect.width() / imageCount;
-    const qreal height = imageRect.height();
-    const qreal left = width * index;
-    const qreal top = 0;
+    const qreal left = widthHeightDiff > 0 ? widthHeightDiff / 2 : 0;
+    const qreal top = widthHeightDiff > 0 ? 0 : -widthHeightDiff / 2;
 
-    return {left, top, width, height};
+    if (imageCount == 1 || imageCount > 3) return {left, top, squareSideLength, squareSideLength};
+
+    const qreal width = squareSideLength / imageCount;
+
+    return {left + width * index, top, width, squareSideLength};
 }
