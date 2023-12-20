@@ -33,8 +33,10 @@ public slots:
         emit stopAll();
     }
     void setVolume(int linear, int logarithmic) override;
-    void next() override
-    { /* Not Implemented */
+    void next(bool withError) override
+    {
+        /* Not Implemented */
+        Q_UNUSED(withError)
     }
     void again() override
     { /* Not Implemented */

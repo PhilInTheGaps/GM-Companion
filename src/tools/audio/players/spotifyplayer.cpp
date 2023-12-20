@@ -18,6 +18,11 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader &mDReader, QObject *parent)
     connect(&m_metaDataTimer, &QTimer::timeout, this, &SpotifyPlayer::onMetaDataTimerTimeout);
 }
 
+auto SpotifyPlayer::canPlay() -> bool
+{
+    return isSpotifyAvailable();
+}
+
 /// The current song has ended, stop any spotify activity and notify music player
 void SpotifyPlayer::onDurationTimerTimeout()
 {
@@ -42,7 +47,7 @@ auto SpotifyPlayer::isSpotifyAvailable() -> bool
         return false;
     }
 
-    qCWarning(gmAudioSpotify) << "Spotify connection is disabled.";
+    qCWarning(gmAudioSpotify) << "Not connected to Spotify.";
     return false;
 }
 
@@ -153,7 +158,7 @@ void SpotifyPlayer::pausePlay()
 /**
  * @brief Switch to next song in playlist
  */
-void SpotifyPlayer::next()
+void SpotifyPlayer::next(bool /*withError*/)
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 

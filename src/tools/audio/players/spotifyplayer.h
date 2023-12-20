@@ -13,13 +13,15 @@ class SpotifyPlayer : public AudioPlayer
 public:
     SpotifyPlayer(MetaDataReader &mDReader, QObject *parent = nullptr);
 
+    [[nodiscard]] static auto canPlay() -> bool;
+
 public slots:
     void play(const QString &uri);
     void play() override;
     void pause() override;
     void stop() override;
     void pausePlay();
-    void next() override;
+    void next(bool withError) override;
     void again() override;
     void setVolume(int linear, int logarithmic) override;
 

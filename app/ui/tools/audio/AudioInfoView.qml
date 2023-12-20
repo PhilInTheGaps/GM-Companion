@@ -1,8 +1,9 @@
 pragma ComponentBehavior: Bound
-
 import QtQuick
 import QtQuick.Controls
 import src
+import IconFonts
+import common
 
 Item {
     id: audio_info_frame
@@ -67,12 +68,26 @@ Item {
         delegate: Item {
             id: playlist_delegate
 
-            // TODO: type
             required property AudioFile modelData
             required property int index
 
-            width: playlist_view.width
+            width: error_indicator.visible ? playlist_view.width + error_indicator.width : playlist_view.width
             height: playlist_text.height + 10
+
+            Text {
+                id: error_indicator
+
+                visible: playlist_delegate.modelData.hadError
+
+                font: FontAwesome.fontSolid
+                text: FontAwesome.triangleExclamation
+                color: SettingsManager.colors.error
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                verticalAlignment: Text.AlignVCenter
+            }
 
             Text {
                 id: playlist_text
@@ -83,6 +98,7 @@ Item {
                 font.pointSize: 10
                 anchors.centerIn: parent
                 width: parent.width - 10
+                leftPadding: error_indicator.visible ? error_indicator.width + error_indicator.anchors.leftMargin : 0
             }
 
             ToolTip {

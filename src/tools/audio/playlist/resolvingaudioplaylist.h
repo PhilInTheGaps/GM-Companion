@@ -14,9 +14,9 @@ public:
 
 private:
     auto unwrapEntries() -> QFuture<void>;
-    auto unwrapPlaylistFile(qsizetype index, const AudioFile &file) -> QFuture<void>;
-    auto unwrapSpotify(qsizetype index, const AudioFile &file) -> QFuture<void>;
-    auto unwrapYouTube(qsizetype index, const AudioFile &file) -> QFuture<void>;
+    auto unwrapPlaylistFile(qsizetype index, AudioFile &file) -> QFuture<void>;
+    auto unwrapSpotify(qsizetype index, AudioFile &file) -> QFuture<void>;
+    auto unwrapYouTube(qsizetype index, AudioFile &file) -> QFuture<void>;
 
     void loadTitles();
     void loadSpotifyTitles(const QList<AudioFile *> &tracks) const;

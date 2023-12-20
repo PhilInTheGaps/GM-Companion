@@ -31,7 +31,7 @@ public slots:
     virtual void stop() = 0;
     virtual void setVolume(int linear, int logarithmic) = 0;
     virtual void again() = 0;
-    virtual void next() = 0;
+    virtual void next(bool withError) = 0;
 
 protected:
     static auto normalizeVolume(int volume) -> float;

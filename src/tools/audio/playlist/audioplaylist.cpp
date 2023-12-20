@@ -87,3 +87,13 @@ void AudioPlaylist::clear()
 {
     m_files.clear();
 }
+
+auto AudioPlaylist::hasElementsWithoutErrors() const -> bool
+{
+    foreach (const auto *file, m_files)
+    {
+        if (!file->hadError()) return true;
+    }
+
+    return false;
+}

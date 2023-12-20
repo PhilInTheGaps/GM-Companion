@@ -38,7 +38,7 @@ auto ResolvingAudioPlaylist::resolve() -> QFuture<void>
 auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
 {
     QList<QFuture<void>> futures;
-    const AudioFile *audioFile = nullptr;
+    AudioFile *audioFile = nullptr;
 
     for (qsizetype i = 0; i < length(); i++)
     {
@@ -73,12 +73,13 @@ auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
     });
 }
 
-auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile &file) -> QFuture<void>
+auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, AudioFile &file) -> QFuture<void>
 {
-    auto callback = [this, index](const QByteArray &data) {
+    auto callback = [this, index, &file](const QByteArray &data) {
         if (data.isEmpty())
         {
             qCWarning(gmAudioPlaylistResolving()) << "Error: File is empty!";
+            file.hadError(true);
             return;
         }
 
@@ -86,6 +87,7 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
         if (playlist->isEmpty())
         {
             qCWarning(gmAudioPlaylistResolving()) << "Playlist is empty";
+            file.hadError(true);
             return;
         }
 
@@ -116,11 +118,17 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, const AudioFile
     }
 }
 
-auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &file) -> QFuture<void>
+auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, AudioFile &file) -> QFuture<void>
 {
     const auto uri = SpotifyUtils::makeUri(file.url());
     const auto type = SpotifyUtils::getUriType(uri);
     const auto id = SpotifyUtils::getIdFromUri(uri);
+
+    if (!Spotify::instance()->connected())
+    {
+        file.hadError(true);
+        return QtFuture::makeReadyFuture();
+    }
 
     if (!SpotifyUtils::isContainerType(type)) return QtFuture::makeReadyFuture();
 
@@ -160,7 +168,7 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, const AudioFile &fil
     }
 }
 
-auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, const AudioFile &file) -> QFuture<void>
+auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, AudioFile &file) -> QFuture<void>
 {
     const PlaylistId id(file.url());
     if (!id.isValid()) return QtFuture::makeReadyFuture();
@@ -177,7 +185,8 @@ auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, const AudioFile &fil
                 files << new AudioFile(video.id.toUrl(), AudioFile::Source::Youtube, video.title, &m_fileParent);
             }
             replace(index, files);
-        });
+        })
+        .onCanceled([&file]() { file.hadError(true); });
 }
 
 void ResolvingAudioPlaylist::loadTitles()

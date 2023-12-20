@@ -38,6 +38,12 @@ void MetaDataReader::setMetaData(QMediaMetaData::Key key, const QVariant &value)
     case QMediaMetaData::CoverArtImage: {
         if (m_coverFile) m_coverFile->deleteLater();
 
+        if (value.value<QImage>().isNull())
+        {
+            m_metaData.cover({});
+            break;
+        }
+
         m_coverFile = std::make_unique<QTemporaryFile>();
 
         if (m_coverFile->open())
@@ -144,7 +150,7 @@ void MetaDataReader::loadMetaData(const QString &path, const QByteArray &data)
 
     if (auto artist = tag->artist(); !artist.isEmpty())
     {
-        m_metaData.artist(QString::fromStdString(artist.to8Bit(true)).split(", "));
+        m_metaData.artist(QString::fromStdString(artist.to8Bit(true)).split(", "_L1));
     }
 
     if (auto album = tag->album(); !album.isEmpty())

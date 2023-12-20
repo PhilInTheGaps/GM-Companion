@@ -42,7 +42,7 @@ public slots:
     void stop() override;
     void setVolume(int linear, int logarithmic) override;
     void again() override;
-    void next() override;
+    void next(bool withError) override;
 
 signals:
     void playlistChanged();

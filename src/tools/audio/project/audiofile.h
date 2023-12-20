@@ -37,6 +37,7 @@ public:
     AUTO_PROPERTY(QString, title)
     AUTO_PROPERTY_VAL(Source, source)
     AUTO_PROPERTY_VAL2(bool, missing, false)
+    AUTO_PROPERTY_VAL2(bool, hadError, false)
     Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY urlChanged)
 };
 

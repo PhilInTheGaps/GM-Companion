@@ -81,13 +81,19 @@ void MusicPlayer::handleUnsupportedMediaSource(const AudioFile &file)
         break;
     default:
         qCCritical(gmAudioMusic()) << "loadMedia() is not implemented for type" << file.source();
-        next();
+        next(true);
         break;
     }
 }
 
 void MusicPlayer::loadSpotifyFile(const AudioFile &file)
 {
+    if (!SpotifyPlayer::canPlay())
+    {
+        next(true);
+        return;
+    }
+
     m_spotifyPlayer.play(file.url());
     state(State::Playing);
 }
@@ -95,7 +101,7 @@ void MusicPlayer::loadSpotifyFile(const AudioFile &file)
 void MusicPlayer::onSpotifySongEnded()
 {
     qCDebug(gmAudioMusic()) << "Spotify song ended, starting next song ...";
-    next();
+    next(false);
 }
 
 void MusicPlayer::onSpotifyStateChanged(State state)

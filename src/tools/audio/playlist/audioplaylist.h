@@ -37,6 +37,8 @@ public:
     void shuffle();
     void clear();
 
+    [[nodiscard]] auto hasElementsWithoutErrors() const -> bool;
+
 private:
     QList<AudioFile *> m_files;
     Type m_type = Type::Undefined;

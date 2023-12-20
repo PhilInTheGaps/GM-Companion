@@ -185,7 +185,7 @@ void AudioTool::next()
 {
     if (m_musicElementType == AudioElement::Type::Music)
     {
-        musicPlayer.next();
+        musicPlayer.next(false);
     }
 }
 

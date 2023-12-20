@@ -53,7 +53,7 @@ void BufferedAudioPlayer::setIndex(qsizetype index)
         }
         else
         {
-            next();
+            next(true);
         }
     }
 }
@@ -110,14 +110,14 @@ auto BufferedAudioPlayer::loadPlaylist() -> QFuture<void>
 void BufferedAudioPlayer::handleUnsupportedMediaSource(const AudioFile &file)
 {
     qCWarning(gmAudioBufferedPlayer()) << "Media type" << file.source() << "is currently not supported.";
-    next();
+    next(true);
 }
 
 void BufferedAudioPlayer::onFileReceived(const Files::FileDataResult &result)
 {
     if (!result.success() || result.data().isEmpty())
     {
-        next();
+        next(true);
         return;
     }
 
@@ -149,8 +149,6 @@ void BufferedAudioPlayer::stop()
 
     m_mediaPlayer.stop();
     state(AudioPlayer::State::Stopped);
-
-    m_playlist->clear();
 }
 
 void BufferedAudioPlayer::setVolume(int linear, int logarithmic)
@@ -164,12 +162,27 @@ void BufferedAudioPlayer::again()
     m_mediaPlayer.setPosition(0);
 }
 
-void BufferedAudioPlayer::next()
+void BufferedAudioPlayer::next(bool withError)
 {
     if (!m_element || m_playlist->isEmpty())
     {
         stop();
         return;
+    }
+
+    if (withError)
+    {
+        auto *file = m_playlist->at(playlistIndex());
+        if (file)
+        {
+            file->hadError(true);
+        }
+
+        if (!m_playlist->hasElementsWithoutErrors())
+        {
+            stop();
+            return;
+        }
     }
 
     // Complete random
@@ -201,7 +214,16 @@ void BufferedAudioPlayer::next()
 void BufferedAudioPlayer::onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState)
 {
     qCDebug(gmAudioBufferedPlayer) << "Media player playback state changed:" << newState;
-    if (newState == QMediaPlayer::PlayingState) state(State::Playing);
+    if (newState == QMediaPlayer::PlayingState)
+    {
+        state(State::Playing);
+
+        auto *file = m_playlist->at(playlistIndex());
+        if (file)
+        {
+            file->hadError(false);
+        }
+    }
 }
 
 void BufferedAudioPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
@@ -212,7 +234,7 @@ void BufferedAudioPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
     {
     case QMediaPlayer::EndOfMedia:
         qCDebug(gmAudioBufferedPlayer()) << "End of media was reached, playing next file ...";
-        next();
+        next(false);
         break;
     case QMediaPlayer::BufferingMedia:
         state(State::Loading);
@@ -234,7 +256,7 @@ void BufferedAudioPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, 
 
     if (error != QMediaPlayer::NoError)
     {
-        next();
+        next(true);
     }
 }
 
@@ -244,7 +266,7 @@ void BufferedAudioPlayer::startPlaying()
 
     if (m_element->mode() == AudioElement::Mode::Random)
     {
-        next();
+        next(false);
         return;
     }
 
@@ -298,6 +320,13 @@ void BufferedAudioPlayer::loadWebFile(const QString &url)
     m_mediaPlayer.setSource(QUrl(url));
     m_mediaPlayer.play();
     m_audioOutput.setMuted(false);
+
+    QMediaMetaData metaData;
+    metaData.insert(QMediaMetaData::Key::Title, "-");
+    metaData.insert(QMediaMetaData::Key::Author, "-");
+    metaData.insert(QMediaMetaData::Key::AlbumTitle, "-");
+    metaData.insert(QMediaMetaData::Key::CoverArtImage, QImage());
+    emit metaDataChanged(metaData);
 }
 
 void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
@@ -305,7 +334,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
     const Services::VideoId id(file.url());
     if (!id.isValid())
     {
-        next();
+        next(true);
         return;
     }
 
@@ -314,7 +343,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
         .then([this, &file](const Services::YouTubeVideo &video) {
             if (video.audioStreamUrl.isEmpty())
             {
-                next();
+                next(true);
                 return;
             }
 
@@ -333,7 +362,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
                     emit metaDataChanged(metaData);
                 });
         })
-        .onCanceled([this]() { next(); });
+        .onCanceled([this]() { next(true); });
 }
 
 void BufferedAudioPlayer::applyShuffleMode()
