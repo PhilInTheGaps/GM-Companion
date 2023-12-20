@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QDir>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QObject>
 #include <QSettings>
 #include <QVariant>
@@ -46,11 +48,14 @@ protected:
 
 private:
     QSettings m_settings = QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+    QMutex m_settingsMutex;
 };
 
 template <typename T>
 auto AbstractSettingsManager::get(QAnyStringView setting, const T &defaultValue, QAnyStringView group) -> T
 {
+    const QMutexLocker lock(&m_settingsMutex);
+
     m_settings.beginGroup(group);
     QVariant variant = m_settings.value(setting, defaultValue);
     m_settings.endGroup();
@@ -64,6 +69,8 @@ template <typename T> auto AbstractSettingsManager::get(const Request<T> &reques
 
 template <typename T> void AbstractSettingsManager::set(QAnyStringView setting, const T &value, QAnyStringView group)
 {
+    const QMutexLocker lock(&m_settingsMutex);
+
     m_settings.beginGroup(group);
     m_settings.setValue(setting, value);
     m_settings.endGroup();
