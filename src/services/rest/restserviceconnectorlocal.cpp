@@ -93,6 +93,17 @@ void RESTServiceConnectorLocal::disconnectService()
 
 void RESTServiceConnectorLocal::sendRequest(RestRequest &&container, QPromise<RestReply> &&promise)
 {
+    if (QThread::currentThread() != this->thread())
+    {
+        QMetaObject::invokeMethod(
+            this,
+            [this, container = std::move(container), promise = std::move(promise)]() mutable {
+                sendRequest(std::move(container), std::move(promise));
+            },
+            Qt::ConnectionType::QueuedConnection);
+        return;
+    }
+
     auto *requestor = makeRequestor();
     auto request = container.request();
 
