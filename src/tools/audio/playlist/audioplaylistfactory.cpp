@@ -14,7 +14,7 @@ auto AudioPlaylistFactory::build(const QByteArray &data, QObject *parent) -> std
     case AudioPlaylist::Type::pls:
         return pls(data, parent);
     default:
-        return std::unique_ptr<AudioPlaylist>();
+        return {};
     }
 }
 

@@ -37,7 +37,7 @@ auto PlaylistsAPI::getPlaylist(const QString &id, Options options) -> QFuture<Sp
             return {};
         }
 
-        return QtFuture::makeReadyFuture(SpotifyPlaylist::fromJson(reply.data()));
+        return QtFuture::makeReadyValueFuture(SpotifyPlaylist::fromJson(reply.data()));
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -72,7 +72,7 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id, Options options) -> QFut
         {
             return getPlaylistTracks(std::move(tracklist), options);
         }
-        return QtFuture::makeReadyFuture(tracklist);
+        return QtFuture::makeReadyValueFuture(tracklist);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -88,7 +88,7 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, Options optio
         if (reply.hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply.errorText();
-            return QtFuture::makeReadyFuture(tracklist);
+            return QtFuture::makeReadyValueFuture(tracklist);
         }
 
         tracklist.append(SpotifyTrackList::fromJson(reply.data()));
@@ -96,7 +96,7 @@ auto PlaylistsAPI::getPlaylistTracks(SpotifyTrackList &&tracklist, Options optio
         {
             return getPlaylistTracks(std::move(tracklist), options);
         }
-        return QtFuture::makeReadyFuture(tracklist);
+        return QtFuture::makeReadyValueFuture(tracklist);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)

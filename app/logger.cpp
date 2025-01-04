@@ -41,11 +41,11 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {
-        std::cout << line.toStdString() << std::endl;
+        std::cout << line.toStdString() << '\n';
     }
     else
     {
-        std::cerr << line.toStdString() << std::endl;
+        std::cerr << line.toStdString() << '\n';
     }
 
     if (type != QtDebugMsg)

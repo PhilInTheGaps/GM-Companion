@@ -14,7 +14,7 @@ auto WebImageLoader::loadImageAsync(const QString &url, QNetworkAccessManager *n
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(url, &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     // Load from url

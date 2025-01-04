@@ -77,7 +77,7 @@ void ShopEditor::onItemFilesFound(Files::FileListResult &&result)
             QList<ItemGroup *> groups = {};
             groups.reserve(results.size());
 
-            foreach (const auto &result, results)
+            for (const auto &result : results)
             {
                 if (!result.success()) continue;
 

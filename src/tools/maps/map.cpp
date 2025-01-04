@@ -62,7 +62,7 @@ void Map::loadMarkers()
 
                 auto markers = QJsonDocument::fromJson(dataResult.data()).object()["markers"_L1].toArray();
 
-                foreach (const auto &marker, markers)
+                for (const auto &marker : markers)
                 {
                     addMarker(new MapMarker(marker.toObject(), this));
                 }

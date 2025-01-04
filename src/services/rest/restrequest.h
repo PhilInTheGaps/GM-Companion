@@ -10,7 +10,7 @@ namespace Services
 class RestRequest
 {
 public:
-    enum class Type
+    enum class Type : std::uint8_t
     {
         GET,
         PUT,

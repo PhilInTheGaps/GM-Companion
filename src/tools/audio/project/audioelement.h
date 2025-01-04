@@ -17,7 +17,7 @@ class AudioElement : public TreeItem
     QML_UNCREATABLE("")
 
 public:
-    enum class Type
+    enum class Type : std::uint8_t
     {
         Music = 0,
         Sound = 1,
@@ -25,7 +25,7 @@ public:
     };
     Q_ENUM(Type)
 
-    enum class Mode
+    enum class Mode : std::uint8_t
     {
         RandomList = 0,
         Random = 1,

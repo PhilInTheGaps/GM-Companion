@@ -5,7 +5,7 @@
 namespace Files
 {
 
-enum class Option
+enum class Option : std::uint8_t
 {
     None = 0,
     AllowCache = 1,

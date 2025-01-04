@@ -36,7 +36,7 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
     // Try to get image from cache
     if (QPixmap image; AudioThumbnailCache::tryGet(id, &image))
     {
-        return QtFuture::makeReadyFuture(image);
+        return QtFuture::makeReadyValueFuture(image);
     }
 
     if (type == SpotifyUtils::SpotifyType::Playlist)

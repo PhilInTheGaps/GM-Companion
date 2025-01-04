@@ -24,7 +24,7 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, Options options) -> 
         QByteArray data;
         if (m_cache.tryGetData(path, data))
         {
-            return QtFuture::makeReadyFuture(FileDataResult(std::move(data)));
+            return QtFuture::makeReadyValueFuture(FileDataResult(std::move(data)));
         }
     }
 
@@ -60,7 +60,7 @@ auto FileAccessNextcloud::createDirThenContinue(const QString &dir, const T1 &ar
 {
     return createDirAsync(dir)
         .then([arg1, arg2, func](FileResult &&result) {
-            if (!result.success()) return QtFuture::makeReadyFuture(std::move(result));
+            if (!result.success()) return QtFuture::makeReadyValueFuture(std::move(result));
             return func(arg1, arg2);
         })
         .unwrap();
@@ -84,7 +84,7 @@ auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data)
                 }
 
                 printError(u"Could not save file %1"_s.arg(path), reply);
-                return QtFuture::makeReadyFuture(FileResult::fromRestReply(reply));
+                return QtFuture::makeReadyValueFuture(FileResult::fromRestReply(reply));
             }
 
             if (!m_cache.createOrUpdateEntry(path, data))
@@ -93,7 +93,7 @@ auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data)
             }
 
             qCDebug(gmFileAccessNextCloud()) << "Successfully saved file" << path;
-            return QtFuture::makeReadyFuture(FileResult(true));
+            return QtFuture::makeReadyValueFuture(FileResult(true));
         })
         .unwrap();
 }
@@ -119,7 +119,7 @@ auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPa
                 }
 
                 printError(u"Could not move file %1 to %2"_s.arg(oldPath, newPath), reply);
-                return QtFuture::makeReadyFuture(FileResult::fromRestReply(reply));
+                return QtFuture::makeReadyValueFuture(FileResult::fromRestReply(reply));
             }
 
             if (!m_cache.moveEntry(oldPath, newPath))
@@ -128,7 +128,7 @@ auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPa
             }
 
             qCDebug(gmFileAccessNextCloud()) << "Successfully moved file" << oldPath << "to" << newPath;
-            return QtFuture::makeReadyFuture(FileResult(true));
+            return QtFuture::makeReadyValueFuture(FileResult(true));
         })
         .unwrap();
 }
@@ -144,13 +144,13 @@ auto FileAccessNextcloud::deleteAsync(const QString &path) -> QFuture<FileResult
             if (reply.hasError())
             {
                 printError(u"Could not delete file/folder %1"_s.arg(path), reply);
-                return QtFuture::makeReadyFuture(FileResult::fromRestReply(reply));
+                return QtFuture::makeReadyValueFuture(FileResult::fromRestReply(reply));
             }
 
             m_cache.removeEntry(path);
 
             qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
-            return QtFuture::makeReadyFuture(FileResult(true));
+            return QtFuture::makeReadyValueFuture(FileResult(true));
         })
         .unwrap();
 }
@@ -177,7 +177,7 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
                 }
 
                 printError(u"Could not copy %1 to %2: %3 %4"_s.arg(path), reply);
-                return QtFuture::makeReadyFuture(FileResult::fromRestReply(reply));
+                return QtFuture::makeReadyValueFuture(FileResult::fromRestReply(reply));
             }
 
             if (!m_cache.copyEntry(path, copy))
@@ -187,7 +187,7 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
             }
 
             qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
-            return QtFuture::makeReadyFuture(FileResult(true));
+            return QtFuture::makeReadyValueFuture(FileResult(true));
         })
         .unwrap();
 }
@@ -292,7 +292,7 @@ auto FileAccessNextcloud::checkAsync(const QString &path, Options options) -> QF
     // Check cache first
     if (options.testFlag(Option::AllowCache) && m_cache.checkEntry(path))
     {
-        return QtFuture::makeReadyFuture(FileCheckResult(path, true));
+        return QtFuture::makeReadyValueFuture(FileCheckResult(path, true));
     }
 
     // If file is not in cache or cache is outdated, fetch from web

@@ -230,7 +230,7 @@ auto RESTServiceConnector::wasRateLimitReached(QNetworkReply::NetworkError error
 
         if (errorObject.contains("errors"_L1))
         {
-            foreach (const auto &entry, errorObject["errors"_L1].toArray())
+            for (const auto &entry : errorObject["errors"_L1].toArray())
             {
                 return entry["reason"_L1].toString() == "userRateLimitExceeded"_L1;
             }

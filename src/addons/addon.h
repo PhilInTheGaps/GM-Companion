@@ -13,7 +13,7 @@ class Addon : public QObject
     QML_UNCREATABLE("")
 
 public:
-    enum class Type
+    enum class Type : std::uint8_t
     {
         Folder,
         Archive

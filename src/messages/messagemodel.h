@@ -13,7 +13,7 @@ class MessageModel : public Common::CustomSharedPtrListModel<Message>
 public:
     using CustomSharedPtrListModel::CustomSharedPtrListModel;
 
-    enum class Roles
+    enum class Roles : std::uint16_t
     {
         Timestamp = Qt::UserRole,
         Type = Qt::UserRole + 1,

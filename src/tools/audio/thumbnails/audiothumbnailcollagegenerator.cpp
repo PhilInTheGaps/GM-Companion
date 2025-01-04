@@ -12,7 +12,7 @@ auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> ele
     // Check if collage can be generated
     if (!canMakeCollage(element))
     {
-        return QtFuture::makeReadyFuture(AudioThumbnailGenerator::getPlaceholderImage(element));
+        return QtFuture::makeReadyValueFuture(AudioThumbnailGenerator::getPlaceholderImage(element));
     }
 
     // Get pixmaps to use in the collage
@@ -25,13 +25,13 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
                                                                 int fileCount, int failCount,
                                                                 QNetworkAccessManager *networkManager) -> QFuture<void>
 {
-    if (!element) return QtFuture::makeReadyFuture();
+    if (!element) return QtFuture::makeReadyVoidFuture();
 
     const QPointer<AudioFile> audioFile = element->files().at(index);
-    if (!audioFile) return QtFuture::makeReadyFuture();
+    if (!audioFile) return QtFuture::makeReadyVoidFuture();
 
     const auto callback = [element, audioFile, index, fileCount, failCount, networkManager](const QPixmap &pixmap) {
-        if (!element) return QtFuture::makeReadyFuture(); // element has possibly been deleted by now
+        if (!element) return QtFuture::makeReadyVoidFuture(); // element has possibly been deleted by now
 
         const auto audioFileCount = element->files().length();
 
@@ -62,7 +62,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(QPointer<AudioEl
             }
         }
 
-        return QtFuture::makeReadyFuture();
+        return QtFuture::makeReadyVoidFuture();
     };
 
     return getCoverArtAsync(element, audioFile, networkManager).then(callback).unwrap();
@@ -83,7 +83,7 @@ auto AudioThumbnailCollageGenerator::canMakeCollage(QPointer<AudioElement> eleme
 auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> element, QPointer<AudioFile> audioFile,
                                                       QNetworkAccessManager *networkManager) -> QFuture<QPixmap>
 {
-    if (!element || !audioFile) return QtFuture::makeReadyFuture(QPixmap());
+    if (!element || !audioFile) return QtFuture::makeReadyValueFuture(QPixmap());
 
     switch (audioFile->source())
     {
@@ -98,10 +98,10 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> ele
         if (const auto id = Services::PlaylistId(audioFile->url()); id.isValid())
             return YouTubeImageLoader::loadImageAsync(id, networkManager);
 
-        return QtFuture::makeReadyFuture(QPixmap());
+        return QtFuture::makeReadyValueFuture(QPixmap());
     }
     default:
-        return QtFuture::makeReadyFuture(QPixmap());
+        return QtFuture::makeReadyValueFuture(QPixmap());
     }
 }
 

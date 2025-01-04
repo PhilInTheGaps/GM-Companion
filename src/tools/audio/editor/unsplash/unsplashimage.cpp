@@ -48,7 +48,7 @@ void ImageListModel::clear()
     }
 }
 
-void ImageListModel::setElements(QList<UnsplashImage *> elements)
+void ImageListModel::setElements(const QList<UnsplashImage *> &elements)
 {
     clear();
 

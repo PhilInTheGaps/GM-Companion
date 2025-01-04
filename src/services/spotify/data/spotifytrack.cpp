@@ -40,7 +40,7 @@ auto SpotifyTrack::fromJsonArray(const QJsonArray &json) -> std::vector<SpotifyT
     std::vector<SpotifyTrack> tracks;
     tracks.reserve(json.count());
 
-    foreach (const auto &item, json)
+    for (const auto &item : json)
     {
         tracks.push_back(SpotifyTrack::fromJson(item.toObject()));
     }

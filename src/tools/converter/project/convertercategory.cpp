@@ -18,7 +18,7 @@ ConverterCategory::ConverterCategory(const QJsonObject &json, QObject *parent)
     const auto units = json["units"_L1].toArray();
     a_units.reserve(units.size());
 
-    foreach (const auto &unit, units)
+    for (const auto &unit : units)
     {
         a_units << new ConverterUnit(unit.toObject(), this);
     }

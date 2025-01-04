@@ -71,7 +71,7 @@ public:
     /// Get information about a user’s available devices
     [[nodiscard]] auto devices() -> QFuture<SpotifyDeviceList>;
 
-    enum class SpotifyRepeatMode
+    enum class SpotifyRepeatMode : std::uint8_t
     {
         /// Repeat current track
         Track,

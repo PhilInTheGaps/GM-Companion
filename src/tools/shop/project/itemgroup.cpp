@@ -27,12 +27,12 @@ ItemGroup::ItemGroup(const QString &name, const QJsonObject &json, QObject *pare
     const auto categories = json["categories"_L1].toArray();
     a_categories.reserve(categories.count());
 
-    foreach (const auto &category, categories)
+    for (const auto &category : categories)
     {
         auto categoryName = category["name"_L1].toString();
         a_categories.append(categoryName);
 
-        foreach (const auto &item, category["items"_L1].toArray())
+        for (const auto &item : category["items"_L1].toArray())
         {
             a_items.append(new Item(categoryName, item.toObject(), parent));
         }

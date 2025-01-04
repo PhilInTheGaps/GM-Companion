@@ -44,7 +44,7 @@ void UnsplashParser::parse()
 
         m_doc = QJsonDocument::fromJson(reply->readAll());
 
-        foreach (auto o, m_doc.array())
+        for (auto o : m_doc.array())
         {
             auto *image = new UnsplashImage;
             image->id(o["id"_L1].toString());
@@ -53,7 +53,7 @@ void UnsplashParser::parse()
 
             QStringList tags;
 
-            foreach (auto t, o["tags"_L1].toArray())
+            for (auto t : o["tags"_L1].toArray())
             {
                 tags.append(t.toString());
             }

@@ -13,7 +13,7 @@ class AudioPlayer : public QObject
 public:
     using QObject::QObject;
 
-    enum class State
+    enum class State : std::uint8_t
     {
         Initialized,
         Playing,

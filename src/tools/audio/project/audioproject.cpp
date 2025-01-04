@@ -37,7 +37,7 @@ AudioProject::AudioProject(QJsonObject object, QObject *parent)
     const auto categories = object["categories"_L1].toArray();
     a_categories.reserve(categories.size());
 
-    foreach (const auto &categoryJson, categories)
+    for (const auto &categoryJson : categories)
     {
         auto *category = new AudioCategory(categoryJson.toObject(), name(), this);
         prepareCategory(category);

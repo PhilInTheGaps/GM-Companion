@@ -40,7 +40,7 @@ ShopProject::ShopProject(const QJsonObject &json, QObject *parent)
 
     auto categoryArray = json["categories"_L1].toArray();
 
-    foreach (const auto &categoryJson, categoryArray)
+    for (const auto &categoryJson : categoryArray)
     {
         const auto categoryObject = categoryJson.toObject();
 
@@ -48,7 +48,7 @@ ShopProject::ShopProject(const QJsonObject &json, QObject *parent)
         auto shopArray = categoryObject["shops"_L1].toArray();
         shops.reserve(shopArray.size());
 
-        foreach (const auto &shop, shopArray)
+        for (const auto &shop : shopArray)
         {
             shops.append(new ItemShop(shop.toObject(), this));
         }

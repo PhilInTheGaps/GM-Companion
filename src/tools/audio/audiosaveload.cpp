@@ -126,7 +126,7 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
     if (!project)
     {
         qCWarning(gmAudioSaveLoad()) << "Could not save project: project is null!";
-        return QtFuture::makeReadyFuture(false);
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     qCDebug(gmAudioSaveLoad()) << "Saving project:" << project->name() << "...";
@@ -134,7 +134,7 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
     if (project->isSaved())
     {
         qCDebug(gmAudioSaveLoad()) << "Project does not need to be saved, no changes were made.";
-        return QtFuture::makeReadyFuture(true);
+        return QtFuture::makeReadyValueFuture(true);
     }
 
     auto data = QJsonDocument(project->toJson()).toJson(QJsonDocument::Indented);
@@ -168,12 +168,12 @@ auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &fil
 
     return future
         .then([filePath, data, project](const FileResult &result) {
-            if (!result.success()) return QtFuture::makeReadyFuture(false);
+            if (!result.success()) return QtFuture::makeReadyValueFuture(false);
 
             project->wasRenamed(false);
             return saveProject(project, filePath, data);
         })
-        .onCanceled([]() { return QtFuture::makeReadyFuture(false); })
+        .onCanceled([]() { return QtFuture::makeReadyValueFuture(false); })
         .unwrap();
 }
 
@@ -181,7 +181,7 @@ auto AudioSaveLoad::deleteProject(const AudioProject *project, const QString &fo
 {
     if (!project)
     {
-        return QtFuture::makeReadyFuture(false);
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     auto filePath = getProjectFolder(folder) + "/" + project->name() + PROJECT_FILE_SUFFIX;

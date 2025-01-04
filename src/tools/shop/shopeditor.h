@@ -26,7 +26,7 @@ class ShopEditor : public BaseShopTool
 public:
     explicit ShopEditor(QObject *parent = nullptr);
 
-    enum class Type
+    enum class Type : std::uint8_t
     {
         Project,
         Category,

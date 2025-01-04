@@ -11,7 +11,7 @@ class SpotifyUtils
     Q_GADGET
 
 public:
-    enum class SpotifyType
+    enum class SpotifyType : std::uint8_t
     {
         Album,
         Playlist,

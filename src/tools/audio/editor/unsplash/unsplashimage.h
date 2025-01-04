@@ -47,7 +47,7 @@ public:
     }
     [[nodiscard]] auto data(const QModelIndex &index, int role) const -> QVariant override;
 
-    void setElements(QList<UnsplashImage *> elements);
+    void setElements(const QList<UnsplashImage *> &elements);
     void clear();
 
 public slots:

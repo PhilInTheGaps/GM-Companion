@@ -32,14 +32,14 @@ struct SpotifyPlaybackState
     static auto fromJson(const QJsonDocument &json) -> SpotifyPlaybackState;
     static auto fromJson(const QJsonObject &json) -> SpotifyPlaybackState;
 
-    enum class RepeatState
+    enum class RepeatState : std::uint8_t
     {
         Off,
         Track,
         Context
     };
 
-    enum class ShuffleState
+    enum class ShuffleState : std::uint8_t
     {
         On,
         Off

@@ -26,7 +26,7 @@ class Character : public QObject
     AUTO_PROPERTY(QString, folder)
 
 public:
-    enum class Type
+    enum class Type : std::uint8_t
     {
         Image,
         Pdf,

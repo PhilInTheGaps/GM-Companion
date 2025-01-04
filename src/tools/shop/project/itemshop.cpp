@@ -35,7 +35,7 @@ ItemShop::ItemShop(const QJsonObject &json, QObject *parent) : BaseProjectItem(j
     auto itemArray = json["items"_L1].toArray();
     a_items.reserve(itemArray.size());
 
-    foreach (const auto &item, itemArray)
+    for (const auto &item : itemArray)
     {
         a_items.append(new Item(item.toObject(), this));
     }

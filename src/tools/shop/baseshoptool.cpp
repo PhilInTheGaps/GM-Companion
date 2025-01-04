@@ -43,7 +43,7 @@ void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResul
 {
     qCDebug(gmShopsBaseTool()) << "Loading" << results.size() << "projects ...";
 
-    foreach (const auto &result, results)
+    for (const auto &result : results)
     {
         a_projects.append(new ShopProject(QJsonDocument::fromJson(result.data()).object(), this));
     }

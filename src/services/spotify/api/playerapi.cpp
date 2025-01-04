@@ -187,7 +187,7 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
             return {};
         }
 
-        return QtFuture::makeReadyFuture(SpotifyPlaybackState::fromJson(QJsonDocument::fromJson(reply.data())));
+        return QtFuture::makeReadyValueFuture(SpotifyPlaybackState::fromJson(QJsonDocument::fromJson(reply.data())));
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated).then(callback).unwrap();
@@ -224,7 +224,7 @@ auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QS
             return {};
         }
 
-        return QtFuture::makeReadyFuture(SpotifyCurrentTrack::fromJson(reply.data()));
+        return QtFuture::makeReadyValueFuture(SpotifyCurrentTrack::fromJson(reply.data()));
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated).then(callback).unwrap();

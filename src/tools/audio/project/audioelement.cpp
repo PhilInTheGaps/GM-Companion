@@ -29,7 +29,7 @@ AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &
     a_thumbnail = new AudioThumbnail(m_path, this);
     a_thumbnail->setRelativeUrl(object["icon"_L1].toString());
 
-    foreach (const auto &file, object.value("files"_L1).toArray())
+    for (const auto &file : object.value("files"_L1).toArray())
     {
         m_files.append(new AudioFile(file.toObject(), this));
     }

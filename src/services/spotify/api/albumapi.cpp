@@ -44,7 +44,7 @@ auto AlbumAPI::getAlbum(const QString &id, Options options) -> QFuture<SpotifyAl
             return getAlbumTracks(std::move(album), options);
         }
 
-        return QtFuture::makeReadyFuture(album);
+        return QtFuture::makeReadyValueFuture(album);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -79,7 +79,7 @@ auto AlbumAPI::getAlbumTracks(const QString &id, Options options) -> QFuture<Spo
         {
             return getAlbumTracks(std::move(tracklist), options);
         }
-        return QtFuture::makeReadyFuture(tracklist);
+        return QtFuture::makeReadyValueFuture(tracklist);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -89,7 +89,7 @@ auto AlbumAPI::getAlbumTracks(const QString &id, Options options) -> QFuture<Spo
 
 auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<SpotifyAlbum>
 {
-    if (album.tracks.next.isEmpty()) return QtFuture::makeReadyFuture(album);
+    if (album.tracks.next.isEmpty()) return QtFuture::makeReadyValueFuture(album);
 
     const QUrl url(album.tracks.next);
 
@@ -97,7 +97,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
-            return QtFuture::makeReadyFuture(album);
+            return QtFuture::makeReadyValueFuture(album);
         }
 
         album.tracks.append(SpotifyTrackList::fromJson(reply.data()));
@@ -105,7 +105,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyAlbum &&album, Options options) -> QFuture<
         {
             return getAlbumTracks(std::move(album), options);
         }
-        return QtFuture::makeReadyFuture(album);
+        return QtFuture::makeReadyValueFuture(album);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -121,7 +121,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, Options options) -> 
         if (reply.hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply.errorText();
-            return QtFuture::makeReadyFuture(tracklist);
+            return QtFuture::makeReadyValueFuture(tracklist);
         }
 
         tracklist.append(SpotifyTrackList::fromJson(reply.data()));
@@ -129,7 +129,7 @@ auto AlbumAPI::getAlbumTracks(SpotifyTrackList &&tracklist, Options options) -> 
         {
             return getAlbumTracks(std::move(tracklist), options);
         }
-        return QtFuture::makeReadyFuture(tracklist);
+        return QtFuture::makeReadyValueFuture(tracklist);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)

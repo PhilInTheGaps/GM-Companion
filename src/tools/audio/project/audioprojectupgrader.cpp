@@ -45,7 +45,7 @@ auto AudioProjectUpgrader::convertScenarios(const QJsonArray &scenarios) -> QJso
 {
     QJsonArray scenariosNew;
 
-    foreach (const auto &scenario, scenarios)
+    for (const auto &scenario : scenarios)
     {
         QJsonObject scenarioNew{{"name", scenario["name"_L1]}};
 
@@ -86,7 +86,7 @@ auto AudioProjectUpgrader::convertMusicElements(const QJsonArray &elements) -> Q
 
         QJsonArray filesNew;
 
-        foreach (const auto &file, element["files"_L1].toArray())
+        for (const auto &file : element["files"_L1].toArray())
         {
             filesNew.append(QJsonObject{{"url", file.toString()}, {"source", 0}});
         }

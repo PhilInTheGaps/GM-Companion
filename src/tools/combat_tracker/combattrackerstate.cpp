@@ -103,7 +103,7 @@ void CombatTrackerState::load(const QJsonDocument &json)
 
     auto state = json.object();
 
-    foreach (auto combatant, state["combatants"_L1].toArray())
+    for (auto combatant : state["combatants"_L1].toArray())
     {
         m_combatants << Combatant::fromJson(combatant.toObject(), this);
     }

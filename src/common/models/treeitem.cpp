@@ -51,7 +51,7 @@ auto TreeItem::childItemsQml() -> QQmlListProperty<TreeItem>
     // the NotePage elements would sometimes only have the properties they inherit
     // from TreeItem, while all other ones would be undefined.
     m_childItems = childItems();
-    return QQmlListProperty(this, &m_childItems);
+    return {this, &m_childItems};
 }
 
 auto TreeItem::creatables() const -> QStringList

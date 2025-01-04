@@ -16,7 +16,7 @@ public:
 
     auto start() -> QFuture<bool> override;
     auto stop() -> bool override;
-    auto hasStarted() const -> bool;
+    [[nodiscard]] auto hasStarted() const -> bool;
 
     void setAsActiveDevice();
 
@@ -32,7 +32,7 @@ private:
     static auto getLibrespotPath() -> QString;
     static constexpr auto getLibrespotBinaryName() -> const char *;
 
-    auto getLibrespotArgs(const QString &username) const -> QStringList;
+    [[nodiscard]] auto getLibrespotArgs(const QString &username) const -> QStringList;
 
     struct LibrespotInfo
     {

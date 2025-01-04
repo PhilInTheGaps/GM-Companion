@@ -36,7 +36,7 @@ auto TracksAPI::getTrack(const QString &id, Options options) -> QFuture<SpotifyT
             return {};
         }
 
-        return QtFuture::makeReadyFuture(SpotifyTrack::fromJson(reply.data()));
+        return QtFuture::makeReadyValueFuture(SpotifyTrack::fromJson(reply.data()));
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)
@@ -59,7 +59,7 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&pr
     -> QFuture<std::vector<SpotifyTrack>>
 {
     auto batch = getNextBatch(ids, previous);
-    if (batch.isEmpty()) return QtFuture::makeReadyFuture(previous);
+    if (batch.isEmpty()) return QtFuture::makeReadyValueFuture(previous);
 
     QUrl url(u"https://api.spotify.com/v1/tracks"_s);
 
@@ -87,7 +87,7 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<SpotifyTrack> &&pr
             return getTracks(ids, std::move(previous), options);
         }
 
-        return QtFuture::makeReadyFuture(previous);
+        return QtFuture::makeReadyValueFuture(previous);
     };
 
     return m_spotify->get(NetworkUtils::makeJsonRequest(url), Services::Option::Authenticated | options)

@@ -114,7 +114,7 @@ auto ResolvingAudioPlaylist::unwrapPlaylistFile(qsizetype index, AudioFile &file
     default:
         qCWarning(gmAudioPlaylistResolving())
             << "Could not expand playlist file" << file.url() << "with source" << file.source();
-        return QtFuture::makeReadyFuture();
+        return QtFuture::makeReadyVoidFuture();
     }
 }
 
@@ -127,10 +127,10 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, AudioFile &file) -> 
     if (!Spotify::instance()->connected())
     {
         file.hadError(true);
-        return QtFuture::makeReadyFuture();
+        return QtFuture::makeReadyVoidFuture();
     }
 
-    if (!SpotifyUtils::isContainerType(type)) return QtFuture::makeReadyFuture();
+    if (!SpotifyUtils::isContainerType(type)) return QtFuture::makeReadyVoidFuture();
 
     const auto callback = [this, index](const SpotifyTrackList &tracklist) {
         QList<AudioFile *> files;
@@ -164,14 +164,14 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, AudioFile &file) -> 
     default:
         qCCritical(gmAudioPlaylistResolving())
             << "loadPlaylistRecursiveSpotify(): not implemented for container type" << (int)type;
-        return QtFuture::makeReadyFuture();
+        return QtFuture::makeReadyVoidFuture();
     }
 }
 
 auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, AudioFile &file) -> QFuture<void>
 {
     const PlaylistId id(file.url());
-    if (!id.isValid()) return QtFuture::makeReadyFuture();
+    if (!id.isValid()) return QtFuture::makeReadyVoidFuture();
 
     return YouTube::instance()
         ->getPlaylistInfoAsync(id, Services::Option::None)

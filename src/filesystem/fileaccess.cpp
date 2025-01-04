@@ -7,7 +7,7 @@ auto FileAccess::multiGetDataAsync(MultiGetHelper<FileDataResult> &&helper, Opti
 {
     if (helper.isDone())
     {
-        return QtFuture::makeReadyFuture(helper.getResults());
+        return QtFuture::makeReadyValueFuture(helper.getResults());
     }
 
     auto next = getDataAsync(helper.getNextPath(), options);
@@ -25,7 +25,7 @@ auto FileAccess::multiCheckAsync(MultiGetHelper<FileCheckResult> &&helper, Optio
 {
     if (helper.isDone())
     {
-        return QtFuture::makeReadyFuture(FileMultiCheckResult(helper.getResults()));
+        return QtFuture::makeReadyValueFuture(FileMultiCheckResult(helper.getResults()));
     }
 
     auto next = checkAsync(helper.getNextPath(), options);

@@ -15,7 +15,7 @@ class NextCloudConnector : public RESTServiceConnector
     Q_OBJECT
 
 public:
-    enum class State
+    enum class State : std::uint8_t
     {
         Connected,
         Connecting,

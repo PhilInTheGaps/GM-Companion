@@ -181,7 +181,7 @@ auto PipedConnector::fetchInstancesFromApiAsync() -> QFuture<bool>
 
         const auto entries = QJsonDocument::fromJson(reply->readAll()).array();
 
-        foreach (const auto &entry, entries)
+        for (const auto &entry : entries)
         {
             m_instances.push_back(PipedInstance{entry["name"_L1].toString(), entry["api_url"_L1].toString(),
                                                 entry["locations"_L1].toString(), entry["cdn"_L1].toBool()});

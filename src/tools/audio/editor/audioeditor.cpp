@@ -40,7 +40,7 @@ void AudioEditor::onFoundProjects(const std::vector<AudioProject *> &projects)
     a_projects.clear();
     a_projects.reserve(projects.size());
 
-    foreach (auto *project, projects)
+    for (auto *project : projects)
     {
         a_projects << project;
 

@@ -39,7 +39,7 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, Aud
     const auto scenarios = object["scenarios"_L1].toArray();
     a_scenarios.reserve(scenarios.size());
 
-    foreach (const auto &scenarioJson, scenarios)
+    for (const auto &scenarioJson : scenarios)
     {
         auto *scenario = new AudioScenario(scenarioJson.toObject(), m_path, this);
         prepareScenario(scenario);

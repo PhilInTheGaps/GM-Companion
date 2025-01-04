@@ -9,7 +9,7 @@
 class AudioPlaylist
 {
 public:
-    enum class Type
+    enum class Type : std::uint8_t
     {
         Undefined,
         m3u,

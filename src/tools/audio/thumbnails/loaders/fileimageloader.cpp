@@ -12,7 +12,7 @@ auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(path, &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     auto future = File::getDataAsync(path, Files::Option::AllowCache | Files::Option::LowPriority);

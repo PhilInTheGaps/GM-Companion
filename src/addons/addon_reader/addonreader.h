@@ -8,7 +8,7 @@
 class AddonReader : public AbstractAddonReader
 {
 public:
-    enum class Feature
+    enum class Feature : std::uint8_t
     {
         None,
         Audio,

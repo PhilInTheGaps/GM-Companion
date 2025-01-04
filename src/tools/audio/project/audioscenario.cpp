@@ -53,28 +53,28 @@ AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, boo
 
     connect(this, &AudioScenario::scenariosChanged, this, &AudioScenario::onScenariosChanged);
 
-    foreach (const auto &elementJson, object["music_elements"_L1].toArray())
+    for (const auto &elementJson : object["music_elements"_L1].toArray())
     {
         auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Music, m_path, this);
         prepareElement(element);
         m_elements.append(element);
     }
 
-    foreach (const auto &elementJson, object["sound_elements"_L1].toArray())
+    for (const auto &elementJson : object["sound_elements"_L1].toArray())
     {
         auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Sound, m_path, this);
         prepareElement(element);
         m_elements.append(element);
     }
 
-    foreach (const auto &elementJson, object["radio_elements"_L1].toArray())
+    for (const auto &elementJson : object["radio_elements"_L1].toArray())
     {
         auto *element = new AudioElement(elementJson.toObject(), AudioElement::Type::Radio, m_path, this);
         prepareElement(element);
         m_elements.append(element);
     }
 
-    foreach (const auto &scenarioJson, object["scenarios"_L1].toArray())
+    for (const auto &scenarioJson : object["scenarios"_L1].toArray())
     {
         auto *scenario = new AudioScenario(scenarioJson.toObject(), m_path, this);
         prepareScenario(scenario);
@@ -176,7 +176,7 @@ auto AudioScenario::elements(bool recursive) const -> QList<AudioElement *>
 
 auto AudioScenario::elementsQml() -> QQmlListProperty<AudioElement>
 {
-    return QQmlListProperty(this, &m_elements);
+    return {this, &m_elements};
 }
 
 /**

@@ -18,7 +18,7 @@ public:
     static auto incrementName(const QString &name) -> QString;
     static auto fileInDir(const QString &fileName, const QString &dir) -> QString;
 
-    enum class MimeType
+    enum class MimeType : std::uint8_t
     {
         Unknown,
         MPEG,

@@ -47,14 +47,14 @@ auto LibrespotController::start() -> QFuture<bool>
     {
         qCWarning(gmLibrespotController()) << "Could not start librespot, username is not set.";
         updateStatus(Status::Type::Error, tr("Error: Username is not set."));
-        return QtFuture::makeReadyFuture(false);
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     if (password.isEmpty())
     {
         qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
         updateStatus(Status::Type::Error, tr("Error: Password is not set."));
-        return QtFuture::makeReadyFuture(false);
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     const auto info = getLibrespotInfo();
@@ -63,7 +63,7 @@ auto LibrespotController::start() -> QFuture<bool>
         qCWarning(gmLibrespotController()) << "Could not get librespot version number.";
         updateStatus(Status::Type::Error, tr("Error: Could not get librespot version number. "
                                              "This probably means that the librespot executable can not be found."));
-        return QtFuture::makeReadyFuture(false);
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     qCDebug(gmLibrespotController()) << QString(info);

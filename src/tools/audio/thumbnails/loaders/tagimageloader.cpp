@@ -20,13 +20,13 @@ Q_LOGGING_CATEGORY(gmAudioTagImageLoader, "gm.audio.thumbnails.loaders.tag")
 auto TagImageLoader::loadImageAsync(const AudioElement *element, const AudioFile *audioFile) -> QFuture<QPixmap>
 {
     // Paranoid pointer check
-    if (!audioFile) return QtFuture::makeReadyFuture(QPixmap());
+    if (!audioFile) return QtFuture::makeReadyValueFuture(QPixmap());
 
     if (audioFile->source() != AudioFile::Source::File)
     {
         qCCritical(gmAudioTagImageLoader())
             << "Can not read image from tags, as audio file" << audioFile->url() << "is not a local file";
-        return QtFuture::makeReadyFuture(QPixmap());
+        return QtFuture::makeReadyValueFuture(QPixmap());
     }
 
     // Resolve file path
@@ -36,7 +36,7 @@ auto TagImageLoader::loadImageAsync(const AudioElement *element, const AudioFile
     // Try to retrieve image from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(path, &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     const auto isLocalFile = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s) == "local"_L1;

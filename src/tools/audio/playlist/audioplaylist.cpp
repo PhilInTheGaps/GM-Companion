@@ -25,7 +25,7 @@ auto AudioPlaylist::files() const -> QList<AudioFile *>
 
 auto AudioPlaylist::filesQml(QObject *parent) -> QQmlListProperty<AudioFile>
 {
-    return QQmlListProperty(parent, &m_files);
+    return {parent, &m_files};
 }
 
 auto AudioPlaylist::type() const -> AudioPlaylist::Type

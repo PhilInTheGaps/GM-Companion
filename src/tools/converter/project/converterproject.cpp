@@ -20,7 +20,7 @@ ConverterProject::ConverterProject(const QJsonObject &json, QObject *parent)
     const auto categories = json["categories"_L1].toArray();
     a_categories.reserve(categories.size());
 
-    foreach (const auto &category, categories)
+    for (const auto &category : categories)
     {
         a_categories << new ConverterCategory(category.toObject(), this);
     }

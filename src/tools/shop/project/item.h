@@ -39,7 +39,7 @@ class ItemModel : public CustomObjectListModel
 public:
     using CustomObjectListModel::CustomObjectListModel;
 
-    enum class Roles
+    enum class Roles : std::uint16_t
     {
         Name = Qt::UserRole,
         Price = Qt::UserRole + 1,

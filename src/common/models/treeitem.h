@@ -13,7 +13,7 @@ class TreeItem : public BaseProjectItem
     QML_UNCREATABLE("")
 
 public:
-    enum class CheckedState
+    enum class CheckedState : std::uint8_t
     {
         Unchecked = 0,
         PartiallyChecked = 1,

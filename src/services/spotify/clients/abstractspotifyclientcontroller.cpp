@@ -21,7 +21,7 @@ AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent
 auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<SpotifyDevice>
 {
     const auto callback = [name](const SpotifyDeviceList &deviceList) {
-        foreach (const auto &device, deviceList.devices)
+        for (const auto &device : deviceList.devices)
         {
             if (device.name == name) return device;
         }

@@ -18,7 +18,7 @@ public:
     {
         QList<T> list;
         list.reserve(from.size());
-        foreach (auto entry, from)
+        for (auto entry : from)
         {
             auto *object = qobject_cast<T>(entry);
             if (object) list.push_back(object);

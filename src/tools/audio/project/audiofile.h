@@ -12,7 +12,7 @@ class AudioFile : public QObject
     QML_UNCREATABLE("")
 
 public:
-    enum class Source
+    enum class Source : std::int8_t
     {
         Unknown = -1,
         File = 0,
