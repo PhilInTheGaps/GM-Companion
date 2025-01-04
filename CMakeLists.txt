@@ -34,6 +34,7 @@ find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Qml Multimedia Network
 find_package(QuaZip-Qt6 REQUIRED)
 find_package(QtKeychain REQUIRED)
 
+qt_policy(SET QTP0004 NEW)
 qt_standard_project_setup(REQUIRES 6.5)
 set(CMAKE_AUTORCC ON) # turn on automatic invocation of the RCC
 add_compile_definitions(QT_DEPRECATED_WARNINGS)
