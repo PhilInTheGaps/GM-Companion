@@ -86,6 +86,8 @@ set(SRC_YOUTUBE
     youtube/youtube.cpp
     youtube/pipedconnector.h
     youtube/pipedconnector.cpp
+    youtube/video.h
+    youtube/playlist.h
     youtube/videoid.h
     youtube/videoid.cpp
     youtube/playlistid.h

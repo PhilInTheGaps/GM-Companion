@@ -54,7 +54,7 @@ auto YouTube::getStreamInfoAsync(const VideoId &id, Options options) -> QFuture<
 
                 if (ok)
                 {
-                    return QtFuture::makeReadyFuture(std::move(video));
+                    return QtFuture::makeReadyValueFuture(std::move(video));
                 }
             }
 
@@ -123,7 +123,7 @@ auto YouTube::parseStreamResponse(const QByteArray &data, const VideoId &id, boo
     auto supportedFileFormats = QMediaFormat().supportedFileFormats(QMediaFormat::ConversionMode::Decode);
     auto supportedAudioCodecs = QMediaFormat().supportedAudioCodecs(QMediaFormat::ConversionMode::Decode);
 
-    foreach (const auto &stream, doc["audioStreams"_L1].toArray())
+    for (const auto &stream : doc["audioStreams"_L1].toArray())
     {
         if (stream["bitrate"_L1].toInt() > bestBitrate)
         {
@@ -145,8 +145,8 @@ auto YouTube::parseStreamResponse(const QByteArray &data, const VideoId &id, boo
     return video;
 }
 
-auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id, Options options, bool &ok)
-    -> QFuture<YouTubePlaylist>
+auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id, Options options,
+                                    bool &ok) -> QFuture<YouTubePlaylist>
 {
     QJsonParseError parseError;
     const auto doc = QJsonDocument::fromJson(data, &parseError);
@@ -157,14 +157,14 @@ auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id
     if (parseError.error != QJsonParseError::NoError)
     {
         ok = false;
-        return QtFuture::makeReadyFuture(std::move(playlist));
+        return QtFuture::makeReadyValueFuture(std::move(playlist));
     }
 
     playlist.title = doc["name"_L1].toString();
     playlist.uploader = doc["uploader"_L1].toString();
     playlist.thumbnailUrl = doc["thumbnailUrl"_L1].toString();
 
-    foreach (const auto &entry, doc["relatedStreams"_L1].toArray())
+    for (const auto &entry : doc["relatedStreams"_L1].toArray())
     {
         playlist.streams.push_back(YouTubeVideo{VideoId(entry["url"_L1].toString()), entry["title"_L1].toString(),
                                                 entry["uploader"_L1].toString(), entry["thumbnailUrl"_L1].toString(),
@@ -179,11 +179,11 @@ auto YouTube::parsePlaylistResponse(const QByteArray &data, const PlaylistId &id
         return continueLoadingOfPlaylist(std::move(playlist), nextpage, options);
     }
 
-    return QtFuture::makeReadyFuture(std::move(playlist));
+    return QtFuture::makeReadyValueFuture(std::move(playlist));
 }
 
-auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QString &nextpage, Options options)
-    -> QFuture<YouTubePlaylist>
+auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QString &nextpage,
+                                        Options options) -> QFuture<YouTubePlaylist>
 {
     const auto path = u"/nextpage/playlists/%1?nextpage=%2"_s.arg(playlist.id.toString(), nextpage);
     const auto request = QNetworkRequest(path);
@@ -193,11 +193,11 @@ auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QStrin
             if (reply.hasError())
             {
                 qCDebug(gmYouTube()) << "Error while retrieving next page of playlist:" << reply.errorText();
-                return QtFuture::makeReadyFuture(std::move(playlist));
+                return QtFuture::makeReadyValueFuture(std::move(playlist));
             }
 
             const auto doc = QJsonDocument::fromJson(reply.data());
-            foreach (const auto &entry, doc["relatedStreams"_L1].toArray())
+            for (const auto &entry : doc["relatedStreams"_L1].toArray())
             {
                 playlist.streams.push_back(YouTubeVideo{VideoId(entry["url"_L1].toString()),
                                                         entry["title"_L1].toString(), entry["uploader"_L1].toString(),
@@ -210,7 +210,7 @@ auto YouTube::continueLoadingOfPlaylist(YouTubePlaylist &&playlist, const QStrin
                 return continueLoadingOfPlaylist(std::move(playlist), nextpage, options);
             }
 
-            return QtFuture::makeReadyFuture(std::move(playlist));
+            return QtFuture::makeReadyValueFuture(std::move(playlist));
         })
         .unwrap();
 }

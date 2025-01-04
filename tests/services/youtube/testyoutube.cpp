@@ -14,6 +14,11 @@ public:
         networkManager->setTransferTimeout(5000);
         YouTube::instance()->setNetworkManager(networkManager);
     }
+
+protected:
+    void SetUp() override {
+        GTEST_SKIP() << "Skipping all YouTube tests because Piped is currently broken";
+    }
 };
 
 TEST_F(YouTubeTest, CanGetStreamInfos)
@@ -38,7 +43,7 @@ TEST_F(YouTubeTest, CanGetPlaylistInfos)
     StaticAbstractTest::testFutureNoAuth(future, "getPlaylistInfoAsync", [future]() {
         const auto res = future.result();
         EXPECT_EQ(res.id.toString().toStdString(), "PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz");
-        EXPECT_EQ(res.title.toStdString(), "Hades Singles Playlist");
+        EXPECT_EQ(res.title.toStdString(), "Hades - Singles Playlist");
         EXPECT_NE(res.uploader.toStdString(), "");
         EXPECT_NE(res.thumbnailUrl.toStdString(), "");
         EXPECT_FALSE(res.streams.empty());

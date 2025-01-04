@@ -134,7 +134,7 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, AudioFile &file) -> 
 
     const auto callback = [this, index](const SpotifyTrackList &tracklist) {
         QList<AudioFile *> files;
-        foreach (const auto &track, tracklist.tracks)
+        for (const auto &track : tracklist.tracks)
         {
             if (!track.isPlayable)
             {
@@ -178,7 +178,7 @@ auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, AudioFile &file) -> 
         .then([this, index](const YouTubePlaylist &playlist) {
             QList<AudioFile *> files;
             files.reserve(playlist.streams.size());
-            foreach (const auto &video, playlist.streams)
+            for (const auto &video : playlist.streams)
             {
                 if (!video.id.isValid()) continue;
 

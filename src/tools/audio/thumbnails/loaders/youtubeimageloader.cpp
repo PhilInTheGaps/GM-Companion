@@ -17,7 +17,7 @@ auto YouTubeImageLoader::loadImageAsync(const VideoId &id, QNetworkAccessManager
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(id.toString(), &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     // Get video info
@@ -37,7 +37,7 @@ auto YouTubeImageLoader::loadImageAsync(const YouTubeVideo &video, QNetworkAcces
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(video.id.toString(), &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     if (video.thumbnailUrl.isEmpty()) return {};
@@ -56,7 +56,7 @@ auto YouTubeImageLoader::loadImageAsync(const PlaylistId &id, QNetworkAccessMana
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(id.toString(), &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     // Get video info
@@ -78,7 +78,7 @@ auto YouTubeImageLoader::loadImageAsync(const YouTubePlaylist &playlist, QNetwor
     // Try to load from cache
     if (QPixmap pixmap; AudioThumbnailCache::tryGet(playlist.id.toString(), &pixmap))
     {
-        return QtFuture::makeReadyFuture(pixmap);
+        return QtFuture::makeReadyValueFuture(pixmap);
     }
 
     if (playlist.thumbnailUrl.isEmpty()) return {};

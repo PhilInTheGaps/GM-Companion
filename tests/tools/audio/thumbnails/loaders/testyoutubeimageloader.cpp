@@ -23,6 +23,8 @@ TEST(YouTubeImageLoaderTest, CanNotLoadNullVideoImage)
 
 TEST(YouTubeImageLoaderTest, CanLoadVideoImage)
 {
+    GTEST_SKIP() << "Skipping all YouTube tests because Piped is currently broken";
+
     const auto future = YouTubeImageLoader::loadImageAsync(VideoId(u"https://www.youtube.com/watch?v=dQw4w9WgXcQ"_s),
                                                            makeNetworkManager());
 
@@ -47,6 +49,8 @@ TEST(YouTubeImageLoaderTest, CanNotLoadNullPlaylistImage)
 
 TEST(YouTubeImageLoaderTest, CanLoadPlaylistImage)
 {
+    GTEST_SKIP() << "Skipping all YouTube tests because Piped is currently broken";
+
     const auto future = YouTubeImageLoader::loadImageAsync(
         PlaylistId(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s),
         makeNetworkManager());

@@ -66,7 +66,7 @@ auto PipedConnector::fetchInstancesAsync() -> QFuture<bool>
 
     return fetchInstancesFromApiAsync()
         .then([this](bool result) {
-            if (result) return QtFuture::makeReadyFuture(result);
+            if (result) return QtFuture::makeReadyValueFuture(result);
 
             return fetchInstancesFromWikiAsync();
         })
