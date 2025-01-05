@@ -1,5 +1,6 @@
 #include "charactertool.h"
 #include "filesystem/file.h"
+#include "filesystem/results/filecheckresult.h"
 #include "filesystem/results/filedataresult.h"
 #include "filesystem/results/filelistresult.h"
 #include "settings/settingsmanager.h"
@@ -115,8 +116,12 @@ void CharacterTool::loadData()
     setIsDataLoaded(true);
 
     const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
-    Files::File::getDataAsync(filePath, Files::Option::AllowCache).then([this](const Files::FileDataResult &result) {
-        loadInactiveCharacters(result.data());
+
+    Files::File::checkAsync(filePath).then([this, filePath](const Files::FileCheckResult &checkResult) {
+        if (!checkResult.success() || !checkResult.exists()) return;
+
+        Files::File::getDataAsync(filePath, Files::Option::AllowCache)
+            .then([this](const Files::FileDataResult &result) { loadInactiveCharacters(result.data()); });
     });
 }
 
@@ -158,8 +163,14 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
             << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
 
         const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
-        Files::File::getDataAsync(filePath, Files::Option::AllowCache)
-            .then([this](const Files::FileDataResult &result) { convertSettingsFile(result.data()); });
+
+        Files::File::checkAsync(filePath).then([this, filePath](const Files::FileCheckResult &checkResult) {
+            if (!checkResult.success() || !checkResult.exists()) return;
+
+            Files::File::getDataAsync(filePath, Files::Option::AllowCache)
+                .then([this](const Files::FileDataResult &result) { convertSettingsFile(result.data()); });
+        });
+
         return;
     }
 
