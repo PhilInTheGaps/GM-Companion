@@ -133,7 +133,17 @@ auto SettingsManager::getPassword(const QString &username, const QString &servic
 
     if (job->error())
     {
-        qCCritical(gmSettings) << "Could not read password:" << job->error() << job->errorString();
+        if (username.isEmpty())
+        {
+            qCCritical(gmSettings) << "Could not read password for service" << service
+                                   << "(no username):" << job->error() << job->errorString();
+        }
+        else
+        {
+            qCCritical(gmSettings) << "Could not read password for service" << service << ":" << job->error()
+                                   << job->errorString();
+        }
+
         return u""_s;
     }
 

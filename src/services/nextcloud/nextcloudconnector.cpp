@@ -32,20 +32,23 @@ NextCloudConnector::NextCloudConnector(NextCloud *nc, QObject *parent)
     connect(this, &NextCloudConnector::stateChanged, this, &NextCloudConnector::onStateChanged);
     state(State::Connecting);
 
-    QTimer::singleShot(0, this, [this]() {
-        m_appPassword = SettingsManager::getPassword(m_nc->loginName(), m_nc->serviceName());
+    if (!m_nc->loginName().isEmpty())
+    {
+        QTimer::singleShot(0, this, [this]() {
+            m_appPassword = SettingsManager::getPassword(m_nc->loginName(), m_nc->serviceName());
 
-        if (m_nc->loginName().isEmpty() || m_appPassword.isEmpty() || m_nc->serverUrl().isEmpty())
-        {
-            state(State::Disconnected);
-        }
-        else
-        {
-            qCDebug(gmNcConnector()) << "Connected to Nextcloud as user" << m_nc->loginName() << "on server"
-                                     << m_nc->serverUrl();
-            state(State::Connected);
-        }
-    });
+            if (m_nc->loginName().isEmpty() || m_appPassword.isEmpty() || m_nc->serverUrl().isEmpty())
+            {
+                state(State::Disconnected);
+            }
+            else
+            {
+                qCDebug(gmNcConnector()) << "Connected to Nextcloud as user" << m_nc->loginName() << "on server"
+                                         << m_nc->serverUrl();
+                state(State::Connected);
+            }
+        });
+    }
 }
 
 void NextCloudConnector::grantAccess()
