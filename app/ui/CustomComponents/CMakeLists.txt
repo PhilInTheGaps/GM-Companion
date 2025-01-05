@@ -26,6 +26,4 @@ qt_add_qml_module(gm-companion-ui-cc
         CustomToolBarComboBox.qml
         CCColors.qml
         CCSizes.qml
-    IMPORT_PATH
-        ${QML_IMPORT_PATH}
 )

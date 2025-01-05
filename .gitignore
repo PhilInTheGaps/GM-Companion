@@ -58,6 +58,7 @@ target_wrapper.*
 # QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+*.qmlls.ini
 
 # QtCtreator CMake
 CMakeLists.txt.user*

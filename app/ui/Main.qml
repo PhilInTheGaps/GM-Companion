@@ -85,7 +85,7 @@ ApplicationWindow {
         if (SettingsManager.checkForUpdates) {
             UpdateManager.checkForUpdates();
         }
-        if (!SettingsManager.has("crashReports", "Telemetry")) {
+        if (!SettingsManager.has("errorsAndWarnings", "Telemetry")) {
             console.debug("CrashReports preference has not been set.");
             new_settings_dialog.open();
         }

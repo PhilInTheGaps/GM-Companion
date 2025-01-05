@@ -49,6 +49,4 @@ qt_add_qml_module(gm-companion-ui-style
         ToolTip.qml
         StyleColors.qml
         StyleSizes.qml
-    IMPORT_PATH
-        ${QML_IMPORT_PATH}
 )

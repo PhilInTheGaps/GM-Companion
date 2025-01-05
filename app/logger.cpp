@@ -6,6 +6,7 @@
 #include <QLoggingCategory>
 #include <QMutexLocker>
 #include <iostream>
+#include <sentry.h>
 
 Q_LOGGING_CATEGORY(gmLogger, "gm.logger")
 
@@ -30,30 +31,67 @@ Logger::Logger()
     qInstallMessageHandler(messageHandler);
 }
 
+static auto msgTypeToSentryLevel(QtMsgType type) -> sentry_level_t
+{
+    switch (type)
+    {
+    case QtInfoMsg:
+        return SENTRY_LEVEL_INFO;
+    case QtWarningMsg:
+        return SENTRY_LEVEL_WARNING;
+    case QtCriticalMsg:
+        return SENTRY_LEVEL_ERROR;
+    case QtFatalMsg:
+        return SENTRY_LEVEL_FATAL;
+    default:
+        return SENTRY_LEVEL_DEBUG;
+    }
+}
+
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     auto timestamp = QDateTime::currentDateTime();
     auto line = QStringLiteral("%1 %2 %3: %4")
                     .arg(timestamp.toString(QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz ")).toUtf8(), msgTypeToPrefix(type),
-                         context.category, msg.toUtf8());
+                         context.category, msg.toUtf8())
+                    .toUtf8()
+                    .constData();
 
     QMutexLocker const locker(&m_logMutex);
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {
-        std::cout << line.toStdString() << '\n';
+        std::cout << line << '\n' << std::flush;
     }
     else
     {
-        std::cerr << line.toStdString() << '\n';
+        std::cerr << line << '\n' << std::flush;
     }
 
     if (type != QtDebugMsg)
     {
         MessageManager::instance()->addMessage(timestamp, type, context.category, msg);
+
+        if (m_isSentryEnabled)
+        {
+            auto sentryContext = sentry_value_new_object();
+            sentry_value_set_by_key(sentryContext, "category", sentry_value_new_string(context.category));
+            sentry_value_set_by_key(sentryContext, "file", sentry_value_new_string(context.file));
+            sentry_value_set_by_key(sentryContext, "function", sentry_value_new_string(context.function));
+            sentry_value_set_by_key(sentryContext, "line", sentry_value_new_int32(context.line));
+            sentry_value_set_by_key(sentryContext, "version", sentry_value_new_int32(context.version));
+            sentry_set_context("QMessageLogContext", sentryContext);
+
+            sentry_capture_event(sentry_value_new_message_event(msgTypeToSentryLevel(type), nullptr, msg.toUtf8()));
+        }
     }
 
-    m_logStream << line << "\n";
+    m_logStream << line << '\n';
+}
+
+void Logger::enableSentryEvents(bool enable)
+{
+    m_isSentryEnabled = enable;
 }
 
 /// If it does not exist yet, create the folder that will contain the log file

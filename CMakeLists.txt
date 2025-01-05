@@ -34,8 +34,10 @@ find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Qml Multimedia Network
 find_package(QuaZip-Qt6 REQUIRED)
 find_package(QtKeychain REQUIRED)
 
+qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
-qt_standard_project_setup(REQUIRES 6.5)
+set(QT_QML_GENERATE_QMLLS_INI ON)
+qt_standard_project_setup(REQUIRES 6.8)
 set(CMAKE_AUTORCC ON) # turn on automatic invocation of the RCC
 add_compile_definitions(QT_DEPRECATED_WARNINGS)
 
@@ -103,6 +105,8 @@ list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/src)
 list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/app/ui)
 list(APPEND QML_IMPORT_PATH ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/qml-icon-fonts)
+list(APPEND QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml)
+list(APPEND QML_IMPORT_PATH ${CMAKE_BINARY_DIR}/imports)
 list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 

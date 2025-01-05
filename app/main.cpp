@@ -111,15 +111,6 @@ auto main(int argc, char *argv[]) -> int
 
     qCDebug(gmMain()).noquote() << "Starting GM-Companion" << CURRENT_VERSION << "...";
 
-    registerMetaTypes();
-    initResources();
-
-    QQuickStyle::setStyle(u"Style"_s);
-
-    QTranslator translator;
-    QQmlApplicationEngine engine;
-    initTranslations(translator, engine);
-
     // Sentry.io crash reporting
     // Crash reports and session tracking are opt-in settings
     if (SettingsManager::instance()->get(u"crashReports"_s, false, u"Telemetry"_s))
@@ -134,12 +125,25 @@ auto main(int argc, char *argv[]) -> int
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
         if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
 
+        sentry_set_level(SENTRY_LEVEL_WARNING);
+
         sentry_set_tag("qt", qVersion());
 
         sentry_init(sentryOptions);
+
+        Logger::enableSentryEvents(SettingsManager::instance()->get(u"errorsAndWarnings"_s, false, u"Telemetry"_s));
     }
 
     auto sentryClose = qScopeGuard([] { sentry_close(); });
+
+    registerMetaTypes();
+    initResources();
+
+    QQuickStyle::setStyle(u"Style"_s);
+
+    QTranslator translator;
+    QQmlApplicationEngine engine;
+    initTranslations(translator, engine);
 
     // Misc
     Files::File::init(Services::NextCloud::qmlInstance(&engine));

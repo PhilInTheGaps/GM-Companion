@@ -155,9 +155,7 @@ qt_add_qml_module(gm-companion-ui
         tools/settings/CreditsItem.qml
         tools/settings/GeneralPage.qml
         tools/settings/InfoPage.qml
-        tools/settings/PathsPage.qml
-    IMPORT_PATH
-        ${QML_IMPORT_PATH})
+        tools/settings/PathsPage.qml)
 
 target_link_libraries(gm-companion-ui
     PUBLIC

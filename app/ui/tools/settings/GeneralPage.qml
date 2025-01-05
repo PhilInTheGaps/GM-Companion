@@ -331,6 +331,20 @@ SplitView {
                 }
             }
 
+            // Errors and Warnings
+            Row {
+                CheckBox {
+                    text: qsTr("Errors and Warnings")
+                    checked: SettingsManager.errorsAndWarnings
+                    onClicked: SettingsManager.errorsAndWarnings = checked
+                }
+
+                HelpAnnotation {
+                    anchors.verticalCenter: parent.verticalCenter
+                    helpText: qsTr("Upload log messages (only warnings and errors) to sentry.io")
+                }
+            }
+
             // Session Tracking
             Row {
                 CheckBox {

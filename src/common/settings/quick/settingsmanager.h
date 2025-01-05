@@ -44,6 +44,7 @@ class SettingsManager : public QObject
 
     // Telemetry
     SETTINGS_PROPERTY_VAL2(bool, crashReports, false, "Telemetry")
+    SETTINGS_PROPERTY_VAL2(bool, errorsAndWarnings, false, "Telemetry")
     SETTINGS_PROPERTY_VAL2(bool, sessionTracking, false, "Telemetry")
 
 public:
