@@ -78,12 +78,21 @@ auto TagImageLoader::loadFromData(const QString &path, std::unique_ptr<ByteVecto
     case FileUtils::MimeType::Vorbis: {
         return loadFromVorbis(Ogg::Vorbis::File(data.get()), path);
     }
+#if TAGLIB_MAJOR_VERSION >= 2
+    case FileUtils::MimeType::FLAC: {
+        if (FLAC::File flac(data.get(), true, TagLib::FLAC::Properties::ReadStyle::Average, ID3v2::FrameFactory::instance()); flac.isValid())
+            return loadFromFlac(flac, path);
+
+        return loadFromFlac(Ogg::FLAC::File(data.get()), path);
+    }
+#else
     case FileUtils::MimeType::FLAC: {
         if (FLAC::File flac(data.get(), ID3v2::FrameFactory::instance()); flac.isValid())
             return loadFromFlac(flac, path);
 
         return loadFromFlac(Ogg::FLAC::File(data.get()), path);
     }
+#endif
     case FileUtils::MimeType::WAV: {
         return loadFromWav(RIFF::WAV::File(data.get()), path);
     }
