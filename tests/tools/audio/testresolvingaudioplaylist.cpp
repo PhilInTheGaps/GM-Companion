@@ -115,6 +115,8 @@ TEST_F(ResolvingAudioPlaylistTest, CanResolveWebPlaylists)
 
 TEST_F(ResolvingAudioPlaylistTest, CanResolveYouTubePlaylist)
 {
+    GTEST_SKIP() << "Skipping all YouTube tests because Piped is currently broken";
+
     auto *yt = new AudioFile(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s,
                              AudioFile::Source::Youtube, u""_s, nullptr);
     m_playlist->setFiles({yt});
@@ -129,6 +131,8 @@ TEST_F(ResolvingAudioPlaylistTest, CanResolveYouTubePlaylist)
 
 TEST_F(ResolvingAudioPlaylistTest, CanResolveMixedPlaylist)
 {
+    GTEST_SKIP() << "Skipping all YouTube tests because Piped is currently broken";
+
     auto *m3u = new AudioFile(u"/test.m3u"_s, AudioFile::Source::File, u""_s, nullptr);
     auto *pls = new AudioFile(u"/test.pls"_s, AudioFile::Source::File, u""_s, nullptr);
     auto *yt = new AudioFile(u"https://www.youtube.com/playlist?list=PL53mjgVKFq7yu0LdAvpp42ZGLzRCkFKuz"_s,
