@@ -338,5 +338,5 @@ auto CombatTracker::getCacheFile() -> QFile
 {
     const auto filePath = FileUtils::fileInDir(u"combat-tracker-state.json"_s, QDir::tempPath());
 
-    return {filePath};
+    return QFile(filePath);
 }
