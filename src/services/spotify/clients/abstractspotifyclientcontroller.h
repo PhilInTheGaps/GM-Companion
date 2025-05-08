@@ -18,7 +18,7 @@ class AbstractSpotifyClientController : public QObject
     READ_PROPERTY(Status *, status)
 
 public:
-    virtual auto start() -> QFuture<bool> = 0;
+    virtual auto start(const QString &accessToken) -> QFuture<bool> = 0;
     virtual auto stop() -> bool = 0;
 
     [[nodiscard]] auto deviceName() const

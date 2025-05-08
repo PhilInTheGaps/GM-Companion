@@ -14,7 +14,6 @@ class Spotify : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 
-    SETTINGS_PROPERTY2(QString, username, QLatin1String(), GROUP)
     SETTINGS_PROPERTY2(QString, clientSecret, QLatin1String(), GROUP)
     SETTINGS_PROPERTY2(QString, clientId, QLatin1String(), GROUP)
     SETTINGS_PROPERTY2(QString, connection, QLatin1String(), GROUP)
@@ -33,11 +32,6 @@ public:
     Q_INVOKABLE static void setServerUrl(const QString &url)
     {
         SettingsManager::setServerUrl(url, GROUP);
-    }
-
-    Q_INVOKABLE static void setPassword(const QString &username, const QString &password)
-    {
-        SettingsManager::setPassword(username, password, GROUP);
     }
 
 private:

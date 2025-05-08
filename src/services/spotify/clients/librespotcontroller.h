@@ -14,7 +14,7 @@ class LibrespotController : public AbstractSpotifyClientController
 public:
     explicit LibrespotController(QObject *parent = nullptr);
 
-    auto start() -> QFuture<bool> override;
+    auto start(const QString &accessToken) -> QFuture<bool> override;
     auto stop() -> bool override;
     [[nodiscard]] auto hasStarted() const -> bool;
 
@@ -32,7 +32,7 @@ private:
     static auto getLibrespotPath() -> QString;
     static constexpr auto getLibrespotBinaryName() -> const char *;
 
-    [[nodiscard]] auto getLibrespotArgs(const QString &username) const -> QStringList;
+    [[nodiscard]] auto getLibrespotArgs() const -> QStringList;
 
     struct LibrespotInfo
     {

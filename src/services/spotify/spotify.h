@@ -48,8 +48,6 @@ public:
     PlaylistsAPI playlists = PlaylistsAPI(this);
     TracksAPI tracks = TracksAPI(this);
 
-    AUTO_PROPERTY(QString, username);
-
 public slots:
     void connectService() override;
     void disconnectService() override;

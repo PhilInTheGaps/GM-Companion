@@ -18,7 +18,6 @@ Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 Spotify::Spotify(QObject *parent) : Service(u"Spotify"_s, parent)
 {
     m_networkManager = new QNetworkAccessManager(this);
-    username(SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s));
 
     connect(m_librespotController.status(), &Status::messageChanged, this, &Spotify::forwardClientStatus);
 
@@ -47,19 +46,7 @@ void Spotify::updateConnector()
 
     if (!connected()) return;
 
-    // start client delayed
-    QTimer::singleShot(0, this, [this]() {
-        if (m_librespotController.hasStarted())
-        {
-            grant();
-        }
-        else
-        {
-            m_librespotController.start().then([this](bool success) {
-                if (success) grant();
-            });
-        }
-    });
+    grant();
 }
 
 auto Spotify::instance() -> Spotify *
@@ -147,25 +134,18 @@ auto Spotify::clientStatus() const -> Status *
 
 void Spotify::connectService()
 {
-    username(SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s));
+    updateConnector();
 
-    m_librespotController.start().then([this](bool success) {
-        qCDebug(gmSpotify()) << "Client has started:" << success;
-
-        if (success)
-        {
-            updateConnector();
-            grant();
-        }
-    });
+    if (!connected())
+    {
+        grant();
+    }
 }
 
 void Spotify::disconnectService()
 {
     connected(false);
     if (m_connector) m_connector->disconnectService();
-    SettingsManager::setPassword(username(), u""_s, u"Spotify"_s);
-    SettingsManager::instance()->set(u"username"_s, u""_s, u"Spotify"_s);
     SettingsManager::instance()->set(u"clientId"_s, u""_s, u"Spotify"_s);
     SettingsManager::instance()->set(u"clientSecret"_s, u""_s, u"Spotify"_s);
     m_librespotController.stop();
@@ -211,6 +191,12 @@ void Spotify::onAccessGranted()
     qCDebug(gmSpotify) << "Access has been granted!";
 
     connected(true);
+
+    QTimer::singleShot(0, this, [this]() {
+        if (m_librespotController.hasStarted()) return;
+
+        m_librespotController.start(m_connector->getAccessToken());
+    });
 }
 
 void Spotify::forwardClientStatus(const QString &message)

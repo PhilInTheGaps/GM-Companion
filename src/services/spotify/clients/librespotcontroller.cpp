@@ -10,7 +10,6 @@
 #include <QLoggingCategory>
 #include <QNetworkRequest>
 #include <QTimer>
-#include <chrono>
 
 Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot")
 
@@ -27,7 +26,7 @@ LibrespotController::LibrespotController(QObject *parent)
     initProcess();
 }
 
-auto LibrespotController::start() -> QFuture<bool>
+auto LibrespotController::start(const QString &accessToken) -> QFuture<bool>
 {
     updateStatus(Status::Type::Info, u"Starting librespot client ..."_s);
 
@@ -39,23 +38,6 @@ auto LibrespotController::start() -> QFuture<bool>
     }
 
     m_isExitExpected = false;
-
-    const auto username = SettingsManager::instance()->get<QString>(u"username"_s, u""_s, u"Spotify"_s);
-    auto password = SettingsManager::getPassword(username, u"Spotify"_s);
-
-    if (username.isEmpty())
-    {
-        qCWarning(gmLibrespotController()) << "Could not start librespot, username is not set.";
-        updateStatus(Status::Type::Error, tr("Error: Username is not set."));
-        return QtFuture::makeReadyValueFuture(false);
-    }
-
-    if (password.isEmpty())
-    {
-        qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
-        updateStatus(Status::Type::Error, tr("Error: Password is not set."));
-        return QtFuture::makeReadyValueFuture(false);
-    }
 
     const auto info = getLibrespotInfo();
     if (info.version.isEmpty())
@@ -70,7 +52,7 @@ auto LibrespotController::start() -> QFuture<bool>
     m_hasAuthenticated = std::make_unique<QPromise<bool>>();
     m_hasAuthenticated->start();
 
-    const auto args = getLibrespotArgs(username);
+    const auto args = getLibrespotArgs();
     const auto librespotPath = getLibrespotPath();
 
     qCDebug(gmLibrespotController()) << librespotPath << args;
@@ -80,20 +62,19 @@ auto LibrespotController::start() -> QFuture<bool>
         stop();
     }
 
-    // In librespot versions > 0.3.1 passing the password via stdin is broken
-    // but older versions don't support passing the pw via env variables
     if (UpdateManager::compareVersions(info.version, u"0.3.1"_s))
     {
         auto env = QProcessEnvironment::systemEnvironment();
-        env.insert(u"LIBRESPOT_PASSWORD"_s, password);
+        env.insert(u"LIBRESPOT_ACCESS_TOKEN"_s, accessToken);
         m_librespotProcess.setProcessEnvironment(env);
 
         m_librespotProcess.start(librespotPath, args);
     }
     else
     {
-        m_librespotProcess.start(librespotPath, args);
-        m_librespotProcess.write(u"%1\n"_s.arg(password).toUtf8()); // pass password via stdin
+        qCWarning(gmLibrespotController())
+            << "librespot version is too old, please upgrade to a version newer than 0.3.1";
+        return QtFuture::makeReadyValueFuture(false);
     }
 
     return m_hasAuthenticated->future();
@@ -101,8 +82,6 @@ auto LibrespotController::start() -> QFuture<bool>
 
 auto LibrespotController::stop() -> bool
 {
-    using namespace std::chrono_literals;
-
     if (m_librespotProcess.state() == QProcess::NotRunning) return true;
 
     updateStatus(Status::Type::Info, tr("Stopping librespot client ..."));
@@ -148,6 +127,12 @@ void LibrespotController::initProcess() const
 void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
+
+    if (!m_hasStarted)
+    {
+        qCDebug(gmLibrespotController()) << "librespot instance is not running";
+        return;
+    }
 
     const auto callback = [this](const SpotifyDevice &device) {
         if (device.id.isEmpty())
@@ -224,15 +209,17 @@ constexpr auto LibrespotController::getLibrespotBinaryName() -> const char *
 #endif
 }
 
-auto LibrespotController::getLibrespotArgs(const QString &username) const -> QStringList
+auto LibrespotController::getLibrespotArgs() const -> QStringList
 {
     QStringList args;
 
+    args << u"--disable-discovery"_s;
+    args << u"--disable-gapless"_s;
     args << u"-n"_s << deviceName();
-    args << u"-u"_s << username;
     args << u"-b"_s << SettingsManager::instance()->get(u"bitrate"_s, u"160"_s, u"Spotify"_s);
     args << u"--volume-ctrl"_s << u"linear"_s;
     args << u"--volume-range"_s << u"60.0"_s;
+    args << u"--autoplay"_s << u"off"_s;
 
     if (!SettingsManager::instance()->get(u"enableCache"_s, true, u"Spotify"_s))
     {

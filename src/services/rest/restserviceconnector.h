@@ -39,6 +39,11 @@ public:
     [[nodiscard]] auto networkManager() const -> QNetworkAccessManager *;
     void setNetworkManager(QNetworkAccessManager *networkManager);
 
+    [[nodiscard]] virtual auto getAccessToken() -> QString
+    {
+        return QLatin1String();
+    };
+
 signals:
     void accessGranted();
     void statusChanged(const Status::Type &type, const QString &message);
@@ -64,10 +69,6 @@ protected:
     [[nodiscard]] auto maxConcurrentRequests() const -> size_t;
     void setMaxConcurrentRequests(int count);
 
-    [[nodiscard]] virtual auto getAccessToken() -> QString
-    {
-        return QLatin1String();
-    };
     virtual void refreshAccessToken(bool updateAuthentication = false) = 0;
     void updateTokenExpireTime(std::chrono::seconds expiresIn);
     [[nodiscard]] auto isTokenExpired() const -> bool;

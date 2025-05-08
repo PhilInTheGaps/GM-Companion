@@ -42,6 +42,8 @@ public:
     auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, Options options)
         -> QFuture<RestReply> override;
 
+    [[nodiscard]] auto getAccessToken() -> QString override;
+
 protected:
     O2 *m_o2 = nullptr;
     O0SettingsStore *m_settingsStore = nullptr;
@@ -59,7 +61,6 @@ private:
     auto makeRequestor() -> O2Requestor *;
     void sendRequest(RestRequest &&container, QPromise<RestReply> &&promise) override;
 
-    [[nodiscard]] auto getAccessToken() -> QString override;
     void refreshAccessToken(bool /*updateAuthentication*/ = false) override;
 };
 

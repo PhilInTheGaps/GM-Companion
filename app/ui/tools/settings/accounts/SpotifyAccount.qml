@@ -18,8 +18,6 @@ BaseAccountPage {
         spacing: 10
 
         function saveConnectionSettings() {
-            Common.SettingsManager.services.spotify.username = username_textfield.text;
-            Common.SettingsManager.services.spotify.setPassword(username_textfield.text, password_textfield.text);
             Common.SettingsManager.services.spotify.clientId = spotify_id_textfield.text;
             Common.SettingsManager.services.spotify.clientSecret = spotify_secret_textfield.text;
             Common.SettingsManager.services.spotify.setServerUrl(custom_server_textfield.text);
@@ -37,50 +35,6 @@ BaseAccountPage {
             anchors.left: parent.left
             anchors.right: parent.right
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        }
-
-        // if connected, show username
-        Label {
-            visible: Services.Spotify.connected
-            text: qsTr("Username: ") + Services.Spotify.username
-            anchors.left: parent.left
-            anchors.right: parent.right
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-        }
-
-        // Login for librespot
-        GridLayout {
-            visible: !Services.Spotify.connected
-            columns: 2
-            columnSpacing: 10
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Label {
-                id: username_label
-                text: qsTr("Username")
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            TextField {
-                id: username_textfield
-                selectByMouse: true
-                Layout.fillWidth: true
-                Component.onCompleted: text = Common.SettingsManager.services.spotify.username
-            }
-
-            Label {
-                id: password_label
-                text: qsTr("Password")
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            TextField {
-                id: password_textfield
-                selectByMouse: true
-                Layout.fillWidth: true
-                echoMode: TextField.Password
-            }
         }
 
         // Connection settings
@@ -180,7 +134,7 @@ BaseAccountPage {
             text: Services.Spotify.connected ? qsTr("Disconnect") : qsTr("Connect")
 
             // Only enable if all required text field are filled out
-            enabled: Services.Spotify.connected || (username_textfield.text !== "" && password_textfield.text !== "" && (default_server_radio_button.checked || (custom_server_radio_button.checked && custom_server_textfield.text !== "") || (client_id_secret_radio_button.checked && spotify_id_textfield.text !== "" && spotify_secret_textfield.text !== "")))
+            enabled: Services.Spotify.connected || (default_server_radio_button.checked || (custom_server_radio_button.checked && custom_server_textfield.text !== "") || (client_id_secret_radio_button.checked && spotify_id_textfield.text !== "" && spotify_secret_textfield.text !== ""))
 
             onClicked: {
                 if (Services.Spotify.connected) {

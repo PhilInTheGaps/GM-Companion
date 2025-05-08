@@ -3,12 +3,10 @@
 #include "rest/callbackserver.h"
 #include "rest/restrequest.h"
 #include "rest/restserviceconnector.h"
-#include "utils/stringutils.h"
 #include <QJsonObject>
 #include <QObject>
 #include <QPromise>
 #include <QQueue>
-#include <chrono>
 #include <o0settingsstore.h>
 
 namespace Services
@@ -34,6 +32,8 @@ public:
     auto customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data, Options options)
         -> QFuture<RestReply> override;
 
+    [[nodiscard]] auto getAccessToken() -> QString override;
+
 private:
     O0SettingsStore m_settingsStore = O0SettingsStore(QStringLiteral("gm-companion"));
     CallbackServer m_callbackServer;
@@ -45,7 +45,6 @@ private:
 
     void authenticate();
 
-    [[nodiscard]] auto getAccessToken() -> QString override;
     void saveAccessToken(const QString &token);
     void requestAccessToken(const QString &code);
 
