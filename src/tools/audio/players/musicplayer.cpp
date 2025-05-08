@@ -30,7 +30,6 @@ void MusicPlayer::play()
     if (fileSource() == AudioFile::Source::Spotify)
     {
         m_spotifyPlayer.play();
-        state(State::Playing);
         return;
     }
 
@@ -95,7 +94,6 @@ void MusicPlayer::loadSpotifyFile(const AudioFile &file)
     }
 
     m_spotifyPlayer.play(file.url());
-    state(State::Playing);
 }
 
 void MusicPlayer::onSpotifySongEnded()

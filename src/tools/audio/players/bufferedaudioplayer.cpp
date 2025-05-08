@@ -88,14 +88,17 @@ void BufferedAudioPlayer::play(const QByteArray &data)
         m_mediaBuffer->close();
     }
 
+    // reset state
+    m_mediaPlayer.setSourceDevice(nullptr);
+    m_mediaPlayer.setPosition(0);
+
     m_mediaBuffer = std::make_unique<QBuffer>();
     m_mediaBuffer->setData(data);
     m_mediaBuffer->open(QIODevice::ReadOnly);
     m_mediaPlayer.setSourceDevice(m_mediaBuffer.get());
 
-    state(AudioPlayer::State::Playing);
-
-    m_audioOutput.setMuted(false);
+    // workaround for strange playback issues: mute until buffered
+    m_audioOutput.setMuted(true);
     m_mediaPlayer.play();
 
     emit currentFileChanged(m_playlist->at(playlistIndex())->url(), data);
@@ -214,8 +217,10 @@ void BufferedAudioPlayer::next(bool withError)
 void BufferedAudioPlayer::onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState)
 {
     qCDebug(gmAudioBufferedPlayer) << "Media player playback state changed:" << newState;
-    if (newState == QMediaPlayer::PlayingState)
+
+    switch (newState)
     {
+    case QMediaPlayer::PlayingState: {
         state(State::Playing);
 
         auto *file = m_playlist->at(playlistIndex());
@@ -223,6 +228,16 @@ void BufferedAudioPlayer::onMediaPlayerPlaybackStateChanged(QMediaPlayer::Playba
         {
             file->hadError(false);
         }
+        break;
+    }
+    case QMediaPlayer::PausedState:
+        state(State::Paused);
+        break;
+    case QMediaPlayer::StoppedState:
+        state(State::Stopped);
+        break;
+    default:
+        break;
     }
 }
 
@@ -238,6 +253,14 @@ void BufferedAudioPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
         break;
     case QMediaPlayer::BufferingMedia:
         state(State::Loading);
+        break;
+    case QMediaPlayer::BufferedMedia:
+        // workaround for strange playback issue
+        m_mediaPlayer.setPosition(0);
+        m_audioOutput.setMuted(false);
+
+        // Change state to playing, paused or stopped
+        onMediaPlayerPlaybackStateChanged(m_mediaPlayer.playbackState());
         break;
     default:
         break;
@@ -318,8 +341,11 @@ void BufferedAudioPlayer::loadWebFile(const QString &url)
     m_mediaPlayer.setPosition(0);
     m_mediaPlayer.setSource(QUrl()); // set null url to reset state
     m_mediaPlayer.setSource(QUrl(url));
+
+    // workaround for strange playback issues: mute until buffered
+    m_audioOutput.setMuted(true);
+
     m_mediaPlayer.play();
-    m_audioOutput.setMuted(false);
 
     QMediaMetaData metaData;
     metaData.insert(QMediaMetaData::Key::Title, "-");
