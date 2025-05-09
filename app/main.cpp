@@ -125,11 +125,11 @@ auto main(int argc, char *argv[]) -> int
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
         if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
 
+        sentry_init(sentryOptions);
+
         sentry_set_level(SENTRY_LEVEL_WARNING);
 
         sentry_set_tag("qt", qVersion());
-
-        sentry_init(sentryOptions);
 
         Logger::enableSentryEvents(SettingsManager::instance()->get(u"errorsAndWarnings"_s, false, u"Telemetry"_s));
     }
