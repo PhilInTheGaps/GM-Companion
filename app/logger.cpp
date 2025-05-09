@@ -31,6 +31,12 @@ Logger::Logger()
     qInstallMessageHandler(messageHandler);
 }
 
+Logger::~Logger()
+{
+    m_logStream.flush();
+    m_logStream.setDevice(nullptr);
+}
+
 static auto msgTypeToSentryLevel(QtMsgType type) -> sentry_level_t
 {
     switch (type)
