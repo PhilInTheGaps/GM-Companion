@@ -5,6 +5,7 @@
 #include "settings/quick/settingsmanager.h"
 #include "tools/audio/thumbnails/audiothumbnailprovider.h"
 #include "updates/version.h"
+#include "utils/fileutils.h"
 #include <QFontDatabase>
 #include <QFuture>
 #include <QGuiApplication>
@@ -119,7 +120,9 @@ auto main(int argc, char *argv[]) -> int
         auto *sentryOptions = sentry_options_new();
         sentry_options_set_dsn(sentryOptions,
                                "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
-        sentry_options_set_release(sentryOptions, u"gm-companion@%1"_s.arg(CURRENT_VERSION).toUtf8().data());
+        sentry_options_set_release(sentryOptions, u"gm-companion@%1"_s.arg(CURRENT_VERSION).toUtf8().constData());
+        sentry_options_set_database_path(
+            sentryOptions, FileUtils::fileInDir(".gm-companion/sentry", QDir::homePath()).toUtf8().constData());
 
         auto isSessionTrackingEnabled = SettingsManager::instance()->get(u"sessionTracking"_s, false, u"Telemetry"_s);
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
