@@ -65,7 +65,7 @@ Page {
         y: (parent.height - height) / 2
     }
 
-    AudioExporter {
+    AudioExporterDialog {
         id: audio_exporter_dialog
         width: parent.width - 100
         height: parent.height - 100

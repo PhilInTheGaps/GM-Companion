@@ -66,7 +66,7 @@ qt_add_qml_module(gm-companion-ui
         tools/audio/MetaDataDisplay.qml
         tools/audio/VolumeItem.qml
         tools/audio/VolumeSlider.qml
-        tools/audio/audio_exporter/AudioExporter.qml
+        tools/audio/audio_exporter/AudioExporterDialog.qml
         tools/audio/buttons/AudioButton.qml
         tools/audio/buttons/FileBrowserButton.qml
         tools/audio/buttons/SoundButton.qml

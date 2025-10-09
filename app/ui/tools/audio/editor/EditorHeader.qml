@@ -14,7 +14,7 @@ CustomToolBar {
     required property EditorDeleteDialog deleteDialog
     required property EditorNewThingDialog newThingDialog
     required property EditorRenameDialog renameDialog
-    required property AudioExporter exporterDialog
+    required property AudioExporterDialog exporterDialog
 
     enableBack: true
     enableAdd: true
