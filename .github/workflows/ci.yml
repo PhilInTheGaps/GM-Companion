@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        qt-version: ["6.8.1"]
+        qt-version: ["6.8.3"]
         compiler: ["msvc2022_64"]
     steps:
       - name: Install Qt
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        qt-version: ["6.8.1"]
+        qt-version: ["6.8.3"]
         compiler: ["gcc_64"]
     env:
       QT_QPA_PLATFORM: "offscreen"
@@ -242,7 +242,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        qt-version: ["6.8.1"]
+        qt-version: ["6.8.3"]
         compiler: ["gcc_64"]
     env:
       QT_QPA_PLATFORM: "offscreen"
@@ -281,15 +281,8 @@ jobs:
           cache: "true"
           modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Install sonar-scanner and build-wrapper
-        uses: SonarSource/sonarcloud-github-c-cpp@v3
+      - name: Install Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
 
       - name: Install cget
         run: sudo pip3 install wheel cget
@@ -334,8 +327,11 @@ jobs:
           path: sonar-cache
           key: ${{ runner.os }}-SonarAnalysis
 
-      - name: Run sonar-scanner
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: sonar-scanner
+        with:
+          args: >
+            --define "sonar.cfamily.compile-commands=build/bw-output/compile_commands.json" 
