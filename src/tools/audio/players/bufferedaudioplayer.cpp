@@ -234,8 +234,8 @@ void BufferedAudioPlayer::onMediaPlayerPlaybackStateChanged(QMediaPlayer::Playba
         state(State::Paused);
         break;
     case QMediaPlayer::StoppedState:
-        state(State::Stopped);
-        break;
+        // state "stopped" of internal mediaplayer is only temporary,
+        // we don't want to change the state of the audio player
     default:
         break;
     }
