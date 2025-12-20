@@ -40,8 +40,11 @@ set(SRC_SETTINGS
     settings/quick/window.h
     settings/quick/macros.h
     settings/quick/spotify.h
-    settings/quick/google.h
     settings/quick/nextcloud.h)
+
+if(WITH_GOOGLE_DRIVE)
+    list(APPEND SRC_SETTINGS settings/quick/google.h)
+endif()
 
 set(SRC_UPDATES
     updates/updatemanager.h

@@ -19,13 +19,15 @@ set(SOURCES
 )
 
 if (ENABLE_EXTRA_TESTS)
-#    set_source_files_properties(testgoogledriveaccess.cpp PROPERTIES
-#        SKIP_UNITY_BUILD_INCLUSION TRUE
-#    )
+    if (WITH_GOOGLE_DRIVE)
+        set_source_files_properties(testgoogledriveaccess.cpp PROPERTIES
+            SKIP_UNITY_BUILD_INCLUSION TRUE
+        )
 
-#    list(APPEND SOURCES
-#        testgoogledriveaccess.cpp
-#    )
+        list(APPEND SOURCES
+            testgoogledriveaccess.cpp
+        )
+    endif()
 endif()
 
 qt_add_executable(test_filesystem ${SOURCES})

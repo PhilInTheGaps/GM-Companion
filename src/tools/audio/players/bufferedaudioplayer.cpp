@@ -1,12 +1,15 @@
 #include "bufferedaudioplayer.h"
-#include "../thumbnails/loaders/youtubeimageloader.h"
 #include "filesystem/file.h"
 #include "filesystem/results/filedataresult.h"
-#include "services/youtube/youtube.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
+
+#if WITH_YOUTUBE
+#include "../thumbnails/loaders/youtubeimageloader.h"
+#include "services/youtube/youtube.h"
+#endif
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Common::Settings;
@@ -271,11 +274,13 @@ void BufferedAudioPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, 
 {
     qCWarning(gmAudioBufferedPlayer()) << error << errorString;
 
+#if WITH_YOUTUBE
     if (error == QMediaPlayer::ResourceError && m_currentFileSource == AudioFile::Source::Youtube)
     {
         // if the stream can not be read, change the piped instance
         Services::YouTube::instance()->selectNewPipedInstance();
     }
+#endif
 
     if (error != QMediaPlayer::NoError)
     {
@@ -313,9 +318,11 @@ void BufferedAudioPlayer::loadMedia(AudioFile &file)
     case AudioFile::Source::Web:
         loadWebFile(file);
         break;
+#if WITH_YOUTUBE
     case AudioFile::Source::Youtube:
         loadYouTubeFile(file);
         break;
+#endif
     default:
         handleUnsupportedMediaSource(file);
         break;
@@ -355,6 +362,7 @@ void BufferedAudioPlayer::loadWebFile(const QString &url)
     emit metaDataChanged(metaData);
 }
 
+#if WITH_YOUTUBE
 void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
 {
     const Services::VideoId id(file.url());
@@ -390,6 +398,7 @@ void BufferedAudioPlayer::loadYouTubeFile(AudioFile &file)
         })
         .onCanceled([this]() { next(true); });
 }
+#endif
 
 void BufferedAudioPlayer::applyShuffleMode()
 {

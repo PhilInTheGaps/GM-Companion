@@ -3,8 +3,11 @@
 #include "audiothumbnailgenerator.h"
 #include "loaders/spotifyimageloader.h"
 #include "loaders/tagimageloader.h"
-#include "loaders/youtubeimageloader.h"
 #include <QPainter>
+
+#if WITH_YOUTUBE
+#include "loaders/youtubeimageloader.h"
+#endif
 
 auto AudioThumbnailCollageGenerator::makeCollageAsync(QPointer<AudioElement> element,
                                                       QNetworkAccessManager *networkManager) -> QFuture<QPixmap>
@@ -91,6 +94,7 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> ele
         return TagImageLoader::loadImageAsync(element, audioFile);
     case AudioFile::Source::Spotify:
         return SpotifyImageLoader::loadImageAsync(audioFile);
+#if WITH_YOUTUBE
     case AudioFile::Source::Youtube: {
         if (const auto id = Services::VideoId(audioFile->url()); id.isValid())
             return YouTubeImageLoader::loadImageAsync(id, networkManager);
@@ -100,6 +104,7 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(QPointer<AudioElement> ele
 
         return QtFuture::makeReadyValueFuture(QPixmap());
     }
+#endif
     default:
         return QtFuture::makeReadyValueFuture(QPixmap());
     }

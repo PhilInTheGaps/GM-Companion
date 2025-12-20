@@ -16,8 +16,11 @@ set(AUDIO_THUMBNAILS
     tools/audio/thumbnails/testaudiothumbnail.cpp
     tools/audio/thumbnails/loaders/testtagimageloader.cpp
     tools/audio/thumbnails/loaders/testfileimageloader.cpp
-    tools/audio/thumbnails/loaders/testyoutubeimageloader.cpp
 )
+
+if(WITH_YOUTUBE)
+    list(APPEND AUDIO_THUMBNAILS tools/audio/thumbnails/loaders/testyoutubeimageloader.cpp)
+endif()
 
 # web loader
 # somehow this always fails using github actions (windows) even though the compiled executable works on other machines

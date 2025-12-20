@@ -145,50 +145,59 @@ Item {
         }
     }
 
-    Rectangle {
+    Component {
         id: youtube_adder
-        visible: root.mode > 1 && AudioTool.editor.currentElement && AudioTool.editor.currentElement.type < 2
+        Rectangle {
+            visible: root.mode > 1 && AudioTool.editor.currentElement && AudioTool.editor.currentElement.type < 2
+
+            height: Sizes.toolbarHeight
+            color: palette.alternateBase
+
+            CustomToolBarButton {
+                id: youtube_adder_icon
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                enabled: false
+
+                iconText: FontAwesome.youtube
+                iconFont: FontAwesome.fontBrands
+            }
+
+            TextField {
+                id: youtube_text_field
+                anchors.left: youtube_adder_icon.right
+                anchors.right: youtube_adder_button.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+
+                selectByMouse: true
+                placeholderText: qsTr("YouTube URL")
+            }
+
+            CustomToolBarButton {
+                id: youtube_adder_button
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+
+                iconText: FontAwesome.plus
+
+                onClicked: {
+                    AudioTool.editor.addYtUrl(youtube_text_field.text);
+                }
+            }
+        }
+    }
+
+    Loader {
+        sourceComponent: youtube_adder
+        asynchronous: true
+        active: WITH_YOUTUBE
+
         anchors.topMargin: 5
         anchors.top: url_adder.bottom
         anchors.right: parent.right
         anchors.left: parent.left
-
-        height: Sizes.toolbarHeight
-        color: palette.alternateBase
-
-        CustomToolBarButton {
-            id: youtube_adder_icon
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            enabled: false
-
-            iconText: FontAwesome.youtube
-            iconFont: FontAwesome.fontBrands
-        }
-
-        TextField {
-            id: youtube_text_field
-            anchors.left: youtube_adder_icon.right
-            anchors.right: youtube_adder_button.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-
-            selectByMouse: true
-            placeholderText: qsTr("YouTube URL")
-        }
-
-        CustomToolBarButton {
-            id: youtube_adder_button
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-
-            iconText: FontAwesome.plus
-
-            onClicked: {
-                AudioTool.editor.addYtUrl(youtube_text_field.text);
-            }
-        }
     }
 }

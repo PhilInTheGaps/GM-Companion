@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.19)
 
-set(SRC_COMMON
+set(SRC_SERVICES )
+
+# Common
+list(APPEND SRC_SERVICES
     service.h
     service.cpp
     servicestatus.h
     options.h
 )
 
-set(SRC_REST
+# REST
+list(APPEND SRC_SERVICES
     rest/callbackserver.h
     rest/callbackserver.cpp
     rest/restserviceconnector.h
@@ -19,7 +23,8 @@ set(SRC_REST
     rest/restrequest.h
 )
 
-set(SRC_SPOTIFY
+# Spotify
+list(APPEND SRC_SERVICES
     spotify/config.h
     spotify/spotify.h
     spotify/spotify.cpp
@@ -66,46 +71,46 @@ set(SRC_SPOTIFY
     spotify/api/tracksapi.cpp
 )
 
-set(SRC_NEXTCLOUD
+# NextCloud
+list(APPEND SRC_SERVICES
     nextcloud/nextcloud.h
     nextcloud/nextcloud.cpp
     nextcloud/nextcloudconnector.h
     nextcloud/nextcloudconnector.cpp
 )
 
-set(SRC_GOOGLEDRIVE
-    google/googledrive.h
-    google/googledrive.cpp
-    google/googledriveconnectorlocal.h
-    google/googledriveconnectorlocal.cpp
-    google/googledrivereply.h
-)
+# Google Drive
+if(WITH_GOOGLE_DRIVE)
+    list(APPEND SRC_SERVICES
+        google/googledrive.h
+        google/googledrive.cpp
+        google/googledriveconnectorlocal.h
+        google/googledriveconnectorlocal.cpp
+        google/googledrivereply.h
+    )
+endif()
 
-set(SRC_YOUTUBE
-    youtube/youtube.h
-    youtube/youtube.cpp
-    youtube/pipedconnector.h
-    youtube/pipedconnector.cpp
-    youtube/video.h
-    youtube/playlist.h
-    youtube/videoid.h
-    youtube/videoid.cpp
-    youtube/playlistid.h
-    youtube/playlistid.cpp
-)
+# YouTube
+if(WITH_YOUTUBE)
+    list(APPEND SRC_SERVICES
+        youtube/youtube.h
+        youtube/youtube.cpp
+        youtube/pipedconnector.h
+        youtube/pipedconnector.cpp
+        youtube/video.h
+        youtube/playlist.h
+        youtube/videoid.h
+        youtube/videoid.cpp
+        youtube/playlistid.h
+        youtube/playlistid.cpp
+    )
+endif()
 
 qt_add_library(services STATIC)
 
 qt_add_qml_module(services
     URI services
-    SOURCES
-        ${SRC_COMMON}
-        ${SRC_REST}
-        ${SRC_SPOTIFY}
-        ${SRC_NEXTCLOUD}
-        ${SRC_YOUTUBE}
-        # GoogleDrive support is disabled, see comment in googledrive.h
-        # ${SRC_GOOGLEDRIVE}
+    SOURCES ${SRC_SERVICES}
 )
 
 qt_add_resources(services "services-resources"
@@ -117,14 +122,23 @@ qt_add_resources(services "services-resources"
 
 target_precompile_headers(services REUSE_FROM common)
 
+set(SERVICES_PRIVATE_INCLUDE
+    ${CMAKE_CURRENT_SOURCE_DIR}/spotify
+    ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud
+)
+
+if (WITH_GOOGLE_DRIVE)
+    list(APPEND SERVICES_PRIVATE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/google)
+endif()
+
+if (WITH_YOUTUBE)
+    list(APPEND SERVICES_PRIVATE_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/youtube)
+endif()
+
 target_include_directories(services
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/spotify
-        ${CMAKE_CURRENT_SOURCE_DIR}/nextcloud
-        ${CMAKE_CURRENT_SOURCE_DIR}/youtube)
-        # ${CMAKE_CURRENT_SOURCE_DIR}/google
+    PRIVATE ${SERVICES_PRIVATE_INCLUDE})
 
 target_link_libraries(services
     PUBLIC

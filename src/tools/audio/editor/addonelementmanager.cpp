@@ -200,7 +200,9 @@ void AddonElementManager::removeUnsupportedElementsFromScenario(AudioScenario &s
             {
             case AudioFile::Source::Spotify:
             case AudioFile::Source::Web:
+#if WITH_YOUTUBE
             case AudioFile::Source::Youtube:
+#endif
                 fileIndex++;
                 break;
             default:

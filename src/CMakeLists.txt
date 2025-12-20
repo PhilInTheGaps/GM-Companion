@@ -82,9 +82,14 @@ set(SRC_AUDIO
     tools/audio/thumbnails/loaders/tagimageloader.cpp
     tools/audio/thumbnails/loaders/webimageloader.h
     tools/audio/thumbnails/loaders/webimageloader.cpp
-    tools/audio/thumbnails/loaders/youtubeimageloader.h
-    tools/audio/thumbnails/loaders/youtubeimageloader.cpp
 )
+
+if (WITH_YOUTUBE)
+    list(APPEND
+        SRC_AUDIO
+        tools/audio/thumbnails/loaders/youtubeimageloader.h
+        tools/audio/thumbnails/loaders/youtubeimageloader.cpp)
+endif()
 
 set_source_files_properties(${SRC_AUDIO} PROPERTIES UNITY_GROUP "audio")
 

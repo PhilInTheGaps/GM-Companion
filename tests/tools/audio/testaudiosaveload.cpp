@@ -24,7 +24,8 @@ protected:
     void findProjects();
     void deleteProjects();
 
-    [[nodiscard]] QByteArray projectAsJson() const;
+    [[nodiscard]]
+    QByteArray projectAsJson() const;
 
     std::unique_ptr<AudioProject> m_project = nullptr;
     std::unique_ptr<AudioProject> m_project1 = nullptr;

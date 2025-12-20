@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.19)
 
-set(SRC_COMMON
+set(SRC_FILESYSTEM )
+
+# Common
+list(APPEND SRC_FILESYSTEM
     file.h
     file.cpp
     fileaccess.h
@@ -23,48 +26,49 @@ set(SRC_COMMON
     results/filedataresult.cpp
 )
 
-set(SRC_LOCAL
+# Local
+list(APPEND SRC_FILESYSTEM
     fileaccesslocal.h
     fileaccesslocal.cpp
 )
 
-set(SRC_NEXTCLOUD
+# NextCloud
+list(APPEND SRC_FILESYSTEM
     fileaccessnextcloud.h
     fileaccessnextcloud.cpp
 )
 
-set(SRC_GOOGLEDRIVE
-    fileaccessgoogledrive.h
-    fileaccessgoogledrive.cpp
-    googledrive/endpoints.h
-    googledrive/moveimpl.h
-    googledrive/moveimpl.cpp
-    googledrive/getdataimpl.h
-    googledrive/getdataimpl.cpp
-    googledrive/saveimpl.h
-    googledrive/saveimpl.cpp
-    googledrive/deleteimpl.h
-    googledrive/deleteimpl.cpp
-    googledrive/copyimpl.h
-    googledrive/copyimpl.cpp
-    googledrive/listimpl.h
-    googledrive/listimpl.cpp
-    googledrive/createfileimpl.h
-    googledrive/createfileimpl.cpp
-    googledrive/checkimpl.h
-    googledrive/checkimpl.cpp
-    googledrive/mimetype.h
-)
+# Google Drive
+if(WITH_GOOGLE_DRIVE)
+    list(APPEND SRC_FILESYSTEM
+        fileaccessgoogledrive.h
+        fileaccessgoogledrive.cpp
+        googledrive/endpoints.h
+        googledrive/moveimpl.h
+        googledrive/moveimpl.cpp
+        googledrive/getdataimpl.h
+        googledrive/getdataimpl.cpp
+        googledrive/saveimpl.h
+        googledrive/saveimpl.cpp
+        googledrive/deleteimpl.h
+        googledrive/deleteimpl.cpp
+        googledrive/copyimpl.h
+        googledrive/copyimpl.cpp
+        googledrive/listimpl.h
+        googledrive/listimpl.cpp
+        googledrive/createfileimpl.h
+        googledrive/createfileimpl.cpp
+        googledrive/checkimpl.h
+        googledrive/checkimpl.cpp
+        googledrive/mimetype.h
+    )
+endif()
 
 qt_add_library(filesystem STATIC)
 
 qt_add_qml_module(filesystem
     URI filesystem
-    SOURCES
-        ${SRC_COMMON}
-        ${SRC_LOCAL}
-        ${SRC_NEXTCLOUD}
-        # ${SRC_GOOGLEDRIVE}
+    SOURCES ${SRC_FILESYSTEM}
 )
 
 target_precompile_headers(filesystem REUSE_FROM common)

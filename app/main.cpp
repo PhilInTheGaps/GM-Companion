@@ -1,7 +1,6 @@
 #include "filesystem/file.h"
 #include "logger.h"
 #include "services/nextcloud/nextcloud.h"
-#include "services/youtube/youtube.h"
 #include "settings/quick/settingsmanager.h"
 #include "tools/audio/thumbnails/audiothumbnailprovider.h"
 #include "updates/version.h"
@@ -20,6 +19,10 @@
 #include <QTranslator>
 #include <QtQuickControls2/QQuickStyle>
 #include <thirdparty/sentry-native/include/sentry.h>
+
+#if WITH_YOUTUBE
+#include "services/youtube/youtube.h"
+#endif
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Common::Settings;
@@ -150,7 +153,19 @@ auto main(int argc, char *argv[]) -> int
 
     // Misc
     Files::File::init(Services::NextCloud::qmlInstance(&engine));
+
+#if WITH_YOUTUBE
     Services::YouTube::instance()->setNetworkManager(engine.networkAccessManager());
+    engine.rootContext()->setContextProperty("WITH_YOUTUBE", true);
+#else
+    engine.rootContext()->setContextProperty("WITH_YOUTUBE", false);
+#endif
+
+#if WITH_GOOGLE_DRIVE
+    engine.rootContext()->setContextProperty("WITH_GOOGLE_DRIVE", true);
+#else
+    engine.rootContext()->setContextProperty("WITH_GOOGLE_DRIVE", false);
+#endif
 
     engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider());
     engine.loadFromModule("ui"_L1, "Main"_L1);

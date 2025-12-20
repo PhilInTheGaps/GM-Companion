@@ -785,6 +785,7 @@ auto AudioEditor::addUrl(const QString &url, int mode, const QString &title) -> 
     return true;
 }
 
+#if WITH_YOUTUBE
 /**
  * @brief Add a youtube url to the current element
  */
@@ -800,6 +801,7 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
 
     return true;
 }
+#endif
 
 /**
  * @brief Add a file to an element

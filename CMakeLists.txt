@@ -47,12 +47,27 @@ include(SetVersionNumber)
 # build options
 option(BUILD_TRANSLATIONS "Generate translation files" ON)
 cmake_print_variables(BUILD_TRANSLATIONS)
+
 option(ENABLE_CODE_COVERAGE "Generate code coverage, don't use this for regular builds" OFF)
 cmake_print_variables(ENABLE_CODE_COVERAGE)
+
 option(ENABLE_EXTRA_TESTS "Enable extra tests that require special setup and can not be run on every machine" OFF)
 cmake_print_variables(ENABLE_EXTRA_TESTS)
+
 option(IS_RUNNING_IN_CI "Variable used to en- and disable stuff when running in CI environments" OFF)
 cmake_print_variables(IS_RUNNING_IN_CI)
+
+option(WITH_YOUTUBE "Enable experimental youtube support" OFF)
+cmake_print_variables(WITH_YOUTUBE)
+if (WITH_YOUTUBE)
+  add_compile_definitions(WITH_YOUTUBE)
+endif()
+
+option(WITH_GOOGLE_DRIVE "Enable experimental google drive support" OFF)
+cmake_print_variables(WITH_GOOGLE_DRIVE)
+if (WITH_GOOGLE_DRIVE)
+  add_compile_definitions(WITH_GOOGLE_DRIVE)
+endif()
 
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 

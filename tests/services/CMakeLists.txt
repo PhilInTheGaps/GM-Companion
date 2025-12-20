@@ -1,16 +1,23 @@
 cmake_minimum_required(VERSION 3.19)
 
-qt_add_executable(test_services
+set(SERVICES_TESTS
     main.cpp
     rest/testcallbackserver.cpp
     rest/testrestreply.cpp
     rest/testrestrequest.cpp
     spotify/testspotifyutils.cpp
-    youtube/testyoutube.cpp
-    youtube/testpipedconnector.cpp
-    youtube/testvideoid.cpp
-    youtube/testplaylistid.cpp
 )
+
+if(WITH_YOUTUBE)
+    list(APPEND SERVICES_TESTS
+        youtube/testyoutube.cpp
+        youtube/testpipedconnector.cpp
+        youtube/testvideoid.cpp
+        youtube/testplaylistid.cpp
+    )
+endif()
+
+qt_add_executable(test_services ${SERVICES_TESTS})
 
 target_link_libraries(test_services PRIVATE
     propertyhelper

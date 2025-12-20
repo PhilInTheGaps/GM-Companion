@@ -30,8 +30,10 @@ class BufferedAudioPlayer : public AudioPlayer
 public:
     explicit BufferedAudioPlayer(const QString &settingsId, QNetworkAccessManager *networkManager, QObject *parent);
 
-    [[nodiscard]] auto playlistQml() -> QQmlListProperty<AudioFile>;
-    [[nodiscard]] auto element() const -> QPointer<AudioElement>;
+    [[nodiscard]]
+    auto playlistQml() -> QQmlListProperty<AudioFile>;
+    [[nodiscard]]
+    auto element() const -> QPointer<AudioElement>;
 
     void setIndex(qsizetype index);
 
@@ -55,14 +57,18 @@ protected:
     virtual void handleUnsupportedMediaSource(const AudioFile &file);
     void onFileReceived(const Files::FileDataResult &result);
 
-    [[nodiscard]] auto fileSource() const -> AudioFile::Source;
+    [[nodiscard]]
+    auto fileSource() const -> AudioFile::Source;
     void setPlaylist(std::unique_ptr<ResolvingAudioPlaylist> playlist);
 
     void loadMedia(AudioFile &file);
     void loadLocalFile(const AudioFile &file);
     void loadWebFile(const AudioFile &file);
     void loadWebFile(const QString &url);
+
+#if WITH_YOUTUBE
     void loadYouTubeFile(AudioFile &file);
+#endif
 
 private slots:
     void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);

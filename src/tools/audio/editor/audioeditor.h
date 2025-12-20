@@ -34,27 +34,32 @@ class AudioEditor : public AbstractTool
 public:
     explicit AudioEditor(const QQmlEngine *engine, QObject *parent = nullptr);
 
-    [[nodiscard]] auto exporter() -> AudioExporter *
+    [[nodiscard]]
+    auto exporter() -> AudioExporter *
     {
         return &m_audioExporter;
     }
 
-    [[nodiscard]] auto fileBrowser() -> AudioEditorFileBrowser *
+    [[nodiscard]]
+    auto fileBrowser() -> AudioEditorFileBrowser *
     {
         return &m_fileBrowser;
     }
 
-    [[nodiscard]] auto unsplash() -> UnsplashParser *
+    [[nodiscard]]
+    auto unsplash() -> UnsplashParser *
     {
         return &m_unsplashParser;
     }
 
-    [[nodiscard]] auto addons() -> AddonElementManager *
+    [[nodiscard]]
+    auto addons() -> AddonElementManager *
     {
         return &m_addonElementManager;
     }
 
-    [[nodiscard]] auto files() -> AudioFileModel *
+    [[nodiscard]]
+    auto files() -> AudioFileModel *
     {
         return &m_fileModel;
     }
@@ -66,12 +71,14 @@ public:
     Q_INVOKABLE void renameProject(const QString &name);
     Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
-    [[nodiscard]] auto currentProject() const -> AudioProject *
+    [[nodiscard]]
+    auto currentProject() const -> AudioProject *
     {
         return m_currentProject;
     }
     void setCurrentProject(AudioProject *project);
-    [[nodiscard]] auto projectIndex() const -> int;
+    [[nodiscard]]
+    auto projectIndex() const -> int;
 
     // Categories
     Q_INVOKABLE void setCurrentCategory(int index);
@@ -108,7 +115,9 @@ public:
     Q_INVOKABLE void replaceFileFolder(int index, const QString &folder) const;
     Q_INVOKABLE bool addFile(QStringList path, const QString &filename);
     Q_INVOKABLE bool addUrl(const QString &url, int mode, const QString &title = QLatin1String());
+#if WITH_YOUTUBE
     Q_INVOKABLE bool addYtUrl(const QString &videoUrl);
+#endif
 
     Q_INVOKABLE void findUnsplashImages(const QString &text)
     {
@@ -120,17 +129,20 @@ public:
     }
 
     // Elements
-    [[nodiscard]] auto currentElement() const -> AudioElement *
+    [[nodiscard]]
+    auto currentElement() const -> AudioElement *
     {
         return m_currentElement;
     }
 
     Q_INVOKABLE void loadElement(QObject *element);
-    [[nodiscard]] Q_INVOKABLE QString resourcesPath() const
+    [[nodiscard]]
+    Q_INVOKABLE QString resourcesPath() const
     {
         return Common::Settings::SettingsManager::getPath(QStringLiteral("resources"));
     }
-    [[nodiscard]] Q_INVOKABLE QString basePath() const;
+    [[nodiscard]]
+    Q_INVOKABLE QString basePath() const;
 
     Q_INVOKABLE void setFileIndex(int index)
     {
@@ -167,8 +179,10 @@ private:
     auto addAudioFile(AudioFile *audioFile) -> bool;
 
     // Helper functions
-    [[nodiscard]] auto categoryExists() const -> bool;
-    [[nodiscard]] auto scenarioExists() const -> bool;
+    [[nodiscard]]
+    auto categoryExists() const -> bool;
+    [[nodiscard]]
+    auto scenarioExists() const -> bool;
 
 private slots:
     void addFiles(const QStringList &files);

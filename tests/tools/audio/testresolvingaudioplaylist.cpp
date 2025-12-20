@@ -1,5 +1,4 @@
 #include "settings/settingsmanager.h"
-#include "src/services/youtube/youtube.h"
 #include "src/tools/audio/playlist/resolvingaudioplaylist.h"
 #include "testhelper/abstractmocknetworkmanager.h"
 #include "testhelper/abstracttest.h"
@@ -7,6 +6,10 @@
 #include "utils/fileutils.h"
 #include <QDesktopServices>
 #include <gtest/gtest.h>
+
+#if WITH_YOUTUBE
+#include "src/services/youtube/youtube.h"
+#endif
 
 #ifndef QT_GUI_LIB
 #define QT_GUI_LIB
@@ -51,7 +54,9 @@ public:
         QDesktopServices::setUrlHandler(u"http"_s, networkManager.get(), "simulateBrowser");
         QDesktopServices::setUrlHandler(u"https"_s, networkManager.get(), "simulateBrowser");
 
+#if WITH_YOUTUBE
         Services::YouTube::instance()->setNetworkManager(networkManager.get());
+#endif
 
         m_playlist = std::make_unique<ResolvingAudioPlaylist>(u"testing"_s, networkManager.get());
 

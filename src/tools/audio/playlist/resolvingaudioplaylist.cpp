@@ -4,12 +4,15 @@
 #include "filesystem/results/filedataresult.h"
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
-#include "services/youtube/playlistid.h"
-#include "services/youtube/videoid.h"
-#include "services/youtube/youtube.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
+
+#if WITH_YOUTUBE
+#include "services/youtube/playlistid.h"
+#include "services/youtube/videoid.h"
+#include "services/youtube/youtube.h"
+#endif
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Services;
@@ -57,11 +60,13 @@ auto ResolvingAudioPlaylist::unwrapEntries() -> QFuture<void>
                 futures << unwrapPlaylistFile(i, *audioFile);
             }
             break;
+#if WITH_YOUTUBE
         case AudioFile::Source::Youtube:
             if (!VideoId(audioFile->url()).isValid() && PlaylistId(audioFile->url()).isValid())
             {
                 futures << unwrapYouTube(i, *audioFile);
             }
+#endif
 
         default:
             break;
@@ -168,6 +173,7 @@ auto ResolvingAudioPlaylist::unwrapSpotify(qsizetype index, AudioFile &file) -> 
     }
 }
 
+#if WITH_YOUTUBE
 auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, AudioFile &file) -> QFuture<void>
 {
     const PlaylistId id(file.url());
@@ -188,6 +194,7 @@ auto ResolvingAudioPlaylist::unwrapYouTube(qsizetype index, AudioFile &file) -> 
         })
         .onCanceled([&file]() { file.hadError(true); });
 }
+#endif
 
 void ResolvingAudioPlaylist::loadTitles()
 {
@@ -203,11 +210,13 @@ void ResolvingAudioPlaylist::loadTitles()
             if (SpotifyUtils::getUriType(audioFile->url()) == SpotifyUtils::SpotifyType::Track)
                 spotifyTracks.append(audioFile);
             break;
+#if WITH_YOUTUBE
         case AudioFile::Source::Youtube:
             // piped does not offer a way to send a batch request for meta data
             // so we just display the video id and update the title when we receive the meta data with the stream
             audioFile->title(QObject::tr("YouTube: %1").arg(VideoId(audioFile->url()).toString()));
             break;
+#endif
         default:
             break;
         }
