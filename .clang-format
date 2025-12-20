@@ -2,5 +2,5 @@
 BasedOnStyle: Microsoft
 AccessModifierOffset: '-4'
 AllowShortIfStatementsOnASingleLine: Always
-
+BreakAfterAttributes: Always
 ...
